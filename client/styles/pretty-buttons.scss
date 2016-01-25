@@ -51,6 +51,7 @@
   }
   &.btn-primary {
     @include pretty-buttons($btn-primary-color, $color-primary);
+    background: linear-gradient(to bottom, #3c8d0d 0%, #245508 100%);
     &:hover,
     &:active,
     &.active {

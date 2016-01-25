@@ -1,5 +1,6 @@
 @import '{}/client/styles/variables';
 
 .content {
-  margin-top: $header-height + 10px;
+  margin-top: $header-height;
+  display: flex;
 }

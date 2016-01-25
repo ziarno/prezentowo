@@ -9,3 +9,9 @@ FlowRouter.route('/', {
     ReactLayout.render(App);
   }
 });
+
+FlowRouter.route('/login', {
+  action() {
+    ReactLayout.render(App, {content: <AccountsTemplates />});
+  }
+});

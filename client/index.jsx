@@ -1,4 +1,4 @@
 Meteor.startup(() => {
-  Waves.attach('.btn');
+  Waves.attach('.btn', ['waves-effect']);
   Waves.init();
 });
