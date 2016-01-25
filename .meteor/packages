@@ -15,21 +15,27 @@ tracker                 # Meteor's client-side reactive programming library
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
+# server
 dburles:collection-helpers
 reywood:publish-composite
 mdg:validated-method
-msavin:mongol
-kadira:flow-router
-arillo:flow-router-helpers
 aldeed:collection2
-react
-izzilab:material-ui
 matb33:collection-hooks
-meteorhacks:fast-render
-ongoworks:speakingurl
-meteorhacks:subs-manager
 digilord:faker
 ongoworks:security
+
+# client
+react
 kadira:react-layout
+kadira:flow-router
+arillo:flow-router-helpers
+msavin:mongol
+meteorhacks:fast-render
+meteorhacks:subs-manager
+ongoworks:speakingurl
 fourseven:scss
 seba:minifiers-autoprefixer
+accounts-password
+accounts-facebook
+komorebi:waves
+reywood:bootstrap3-sass

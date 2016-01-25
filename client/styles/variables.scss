@@ -1,2 +1,7 @@
-$gradient-bg: linear-gradient(to bottom,#3c8d0d 0,#245508 100%);
+//sizes
 $header-height: 50px;
+
+//colors
+$color-primary: #245508;
+$gradient-bg: linear-gradient(to bottom,#3c8d0d 0, $color-primary 100%);
+

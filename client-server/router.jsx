@@ -5,9 +5,6 @@ FlowRouter.notFound = {
 };
 
 FlowRouter.route('/', {
-  subscriptions() {
-
-  },
   action() {
     ReactLayout.render(App);
   }
