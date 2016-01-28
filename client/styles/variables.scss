@@ -5,3 +5,7 @@ $header-height: 50px;
 $color-primary: #245508;
 $gradient-bg: linear-gradient(to bottom,#3c8d0d 0, $color-primary 100%);
 
+//mixins
+@mixin default-cursor() {
+  cursor: default !important;
+}

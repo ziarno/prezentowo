@@ -5,12 +5,6 @@ LoginButtons = React.createClass({
       user: Meteor.user()
     };
   },
-  componentDidMount() {
-    Waves.attach('.btn:not(.waves-effect)', ['waves-effect']);
-  },
-  componentDidUpdate() {
-    Waves.attach('.btn:not(.waves-effect)', ['waves-effect']);
-  },
   getLoginButtons() {
     return (
       <div className="btn-group">
@@ -19,19 +13,16 @@ LoginButtons = React.createClass({
           <span>Zaloguj</span>
         </a>
         <a href="/sign-up" className="btn btn-default">
-          <i className="fa fa-sign-up"></i>
-          <span>Zarejestruj</span>
+          <i className="glyphicon glyphicon-user"></i>
+          <span> Zarejestruj</span>
         </a>
       </div>
     )
   },
   getProfileButton() {
-    return (
-      <div>
-        <img src={this.data.user.profile.picture} />
-        <span>{this.data.user.profile.name}</span>
-      </div>
-    )
+    return <UserProfileButton
+      picture={this.data.user.profile.picture}
+      name={this.data.user.profile.name}/>
   },
   render() {
     return (

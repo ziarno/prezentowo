@@ -1,0 +1,12 @@
+.user-profile-button {
+
+  .dropdown-menu li {
+    display: block;
+  }
+
+  & > .user-profile-button--name {
+    padding-left: 42px;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
