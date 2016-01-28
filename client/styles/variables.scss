@@ -2,8 +2,9 @@
 $header-height: 50px;
 
 //colors
-$color-primary: #245508;
-$gradient-bg: linear-gradient(to bottom,#3c8d0d 0, $color-primary 100%);
+$color-primary: #3c8d0d;
+$color-secondary: #245508;
+$gradient-bg: linear-gradient(to bottom, $color-primary 0, $color-secondary 100%);
 
 //mixins
 @mixin default-cursor() {

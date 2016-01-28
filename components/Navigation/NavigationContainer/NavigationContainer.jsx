@@ -10,6 +10,7 @@ NavigationContainer = React.createClass({
       <div>
         <EventsButton />
         <UserProfileButton {...this.data.user.profile} />
+        <NotificationIcon />
       </div>
     )
   },

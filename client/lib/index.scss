@@ -16,10 +16,10 @@
 }
 
 .fa {
-  .fa--space-right {
+  &.fa--space-right {
     margin-right: 10px;
   }
-  .fa--space-left {
+  &.fa--space-left {
     margin-left: 10px;
   }
 }
