@@ -7,7 +7,7 @@ Header = React.createClass({
     return (
       <div className="app-header shadow no-selection">
         <h1 className="title no-selection">Prezentowo</h1>
-        <LoginNavButton />
+        <LoginButtons />
       </div>
     );
   }

@@ -27,6 +27,7 @@ ongoworks:security
 # client
 react
 kadira:react-layout
+kadira:blaze-layout
 kadira:flow-router
 arillo:flow-router-helpers
 msavin:mongol
@@ -43,3 +44,5 @@ useraccounts:bootstrap
 useraccounts:flow-routing
 gwendall:blaze-to-react
 underscore
+jparker:gravatar
+fortawesome:fontawesome
