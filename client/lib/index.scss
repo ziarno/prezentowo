@@ -13,11 +13,17 @@
 
 .btn {
   @include default-cursor();
+}
 
-  .fa {
+.fa {
+  .fa--space-right {
     margin-right: 10px;
   }
+  .fa--space-left {
+    margin-left: 10px;
+  }
 }
+
 
 a:not(.outside-link) {
   @include default-cursor();

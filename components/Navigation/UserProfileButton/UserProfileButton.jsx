@@ -9,11 +9,11 @@ UserProfileButton = React.createClass({
   },
   render() {
     var pictureBackground = {
-      'background-image': `url(${this.props.picture})`
+      backgroundImage: `url(${this.props.picture})`
     };
 
     return (
-      <div className="user-profile-button btn-group">
+      <div className="user-profile-button btn-group nav-group">
         <div className="user-profile-button--name btn btn-default" style={pictureBackground}>
           <span>{this.props.name}</span>
         </div>
