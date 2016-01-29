@@ -3,7 +3,7 @@ EventsButton = React.createClass({
     return (
       <div className="btn-group nav-group">
         <div className="btn btn-default">
-          Wydarzenia
+          <T>Events</T>
         </div>
         <div className="btn btn-default">
           <i className="fa fa-plus"></i>

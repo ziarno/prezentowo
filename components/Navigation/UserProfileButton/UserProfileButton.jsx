@@ -24,20 +24,20 @@ UserProfileButton = React.createClass({
           <li className="waves-effect">
             <a>
               <i className="fa fa-user"></i>
-              Profil
+              <T>Profile</T>
             </a>
           </li>
           <li className="waves-effect">
             <a href="/change-password">
               <i className="fa fa-key"></i>
-              Zmień hasło
+              <T>Change password</T>
             </a>
           </li>
           <li className="divider"></li>
           <li className="waves-effect" onClick={this.logout}>
             <a>
               <i className="fa fa-sign-out"></i>
-              Wyloguj
+              <T>login.Logout</T>
             </a>
           </li>
         </ul>

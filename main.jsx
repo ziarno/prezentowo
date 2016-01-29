@@ -55,22 +55,22 @@ AccountsTemplates.addFields([
     _id: 'name',
     type: 'text',
     required: true,
-    displayName: "Imię i nazwisko",
-    placeholder: "Imię i nazwisko"
+    displayName: _i18n.__('Fullname'),
+    placeholder: _i18n.__('Fullname')
   },
   email,
   {
     _id: "gender",
     type: "radio",
     required: true,
-    displayName: "Płeć",
+    displayName: _i18n.__('Gender'),
     select: [
       {
-        text: "Kobieta",
+        text: _i18n.__('Female'),
         value: "female"
       },
       {
-        text: "Mężczyzna",
+        text: _i18n.__('Male'),
         value: "male"
       }
     ]

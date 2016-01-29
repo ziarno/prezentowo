@@ -1,0 +1,12 @@
+_locale: pl
+Events: Wydarzenia
+Profile: Profil
+Change password: Zmień hasło
+Fullname: Imię i nazwisko
+Gender: Płeć
+Male: Mężczyzna
+Female: Kobieta
+login: 
+  Login: Zaloguj
+  Register: Zarejestruj
+  Logout: Wyloguj

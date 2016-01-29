@@ -1,0 +1,12 @@
+_locale: en
+Events: Events
+Profile: Profile
+Change password: Change password
+Fullname: Fullname
+Gender: Gender
+Male: Male
+Female: Female
+login: 
+  Login: Login
+  Register: Register
+  Logout: Logout
