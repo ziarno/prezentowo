@@ -8,7 +8,7 @@ UserProfileButton = React.createClass({
     AccountsTemplates.logout();
   },
   openProfile() {
-    ModalManager.open(<SimpleModal />);
+    ModalManager.open(<SimpleModal title={_i18n.__('Profile')}/>);
   },
   render() {
     var pictureBackground = {
