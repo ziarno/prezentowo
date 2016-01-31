@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: 'FoglihtenNo07';
-  src: url('/fonts/FoglihtenNo07.otf');
+  src: url('/fonts/FoglihtenNo07-2.otf');
 }
 
 .no-selection::selection,
@@ -60,4 +60,10 @@ a:not(.outside-link) {
 
 .card-1:hover {
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+//cool bg
+.striped-bg {
+  background-color: rgba(60,141,13,0.2);
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
 }

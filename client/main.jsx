@@ -1,0 +1,3 @@
+Meteor.startup(() => {
+  ModalManager.init();
+});

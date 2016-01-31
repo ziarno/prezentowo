@@ -7,7 +7,7 @@ LoginOrRegisterButton = React.createClass({
           <T>login.Login</T>
         </a>
         <a href="/sign-up" className="btn btn-default">
-          <i className="glyphicon glyphicon-user"></i>
+          <i className="glyphicon glyphicon-user"></i>&nbsp;
           <T>login.Register</T>
         </a>
       </div>

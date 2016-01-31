@@ -7,6 +7,9 @@ UserProfileButton = React.createClass({
   logout() {
     AccountsTemplates.logout();
   },
+  openProfile() {
+    ModalManager.open(<SimpleModal />);
+  },
   render() {
     var pictureBackground = {
       backgroundImage: `url(${this.props.picture})`
@@ -21,7 +24,7 @@ UserProfileButton = React.createClass({
           <span className="caret"></span>
         </button>
         <ul className="dropdown-menu dropdown-menu--right dropdown-menu--with-icons">
-          <li className="waves-effect">
+          <li className="waves-effect" onClick={this.openProfile}>
             <a>
               <i className="fa fa-user"></i>
               <T>Profile</T>
