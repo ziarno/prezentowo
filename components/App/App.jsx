@@ -1,4 +1,9 @@
 App = React.createClass({
+  mixins: [ReactMeteorData],
+  getMeteorData() {
+    Meteor.subscribe('Events');
+    return {};
+  },
   componentDidMount() {
     Waves.attach('.btn:not(.waves-effect)');
   },

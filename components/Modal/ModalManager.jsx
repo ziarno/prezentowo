@@ -16,12 +16,12 @@ ModalManager = function () {
       modalContainer = $modalContainer[0];
     },
 
-    open(component) {
+    open(modalComponent) {
       if (isModalOpen) {
         throw new Error('Modal already opened');
       }
       isModalOpen = true;
-      ReactDOM.render(component, modalContainer);
+      ReactDOM.render(modalComponent, modalContainer);
     },
 
     close() {

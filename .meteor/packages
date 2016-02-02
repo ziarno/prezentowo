@@ -19,10 +19,10 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 dburles:collection-helpers
 reywood:publish-composite
 mdg:validated-method
-aldeed:collection2
 matb33:collection-hooks
 digilord:faker
 ongoworks:security
+aldeed:simple-schema
 
 # client
 react
@@ -47,3 +47,4 @@ underscore
 jparker:gravatar
 fortawesome:fontawesome
 universe:i18n
+aldeed:collection2

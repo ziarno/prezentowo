@@ -5,6 +5,8 @@ T9n.setLanguage('pl');
 _i18n.setLocale('pl');
 T = _i18n.createComponent();
 
+SimpleSchema.debug = true; //TODO: remove
+
 /**
  * Configuration for AccountsTemplates.
  * Must be called last (in main.jsx) because it
