@@ -6,7 +6,7 @@ Meteor.publish('Events', function () {
   return Events.find({
     participants: {
       $elemMatch: {
-        id: this.userId
+        userId: this.userId
       }
     }
   });

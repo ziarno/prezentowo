@@ -1,10 +1,30 @@
 //i18n for AccountsTemplates
 T9n.setLanguage('pl');
 
-//i18n component
+//i18n
 _i18n.setLocale('pl');
+_i18n.options = {
+  open: '[',
+  close: ']'
+};
 T = _i18n.createComponent();
 
+/**
+ * Updates error messages to current language
+ */
+SimpleSchema.updateMessages = function () {
+  var messages = _i18n.__('SimpleSchema');
+
+  messages.regEx.forEach((msgObject) => {
+    if (msgObject.exp) {
+      msgObject.exp = SimpleSchema.RegEx[msgObject.exp]
+    }
+  });
+
+  SimpleSchema.messages(messages);
+};
+
+SimpleSchema.updateMessages();
 SimpleSchema.debug = true; //TODO: remove
 
 /**
@@ -99,4 +119,4 @@ ConfigureAccountsTemplates = function () {
   AccountsTemplates.configureRoute('forgotPwd');
   AccountsTemplates.configureRoute('resetPwd');
   AccountsTemplates.configureRoute('enrollAccount');
-}
+};

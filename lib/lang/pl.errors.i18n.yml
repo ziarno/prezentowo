@@ -1,0 +1,7 @@
+_locale: pl
+No event: "Nie ma takiego wydarzenia (id: [eventId])"
+Only creator can remove: >
+  Tylko twórca wydarzenia może usuwać uczestników,
+  lub uczestnicy sami siebie
+Only creator can add: Tylko twórca wydarzenia może dodawać uczestników
+Remove creator: Twórca wydarzenia nie może zostać z niego usunięty
