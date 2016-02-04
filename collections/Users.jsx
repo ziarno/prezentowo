@@ -19,5 +19,19 @@ Meteor.users.findByVerifiedEmail = function (email) {
 Meteor.users.helpers({
   email() {
     return (this.emails && this.emails[0].address) || this.services.facebook.email;
+  },
+  isParticipant(eventId) {
+    return !!Events.findOne({
+      _id: eventId,
+      participants: {
+        userId: this._id
+      }
+    });
+  },
+  hasCreatedPresent(presentId) {
+    return !!Presents.findOne({
+      _id: presentId,
+      creatorUserId: presentId
+    });
   }
 });
