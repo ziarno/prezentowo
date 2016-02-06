@@ -1,13 +1,18 @@
 Mixins = {
-  loggedIn: RestrictMixin.createMixin({
-    condition() {
-      return !this.userId
-    },
-    error() {
-      return new Meteor.Error(
-        `${this.name}.unauthorized`,
-        _i18n.__('Must be logged in')
-      );
+  loggedIn: function (methodOptions) {
+    var originalRun = methodOptions.run;
+    if (_.isFunction(originalRun)) {
+      methodOptions.run = function () {
+        if (!this.userId) {
+          throw new Meteor.Error(
+            `${this.name}.unauthorized`,
+            _i18n.__('Must be logged in')
+          );
+        }
+        return originalRun.apply(this, arguments);
+      };
     }
-  })
+
+    return methodOptions;
+  }
 };

@@ -2,6 +2,7 @@ App = React.createClass({
   mixins: [ReactMeteorData],
   getMeteorData() {
     Meteor.subscribe('Events');
+    Meteor.subscribe('Presents');
     return {};
   },
   componentDidMount() {

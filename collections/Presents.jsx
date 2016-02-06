@@ -29,9 +29,6 @@ Presents.Schemas.NewPresent = new SimpleSchema({
   },
   forUserId: {
     type: String
-  },
-  creatorUserId: {
-    type: String
   }
 });
 
@@ -52,6 +49,14 @@ Presents.Schemas.Main = new SimpleSchema([
       type: [String],
       defaultValue: [],
       label: _i18n.__('Shared comments')
+    },
+    creatorUserId: {
+      type: String,
+      autoValue() {
+        if (this.isInsert) {
+          return this.userId;
+        }
+      }
     }
   }
 ]);
@@ -79,17 +84,40 @@ Presents.methods.addPresent = new ValidatedMethod({
 Presents.methods.removePresent = new ValidatedMethod({
   name: 'Presents.methods.removePresent',
   mixins: [Mixins.loggedIn],
-  validate: (presentId) => {
-    check(presentId, String)
-  },
-  run(presentId) {
+  validate: new SimpleSchema({
+    presentId: {
+      type: String
+    }
+  }).validator(),
+  run({presentId}) {
     if (!Meteor.user().isParticipant(present.eventId)) {
       throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'));
     }
     if (!Meteor.user().hasCreatedPresent(presentId)) {
-      throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Presents deleted by creators'));
+      throw new Meteor.Error(`${this.name}.notCreatedPresent`, _i18n.__('Presents deleted by creators'));
     }
 
     Presents.remove(presentId);
+  }
+});
+
+Presents.methods.editPresent = new ValidatedMethod({
+  name: 'Presents.methods.editPresent',
+  mixins: [Mixins.loggedIn],
+  validate: new SimpleSchema({
+    presentId: {
+      type: String
+    },
+    present: {
+      type: Presents.Schemas.NewPresent.pick(['title', 'description', 'picture'])
+    }
+  }).validator(),
+  run({presentId, present}) {
+    if (!Meteor.user().hasCreatedPresent(presentId)) {
+      throw new Meteor.Error(`${this.name}.notCreatedPresent`, _i18n.__('Presents edited by creators'));
+    }
+
+
+
   }
 });

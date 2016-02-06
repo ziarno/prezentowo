@@ -24,7 +24,9 @@ Meteor.users.helpers({
     return !!Events.findOne({
       _id: eventId,
       participants: {
-        userId: this._id
+        $elemMatch: {
+          userId: this._id
+        }
       }
     });
   },

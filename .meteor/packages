@@ -25,7 +25,6 @@ ongoworks:security
 aldeed:simple-schema
 aldeed:collection2
 kadira:debug
-ziarno:restrict-mixin
 
 # client
 react
@@ -50,3 +49,4 @@ underscore
 jparker:gravatar
 fortawesome:fontawesome
 universe:i18n
+autopublish
