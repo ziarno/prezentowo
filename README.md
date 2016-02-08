@@ -23,6 +23,8 @@ db.system.js.save({
       db.presents.remove({}, {multi: true});
       db.comments.remove({}, {multi: true});
       db.users.remove({}, {multi: true});
+      db.invitations.remove({}, {multi: true});
+      db.notifications.remove({}, {multi: true});
     }
 });
 ```
@@ -38,10 +40,12 @@ db.system.js.save({
             event.participants.forEach(function (participant) {
 
                 var ownPresentsCount = db.presents.count({
+                    eventId: event._id,
                     forUserId: participant.userId,
                     creatorId: participant.userId
                 });
                 var otherPresentsCount = db.presents.count({
+                    eventId: event._id,
                     forUserId: participant.userId,
                     creatorId: {$ne: participant.userId}
                 });
@@ -80,13 +84,13 @@ Test scripts
 ------------
 
 ```
-Events.methods.createEvent.call({
+var eventId = '3pv8hdxXXQXpsNAEr';
+
+var eventId = Events.methods.createEvent.call({
     title: 'Christmas 2016!',
     type: 'many-to-many',
-    date: new Date(24,11,2016)
+    date: new Date(2016,11,24)
 });
-
-var eventId = '3pv8hdxXXQXpsNAEr';
 
 Events.methods.addParticipant.call({
     eventId: eventId,
@@ -116,14 +120,14 @@ var forUserId = '7LNydRfj6Z2NzMRt7'
 
 Presents.methods.createPresent.call({
     title: 'iPod',
-    picture: 'pic',
+    pictureUrl: 'pic',
     forUserId: forUserId,
     eventId: eventId
 });
 
 Presents.methods.createPresent.call({
     title: 'telefon',
-    picture: 'pic',
+    pictureUrl: 'pic',
     description: 'desc',
     forUserId: forUserId,
     eventId: eventId

@@ -1,6 +1,6 @@
 UserProfileButton = React.createClass({
   propTypes: {
-    picture: React.PropTypes.string.isRequired,
+    pictureUrl: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
     onClick: React.PropTypes.func
   },
@@ -12,7 +12,7 @@ UserProfileButton = React.createClass({
   },
   render() {
     var pictureBackground = {
-      backgroundImage: `url(${this.props.picture})`
+      backgroundImage: `url(${this.props.pictureUrl.small})`
     };
 
     return (

@@ -23,7 +23,11 @@ Comments.Schemas.Main = new SimpleSchema({
   date: {
     type: Date,
     label: () => _i18n.__('Date'),
-    autoValue: () => new Date()
+    autoValue() {
+      if (this.isInsert) {
+        return new Date();
+      }
+    }
   },
   message: {
     type: String,
@@ -47,7 +51,7 @@ Comments.methods.createComment = new ValidatedMethod({
     },
     type: {
       type: String,
-      allowedValues: ['secret', 'public']
+      allowedValues: ['secret', 'shared']
     },
     message: {
       type: String
@@ -55,11 +59,10 @@ Comments.methods.createComment = new ValidatedMethod({
   }).validator(),
   run({presentId, type, message}) {
     var commentId;
-    var comment = {message, presentId};
     var presentModifier = {$addToSet: {}};
-    var commentsCollectionName = type === 'secret' ? 'commentsSecret' : 'commentsPublic';
+    var commentsCollectionName = type === 'secret' ? 'commentsSecret' : 'commentsShared';
 
-    commentId = Comments.insert(comment);
+    commentId = Comments.insert({message, presentId});
     presentModifier.$addToSet[commentsCollectionName] = commentId;
     Presents.update(presentId, presentModifier);
     return commentId;
@@ -75,31 +78,24 @@ Comments.methods.removeComment = new ValidatedMethod({
     }
   }).validator(),
   run({commentId}) {
-    var {presentId} = Comments.find(commentId, {fields: {presentId: 1}});
-    var commentHasBeenRemoved;
-
-    if (!presentId) {
-      throw new Meteor.Error(`${this.name}.noCommentFound`, _i18n.__('Comment not found'));
-    }
-
-    commentHasBeenRemoved = Comments.remove({
+    return Comments.remove({
       _id: commentId,
       userId: this.userId
     });
-
-    if (commentHasBeenRemoved) {
-      Presents.update(presentId, {
-        $pull: {
-          commentsSecret: commentId,
-          commentsPublic: commentId
-        }
-      });
-    }
-
-    return commentHasBeenRemoved;
   }
 });
+Comments.after.remove(function (userId, comment) {
+  if (!comment.presentId) {
+    return;
+  }
 
+  return Presents.update(comment.presentId, {
+    $pull: {
+      commentsSecret: comment._id,
+      commentsShared: comment._id
+    }
+  });
+});
 
 Comments.methods.editComment = new ValidatedMethod({
   name: 'Comments.methods.editComment',

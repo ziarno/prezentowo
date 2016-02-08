@@ -1,28 +1,36 @@
 /**
  * Users Collection
  */
+Meteor.users.permit(['insert', 'update', 'remove']).never().apply(); //ongoworks:security
+
+/**
+ * HELPER FUNCTIONS
+ */
 Meteor.users.findByEmail = function (email) {
-  return email && Meteor.users.findOne({$or: [
-    {'services.facebook.email': email},
-    {'emails': {$elemMatch: {address: email}}},
-    {'profile.isTemp': true, 'profile.email': email}
-  ]});
+  return email && Meteor.users.findOne({
+      registered_emails: {
+        $elemMatch: {
+          address: email
+        }
+      }
+    });
 };
 
 Meteor.users.findByVerifiedEmail = function (email) {
-  return email && Meteor.users.findOne({$or: [
-    {'services.facebook.email': email},
-    {'emails': {$elemMatch: {address: email, verified: true}}}
-  ]});
+  return email && Meteor.users.findOne({
+      registered_emails: {
+        $elemMatch: {
+          address: email,
+          verified: true
+        }
+      }
+    });
 };
 
 /**
  * Collection helpers
  */
 Meteor.users.helpers({
-  email() {
-    return (this.emails && this.emails[0].address) || this.services.facebook.email;
-  },
   isEventParticipant({eventId, presentId}) {
     var present;
 
@@ -31,13 +39,9 @@ Meteor.users.helpers({
       eventId = present && present.eventId;
     }
 
-    return !!Events.findOne({
-      _id: eventId,
-      participants: {
-        $elemMatch: {
-          userId: this._id
-        }
-      }
+    return Events.functions.isUserParticipant({
+      eventId,
+      participantId: this._id
     });
   },
   hasCreatedPresent(presentId) {

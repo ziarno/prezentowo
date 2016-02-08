@@ -10,3 +10,6 @@ $gradient-bg: linear-gradient(to bottom, $color-primary 0, $color-secondary 100%
 @mixin default-cursor() {
   cursor: default !important;
 }
+
+//other
+$transition-time: 0.3s;

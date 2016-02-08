@@ -13,6 +13,7 @@
 
 .btn {
   @include default-cursor();
+  transition: background-color $transition-time;
 }
 
 .fa {

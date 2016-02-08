@@ -15,7 +15,7 @@ Presents.Schemas.NewPresent = new SimpleSchema({
     type: String,
     label: _i18n.__('Title')
   },
-  picture: {
+  pictureUrl: {
     type: String,
     label: _i18n.__('Picture')
   },
@@ -60,8 +60,12 @@ Presents.Schemas.Main = new SimpleSchema([
     },
     date: {
       type: Date,
-      label: () => {_i18n.__('Date')},
-      autoValue: () => new Date()
+      label: () => _i18n.__('Date'),
+      autoValue() {
+        if (this.isInsert) {
+          return new Date();
+        }
+      }
     }
   }
 ]);
@@ -78,6 +82,7 @@ Presents.functions.updatePresentsCount = function (incrementValue, userId, prese
   var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount';
   var countModifier = {$inc: {}};
   countModifier.$inc[`participants.$.${countFieldName}`] = incrementValue;
+
   Events.update({
     _id: present.eventId,
     'participants.userId': present.forUserId
@@ -149,18 +154,18 @@ Presents.methods.editPresent = new ValidatedMethod({
       type: String
     },
     present: {
-      type: Presents.Schemas.NewPresent.pick(['title', 'description', 'picture'])
+      type: Presents.Schemas.NewPresent.pick(['title', 'description', 'pictureUrl'])
     }
   }).validator(),
   run({presentId, present}) {
-    var {title, picture, description} = present;
+    var {title, pictureUrl, description} = present;
 
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(`${this.name}.notCreatedPresent`, _i18n.__('Presents edited by creators'));
     }
 
     return Presents.update(presentId, {$set: {
-      title, picture, description
+      title, pictureUrl, description
     }});
   }
 });
