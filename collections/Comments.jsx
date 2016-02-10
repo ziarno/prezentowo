@@ -20,9 +20,9 @@ Comments.Schemas.Main = new SimpleSchema({
   presentId: {
     type: String
   },
-  date: {
+  createdAt: {
     type: Date,
-    label: () => _i18n.__('Date'),
+    label: () => _i18n.__('Created'),
     autoValue() {
       if (this.isInsert) {
         return new Date();

@@ -58,9 +58,9 @@ Presents.Schemas.Main = new SimpleSchema([
         }
       }
     },
-    date: {
+    createdAt: {
       type: Date,
-      label: () => _i18n.__('Date'),
+      label: () => _i18n.__('Created'),
       autoValue() {
         if (this.isInsert) {
           return new Date();

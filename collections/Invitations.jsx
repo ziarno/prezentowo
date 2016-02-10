@@ -18,6 +18,15 @@ Invitations.Schemas.Main = new SimpleSchema({
   },
   isForTempUser: {
     type: Boolean
+  },
+  createdAt: {
+    type: Date,
+    label: () => _i18n.__('Created'),
+    autoValue() {
+      if (this.isInsert) {
+        return new Date();
+      }
+    }
   }
 });
 

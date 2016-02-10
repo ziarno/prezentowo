@@ -17,8 +17,9 @@ Notifications.Schemas.Main = new SimpleSchema({
     type: String,
     allowedValues: ['new', 'changed', 'edited']
   },
-  date: {
+  createdAt: {
     type: String,
+    label: () => _i18n.__('Created'),
     autoValue() {
       if (!this.isSet) {
         return new Date();
