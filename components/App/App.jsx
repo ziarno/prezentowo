@@ -13,7 +13,7 @@ App = React.createClass({
     return (
       <div>
         <Header />
-        <div className="content">
+        <div className="app-content">
           {this.props.content}
         </div>
       </div>

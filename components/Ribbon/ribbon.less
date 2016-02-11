@@ -1,4 +1,4 @@
-@import '{}/client/styles/variables';
+@import '/client/styles/partials/vars.import.less';
 
 .ribbon {
   margin-left: -15px;
@@ -9,11 +9,11 @@
   text-align: center;
   font-size: 14px;
   background: #3c8d0d;
-  background: -webkit-gradient(linear, left top, left bottom, from($color-primary), to(#2d6a0a));
-  background: -webkit-linear-gradient(top, $color-primary, #2d6a0a);
-  background: -moz-linear-gradient(top, $color-primary, #2d6a0a);
-  background: -ms-linear-gradient(top, $color-primary, #2d6a0a);
-  background: -o-linear-gradient(top, $color-primary, #2d6a0a);
+  background: -webkit-gradient(linear, left top, left bottom, from(@color-primary), to(#2d6a0a));
+  background: -webkit-linear-gradient(top, @color-primary, #2d6a0a);
+  background: -moz-linear-gradient(top, @color-primary, #2d6a0a);
+  background: -ms-linear-gradient(top, @color-primary, #2d6a0a);
+  background: -o-linear-gradient(top, @color-primary, #2d6a0a);
   background-image: -ms-linear-gradient(top, #3c8d0d 0%, #2d6a0a 100%);
   box-shadow: rgba(000,000,000,0.3) 0 1px 1px;
 

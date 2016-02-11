@@ -1,1 +1,6 @@
 .idea/
+client/lib/semantic-ui/*
+!client/lib/semantic-ui/site/
+!client/lib/semantic-ui/custom.semantic.json
+!client/lib/semantic-ui/theme.config.import.less
+.DS_Store

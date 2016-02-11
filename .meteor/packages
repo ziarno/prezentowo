@@ -27,6 +27,7 @@ aldeed:collection2
 kadira:debug
 
 # client
+less
 react
 kadira:react-layout
 kadira:blaze-layout
@@ -36,18 +37,15 @@ msavin:mongol
 meteorhacks:fast-render
 meteorhacks:subs-manager
 ongoworks:speakingurl
-fourseven:scss
 seba:minifiers-autoprefixer
 accounts-password
 accounts-facebook
 komorebi:waves
-reywood:bootstrap3-sass
-useraccounts:bootstrap
+useraccounts:semantic-ui
 useraccounts:flow-routing
 gwendall:blaze-to-react
 underscore
 jparker:gravatar
-fortawesome:fontawesome
 universe:i18n
 splendido:accounts-emails-field
-sacha:spin
+semantic:ui
