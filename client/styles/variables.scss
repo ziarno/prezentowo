@@ -1,10 +1,12 @@
 //sizes
 $header-height: 50px;
+$footer-height: 10px;
 
 //colors
 $color-primary: #3c8d0d;
 $color-secondary: #245508;
 $gradient-bg: linear-gradient(to bottom, $color-primary 0, $color-secondary 100%);
+$gradient-bg-reverse: linear-gradient(to bottom, $color-secondary 0, $color-primary 100%);
 
 //mixins
 @mixin default-cursor() {
