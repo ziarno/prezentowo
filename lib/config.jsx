@@ -1,7 +1,7 @@
 //i18n for AccountsTemplates
 T9n.setLanguage('pl');
 
-//i18n
+//universe:i18n
 _i18n.setLocale('pl');
 _i18n.options = {
   open: '[',
@@ -24,7 +24,6 @@ SimpleSchema.updateMessages = function () {
   SimpleSchema.messages(messages);
 };
 
-SimpleSchema.updateMessages();
 SimpleSchema.debug = true; //TODO: remove
 
 /**

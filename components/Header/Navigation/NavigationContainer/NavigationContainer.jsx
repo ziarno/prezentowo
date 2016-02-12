@@ -5,22 +5,25 @@ NavigationContainer = React.createClass({
       user: Meteor.user()
     };
   },
-  getNavigation() {
+  getLoggedInNavigation() {
     return (
-      <div>
+      <div id="navigation-container">
         <EventsButton />
         <UserProfileButton {...this.data.user.profile} />
         <NotificationIcon />
       </div>
-    )
+    );
+  },
+  getLoggedOutNavigation() {
+    return (
+      <div id="navigation-container">
+        <LoginOrRegisterButton />
+      </div>
+    );
   },
   render() {
-    return (
-      <div className="navigation-container">
-        {this.data.user ?
-          this.getNavigation() :
-          <LoginOrRegisterButton />}
-      </div>
-    )
+    return this.data.user ?
+      this.getLoggedInNavigation() :
+      this.getLoggedOutNavigation();
   }
 });

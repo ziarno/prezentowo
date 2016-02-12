@@ -1,13 +1,13 @@
 LoginOrRegisterButton = React.createClass({
   render() {
     return (
-      <div className="btn-group nav-group">
-        <a href="/sign-in" className="btn btn-default">
-          <i className="fa fa-sign-in fa--space-right"></i>
+      <div className="ui buttons compact user-panel">
+        <a href="/sign-in" className="ui button">
+          <i className="sign in icon"></i>
           <T>login.Login</T>
         </a>
-        <a href="/sign-up" className="btn btn-default">
-          <i className="glyphicon glyphicon-user"></i>&nbsp;
+        <a href="/sign-up" className="ui button">
+          <i className="user icon"></i>
           <T>login.Register</T>
         </a>
       </div>

@@ -6,13 +6,13 @@ EventsButton = React.createClass({
 
   render() {
     return (
-      <div className="btn-group nav-group">
-        <div className="btn btn-default">
-          <T>Events</T>&nbsp;
-          <span className="caret"></span>
+      <div className="ui buttons compact">
+        <div className="ui icon button">
+          <T>Events</T>
+          <i className="caret down icon"></i>
         </div>
-        <div className="btn btn-default" onClick={this.showCreateEventModal}>
-          <i className="fa fa-plus"></i>
+        <div className="ui button icon" onClick={this.showCreateEventModal}>
+          <i className="plus icon"></i>
         </div>
       </div>
     )

@@ -11,11 +11,11 @@ a {
     cursor: default !important;
   }
 
-  &:hover:before {
+  &:not(.ui):hover:before {
     transform: scaleX(1);
   }
 
-  &:before {
+  &:not(.ui):before {
     background-color: @color-primary;
     position: absolute;
     top: auto;

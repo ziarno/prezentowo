@@ -16,14 +16,14 @@ UserProfileButton = React.createClass({
     };
 
     return (
-      <div className="user-profile-button btn-group nav-group">
-        <div className="user-profile-button--name btn btn-default" style={pictureBackground}>
+      <div id="user-profile-button" className="ui buttons compact user-panel">
+        <div className="user-profile-button--name ui button" style={pictureBackground}>
           <span>{this.props.name}</span>
         </div>
-        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          <span className="caret"></span>
+        <button type="button" className="ui icon button" data-toggle="dropdown">
+          <i className="caret down icon"></i>
         </button>
-        <ul className="dropdown-menu dropdown-menu--right dropdown-menu--with-icons">
+        {/*<ul className="dropdown-menu dropdown-menu--right dropdown-menu--with-icons">
           <li className="waves-effect" onClick={this.openProfile}>
             <a>
               <i className="fa fa-user"></i>
@@ -43,7 +43,7 @@ UserProfileButton = React.createClass({
               <T>login.Logout</T>
             </a>
           </li>
-        </ul>
+        </ul>*/}
       </div>
     )
   }
