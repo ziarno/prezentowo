@@ -93,19 +93,20 @@ ConfigureAccountsTemplates = function () {
     },
     email,
     {
-      _id: "gender",
-      type: "select",
+      _id: 'gender',
+      type: 'select',
+      template: 'genderInput',
       required: true,
       placeholder: _i18n.__('Gender'),
       displayName: _i18n.__('Gender'),
       select: [
         {
           text: _i18n.__('Female'),
-          value: "female"
+          value: 'female'
         },
         {
           text: _i18n.__('Male'),
-          value: "male"
+          value: 'male'
         }
       ]
     },

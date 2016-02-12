@@ -1,4 +1,4 @@
-<template name="customAtSelectInput">
+<template name="genderInput">
   <div class="at-input {{#if required}} required {{/if}} {{#if hasError}} error {{/if}} field">
     {{#if showLabels}}
       <label>{{displayName}}</label>
@@ -9,7 +9,10 @@
       <i class="dropdown icon"></i>
       <div class="menu">
         {{#each values}}
-          <div class="item" data-value="{{value}}">{{text}}</div>
+          <div class="item" data-value="{{value}}">
+            <i class="{{getIconName value}} icon"></i>
+            {{text}}
+          </div>
         {{/each}}
       </div>
     </div>
