@@ -1,0 +1,14 @@
+<template name="atGenderInput">
+  <div class="inline fields">
+    <label>{{displayName}}</label>
+    {{#each values}}
+      <div class="at-input field">
+        <div class="ui radio checkbox">
+          <input id="at-field-{{id}}-choice-{{value}}" type="radio" name="at-field-{{id}}"
+                 value= {{value}} tabindex="0" class="hidden">
+          <label for="at-field-{{id}}-choice-{{value}}">{{text}}</label>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</template>

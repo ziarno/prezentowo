@@ -99,6 +99,7 @@ ConfigureAccountsTemplates = function () {
       type: "radio",
       required: true,
       displayName: _i18n.__('Gender'),
+      template: 'atGenderInput',
       select: [
         {
           text: _i18n.__('Female'),
