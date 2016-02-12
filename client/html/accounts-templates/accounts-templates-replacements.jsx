@@ -23,6 +23,7 @@ function retriggerDropdownEvents() {
 }
 
 Template.customAtPwdFormBtn.replaces('atPwdFormBtn');
+Template.customFullPageAtForm.replaces('fullPageAtForm');
 Template.atSelectInput.onRendered(retriggerDropdownEvents);
 Template.genderInput.onRendered(retriggerDropdownEvents);
 Template.genderInput.helpers({
