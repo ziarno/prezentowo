@@ -1,0 +1,22 @@
+<template name="customAtSelectInput">
+  <div class="at-input {{#if required}} required {{/if}} {{#if hasError}} error {{/if}} field">
+    {{#if showLabels}}
+      <label>{{displayName}}</label>
+    {{/if}}
+    <div class="ui fluid selection dropdown">
+      <input type="hidden" id="at-field-{{_id}}" name="at-field-{{_id}}">
+      <div class="default text">{{displayName}}</div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        {{#each values}}
+          <div class="item" data-value="{{value}}">{{text}}</div>
+        {{/each}}
+      </div>
+    </div>
+    {{#if hasError}}
+      <div class="at-wrap">
+        <div class="ui large red pointing label">{{errorText}}</div>
+      </div>
+    {{/if}}
+  </div>
+</template>

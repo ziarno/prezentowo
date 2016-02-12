@@ -89,16 +89,15 @@ ConfigureAccountsTemplates = function () {
       _id: 'name',
       type: 'text',
       required: true,
-      displayName: _i18n.__('Fullname'),
       placeholder: _i18n.__('Fullname')
     },
     email,
     {
       _id: "gender",
-      type: "radio",
+      type: "select",
       required: true,
+      placeholder: _i18n.__('Gender'),
       displayName: _i18n.__('Gender'),
-      template: 'atGenderInput',
       select: [
         {
           text: _i18n.__('Female'),
