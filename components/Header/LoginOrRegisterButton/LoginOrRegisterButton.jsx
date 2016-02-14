@@ -1,7 +1,7 @@
 LoginOrRegisterButton = React.createClass({
   render() {
     return (
-      <div className="ui buttons compact user-panel">
+      <div className="ui buttons compact">
         <a href="/sign-in" className="ui button">
           <i className="sign in icon"></i>
           <T>login.Login</T>

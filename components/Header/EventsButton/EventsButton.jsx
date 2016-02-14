@@ -1,5 +1,7 @@
 EventsButton = React.createClass({
 
+  mixins: [Mixins.dropdown],
+
   showCreateEventModal() {
     ModalManager.open(<CreateEventModal />);
   },
@@ -7,12 +9,9 @@ EventsButton = React.createClass({
   render() {
     return (
       <div className="ui buttons compact">
-        <div className="ui icon button">
+        <div className="ui icon button right labeled">
           <T>Events</T>
           <i className="caret down icon"></i>
-        </div>
-        <div className="ui button icon" onClick={this.showCreateEventModal}>
-          <i className="plus icon"></i>
         </div>
       </div>
     )
