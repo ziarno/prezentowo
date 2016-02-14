@@ -1,3 +1,12 @@
+Config = {
+  popup: {
+    variation: 'inverted tiny',
+    delay: {
+      show: 500
+    }
+  }
+};
+
 //i18n for AccountsTemplates
 T9n.setLanguage('pl');
 

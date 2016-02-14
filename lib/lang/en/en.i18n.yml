@@ -1,5 +1,6 @@
 _locale: en
 Events: Events
+Past events: Past events
 Profile: Profile
 Change password: Change password
 Fullname: Fullname
@@ -21,3 +22,5 @@ Description: Description
 Buyers: Buyers
 Secret comments: Secret comments
 Shared comments: Shared comments
+Notifications: Notifications
+New event: New event

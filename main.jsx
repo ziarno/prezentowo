@@ -1,5 +1,10 @@
 ConfigureAccountsTemplates(); //defined in lib/config.jsx
 
 Meteor.startup(function () {
-  Meteor.setTimeout(SimpleSchema.updateMessages);
+  if (Meteor.isServer) {
+    SimpleSchema.updateMessages();
+  } else {
+    //load on document ready
+    $(SimpleSchema.updateMessages);
+  }
 });

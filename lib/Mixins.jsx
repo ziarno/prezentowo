@@ -42,9 +42,11 @@ Mixins.dropdown = {
         onHide: () => this.$dropdownTrigger.removeClass('active'),
         ...this.dropdownOptions
       });
-      this.$dropdownTrigger.on('click', () => {
-        this.$dropdown.dropdown('show')
-      });
+      this.$dropdownTrigger
+        .on('click', () => {
+          this.$dropdown.dropdown('show')
+        })
+        .css('border-radius', '4px');
     }
   }
 };

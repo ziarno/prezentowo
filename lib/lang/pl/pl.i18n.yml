@@ -1,5 +1,6 @@
 _locale: pl
 Events: Wydarzenia
+Past events: Przeszłe wydarzenia
 Profile: Profil
 Change password: Zmień hasło
 Fullname: Imię i nazwisko
@@ -21,3 +22,5 @@ Description: Opis
 Buyers: Kupujący
 Secret comments: Komentarze sekretne
 Shared comments: Komentarze wspólne
+Notifications: Powiadomienia
+New event: Nowe wydarzenie

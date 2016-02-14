@@ -14,7 +14,7 @@ Meteor.publish('events', function () {
     }
   }, {
     sort: {
-      createdAt: -1
+      date: -1
     }
   });
 });
