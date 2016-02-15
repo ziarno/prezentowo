@@ -25,10 +25,12 @@ Presents.Schemas.NewPresent = new SimpleSchema({
     optional: true
   },
   eventId: {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   forUserId: {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   }
 });
 
@@ -37,6 +39,7 @@ Presents.Schemas.Main = new SimpleSchema([
   {
     buyers: {
       type: [String],
+      regEx: SimpleSchema.RegEx.Id,
       defaultValue: [],
       label: _i18n.__('Buyers')
     },
@@ -52,6 +55,7 @@ Presents.Schemas.Main = new SimpleSchema([
     },
     creatorId: {
       type: String,
+      regEx: SimpleSchema.RegEx.Id,
       autoValue() {
         if (this.isInsert) {
           return this.userId;

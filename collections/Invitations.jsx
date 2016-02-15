@@ -11,10 +11,12 @@ Invitations.Schemas = {};
 
 Invitations.Schemas.Main = new SimpleSchema({
   forEventId: {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   forUserId: {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   isForTempUser: {
     type: Boolean

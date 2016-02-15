@@ -32,7 +32,8 @@ Notifications.Schemas.Main = new SimpleSchema({
     type: [Object]
   },
   'seenByUsers.id': {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   'seenByUsers.seen': {
     type: Boolean
@@ -43,7 +44,8 @@ Notifications.Schemas.Main = new SimpleSchema({
     type: Object
   },
   'byUser.id': {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   'byUser.name': {
     type: String
@@ -58,7 +60,8 @@ Notifications.Schemas.Main = new SimpleSchema({
     optional: true
   },
   'forUser.id': {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   'forUser.name': {
     type: String
@@ -73,7 +76,8 @@ Notifications.Schemas.Main = new SimpleSchema({
     optional: true
   },
   'forPresent.id': {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   'forPresent.name': {
     type: String
@@ -88,7 +92,8 @@ Notifications.Schemas.Main = new SimpleSchema({
     optional: true
   },
   'forEvent.id': {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   'forEvent.name': {
     type: String

@@ -13,12 +13,14 @@ Comments.Schemas = {};
 Comments.Schemas.Main = new SimpleSchema({
   userId: {
     type: String,
+    regEx: SimpleSchema.RegEx.Id,
     autoValue() {
       return this.userId;
     }
   },
   presentId: {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   createdAt: {
     type: Date,
