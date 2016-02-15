@@ -25,7 +25,14 @@ Mixins.loggedIn = function loggedInMixin(methodOptions) {
  */
 
 /**
- * DROPDOWN mixin
+ * DROPDOWN MIXIN
+ *
+ * This exists because semantic-ui normally
+ * requires the dropdown content to be *inside*
+ * the button which triggers it - requires
+ * overflow: visible, and the *ripple effect*
+ * requires overflow: hidden;
+ *
  * Requires:
  * refs: dropdown-trigger and dropdown
  * dropdownOptions (optional)

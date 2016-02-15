@@ -22,7 +22,7 @@ EventsButton = React.createClass({
           {event.title}
         </div>
       </div>
-    )
+    );
   },
 
   showEvent() {
@@ -54,7 +54,8 @@ EventsButton = React.createClass({
         <div className="ui dropdown" ref="dropdown">
             <div className="menu">
 
-              <div className="item new-event">
+              <div className="item new-event"
+                   onClick={this.showCreateEventModal}>
                 <i className="plus icon"></i>
                 <T>New event</T>
               </div>

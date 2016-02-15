@@ -1,39 +1,35 @@
 ModalManager = function () {
 
-  var isModalOpen, $modalContainer, modalContainer;
+  var $modal;
+  var modalContainer;
 
   return {
 
     init() {
-      isModalOpen = false;
-      $modalContainer = $('<div id="modal-container"></div>');
-      $modalContainer
-        .on('hidden.bs.modal', this.onHidden)
-        .on('show.bs.modal', function () {
-          Waves.attach('.btn:not(.waves-effect)');
-        })
-        .appendTo(document.body);
-      modalContainer = $modalContainer[0];
+      modalContainer = document.createElement('div');
+      modalContainer.id = 'modal-container';
+      document.body.appendChild(modalContainer);
     },
 
     open(modalComponent) {
-      if (isModalOpen) {
-        throw new Error('Modal already opened');
-      }
-      isModalOpen = true;
-      ReactDOM.render(modalComponent, modalContainer);
+      $modal = $(ReactDOM.findDOMNode(
+        ReactDOM.render(modalComponent, modalContainer)
+      ));
+      $modal.modal({
+        detachable: false,
+        autofocus: false,
+        onShow() {
+          Waves.attach('.button');
+        },
+        onHidden() {
+          ReactDOM.unmountComponentAtNode(modalContainer);
+        }
+      });
+      $modal.modal('show');
     },
 
     close() {
-      if (!isModalOpen) {
-        throw new Error('No modal open');
-      }
-      $modalContainer.find('.modal').modal('hide');
-    },
-
-    onHidden() {
-      isModalOpen = false;
-      ReactDOM.unmountComponentAtNode(modalContainer);
+      $modal.modal('hide');
     }
   };
 

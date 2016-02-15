@@ -1,7 +1,7 @@
 SimpleModal = React.createClass({
   render() {
     return (
-      <Modal {...this.props} ribbon>
+      <Modal {...this.props} >
         <span>lalala</span>
       </Modal>
     )
