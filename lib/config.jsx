@@ -7,11 +7,7 @@ Config = {
   }
 };
 
-//i18n for AccountsTemplates
-T9n.setLanguage('pl');
-
 //universe:i18n
-_i18n.setLocale('pl');
 _i18n.options = {
   open: '[',
   close: ']'
@@ -24,16 +20,32 @@ T = _i18n.createComponent();
 SimpleSchema.updateMessages = function () {
   var messages = _i18n.__('SimpleSchema');
 
-  messages.regEx.forEach((msgObject) => {
-    if (msgObject.exp) {
-      msgObject.exp = SimpleSchema.RegEx[msgObject.exp]
-    }
-  });
+  if (messages.length) {
+    messages.regEx.forEach((msgObject) => {
+      if (msgObject.exp) {
+        msgObject.exp = SimpleSchema.RegEx[msgObject.exp]
+      }
+    });
 
-  SimpleSchema.messages(messages);
+    SimpleSchema.messages(messages);
+  }
+
 };
 
 SimpleSchema.debug = true; //TODO: remove
+
+SetLanguage = function (lang) {
+  //i18n for AccountsTemplates
+  T9n.setLanguage(lang);
+
+  //momentjs
+  moment.locale(lang);
+
+  //universe:i18n
+  _i18n.setLocale(lang);
+
+  SimpleSchema.updateMessages();
+};
 
 /**
  * Configuration for AccountsTemplates.

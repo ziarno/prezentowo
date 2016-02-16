@@ -12,14 +12,14 @@ EventsButton = React.createClass({
 
   getEventItem(event) {
     return (
-      <div className="item event"
+      <div className="item event flex"
            onClick={this.showEvent.bind(this, event)}
            key={event._id}>
-        <div className="description">
-          {moment(event.date).format('L')}
-        </div>
         <div className="text">
           {event.title}
+        </div>
+        <div className="description">
+          <DateField date={event.date} />
         </div>
       </div>
     );

@@ -3,7 +3,11 @@
 *******************************/
 
 .ui.dropdown {
-  &, & .item {
-    cursor: default !important;
+  &, & .menu > .item {
+    cursor: default;
+    &.flex {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 }
