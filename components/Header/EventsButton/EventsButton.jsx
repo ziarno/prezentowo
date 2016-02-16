@@ -31,22 +31,27 @@ EventsButton = React.createClass({
 
   render() {
     var now = new Date();
-    var futureEvents = [];
+    var activeEvents = [];
     var pastEvents = [];
+    var activeEventsHeader;
 
     this.props.events.forEach((event) => {
       if (now < event.date) {
-        futureEvents.unshift(event);
+        activeEvents.unshift(event);
       } else {
         pastEvents.unshift(event);
       }
     });
 
+    activeEventsHeader = activeEvents.length ?
+      <T>Active events</T> :
+      <T>No active events</T>;
+
     return (
       <div  className="ui buttons compact">
         <div className={"ui icon button right labeled " +
-                        "waves-effect waves-button" +
-                        (!this.props.ready && "loading")}
+                        "waves-effect waves-button " +
+                        (!this.props.ready ? "loading": "")}
              ref="dropdown-trigger">
           <T>Events</T>
           <i className="caret down icon"></i>
@@ -60,10 +65,11 @@ EventsButton = React.createClass({
                 <T>New event</T>
               </div>
 
-              {!!futureEvents.length && (
               <div className="divider"></div>
-              )}
-              {futureEvents.map(this.getEventItem)}
+              <div className={"header " + (!activeEvents.length ? "inactive" : "")}>
+                {activeEventsHeader}
+              </div>
+              {activeEvents.map(this.getEventItem)}
 
               {!!pastEvents.length && (
               <div className="divider"></div>

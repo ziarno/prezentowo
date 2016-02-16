@@ -1,5 +1,15 @@
+@import '/client/styles/partials/vars.import.less';
+
 .ui.dropdown  {
   .new-event {
     text-align: center !important;
+  }
+  .header.inactive {
+    text-align: center;
+    cursor: default;
+    color: #aaa;
+    &::selection {
+      background: transparent;
+    }
   }
 }
