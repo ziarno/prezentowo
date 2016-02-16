@@ -7,10 +7,9 @@ Fullname: Fullname
 Gender: Gender
 Male: Male
 Female: Female
-login: 
-  Login: Login
-  Register: Register
-  Logout: Logout
+Login: Login
+Register: Register
+Logout: Logout
 New event: New event
 Title: Title
 Event type: Event type
@@ -26,3 +25,6 @@ Notifications: Notifications
 New event: New event
 Active events: Active events
 No active events: You have no active events
+today: today
+yesterday: yesterday
+tomorrow: tomorrow

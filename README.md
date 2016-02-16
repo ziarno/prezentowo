@@ -151,3 +151,5 @@ Todo:
 - add security for adding comments:
   - to add a comment user must be in the event that present is in (so need to find that event and present)
   - to add a secret comment user must not be in "forId" (can't add a comment to his own present)
+- lang rerendering
+- momentjs renrendering (5 minutes ago will be invalid after some time)

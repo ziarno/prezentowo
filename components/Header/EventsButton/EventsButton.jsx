@@ -19,7 +19,7 @@ EventsButton = React.createClass({
           {event.title}
         </div>
         <div className="description">
-          <DateField date={event.date} />
+          <DateField date={event.date} roundToDays />
         </div>
       </div>
     );

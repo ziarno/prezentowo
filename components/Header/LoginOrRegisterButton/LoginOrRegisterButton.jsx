@@ -4,11 +4,11 @@ LoginOrRegisterButton = React.createClass({
       <div className="ui buttons compact">
         <a href="/sign-in" className="ui button">
           <i className="sign in icon"></i>
-          <T>login.Login</T>
+          <T>Login</T>
         </a>
         <a href="/sign-up" className="ui button">
           <i className="user icon"></i>
-          <T>login.Register</T>
+          <T>Register</T>
         </a>
       </div>
     )

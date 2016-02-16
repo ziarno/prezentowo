@@ -19,7 +19,7 @@ ModalManager = function () {
         detachable: false,
         autofocus: false,
         onShow() {
-          Waves.attach('.button');
+          Waves.attach('.button', 'waves-button');
         },
         onHidden() {
           ReactDOM.unmountComponentAtNode(modalContainer);

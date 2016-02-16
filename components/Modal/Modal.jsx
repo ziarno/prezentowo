@@ -9,11 +9,9 @@ Modal = React.createClass({
     const title = this.props.ribbon ? (
       <Ribbon>
         <h1>{this.props.title}</h1>
-        <i className="close icon"></i>
       </Ribbon>
     ) : (
       <div className="header">
-        <i className="close icon"></i>
         {this.props.title}
       </div>
     );
@@ -28,8 +26,8 @@ Modal = React.createClass({
         </div>
 
         <div className="actions">
-          <button className="ui button">Close</button>
-          <button className="ui button">Save changes</button>
+          <button className="ui button compact">Close</button>
+          <button className="ui button compact">Save changes</button>
         </div>
             
       </div>

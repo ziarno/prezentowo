@@ -6,7 +6,7 @@ UserProfileButton = React.createClass({
   },
   componentDidMount() {
     $(this.refs.logout).popup({
-      content: _i18n.__('login.Logout'),
+      content: _i18n.__('Logout'),
       variation: 'inverted tiny',
       position: 'bottom right',
       delay: {

@@ -7,10 +7,9 @@ Fullname: Imię i nazwisko
 Gender: Płeć
 Male: Mężczyzna
 Female: Kobieta
-login: 
-  Login: Zaloguj
-  Register: Zarejestruj
-  Logout: Wyloguj
+Login: Zaloguj
+Register: Zarejestruj
+Logout: Wyloguj
 New event: Nowe wydarzenie
 Title: Tytuł
 Event type: Typ wydarzenia
@@ -26,3 +25,6 @@ Notifications: Powiadomienia
 New event: Nowe wydarzenie
 Active events: Aktywne wydarzenia
 No active events: Nie masz aktywnych wydarzeń
+today: dzisiaj
+yesterday: wczoraj
+tomorrow: jutro
