@@ -8,10 +8,8 @@ Config = {
 };
 
 //universe:i18n
-_i18n.options = {
-  open: '[',
-  close: ']'
-};
+_i18n.options.open = '[';
+_i18n.options.close = ']';
 T = _i18n.createComponent();
 
 /**
@@ -20,7 +18,7 @@ T = _i18n.createComponent();
 SimpleSchema.updateMessages = function () {
   var messages = _i18n.__('SimpleSchema');
 
-  if (messages.length) {
+  if (_.isObject(messages)) {
     messages.regEx.forEach((msgObject) => {
       if (msgObject.exp) {
         msgObject.exp = SimpleSchema.RegEx[msgObject.exp]
