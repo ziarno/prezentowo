@@ -24,4 +24,20 @@
     line-height: @header-height + 5px;
     font-size: 35px;
   }
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    border-top: 1px dashed rgba(255,255,255, 0.3);
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+  }
+  &:before {
+    top: 2px;
+  }
+  &:after {
+    bottom: 2px;
+  }
+
 }
