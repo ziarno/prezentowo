@@ -1,6 +1,6 @@
 //defined in lib/config.jsx
-ConfigureAccountsTemplates();
 SetLanguage('pl');
+ConfigureAccountsTemplates();
 
 Meteor.startup(function () {
   if (Meteor.isServer) {

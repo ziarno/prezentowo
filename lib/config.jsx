@@ -20,8 +20,8 @@ SimpleSchema.updateMessages = function () {
 
   if (_.isObject(messages)) {
     messages.regEx.forEach((msgObject) => {
-      if (msgObject.exp) {
-        msgObject.exp = SimpleSchema.RegEx[msgObject.exp]
+      if (msgObject.expression) {
+        msgObject.exp = SimpleSchema.RegEx[msgObject.expression]
       }
     });
 

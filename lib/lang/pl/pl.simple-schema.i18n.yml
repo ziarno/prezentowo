@@ -21,12 +21,12 @@ SimpleSchema:
   keyNotInSchema: "[key] nie jest dozwolony przez schemat"
   regEx:
   - {msg: "[label] - walidacja wyrażeniem regularnym nie powiodła się"}
-  - {exp: Email, msg: "[label] musi być poprawnym adresem e-mail"}
-  - {exp: WeakEmail, msg: "[label] musi być poprawnym adresem e-mail"}
-  - {exp: Domain, msg: "[label] musi być poprawną domeną"}
-  - {exp: WeakDomain, msg: "[label] musi być poprawną domeną"}
-  - {exp: IP, msg: "[label] musi być poprawnym adresem IPv4 lub IPv6"}
-  - {exp: IPv4, msg: "[label] musi być poprawnym adresem IPv4"}
-  - {exp: IPv6, msg: "[label] musi być poprawnym adresem IPv6"}
-  - {exp: Url, msg: "[label] musi być poprawnym adresem URL"}
-  - {exp: Id, msg: "[label] musi być poprawnym ID alfanumerycznym"}
+  - {expression: Email, msg: "[label] musi być poprawnym adresem e-mail"}
+  - {expression: WeakEmail, msg: "[label] musi być poprawnym adresem e-mail"}
+  - {expression: Domain, msg: "[label] musi być poprawną domeną"}
+  - {expression: WeakDomain, msg: "[label] musi być poprawną domeną"}
+  - {expression: IP, msg: "[label] musi być poprawnym adresem IPv4 lub IPv6"}
+  - {expression: IPv4, msg: "[label] musi być poprawnym adresem IPv4"}
+  - {expression: IPv6, msg: "[label] musi być poprawnym adresem IPv6"}
+  - {expression: Url, msg: "[label] musi być poprawnym adresem URL"}
+  - {expression: Id, msg: "[label] musi być poprawnym ID alfanumerycznym"}
