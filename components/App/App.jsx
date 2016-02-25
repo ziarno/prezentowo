@@ -4,10 +4,10 @@ App = React.createClass({
     return {};
   },
   componentDidMount() {
-    Waves.attach('.button', ['waves-button']);
+    Utils.attachWaves();
   },
   componentDidUpdate() {
-    Waves.attach('.button', ['waves-button']);
+    Utils.attachWaves();
   },
   render() {
     return (

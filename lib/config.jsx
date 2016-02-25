@@ -1,8 +1,10 @@
 Config = {
   popup: {
     variation: 'inverted tiny',
+    position: 'bottom center',
     delay: {
-      show: 500
+      show: 300,
+      hide: 0
     }
   }
 };
@@ -11,39 +13,6 @@ Config = {
 _i18n.options.open = '[';
 _i18n.options.close = ']';
 T = _i18n.createComponent();
-
-/**
- * Updates error messages to current language
- */
-SimpleSchema.updateMessages = function () {
-  var messages = _i18n.__('SimpleSchema');
-
-  if (_.isObject(messages)) {
-    messages.regEx.forEach((msgObject) => {
-      if (msgObject.expression) {
-        msgObject.exp = SimpleSchema.RegEx[msgObject.expression]
-      }
-    });
-
-    SimpleSchema.messages(messages);
-  }
-
-};
-
-SimpleSchema.debug = true; //TODO: remove
-
-SetLanguage = function (lang) {
-  //i18n for AccountsTemplates
-  T9n.setLanguage(lang);
-
-  //momentjs
-  moment.locale(lang);
-
-  //universe:i18n
-  _i18n.setLocale(lang);
-
-  SimpleSchema.updateMessages();
-};
 
 /**
  * Configuration for AccountsTemplates.

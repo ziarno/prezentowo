@@ -6,20 +6,28 @@ UserProfileButton = React.createClass({
   },
   componentDidMount() {
     $(this.refs.logout).popup({
-      content: _i18n.__('Logout'),
-      variation: 'inverted tiny',
-      position: 'bottom right',
-      delay: {
-        show: 500
-      }
+      ...Config.popup,
+      content: _i18n.__('Logout')
     });
+    $(this.refs.profile).popup({
+      ...Config.popup,
+      content: _i18n.__('Profile')
+    });
+  },
+  componentWillUnmount() {
+    $(this.refs.logout).popup('destroy');
+    $(this.refs.profile).popup('destroy');
   },
   logout() {
     AccountsTemplates.logout();
-    $(this.refs.logout).popup('hide');
+    this.hidePopups();
   },
   openProfile() {
     ModalManager.open(<SimpleModal title={_i18n.__('Profile')}/>);
+  },
+  hidePopups() {
+    $(this.refs.logout).popup('hide');
+    $(this.refs.profile).popup('hide');
   },
   render() {
     var pictureBackground = {
@@ -27,16 +35,20 @@ UserProfileButton = React.createClass({
     };
 
     return (
-      <div id="user-profile-button"
-           className="ui buttons compact">
-        <div className="user-profile-button--name ui button"
-             onClick={this.openProfile}
-             style={pictureBackground}>
+      <div
+        id="user-profile-button"
+        className="ui buttons compact">
+        <div
+          className="user-profile-button--name ui button"
+          onClick={this.openProfile}
+          style={pictureBackground}
+          ref="profile">
           <span>{this.props.name}</span>
         </div>
-        <div className="ui icon button"
-             ref="logout"
-             onClick={this.logout}>
+        <div
+          className="ui icon button"
+          ref="logout"
+          onClick={this.logout}>
           <i className="sign out icon"></i>
         </div>
       </div>

@@ -1,5 +1,7 @@
 Header = React.createClass({
+
   mixins: [ReactMeteorData],
+
   getMeteorData() {
     var eventsSubscribtion = Meteor.subscribe('events');
 
@@ -9,6 +11,7 @@ Header = React.createClass({
       user: Meteor.user()
     };
   },
+
   getLoggedInNavigation() {
     return (
       <div id="navigation-container">
@@ -18,6 +21,7 @@ Header = React.createClass({
       </div>
     );
   },
+
   getLoggedOutNavigation() {
     return (
       <div id="navigation-container">
@@ -25,6 +29,7 @@ Header = React.createClass({
       </div>
     );
   },
+
   render() {
     return (
       <div className="app-header shadow no-selection">
@@ -35,4 +40,5 @@ Header = React.createClass({
       </div>
     );
   }
+
 });

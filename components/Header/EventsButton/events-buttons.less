@@ -13,3 +13,12 @@
     }
   }
 }
+
+#events-button {
+  .caret.down.icon {
+    transition: transform @transition-time;
+  }
+  &.active .caret.down.icon {
+    transform: rotate(180deg);
+  }
+}

@@ -8,3 +8,16 @@
   cursor: default !important;
   transition: background-color @transition-time;
 }
+
+/* Left Labeled */
+.ui.labeled.icon.buttons .button,
+.ui.labeled.icon.button {
+  padding-left: (@labeledIconPadding - 1em) !important;
+  padding-right: @horizontalPadding !important;
+}
+
+/* Right Labeled */
+.ui[class*="right labeled"].icon.button {
+  padding-right: (@labeledIconPadding - 1em) !important;
+  padding-left: @horizontalPadding !important;
+}

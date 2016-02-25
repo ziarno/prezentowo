@@ -10,21 +10,6 @@ EventsButton = React.createClass({
     ModalManager.open(<CreateEventModal />);
   },
 
-  getEventItem(event) {
-    return (
-      <div className="item event flex"
-           onClick={this.showEvent.bind(this, event)}
-           key={event._id}>
-        <div className="text">
-          {event.title}
-        </div>
-        <div className="description">
-          <DateField date={event.date} roundToDays />
-        </div>
-      </div>
-    );
-  },
-
   showEvent() {
 
   },
@@ -49,9 +34,10 @@ EventsButton = React.createClass({
 
     return (
       <div  className="ui buttons compact">
-        <div className={"ui icon button right labeled " +
-                        "waves-effect waves-button " +
-                        (!this.props.ready ? "loading": "")}
+        <div id="events-button"
+             className={classNames('ui icon button right labeled waves-effect waves-button', {
+              loading: !this.props.ready
+             })}
              ref="dropdown-trigger">
           <T>Events</T>
           <i className="caret down icon"></i>
@@ -66,10 +52,19 @@ EventsButton = React.createClass({
               </div>
 
               <div className="divider"></div>
-              <div className={"header " + (!activeEvents.length ? "inactive" : "")}>
+              <div
+                className={classNames('header', {
+                  inactive: !activeEvents.length
+                })}>
                 {activeEventsHeader}
               </div>
-              {activeEvents.map(this.getEventItem)}
+              {activeEvents.map((event) => (
+                <EventItem
+                  key={event._id}
+                  event={event}
+                  onClick={this.showEvent}
+                />
+              ))}
 
               {!!pastEvents.length && (
               <div className="divider"></div>
@@ -79,7 +74,13 @@ EventsButton = React.createClass({
                 <T>Past events</T>
               </div>
               )}
-              {pastEvents.map(this.getEventItem)}
+              {pastEvents.map((event) => (
+                <EventItem
+                  key={event._id}
+                  event={event}
+                  onClick={this.showEvent}
+                />
+              ))}
 
             </div>
         </div>

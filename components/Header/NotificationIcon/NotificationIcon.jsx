@@ -6,6 +6,9 @@ NotificationIcon = React.createClass({
       content: _i18n.__('Notifications')
     });
   },
+  componentWillUnmount() {
+    $(ReactDOM.findDOMNode(this)).popup('destroy');
+  },
   hidePopup() {
     $(ReactDOM.findDOMNode(this)).popup('hide');
   },

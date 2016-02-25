@@ -19,7 +19,7 @@ ModalManager = function () {
         detachable: false,
         autofocus: false,
         onShow() {
-          Waves.attach('.button', 'waves-button');
+          Utils.attachWaves();
         },
         onHidden() {
           ReactDOM.unmountComponentAtNode(modalContainer);
@@ -29,7 +29,7 @@ ModalManager = function () {
     },
 
     close() {
-      $modal.modal('hide');
+      $modal && $modal.modal('hide');
     }
   };
 

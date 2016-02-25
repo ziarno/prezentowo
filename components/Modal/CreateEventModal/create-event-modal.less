@@ -1,0 +1,57 @@
+@import '/client/styles/partials/vars.import.less';
+
+#new-event-form {
+  text-align: center;
+
+  .red.label {
+    margin-top: 0;
+  }
+
+  #many-to-many, #many-to-one {
+    margin: 0 25px;
+    width: 250px;
+    white-space: nowrap;
+    display: block;
+    &.active {
+      background-color: @color-light !important;
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.14) inset,
+        0 3px 5px rgba(0, 0, 0, 0.125) inset;
+    }
+    & > p {
+      margin-top: 10px;
+    }
+  }
+
+  .event-type {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .date-title {
+    margin-top: 0;
+  }
+
+  .datepicker {
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    min-height: 256px;
+  }
+
+}
+
+.new-event-title {
+  &, & input {
+    text-align: center !important;
+    font-size: 1.2rem;
+  }
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: rgba(0,0,0,0.5);
+  display: inline-block;
+  margin: 10px 0;
+}
