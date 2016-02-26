@@ -10,8 +10,8 @@ EventsButton = React.createClass({
     ModalManager.open(<CreateEventModal />);
   },
 
-  showEvent() {
-
+  showEvent(event) {
+    FlowRouter.go(`/event/${event._id}`);
   },
 
   render() {

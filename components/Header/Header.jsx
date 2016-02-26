@@ -12,11 +12,40 @@ Header = React.createClass({
     };
   },
 
+  getInitialState() {
+    return {
+      title: 'Prezentowo'
+    }
+  },
+
+  componentDidMount() {
+    this.titleComputation = Tracker.autorun(() => {
+      var eventId = FlowRouter.getParam('eventId');
+      var event = Events.findOne(eventId);
+      var title;
+
+      if (!eventId) {
+        title = 'Prezentowo';
+      } else {
+        title = event && event.title || '';
+      }
+
+      this.setState({title});
+    });
+  },
+
+  componentWillUnmount() {
+    this.titleComputation.stop();
+  },
+
   getLoggedInNavigation() {
     return (
       <div id="navigation-container">
-        <EventsButton events={this.data.events} ready={this.data.ready} />
-        <UserProfileButton {...this.data.user.profile} />
+        <EventsButton
+          events={this.data.events}
+          ready={this.data.ready} />
+        <UserProfileButton
+          {...this.data.user.profile} />
         <NotificationIcon />
       </div>
     );
@@ -33,7 +62,9 @@ Header = React.createClass({
   render() {
     return (
       <div className="app-header shadow no-selection">
-        <h1 className="title no-selection">Prezentowo</h1>
+        <h1 className="title no-selection capitalize">
+          {this.state.title}
+        </h1>
         {this.data.user ?
           this.getLoggedInNavigation() :
           this.getLoggedOutNavigation()}

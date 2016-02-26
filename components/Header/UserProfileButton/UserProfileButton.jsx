@@ -20,7 +20,6 @@ UserProfileButton = React.createClass({
   },
   logout() {
     AccountsTemplates.logout();
-    this.hidePopups();
   },
   openProfile() {
     ModalManager.open(<SimpleModal title={_i18n.__('Profile')}/>);
@@ -37,9 +36,10 @@ UserProfileButton = React.createClass({
     return (
       <div
         id="user-profile-button"
-        className="ui buttons compact">
+        className="ui buttons compact"
+        onClick={this.hidePopups}>
         <div
-          className="user-profile-button--name ui button"
+          className="user-profile-button--name ui button capitalize"
           onClick={this.openProfile}
           style={pictureBackground}
           ref="profile">

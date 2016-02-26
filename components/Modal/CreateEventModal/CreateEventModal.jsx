@@ -34,11 +34,13 @@ CreateEventModal = React.createClass({
   },
 
   submit(event) {
+    var eventId;
+
     event.preventDefault();
-    console.log(this.state);
     if (this.schema.validate(this.state)) {
-      Events.methods.createEvent.call(this.state);
+      eventId = Events.methods.createEvent.call(this.state);
       ModalManager.close();
+      FlowRouter.go(`/event/${eventId}`);
     }
   },
 
@@ -134,16 +136,15 @@ CreateEventModal = React.createClass({
         <div className="actions">
           <div className="ui buttons">
             <button
-              className="ui labeled icon button "
+              className="ui button "
               onClick={ModalManager.close}>
-              <i className="remove icon"></i>
               <T>Cancel</T>
             </button>
             <button
               className="ui right labeled icon primary button"
               onClick={this.submit}>
               <i className="wizard icon"></i>
-              <T>Create</T>
+              <T>Create event</T>
             </button>
           </div>
         </div>

@@ -1,8 +1,4 @@
 App = React.createClass({
-  mixins: [ReactMeteorData],
-  getMeteorData() {
-    return {};
-  },
   componentDidMount() {
     Utils.attachWaves();
   },

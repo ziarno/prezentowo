@@ -1,7 +1,7 @@
 EventItem = ({event, onClick}) => (
   <div className="item event flex"
-       onClick={onClick}>
-    <div className="text">
+       onClick={() => onClick(event)}>
+    <div className="text capitalize">
       {event.title}
     </div>
     <div className="description">

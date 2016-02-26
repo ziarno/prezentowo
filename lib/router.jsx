@@ -9,3 +9,11 @@ FlowRouter.route('/', {
     ReactLayout.render(App);
   }
 });
+
+FlowRouter.route('/event/:eventId', {
+  action() {
+    ReactLayout.render(App, {
+      content: <EventContainer />
+    });
+  }
+});
