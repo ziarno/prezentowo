@@ -8,6 +8,9 @@ ModalManager = function () {
     init() {
       modalContainer = document.createElement('div');
       modalContainer.id = 'modal-container';
+      //make modal render into the same container that it normally would without detachable:false
+      modalContainer.className =
+        'ui dimmer modals';
       document.body.appendChild(modalContainer);
     },
 
@@ -16,7 +19,7 @@ ModalManager = function () {
         ReactDOM.render(modalComponent, modalContainer)
       ));
       $modal.modal({
-        detachable: false,
+        //note: don't use detachable:false - instead "detach" into the same container that we render it into
         autofocus: false,
         onShow() {
           Utils.attachWaves();

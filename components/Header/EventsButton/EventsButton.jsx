@@ -42,7 +42,9 @@ EventsButton = React.createClass({
           <T>Events</T>
           <i className="caret down icon"></i>
         </div>
-        <div className="ui dropdown" ref="dropdown">
+        <div
+          className="ui dropdown"
+          ref="dropdown">
             <div className="menu">
 
               <div className="item new-event"
@@ -51,36 +53,40 @@ EventsButton = React.createClass({
                 <T>New event</T>
               </div>
 
-              <div className="divider"></div>
-              <div
-                className={classNames('header', {
-                  inactive: !activeEvents.length
-                })}>
-                {activeEventsHeader}
-              </div>
-              {activeEvents.map((event) => (
-                <EventItem
-                  key={event._id}
-                  event={event}
-                  onClick={this.showEvent}
-                />
-              ))}
+              <div className="scrolling menu">
 
-              {!!pastEvents.length && (
-              <div className="divider"></div>
-              )}
-              {!!pastEvents.length && (
-              <div className="header">
-                <T>Past events</T>
+                <div
+                  className={classNames('header', {
+                    inactive: !activeEvents.length
+                  })}>
+                  {activeEventsHeader}
+                </div>
+                {activeEvents.map((event) => (
+                  <EventItem
+                    key={event._id}
+                    event={event}
+                    onClick={this.showEvent}
+                  />
+                ))}
+
+                {!!pastEvents.length && (
+                <div className="divider"></div>
+                )}
+                {!!pastEvents.length && (
+                <div className="header">
+                  <T>Past events</T>
+                </div>
+                )}
+                {pastEvents.map((event) => (
+                  <EventItem
+                    key={event._id}
+                    event={event}
+                    onClick={this.showEvent}
+                  />
+                ))}
+
               </div>
-              )}
-              {pastEvents.map((event) => (
-                <EventItem
-                  key={event._id}
-                  event={event}
-                  onClick={this.showEvent}
-                />
-              ))}
+
 
             </div>
         </div>
