@@ -57,3 +57,60 @@ Mixins.dropdown = {
     }
   }
 };
+
+/**
+ * POPUPS MIXIN
+ *
+ * Requires:
+ * getPopups() method - must return an object:
+ * {
+ *  refKey: {popupConfig},
+ *  ...
+ * }
+ * Note: Add refKeys to components' refs
+ */
+Mixins.popup = {
+
+  defaultConfig: {
+    variation: 'inverted tiny',
+    position: 'bottom center',
+    delay: {
+      show: 300,
+      hide: 0
+    }
+  },
+
+  componentDidMount() {
+    this.setPopups();
+    _i18n.onChangeLocale(this.setPopups);
+  },
+
+  componentWillUnmount() {
+    this.invokePopupsWith('destroy');
+    _i18n.offChangeLocale(this.setPopups);
+  },
+
+  setPopups() {
+    this.invokePopupsWith((popupConfig) => ({
+      ...this.defaultConfig,
+      ...popupConfig
+    }));
+  },
+
+  hidePopups() {
+    this.invokePopupsWith('hide');
+  },
+
+  invokePopupsWith(action) {
+    var popups = _.isFunction(this.getPopups) ?
+      this.getPopups() : {};
+
+    _.each(popups, (popupConfig, key) => {
+      var popupAction = _.isFunction(action) ?
+        action(popupConfig, key) : action;
+
+      $(this.refs[key]).popup(popupAction);
+    }, this);
+  }
+
+};

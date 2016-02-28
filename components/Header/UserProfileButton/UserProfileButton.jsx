@@ -1,32 +1,27 @@
 UserProfileButton = React.createClass({
+  mixins: [Mixins.popup],
   propTypes: {
     pictureUrl: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
     onClick: React.PropTypes.func
   },
-  componentDidMount() {
-    $(this.refs.logout).popup({
-      ...Config.popup,
-      content: _i18n.__('Logout')
-    });
-    $(this.refs.profile).popup({
-      ...Config.popup,
-      content: _i18n.__('Profile')
-    });
-  },
-  componentWillUnmount() {
-    $(this.refs.logout).popup('destroy');
-    $(this.refs.profile).popup('destroy');
+  getPopups() {
+    return {
+      logout: {
+        content: _i18n.__('Logout'),
+      },
+      profile: {
+        content: _i18n.__('Profile')
+      }
+    };
   },
   logout() {
     AccountsTemplates.logout();
+    this.hidePopups();
   },
   openProfile() {
     ModalManager.open(<SimpleModal title={_i18n.__('Profile')}/>);
-  },
-  hidePopups() {
-    $(this.refs.logout).popup('hide');
-    $(this.refs.profile).popup('hide');
+    this.hidePopups();
   },
   render() {
     var pictureBackground = {

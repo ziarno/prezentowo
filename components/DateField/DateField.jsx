@@ -1,11 +1,8 @@
 DateField = React.createClass({
 
-  componentDidMount() {
-    this.setPopup();
-    _i18n.onChangeLocale(this.setPopup);
-  },
+  mixins: [Mixins.popup],
 
-  setPopup() {
+  getPopups() {
     var dateText = moment(this.props.date).from(new Date());
     var startOfToday = moment().startOf('day');
     var startOfDate = moment(this.props.date).startOf('day');
@@ -20,25 +17,17 @@ DateField = React.createClass({
       dateText = days[daysDiff];
     }
 
-    $(ReactDOM.findDOMNode(this)).popup({
-      ...Config.popup,
-      position: 'right center',
-      variation: 'mini',
-      delay: {
-        show: 100,
-        hide: 0
-      },
-      content: dateText
-    });
-  },
-
-  hidePopup() {
-    $(ReactDOM.findDOMNode(this)).popup('hide');
-  },
-
-  componentWillUnmount() {
-    $(ReactDOM.findDOMNode(this)).popup('destroy');
-    _i18n.offChangeLocale(this.setPopup);
+    return {
+      dateField: {
+        position: 'right center',
+        variation: 'mini',
+        delay: {
+          show: 100,
+          hide: 0
+        },
+        content: dateText
+      }
+    };
   },
 
   render() {
@@ -46,7 +35,8 @@ DateField = React.createClass({
       <span
         className={this.props.className}
         onClick={this.hidePopup}
-        onMouseEnter={this.setPopup}>
+        onMouseEnter={this.setPopups}
+        ref="dateField">
 
         {moment(this.props.date).format('L')}
       </span>

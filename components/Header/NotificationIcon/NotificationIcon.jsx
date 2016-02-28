@@ -1,21 +1,19 @@
 NotificationIcon = React.createClass({
-  componentDidMount() {
-    $(ReactDOM.findDOMNode(this)).popup({
-      ...Config.popup,
-      position: 'bottom right',
-      content: _i18n.__('Notifications')
-    });
-  },
-  componentWillUnmount() {
-    $(ReactDOM.findDOMNode(this)).popup('destroy');
-  },
-  hidePopup() {
-    $(ReactDOM.findDOMNode(this)).popup('hide');
+  mixins: [Mixins.popup],
+  getPopups() {
+    return {
+      notificationIcon: {
+        position: 'bottom right',
+        content: _i18n.__('Notifications')
+      }
+    };
   },
   render() {
     return (
-      <div className="ui button compact icon"
-           onClick={this.hidePopup}>
+      <div
+        className="ui button compact icon"
+        onClick={this.hidePopup}
+        ref="notificationIcon">
         <i className="alarm outline icon"></i>
       </div>
     );

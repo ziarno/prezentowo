@@ -1,14 +1,3 @@
-Config = {
-  popup: {
-    variation: 'inverted tiny',
-    position: 'bottom center',
-    delay: {
-      show: 300,
-      hide: 0
-    }
-  }
-};
-
 //universe:i18n
 _i18n.options.open = '[';
 _i18n.options.close = ']';
