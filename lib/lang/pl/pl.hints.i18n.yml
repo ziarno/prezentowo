@@ -2,3 +2,4 @@ _locale: pl
 hints:
   Christmas: Np. Gwiazdka
   Birthday: Np. Urodziny
+  EmailOptional: Email (opcjonalnie)

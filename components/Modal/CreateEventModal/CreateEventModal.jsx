@@ -59,9 +59,10 @@ CreateEventModal = React.createClass({
           </h3>
           <Input
             name="title"
-            className="new-event-title"
+            className="new-event-title field"
             schema={this.schema}
             onChange={this.setState.bind(this)}
+            errorTooltip
           />
 
           <h3>

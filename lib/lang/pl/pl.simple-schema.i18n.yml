@@ -30,3 +30,4 @@ SimpleSchema:
   - {expression: IPv6, msg: "[label] musi być poprawnym adresem IPv6"}
   - {expression: Url, msg: "[label] musi być poprawnym adresem URL"}
   - {expression: Id, msg: "[label] musi być poprawnym ID alfanumerycznym"}
+  invalidEmail: "Nieprawidłowy adres email"

@@ -1,0 +1,30 @@
+@import '/client/styles/partials/vars.import.less';
+
+.form-popup {
+  padding: 0 !important;
+  border: 0 !important;
+  text-align: left;
+
+  & > :first-child {
+    margin-top: -1px !important;
+  }
+
+  &:before {
+    background-color: @background-grey !important;
+  }
+
+  .actions  {
+    overflow: auto;
+    padding: 0;
+
+    .ui.buttons {
+      float: right;
+      & :first-child {
+        border-radius: 0;
+      }
+      & :last-child {
+        border-top-right-radius: 0;
+      }
+    }
+  }
+}

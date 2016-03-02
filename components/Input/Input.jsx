@@ -4,17 +4,18 @@ Input = React.createClass({
 
   getMeteorData() {
     return {
-      error: this.props.schema.keyErrorMessage(this.props.name)
+      error: this.props.schema &&
+        this.props.schema.keyErrorMessage(this.props.name)
     };
   },
 
   propTypes: {
     name: React.PropTypes.string.isRequired,
-    schema: React.PropTypes.object.isRequired,
+    schema: React.PropTypes.object,
+    onChange: React.PropTypes.func,
     className: React.PropTypes.string,
     label: React.PropTypes.string,
-    placeholder: React.PropTypes.string,
-    onChange: React.PropTypes.func
+    placeholder: React.PropTypes.string
   },
 
   getInitialState() {
@@ -25,17 +26,17 @@ Input = React.createClass({
     this.setState({showError: false});
   },
 
-  onChange(e) {
+  onChange(event) {
     if (this.props.onChange) {
       this.props.onChange({
-        [this.props.name]: e.currentTarget.value
+        [this.props.name]: event.currentTarget.value
       })
     }
   },
 
   validate(event) {
     this.setState({showError: true});
-    this.props.schema.validateOne({
+    this.props.schema && this.props.schema.validateOne({
       [this.props.name]: event.currentTarget.value
     }, this.props.name);
   },
@@ -48,7 +49,7 @@ Input = React.createClass({
 
     return (
       <div
-        className={classNames('field', this.props.className, {
+        className={classNames(this.props.className, {
           error: showErrorState()
         })}>
 
@@ -69,11 +70,13 @@ Input = React.createClass({
           <span className="hint">{this.props.hint}</span>
         ) : null}
 
-        {showErrorState() ? (
+        {showErrorState() && this.props.errorTooltip ? (
             <div className="ui pointing red basic label">
               {this.data.error}
             </div>
           ) : null}
+
+        {this.props.children}
 
       </div>
     );

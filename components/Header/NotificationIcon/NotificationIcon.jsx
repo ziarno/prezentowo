@@ -1,6 +1,6 @@
 NotificationIcon = React.createClass({
-  mixins: [Mixins.popup],
-  getPopups() {
+  mixins: [Mixins.Tooltips],
+  getTooltips() {
     return {
       notificationIcon: {
         position: 'bottom right',
@@ -12,7 +12,7 @@ NotificationIcon = React.createClass({
     return (
       <div
         className="ui button compact icon"
-        onClick={this.hidePopup}
+        onClick={this.hideTooltips}
         ref="notificationIcon">
         <i className="alarm outline icon"></i>
       </div>

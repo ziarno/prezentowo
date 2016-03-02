@@ -1,8 +1,8 @@
 DateField = React.createClass({
 
-  mixins: [Mixins.popup],
+  mixins: [Mixins.Tooltips],
 
-  getPopups() {
+  getTooltips() {
     var dateText = moment(this.props.date).from(new Date());
     var startOfToday = moment().startOf('day');
     var startOfDate = moment(this.props.date).startOf('day');
@@ -34,8 +34,8 @@ DateField = React.createClass({
     return (
       <span
         className={this.props.className}
-        onClick={this.hidePopup}
-        onMouseEnter={this.setPopups}
+        onClick={this.hideTooltips}
+        onMouseEnter={this.setTooltips}
         ref="dateField">
 
         {moment(this.props.date).format('L')}

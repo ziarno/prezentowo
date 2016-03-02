@@ -25,7 +25,7 @@ Message = React.createClass({
     var key = 0;
 
     return (
-      <div className={classNames(`ui message ${this.props.type}`, {
+      <div className={classNames('ui message', this.props.className, {
         hidden: this.state.visible || this.props.visible
       })}>
 

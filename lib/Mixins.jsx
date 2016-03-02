@@ -3,7 +3,7 @@ Mixins = {};
 /**
  * VALIDATED METHOD MIXINS
  */
-Mixins.loggedIn = function loggedInMixin(methodOptions) {
+Mixins.LoggedIn = function loggedInMixin(methodOptions) {
   var originalRun = methodOptions.run;
   if (_.isFunction(originalRun)) {
     methodOptions.run = function () {
@@ -37,7 +37,7 @@ Mixins.loggedIn = function loggedInMixin(methodOptions) {
  * refs: dropdown-trigger and dropdown
  * dropdownOptions (optional)
  */
-Mixins.dropdown = {
+Mixins.Dropdown = {
   componentDidMount() {
     this.$dropdownTrigger = $(this.refs['dropdown-trigger']);
     this.$dropdown = $(this.refs.dropdown);
@@ -59,57 +59,61 @@ Mixins.dropdown = {
 };
 
 /**
- * POPUPS MIXIN
+ * TOOLTIPS MIXIN
+ *
+ * There are no 'tooltips' in semantic ui, only popups.
+ * Tooltips = small popups.
  *
  * Requires:
- * getPopups() method - must return an object:
+ * getTooltips() method - must return an object:
  * {
- *  refKey: {popupConfig},
+ *  ref: {tooltipConfig},
  *  ...
  * }
- * Note: Add refKeys to components' refs
+ * Note: Add refs to components
  */
-Mixins.popup = {
+Mixins.Tooltips = {
 
   defaultConfig: {
     variation: 'inverted tiny',
     position: 'bottom center',
     delay: {
-      show: 300,
+      show: 500,
       hide: 0
-    }
+    },
+    duration: 100
   },
 
   componentDidMount() {
-    this.setPopups();
-    _i18n.onChangeLocale(this.setPopups);
+    this.setTooltips();
+    _i18n.onChangeLocale(this.setTooltips);
   },
 
   componentWillUnmount() {
-    this.invokePopupsWith('destroy');
-    _i18n.offChangeLocale(this.setPopups);
+    this.invokeTooltipsWith('destroy');
+    _i18n.offChangeLocale(this.setTooltips);
   },
 
-  setPopups() {
-    this.invokePopupsWith((popupConfig) => ({
+  setTooltips() {
+    this.invokeTooltipsWith((tooltipConfig) => ({
       ...this.defaultConfig,
-      ...popupConfig
+      ...tooltipConfig
     }));
   },
 
-  hidePopups() {
-    this.invokePopupsWith('hide');
+  hideTooltips() {
+    this.invokeTooltipsWith('hide');
   },
 
-  invokePopupsWith(action) {
-    var popups = _.isFunction(this.getPopups) ?
-      this.getPopups() : {};
+  invokeTooltipsWith(action) {
+    var tooltips = _.isFunction(this.getTooltips) ?
+      this.getTooltips() : {};
 
-    _.each(popups, (popupConfig, key) => {
-      var popupAction = _.isFunction(action) ?
-        action(popupConfig, key) : action;
+    _.each(tooltips, (tooltipConfig, key) => {
+      var tooltipAction = _.isFunction(action) ?
+        action(tooltipConfig, key) : action;
 
-      $(this.refs[key]).popup(popupAction);
+      $(this.refs[key]).popup(tooltipAction);
     }, this);
   }
 

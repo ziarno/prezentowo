@@ -3,11 +3,14 @@
 *******************************/
 
 .ui.dropdown {
-  &, & .menu > .item {
+  &,
+  & .menu > .item,
+  &.selection > .dropdown.icon {
     cursor: default !important;
     &.flex {
       display: flex;
       justify-content: space-between;
     }
   }
+
 }

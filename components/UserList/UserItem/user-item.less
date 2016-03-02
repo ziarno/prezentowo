@@ -1,0 +1,27 @@
+@import '/client/styles/partials/vars.import.less';
+
+.user-list--item {
+  transition: background-color @transition-time;
+  cursor: default !important;
+  padding: 10px 15px;
+  width: 100%;
+  display: block;
+
+  .presents-count {
+    float: right;
+    min-width: 53px;
+    margin: 0 !important;
+    span {
+      float: right;
+    }
+  }
+
+  &.active, &:hover {
+    background-color: @grey-light;
+    .presents-count {
+      background: none #ffffff;
+      color: rgba(0, 0, 0, 0.87);
+      box-shadow: none;
+    }
+  }
+}

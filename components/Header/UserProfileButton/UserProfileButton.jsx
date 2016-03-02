@@ -1,27 +1,23 @@
 UserProfileButton = React.createClass({
-  mixins: [Mixins.popup],
+  mixins: [Mixins.Tooltips],
   propTypes: {
     pictureUrl: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
     onClick: React.PropTypes.func
   },
-  getPopups() {
+  getTooltips() {
     return {
-      logout: {
-        content: _i18n.__('Logout'),
-      },
-      profile: {
-        content: _i18n.__('Profile')
-      }
+      logout: {content: _i18n.__('Logout')},
+      profile: {content: _i18n.__('Profile')}
     };
   },
   logout() {
     AccountsTemplates.logout();
-    this.hidePopups();
+    this.hideTooltips();
   },
   openProfile() {
-    ModalManager.open(<SimpleModal title={_i18n.__('Profile')}/>);
-    this.hidePopups();
+    ModalManager.open(<SimpleModal title={_i18n.__('Profile')} />);
+    this.hideTooltips();
   },
   render() {
     var pictureBackground = {
@@ -32,7 +28,7 @@ UserProfileButton = React.createClass({
       <div
         id="user-profile-button"
         className="ui buttons compact"
-        onClick={this.hidePopups}>
+        onClick={this.hideTooltips}>
         <div
           className="user-profile-button--name ui button capitalize"
           onClick={this.openProfile}

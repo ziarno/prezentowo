@@ -109,7 +109,7 @@ Presents.methods = {};
 
 Presents.methods.createPresent = new ValidatedMethod({
   name: 'Presents.methods.createPresent',
-  mixins: [Mixins.loggedIn],
+  mixins: [Mixins.LoggedIn],
   validate: Presents.Schemas.NewPresent.validator(),
   run(present) {
     if (!Meteor.user().isEventParticipant({eventId: present.eventId})) {
@@ -127,7 +127,7 @@ Presents.after.insert(
 
 Presents.methods.removePresent = new ValidatedMethod({
   name: 'Presents.methods.removePresent',
-  mixins: [Mixins.loggedIn],
+  mixins: [Mixins.LoggedIn],
   validate: new SimpleSchema({
     presentId: {
       type: String
@@ -152,7 +152,7 @@ Presents.after.remove(
 
 Presents.methods.editPresent = new ValidatedMethod({
   name: 'Presents.methods.editPresent',
-  mixins: [Mixins.loggedIn],
+  mixins: [Mixins.LoggedIn],
   validate: new SimpleSchema({
     presentId: {
       type: String
@@ -176,7 +176,7 @@ Presents.methods.editPresent = new ValidatedMethod({
 
 Presents.methods.addBuyer = new ValidatedMethod({
   name: 'Presents.methods.addBuyer',
-  mixins: [Mixins.loggedIn],
+  mixins: [Mixins.LoggedIn],
   validate: new SimpleSchema({
     presentId: {
       type: String
@@ -194,7 +194,7 @@ Presents.methods.addBuyer = new ValidatedMethod({
 
 Presents.methods.removeBuyer = new ValidatedMethod({
   name: 'Presents.methods.removeBuyer',
-  mixins: [Mixins.loggedIn],
+  mixins: [Mixins.LoggedIn],
   validate: new SimpleSchema({
     presentId: {
       type: String

@@ -30,3 +30,4 @@ SimpleSchema:
   - {expression: IPv6, msg: "[label] must be a valid IPv6 address"}
   - {expression: Url, msg: "[label] must be a valid URL"}
   - {expression: Id, msg: "[label] must be a valid alphanumeric ID"}
+  invalidEmail: "Email is invalid"

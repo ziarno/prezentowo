@@ -4,7 +4,7 @@ EventsButton = React.createClass({
     events: React.PropTypes.array.isRequired
   },
 
-  mixins: [Mixins.dropdown],
+  mixins: [Mixins.Dropdown],
 
   showCreateEventModal() {
     ModalManager.open(<CreateEventModal />);
@@ -43,7 +43,7 @@ EventsButton = React.createClass({
           <i className="caret down icon"></i>
         </div>
         <div
-          className="ui dropdown"
+          className="ui pointing dropdown"
           ref="dropdown">
             <div className="menu">
 
