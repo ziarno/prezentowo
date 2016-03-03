@@ -16,11 +16,13 @@ UserItem = React.createClass({
 
   render() {
     return (
-      <div className="user-list--item capitalize waves-effect">
+      <div className="user-list--item waves-effect">
         <img
           className="ui avatar image"
           src={this.props.user.profile.pictureUrl.small} />
-        <span>{this.props.user.profile.name}</span>
+        <span>
+          {this.props.user.profile.name}
+        </span>
         <div className="presents-count ui label">
           <i className="gift icon"></i>
           {this.data.presentsCount}

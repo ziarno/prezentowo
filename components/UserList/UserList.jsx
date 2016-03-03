@@ -25,6 +25,9 @@ UserList = React.createClass({
       eventId: this.data.event._id,
       sendEmail: data.sendEmail,
       participant: _.omit(data, 'sendEmail')
+    }, function (error, participant) {
+      console.log('error', error);
+      console.log('data', participant);
     });
   },
 

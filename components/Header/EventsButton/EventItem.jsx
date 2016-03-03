@@ -1,7 +1,7 @@
 EventItem = ({event, onClick}) => (
   <div className="item event flex"
        onClick={() => onClick(event)}>
-    <div className="text capitalize">
+    <div className="text">
       <i className={classNames({
         user: event.type === 'many-to-one',
         users: event.type === 'many-to-many'

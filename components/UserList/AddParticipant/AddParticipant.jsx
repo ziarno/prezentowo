@@ -120,6 +120,7 @@ AddParticipant = React.createClass({
                 <input
                   type="checkbox"
                   tabIndex="0"
+                  defaultChecked
                   className="hidden"
                 />
                 <label>

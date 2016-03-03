@@ -34,6 +34,7 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
     },
     children: [
       {
+        collectionName: 'participants',
         find: function (event) {
           var participantIds = event.participants
             .map(participant => participant.userId);
