@@ -5,20 +5,14 @@ EventContainer = React.createClass({
   getMeteorData() {
     var eventId = FlowRouter.getParam('eventId');
     var subscription = Meteor.subscribe('eventDetails', {eventId});
-    var participants = Participants.find({}, {
-      sort: {'profile.name': 1}
-    }).fetch();
-    var currentUserIndex;
-
-    //move logged in user to top
-    _.find(participants, (participant, index) => {
-      currentUserIndex = index;
-      return participant._id === Meteor.userId();
-    });
-
-    participants.unshift(
-      participants.splice(currentUserIndex, 1)[0]
-    );
+    var participants = Participants
+      .find()
+      .fetch()
+      .sort((participant1, participant2) => {
+        return participant1._id === Meteor.userId() ?
+          -1 : (participant1.profile.name.capitalizeFirstLetter() >
+            participant2.profile.name.capitalizeFirstLetter());
+      });
 
     return {
       ready: subscription.ready(),

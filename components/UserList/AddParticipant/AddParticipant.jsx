@@ -36,7 +36,10 @@ AddParticipant = React.createClass({
       position: 'bottom left',
       lastResort: 'bottom left',
       preserve: true,
-      transition: 'slide down'
+      transition: 'slide down',
+      onHide: () => {
+        this.schema.resetValidation();
+      }
     });
     $(this.refs.genderDropdown).dropdown({
       onChange: (value) => {
@@ -96,7 +99,9 @@ AddParticipant = React.createClass({
           ref="addParticipantForm"
           className="add-participant--form ui form attached fluid segment"
           onSubmit={this.submit}>
-          <ImagePicker />
+          <ImagePicker
+            onChange={this.setState.bind(this)}
+          />
           <div className="add-participant--form-right" >
             <Input
               className="ui field"
@@ -154,13 +159,13 @@ AddParticipant = React.createClass({
           </div>
         </form>
         {!this.schema.isValid() ? (
-        <Message
-          className="attached fluid error"
-          messages={this.schema.invalidKeys().map((key) => (
-              this.schema.keyErrorMessage(key.name)
-            ))}>
-        </Message>
-          ) : null}
+          <Message
+            className="attached fluid error"
+            messages={this.schema.invalidKeys().map((key) => (
+                this.schema.keyErrorMessage(key.name)
+              ))}>
+          </Message>
+        ) : null}
         <div className="ui bottom attached message actions">
           <div className="ui buttons">
             <button
