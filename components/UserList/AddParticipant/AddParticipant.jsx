@@ -44,6 +44,7 @@ AddParticipant = React.createClass({
     $(this.refs.genderDropdown).dropdown({
       onChange: (value) => {
         this.setState({gender: value});
+        this.setPictureUrl({pictureUrl: this.refs.imagePicker.getImage()});
         this.schema.validateOne({gender: value}, 'gender');
       }
     });

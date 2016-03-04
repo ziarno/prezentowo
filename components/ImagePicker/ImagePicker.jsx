@@ -13,19 +13,6 @@ ImagePicker = React.createClass({
     }
   },
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return _.difference(nextProps.images, this.props.images).length ||
-      _.difference(nextState.uploadedImages, this.state.uploadedImages).length ||
-      nextState.currentIndex !== this.state.currentIndex ||
-      nextState.isLoading !== this.state.isLoading;
-  },
-
-  componentDidUpdate() {
-    this.props.onChange({
-      pictureUrl: this.getImage()
-    });
-  },
-
   changeImage(count) {
     var imagesCount = this.props.images.length + this.state.uploadedImages.length;
     var nextIndex = (this.state.currentIndex + count + imagesCount) % imagesCount;
@@ -38,6 +25,9 @@ ImagePicker = React.createClass({
 
   setImage(index = this.state.currentIndex) {
     this.setState({currentIndex: index});
+    this.props.onChange({
+      pictureUrl: this.getImage(index)
+    });
   },
 
   sendImage(event) {
@@ -57,6 +47,9 @@ ImagePicker = React.createClass({
         uploadedImages: [res.secure_url, ...this.state.uploadedImages],
         currentIndex: 0,
         isLoading: false
+      });
+      this.props.onChange({
+        pictureUrl: this.getImage(0)
       });
     });
   },
