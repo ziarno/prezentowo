@@ -9,9 +9,13 @@ EventContainer = React.createClass({
       .find()
       .fetch()
       .sort((participant1, participant2) => {
-        return participant1._id === Meteor.userId() ?
-          -1 : (participant1.profile.name.capitalizeFirstLetter() >
-            participant2.profile.name.capitalizeFirstLetter());
+        var name1 = participant1.profile.name.capitalizeFirstLetter();
+        var name2 = participant2.profile.name.capitalizeFirstLetter();
+
+        if (participant1._id === Meteor.userId()) {
+          return -1;
+        }
+        return  name1 > name2 ? 1 : -1;
       });
 
     return {
