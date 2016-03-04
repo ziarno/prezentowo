@@ -7,33 +7,81 @@ ImagePicker = React.createClass({
 
   getInitialState() {
     return {
-      uploadedImage: null
+      uploadedImages: [],
+      currentIndex: 0,
+      isLoading: false
     }
+  },
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return _.difference(nextProps.images, this.props.images).length ||
+      _.difference(nextState.uploadedImages, this.state.uploadedImages).length ||
+      nextState.currentIndex !== this.state.currentIndex ||
+      nextState.isLoading !== this.state.isLoading;
+  },
+
+  componentDidUpdate() {
+    this.props.onChange({
+      pictureUrl: this.getImage()
+    });
+  },
+
+  changeImage(count) {
+    var imagesCount = this.props.images.length + this.state.uploadedImages.length;
+    var nextIndex = (this.state.currentIndex + count + imagesCount) % imagesCount;
+    this.setImage(nextIndex);
+  },
+
+  getImage(index = this.state.currentIndex) {
+    return [...this.state.uploadedImages, ...this.props.images][index];
+  },
+
+  setImage(index = this.state.currentIndex) {
+    this.setState({currentIndex: index});
   },
 
   sendImage(event) {
     var files = event.currentTarget.files;
 
+    this.setState({isLoading: true});
+
     Cloudinary.upload(files, {
       folder: 'users'
     }, (err, res) => {
+      if (err) {
+        return this.setState({
+          isLoading: false
+        });
+      }
       this.setState({
-        uploadedImage: res
-      });
-      this.props.onChange({
-        pictureUrl: res.secure_url
+        uploadedImages: [res.secure_url, ...this.state.uploadedImages],
+        currentIndex: 0,
+        isLoading: false
       });
     });
+  },
+
+  reset() {
+    this.setState(this.getInitialState());
   },
 
   render() {
     return (
       <div className="image-picker shadow">
-        <div className="image">
-          <div className="arrow arrow--left">
+        <Loader visible={this.state.isLoading} />
+        <div
+          className="image"
+          style={{
+            backgroundImage: `url(${this.getImage()})`
+          }}>
+          <div
+            className="arrow arrow--left"
+            onClick={this.changeImage.bind(this, -1)}>
             <i className="chevron left icon"></i>
           </div>
-          <div className="arrow arrow--right">
+          <div
+            className="arrow arrow--right"
+            onClick={this.changeImage.bind(this, 1)}>
             <i className="chevron right icon"></i>
           </div>
         </div>

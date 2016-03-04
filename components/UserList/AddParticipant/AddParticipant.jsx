@@ -24,7 +24,7 @@ AddParticipant = React.createClass({
       name: null,
       email: null,
       gender: null,
-      pictureUrl: 'temporary.pl/dupa.jpg',
+      pictureUrl: '/images/avatars/m1.png',
       sendEmail: true
     };
   },
@@ -61,20 +61,25 @@ AddParticipant = React.createClass({
     });
   },
 
-  hide() {
-    $(this.refs.addParticipantButton).popup('hide');
+  hide(callback) {
+    $(this.refs.addParticipantButton).popup('hide', callback);
   },
 
   reset() {
     $(this.refs.addParticipantForm).form('clear');
     this.setState(this.getInitialState());
     $(this.refs.emailCheckbox).checkbox('check');
+    this.refs.imagePicker.reset();
     this.schema.resetValidation();
   },
 
   hideAndReset() {
-    this.hide();
-    this.reset();
+    this.hide(this.reset);
+  },
+
+  setPictureUrl(pictureObject) {
+    this.setState(pictureObject);
+    this.schema.validateOne(pictureObject, 'pictureUrl');
   },
 
   submit(event) {
@@ -86,6 +91,10 @@ AddParticipant = React.createClass({
   },
 
   render() {
+    var avatarsCount = 12;
+    var avatars = _.range(avatarsCount).map((index) => (
+      `/images/avatars/${this.state.gender ? this.state.gender.charAt(0) : 'm'}${index + 1}.png`
+    ));
 
     var addParticipantPopup = (
       <FormPopup
@@ -100,7 +109,9 @@ AddParticipant = React.createClass({
           className="add-participant--form ui form attached fluid segment"
           onSubmit={this.submit}>
           <ImagePicker
-            onChange={this.setState.bind(this)}
+            ref="imagePicker"
+            onChange={this.setPictureUrl}
+            images={avatars}
           />
           <div className="add-participant--form-right" >
             <Input
