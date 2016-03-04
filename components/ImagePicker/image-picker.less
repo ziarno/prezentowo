@@ -1,6 +1,65 @@
+@import '/client/styles/partials/vars.import.less';
+
 .image-picker {
-  border: 1px solid grey;
   width: 150px;
-  height: 150px;
-  background-image: url('/images/avatars/m1.png');
+  min-width: 150px;
+  border-radius: 4px;
+
+  .image {
+    height: 150px;
+    background-image: url('/images/avatars/m1.png');
+    position: relative;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background-color: rgba(0,0,0,0);
+    color: rgba(0,0,0,0.2);
+    transition: background @transition-time, color @transition-time;
+
+    &:hover {
+      background-color: rgba(0,0,0,0.2);
+      color: #fff;
+    }
+
+    i.icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .arrow--left {
+    left: 0;
+  }
+  .arrow--right {
+    right: 0;
+  }
+
+  .ui.buttons.image-picker--actions {
+    width: 100%;
+    .button:first-child {
+      border-top-left-radius: 0;
+    }
+    .button:last-child {
+      border-top-right-radius: 0;
+    }
+  }
+
+  .image-picker--upload {
+    position: relative;
+  }
+
+  input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
 }
