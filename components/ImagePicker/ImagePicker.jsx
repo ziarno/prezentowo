@@ -1,7 +1,7 @@
 ImagePicker = React.createClass({
 
   propTypes: {
-    onChange: React.PropTypes.func
+    onChange: React.PropTypes.func.isRequired
   },
 
   getInitialState() {

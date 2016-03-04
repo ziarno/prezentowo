@@ -34,6 +34,6 @@ EventContainer = React.createClass({
         <PresentsContainer
           presents={this.data.presents} />
       </div>
-    )
+    );
   }
 });
