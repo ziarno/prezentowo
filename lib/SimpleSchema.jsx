@@ -26,5 +26,5 @@ SimpleSchema.addValidator(function () {
   }
 });
 
-SimpleSchema.debug = true; //TODO: remove
+//SimpleSchema.debug = true; //TODO: remove
 

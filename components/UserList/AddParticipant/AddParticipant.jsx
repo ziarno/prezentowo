@@ -41,13 +41,6 @@ AddParticipant = React.createClass({
         this.schema.resetValidation();
       }
     });
-    $(this.refs.genderDropdown).dropdown({
-      onChange: (value) => {
-        this.setState({gender: value});
-        this.setPictureUrl({pictureUrl: this.refs.imagePicker.getImage()});
-        this.schema.validateOne({gender: value}, 'gender');
-      }
-    });
     $(this.refs.emailCheckbox).checkbox({
       onChecked: () => {
         this.setState({
@@ -83,9 +76,20 @@ AddParticipant = React.createClass({
     this.schema.validateOne(pictureObject, 'pictureUrl');
   },
 
+  setGender({gender}) {
+    this.setState({gender});
+    this.setPictureUrl({pictureUrl: this.refs.imagePicker.getImage()});
+  },
+
   submit(event) {
     event.preventDefault();
-    if (this.schema.validate(_.omit(this.state, 'sendEmail'))) {
+    if (this.schema.validate({
+          name: this.state.name,
+          email: this.state.email,
+          gender: this.state.gender,
+          pictureUrl: this.state.pictureUrl
+        })
+    ) {
       this.props.onSubmit(this.state);
       this.hideAndReset();
     }
@@ -116,14 +120,12 @@ AddParticipant = React.createClass({
           />
           <div className="add-participant--form-right" >
             <Input
-              className="ui field"
               placeholder={_i18n.__('Fullname')}
               name="name"
               schema={this.schema}
               onChange={this.setState.bind(this)}
             />
             <Input
-              className="ui field"
               placeholder={_i18n.__('hints.EmailOptional')}
               type="email"
               name="email"
@@ -145,29 +147,20 @@ AddParticipant = React.createClass({
                 </label>
               </div>
             </Input>
-            <div
-              ref="genderDropdown"
-              className={classNames('ui fluid selection dropdown', {
-                error: this.schema.keyIsInvalid('gender')
-              })}>
-              <input
-                type="hidden"
-                name="sendEmail" />
-              <div className="default text">
-                <T>Gender</T>
+            <SelectInput
+              placeholder={_i18n.__('Gender')}
+              name="gender"
+              schema={this.schema}
+              onChange={this.setGender}>
+              <div className="item" data-value="male">
+                <i className="man icon"></i>
+                <T>Male</T>
               </div>
-              <i className="dropdown icon"></i>
-              <div className="menu">
-                <div className="item" data-value="male">
-                  <i className="man icon"></i>
-                  <T>Male</T>
-                </div>
-                <div className="item" data-value="female">
-                  <i className="woman icon"></i>
-                  <T>Female</T>
-                </div>
+              <div className="item" data-value="female">
+                <i className="woman icon"></i>
+                <T>Female</T>
               </div>
-            </div>
+            </SelectInput>
           </div>
         </form>
         {!this.schema.isValid() ? (
