@@ -197,18 +197,20 @@ AddParticipant = React.createClass({
       </FormPopup>
     );
 
-    return (
-      <div>
-        <div
-          ref="addParticipantButton"
-          className={`user-list--add-participant-button
+    var addParticipantButton = (
+      <div
+        ref="addParticipantButton"
+        className={`user-list--add-participant-button
                 circular ui icon button
                 waves-effect waves-button`}>
-          <i className="add user large icon"></i>
-        </div>
+        <i className="add user large icon"></i>
+      </div>
+    );
 
+    return (
+      <div>
+        {addParticipantButton}
         {addParticipantPopup}
-
       </div>
     );
   }

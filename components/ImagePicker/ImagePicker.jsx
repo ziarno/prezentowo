@@ -30,7 +30,14 @@ ImagePicker = React.createClass({
     });
   },
 
-  sendImage(event) {
+  addImage(pictureUrl) {
+    this.setState({
+      uploadedImages: [pictureUrl, ...this.state.uploadedImages],
+    });
+    this.setImage(0);
+  },
+
+  uploadImage(event) {
     var files = event.currentTarget.files;
 
     this.setState({isLoading: true});
@@ -38,19 +45,12 @@ ImagePicker = React.createClass({
     Cloudinary.upload(files, {
       folder: 'users'
     }, (err, res) => {
-      if (err) {
-        return this.setState({
-          isLoading: false
-        });
-      }
       this.setState({
-        uploadedImages: [res.secure_url, ...this.state.uploadedImages],
-        currentIndex: 0,
         isLoading: false
       });
-      this.props.onChange({
-        pictureUrl: this.getImage(0)
-      });
+      if (!err && res) {
+        this.addImage(res.secure_url);
+      }
     });
   },
 
@@ -62,11 +62,8 @@ ImagePicker = React.createClass({
     return (
       <div className="image-picker shadow">
         <Loader visible={this.state.isLoading} />
-        <div
-          className="image"
-          style={{
-            backgroundImage: `url(${this.getImage()})`
-          }}>
+        <Img
+          src={this.getImage()}>
           <div
             className="arrow arrow--left"
             onClick={this.changeImage.bind(this, -1)}>
@@ -77,7 +74,7 @@ ImagePicker = React.createClass({
             onClick={this.changeImage.bind(this, 1)}>
             <i className="chevron right icon"></i>
           </div>
-        </div>
+        </Img>
         <div className="ui compact small buttons image-picker--actions">
           <label
             htmlFor="picture"
@@ -90,7 +87,7 @@ ImagePicker = React.createClass({
             name="picture"
             id="picture"
             type="file"
-            onChange={this.sendImage}
+            onChange={this.uploadImage}
           />
           <div className="ui icon button waves-effect waves-button">
             <i className="search icon"></i>

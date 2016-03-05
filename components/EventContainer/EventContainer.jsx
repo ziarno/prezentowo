@@ -27,12 +27,9 @@ EventContainer = React.createClass({
 
   render() {
 
-    if (!this.data.ready) {
-      return <span>loading...</span>;
-    }
-
     return (
       <div id="event-container">
+        <Loader visible= {!this.data.ready} />
         <UserList
           users={this.data.participants} />
         <PresentsContainer
