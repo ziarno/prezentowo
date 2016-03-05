@@ -62,12 +62,14 @@ Header = React.createClass({
   render() {
     return (
       <div className="app-header shadow no-selection">
-        <h1 className="title no-selection">
-          {this.state.title}
-        </h1>
-        {this.data.user ?
-          this.getLoggedInNavigation() :
-          this.getLoggedOutNavigation()}
+        <div className="app-header--container">
+          <h1 className="title no-selection">
+            {this.state.title}
+          </h1>
+          {this.data.user ?
+            this.getLoggedInNavigation() :
+            this.getLoggedOutNavigation()}
+        </div>
       </div>
     );
   }
