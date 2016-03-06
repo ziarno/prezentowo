@@ -41,18 +41,6 @@ AddParticipant = React.createClass({
         this.schema.resetValidation();
       }
     });
-    $(this.refs.emailCheckbox).checkbox({
-      onChecked: () => {
-        this.setState({
-          sendEmail: true
-        });
-      },
-      onUnchecked: () => {
-        this.setState({
-          sendEmail: false
-        });
-      }
-    });
   },
 
   hide(callback) {
@@ -61,7 +49,7 @@ AddParticipant = React.createClass({
 
   reset() {
     $(this.refs.addParticipantForm).form('clear');
-    $(this.refs.emailCheckbox).checkbox('check');
+    this.refs.emailCheckbox.reset();
     this.refs.imagePicker.reset();
     this.refs.genderDropdown.reset();
     this.schema.resetValidation();
@@ -132,21 +120,14 @@ AddParticipant = React.createClass({
               name="email"
               schema={this.schema}
               onChange={this.setState.bind(this)}>
-              <div
+              <CheckboxInput
+                name="sendEmail"
                 ref="emailCheckbox"
-                className={classNames('invitation-email-checkbox ui checkbox', {
-                  checked: this.state.sendEmail
-                })}>
-                <input
-                  type="checkbox"
-                  tabIndex="0"
-                  defaultChecked
-                  className="hidden"
-                />
-                <label>
-                  <T>Send invitation email</T>
-                </label>
-              </div>
+                className="invitation-email-checkbox"
+                label={_i18n.__('Send invitation email')}
+                onChange={this.setState.bind(this)}
+                checked
+              />
             </Input>
             <SelectInput
               placeholder={_i18n.__('Gender')}

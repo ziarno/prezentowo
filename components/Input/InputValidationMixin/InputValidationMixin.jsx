@@ -11,7 +11,7 @@ InputValidationMixin = {
 
   getMeteorData() {
     return {
-      hasError: this.props.schema.keyIsInvalid(this.props.name)
+      hasError: this.props.schema && this.props.schema.keyIsInvalid(this.props.name)
     }
   },
 
@@ -32,7 +32,7 @@ InputValidationMixin = {
   onChange(value) {
     this.props.onChange({
       [this.props.name]: value
-    })
+    });
   },
 
   shouldShowError() {
