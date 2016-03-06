@@ -43,7 +43,8 @@ ImagePicker = React.createClass({
     this.setState({isLoading: true});
 
     Cloudinary.upload(files, {
-      folder: 'users'
+      folder: 'users',
+      transformation: 'avatar-large'
     }, (err, res) => {
       this.setState({
         isLoading: false

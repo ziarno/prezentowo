@@ -23,10 +23,12 @@ Img = React.createClass({
 
   loadImage(src = this.props.src) {
     var image = new Image();
+    var timeout = setTimeout(() => this.setState({isLoading: true}), 300);
 
-    this.setState({isLoading: true});
-    image.onload = () => this.setState({isLoading: false});
-    image.onerror = () => this.setState({isLoading: false});
+    image.onload = image.onerror = () => {
+      clearTimeout(timeout);
+      this.setState({isLoading: false});
+    };
     image.src = src;
   },
 
