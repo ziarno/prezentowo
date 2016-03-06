@@ -8,7 +8,7 @@ SelectInput = React.createClass({
 
   componentDidMount() {
     var $dropdown = $(this.refs.dropdown);
-fix
+
     $dropdown.dropdown({
       action(text, value) {
         var nodeString = $(this)
