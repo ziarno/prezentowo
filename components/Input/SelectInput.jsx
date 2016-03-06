@@ -26,8 +26,8 @@ SelectInput = React.createClass({
           $placeholder[0]
         );
         $dropdown
-          .dropdown('set value', value)
-          .dropdown('hide');
+          .dropdown('hide') //note: hide before set value, because error
+          .dropdown('set value', value);
       },
       onChange: (value) => {
         this.validate(value);
