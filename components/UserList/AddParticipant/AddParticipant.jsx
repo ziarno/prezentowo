@@ -61,10 +61,11 @@ AddParticipant = React.createClass({
 
   reset() {
     $(this.refs.addParticipantForm).form('clear');
-    this.setState(this.getInitialState());
     $(this.refs.emailCheckbox).checkbox('check');
     this.refs.imagePicker.reset();
+    this.refs.genderDropdown.reset();
     this.schema.resetValidation();
+    this.setState(this.getInitialState());
   },
 
   hideAndReset() {
@@ -150,6 +151,7 @@ AddParticipant = React.createClass({
             <SelectInput
               placeholder={_i18n.__('Gender')}
               name="gender"
+              ref="genderDropdown"
               schema={this.schema}
               onChange={this.setGender}>
               <div className="item" data-value="male">

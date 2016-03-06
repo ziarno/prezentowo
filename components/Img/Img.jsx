@@ -26,6 +26,7 @@ Img = React.createClass({
 
     this.setState({isLoading: true});
     image.onload = () => this.setState({isLoading: false});
+    image.onerror = () => this.setState({isLoading: false});
     image.src = src;
   },
 

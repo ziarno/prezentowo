@@ -7,7 +7,28 @@ SelectInput = React.createClass({
   },
 
   componentDidMount() {
-    $(ReactDOM.findDOMNode(this)).dropdown({
+    var $dropdown = $(this.refs.dropdown);
+fix
+    $dropdown.dropdown({
+      action(text, value) {
+        var nodeString = $(this)
+          .addClass('active selected')
+          .children()
+          .removeAttr('data-reactid')
+          .parent()
+          .html();
+        var $placeholder = $dropdown.find('.text');
+        $placeholder.removeClass('default');
+
+        $(this).siblings().removeClass('active selected');
+        ReactDOM.render(
+          <div dangerouslySetInnerHTML={{__html: nodeString}} />,
+          $placeholder[0]
+        );
+        $dropdown
+          .dropdown('set value', value)
+          .dropdown('hide');
+      },
       onChange: (value) => {
         this.validate(value);
         if (_.isFunction(this.props.onChange)) {
@@ -21,9 +42,14 @@ SelectInput = React.createClass({
     });
   },
 
+  reset() {
+    $(this.refs.dropdown).dropdown('clear');
+  },
+
   render() {
     return (
       <div
+        ref="dropdown"
         className={classNames('ui fluid selection dropdown', this.props.className, {
           error: this.shouldShowError()
         })}>
