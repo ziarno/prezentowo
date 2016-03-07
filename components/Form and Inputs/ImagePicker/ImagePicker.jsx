@@ -1,7 +1,8 @@
 ImagePicker = React.createClass({
 
+  mixins: [InputValidationMixin],
+
   propTypes: {
-    onChange: React.PropTypes.func.isRequired,
     images: React.PropTypes.array
   },
 
@@ -13,28 +14,31 @@ ImagePicker = React.createClass({
     }
   },
 
-  changeImage(count) {
+  changeImageIndex(count) {
     var imagesCount = this.props.images.length + this.state.uploadedImages.length;
     var nextIndex = (this.state.currentIndex + count + imagesCount) % imagesCount;
-    this.setImage(nextIndex);
+    this.setImageIndex(nextIndex);
   },
 
   getImage(index = this.state.currentIndex) {
     return [...this.state.uploadedImages, ...this.props.images][index];
   },
 
-  setImage(index = this.state.currentIndex) {
+  getValue() {
+    return this.getImage();
+  },
+
+  setImageIndex(index = this.state.currentIndex) {
     this.setState({currentIndex: index});
-    this.props.onChange({
-      pictureUrl: this.getImage(index)
-    });
+    this.onChange(this.getImage(index));
+    this.validate(this.getImage(index));
   },
 
   addImage(pictureUrl) {
     this.setState({
-      uploadedImages: [pictureUrl, ...this.state.uploadedImages],
+      uploadedImages: [pictureUrl, ...this.state.uploadedImages]
     });
-    this.setImage(0);
+    this.setImageIndex(0);
   },
 
   uploadImage(event) {
@@ -67,12 +71,12 @@ ImagePicker = React.createClass({
           src={this.getImage()}>
           <div
             className="arrow arrow--left"
-            onClick={this.changeImage.bind(this, -1)}>
+            onClick={this.changeImageIndex.bind(this, -1)}>
             <i className="chevron left icon"></i>
           </div>
           <div
             className="arrow arrow--right"
-            onClick={this.changeImage.bind(this, 1)}>
+            onClick={this.changeImageIndex.bind(this, 1)}>
             <i className="chevron right icon"></i>
           </div>
         </Img>

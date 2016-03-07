@@ -1,7 +1,7 @@
 Img = React.createClass({
 
   propTypes: {
-    src: React.PropTypes.string.isRequired,
+    src: React.PropTypes.string,
     hideLoader: React.PropTypes.bool
   },
 

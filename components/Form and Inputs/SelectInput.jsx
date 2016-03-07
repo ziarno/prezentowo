@@ -31,15 +31,15 @@ SelectInput = React.createClass({
       },
       onChange: (value) => {
         this.validate(value);
-        if (_.isFunction(this.props.onChange)) {
-          this.props.onChange({
-            [this.props.name]: value
-          });
-        }
+        this.onChange(value);
       },
       onShow: () => this.hideError(),
       onHide: () => this.showError()
     });
+  },
+
+  getValue() {
+    return $(this.refs.dropdown).dropdown('get value');
   },
 
   reset() {

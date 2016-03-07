@@ -11,7 +11,7 @@ SimpleSchema:
   minCount: "You must specify at least [minCount] values"
   maxCount: "You cannot specify more than [maxCount] values"
   noDecimal: "[label] must be an integer"
-  notAllowed: "[value] is not an allowed value"
+  notAllowed: "[label] contains an invalid value"
   expectedString: "[label] must be a string"
   expectedNumber: "[label] must be a number"
   expectedBoolean: "[label] must be a boolean"

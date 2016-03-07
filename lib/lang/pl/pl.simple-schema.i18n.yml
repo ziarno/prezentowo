@@ -11,7 +11,7 @@ SimpleSchema:
   minCount: "Podaj przynajmniej [minCount] wartości"
   maxCount: "Podaj maksymalnie [maxCount] wartości"
   noDecimal: "[label] musi być liczbą całkowitą"
-  notAllowed: "[value] - wartość jest nieprawidłowa"
+  notAllowed: "[label] - wartość jest nieprawidłowa"
   expectedString: "[label] musi być tekstem"
   expectedNumber: "[label] musi być liczbą"
   expectedBoolean: "[label] musi być wartością logiczną"

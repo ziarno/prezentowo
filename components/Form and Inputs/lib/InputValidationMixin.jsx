@@ -4,21 +4,24 @@ InputValidationMixin = {
 
   propTypes: {
     name: React.PropTypes.string.isRequired,
-    schema: React.PropTypes.object,
     onChange: React.PropTypes.func,
     className: React.PropTypes.string
   },
 
+  contextTypes: {
+    register: React.PropTypes.func,
+    schema: React.PropTypes.object,
+    form: React.PropTypes.object
+  },
+
   getMeteorData() {
     return {
-      hasError: this.props.schema && this.props.schema.keyIsInvalid(this.props.name)
+      hasError: this.context.schema && this.context.schema.keyIsInvalid(this.props.name)
     }
   },
 
   getInitialState() {
-    return {
-      showError: false
-    };
+    return {showError: false};
   },
 
   hideError() {
@@ -30,19 +33,28 @@ InputValidationMixin = {
   },
 
   onChange(value) {
-    this.props.onChange({
-      [this.props.name]: value
-    });
+    var valueObject = {[this.props.name]: value};
+
+    this.context.form.setState(valueObject);
+    if (_.isFunction(this.props.onChange)) {
+      this.props.onChange(valueObject);
+    }
   },
 
   shouldShowError() {
     return this.state.showError && this.data.hasError;
   },
 
+  componentDidMount() {
+    if (this.context.register) {
+      this.context.register(this);
+    }
+  },
+
   validate(value) {
     this.setState({showError: true});
-    if (this.props.schema) {
-      this.props.schema.validateOne({
+    if (this.context.schema) {
+      this.context.schema.validateOne({
         [this.props.name]: value
       }, this.props.name);
     }

@@ -11,22 +11,42 @@ AddParticipant = React.createClass({
         .namedContext('newParticipant');
 
     return {
-      errors: {
-        name: this.schema.keyErrorMessage('name'),
-        email: this.schema.keyErrorMessage('email'),
-        gender: this.schema.keyErrorMessage('gender')
-      }
+      errors: this.schema.invalidKeys()
     };
   },
 
   getInitialState() {
     return {
-      name: null,
-      email: null,
-      gender: null,
-      pictureUrl: '/images/avatars/m1.png',
-      sendEmail: true
+      images: []
     };
+  },
+
+  hide(callback) {
+    $(this.refs.addParticipantButton).popup('hide', callback);
+  },
+
+  reset() {
+    this.refs.addParticipantForm.reset();
+  },
+
+  hideAndReset() {
+    this.hide(this.reset);
+  },
+
+  updateImages({gender}) {
+    var avatarsCount = 12;
+    var fileLetterName = gender === 'female' ? 'f' : 'm';
+    var avatars = _.range(avatarsCount).map((index) => (
+      `/images/avatars/${fileLetterName}${index + 1}.png`
+    ));
+    this.setState({images: avatars});
+  },
+
+  submit(formData) {
+    if (this.schema.validate(_.omit(formData, 'sendEmail'))) {
+      this.props.onSubmit(formData);
+      this.hideAndReset();
+    }
   },
 
   componentDidMount() {
@@ -41,55 +61,10 @@ AddParticipant = React.createClass({
         this.schema.resetValidation();
       }
     });
-  },
-
-  hide(callback) {
-    $(this.refs.addParticipantButton).popup('hide', callback);
-  },
-
-  reset() {
-    $(this.refs.addParticipantForm).form('clear');
-    this.refs.emailCheckbox.reset();
-    this.refs.imagePicker.reset();
-    this.refs.genderDropdown.reset();
-    this.schema.resetValidation();
-    this.setState(this.getInitialState());
-  },
-
-  hideAndReset() {
-    this.hide(this.reset);
-  },
-
-  setPictureUrl(pictureObject) {
-    this.setState(pictureObject);
-    this.schema.validateOne(pictureObject, 'pictureUrl');
-  },
-
-  setGender({gender}) {
-    this.setState({gender});
-    this.setPictureUrl({pictureUrl: this.refs.imagePicker.getImage()});
-  },
-
-  submit(event) {
-    event.preventDefault();
-    if (this.schema.validate({
-          name: this.state.name,
-          email: this.state.email,
-          gender: this.state.gender,
-          pictureUrl: this.state.pictureUrl
-        })
-    ) {
-      this.props.onSubmit(this.state);
-      this.hideAndReset();
-    }
+    this.updateImages({gender: 'male'});
   },
 
   render() {
-    var avatarsCount = 12;
-    var avatars = _.range(avatarsCount).map((index) => (
-      `/images/avatars/${this.state.gender ? this.state.gender.charAt(0) : 'm'}${index + 1}.png`
-    ));
-
     var addParticipantPopup = (
       <FormPopup
         className="add-participant">
@@ -98,34 +73,28 @@ AddParticipant = React.createClass({
             <T>New participant</T>
           </div>
         </div>
-        <form
+        <Form
           ref="addParticipantForm"
-          className="add-participant--form ui form attached fluid segment"
-          onSubmit={this.submit}>
+          className="add-participant--form attached fluid segment"
+          onSubmit={this.submit}
+          schema={this.schema}>
           <ImagePicker
-            ref="imagePicker"
-            onChange={this.setPictureUrl}
-            images={avatars}
+            name="pictureUrl"
+            images={this.state.images}
           />
           <div className="add-participant--form-right" >
             <Input
-              placeholder={_i18n.__('Fullname')}
               name="name"
-              schema={this.schema}
-              onChange={this.setState.bind(this)}
+              placeholder={_i18n.__('Fullname')}
             />
             <Input
-              placeholder={_i18n.__('hints.EmailOptional')}
-              type="email"
               name="email"
-              schema={this.schema}
-              onChange={this.setState.bind(this)}>
+              placeholder={_i18n.__('hints.EmailOptional')}
+              type="email">
               <CheckboxInput
                 name="sendEmail"
-                ref="emailCheckbox"
                 className="invitation-email-checkbox"
                 label={_i18n.__('Send invitation email')}
-                onChange={this.setState.bind(this)}
                 checked
               />
             </Input>
@@ -133,8 +102,7 @@ AddParticipant = React.createClass({
               placeholder={_i18n.__('Gender')}
               name="gender"
               ref="genderDropdown"
-              schema={this.schema}
-              onChange={this.setGender}>
+              onChange={this.updateImages}>
               <div className="item" data-value="male">
                 <i className="man icon"></i>
                 <T>Male</T>
@@ -145,26 +113,27 @@ AddParticipant = React.createClass({
               </div>
             </SelectInput>
           </div>
-        </form>
+        </Form>
         {!this.schema.isValid() ? (
           <Message
             className="attached fluid error"
             messages={this.schema.invalidKeys().map((key) => (
                 this.schema.keyErrorMessage(key.name)
-              ))}>
-          </Message>
+            ))}
+          />
         ) : null}
         <div className="ui bottom attached message actions">
           <div className="ui buttons">
             <button
-              className="ui button"
+              className="ui left labeled icon button"
               onClick={this.hideAndReset}>
               <T>Cancel</T>
+              <i className="remove icon"></i>
             </button>
             <button
               className="ui right labeled icon primary button"
               disabled={!this.schema.isValid()}
-              onClick={this.submit}>
+              onClick={(e) => this.refs.addParticipantForm.submit(e)}>
               <i className="plus icon"></i>
               <T>Add participant</T>
             </button>

@@ -6,17 +6,21 @@ CheckboxInput = React.createClass({
     label: React.PropTypes.string
   },
 
-  componentDidMount() {
-    $(this.refs.checkbox).checkbox({
-      onChecked: () => this.onChange(true),
-      onUnchecked: () => this.onChange(false)
-    });
+  getValue() {
+    return $(this.refs.checkbox).checkbox('is checked');
   },
 
   reset() {
     $(this.refs.checkbox).checkbox(
       this.props.checked ? 'set checked' : 'set unchecked'
     );
+  },
+
+  componentDidMount() {
+    $(this.refs.checkbox).checkbox({
+      onChecked: () => this.onChange(true),
+      onUnchecked: () => this.onChange(false)
+    });
   },
 
   render() {
