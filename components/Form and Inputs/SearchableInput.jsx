@@ -1,6 +1,8 @@
+import {InputValidation} from '../../lib/Mixins';
+
 SearchableInput = React.createClass({
 
-  mixins: [InputValidationMixin, ReactMeteorData],
+  mixins: [InputValidation, ReactMeteorData],
 
   propTypes: {
     label: React.PropTypes.string,

@@ -1,6 +1,8 @@
+import {InputValidation} from '../../lib/Mixins';
+
 ImagePicker = React.createClass({
 
-  mixins: [InputValidationMixin],
+  mixins: [InputValidation],
 
   propTypes: {
     images: React.PropTypes.array

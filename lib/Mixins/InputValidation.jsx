@@ -1,6 +1,6 @@
-import {Autorun} from '../../../lib/Mixins'
+import Autorun from './Autorun';
 
-InputValidationMixin = {
+var InputValidation = {
 
   mixins: [Autorun],
 
@@ -65,3 +65,5 @@ InputValidationMixin = {
   }
 
 };
+
+export default InputValidation;

@@ -1,7 +1,5 @@
 import {LoggedIn} from '../lib/Mixins';
 
-console.log(LoggedIn);
-
 /**
  * Comments Collection
  */

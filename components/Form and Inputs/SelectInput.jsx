@@ -1,6 +1,8 @@
+import {InputValidation} from '../../lib/Mixins';
+
 SelectInput = React.createClass({
 
-  mixins: [InputValidationMixin],
+  mixins: [InputValidation],
 
   propTypes: {
     placeholder: React.PropTypes.string
