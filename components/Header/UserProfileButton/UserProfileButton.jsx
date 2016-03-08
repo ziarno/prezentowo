@@ -1,5 +1,7 @@
+import {Tooltips} from '../../../lib/Mixins';
+
 UserProfileButton = React.createClass({
-  mixins: [Mixins.Tooltips],
+  mixins: [Tooltips],
   propTypes: {
     pictureUrl: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,

@@ -1,3 +1,7 @@
+import {LoggedIn} from '../lib/Mixins';
+
+console.log(LoggedIn);
+
 /**
  * Comments Collection
  */
@@ -46,7 +50,7 @@ Comments.methods = {};
 
 Comments.methods.createComment = new ValidatedMethod({
   name: 'Comments.methods.createComment',
-  mixins: [Mixins.LoggedIn],
+  mixins: [LoggedIn],
   validate: new SimpleSchema({
     presentId: {
       type: String
@@ -73,7 +77,7 @@ Comments.methods.createComment = new ValidatedMethod({
 
 Comments.methods.removeComment = new ValidatedMethod({
   name: 'Comments.methods.removeComment',
-  mixins: [Mixins.LoggedIn],
+  mixins: [LoggedIn],
   validate: new SimpleSchema({
     commentId: {
       type: String
@@ -101,7 +105,7 @@ Comments.after.remove(function (userId, comment) {
 
 Comments.methods.editComment = new ValidatedMethod({
   name: 'Comments.methods.editComment',
-  mixins: [Mixins.LoggedIn],
+  mixins: [LoggedIn],
   validate: new SimpleSchema({
     commentId: {
       type: String

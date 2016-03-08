@@ -1,8 +1,9 @@
 import moment from 'moment';
+import {Tooltips} from '../../lib/Mixins';
 
 DateField = React.createClass({
 
-  mixins: [Mixins.Tooltips],
+  mixins: [Tooltips],
 
   getTooltips() {
     var dateText = moment(this.props.date).from(new Date());

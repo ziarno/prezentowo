@@ -1,10 +1,12 @@
+import {Dropdown} from '../../../lib/Mixins';
+
 EventsButton = React.createClass({
 
   propTypes: {
     events: React.PropTypes.array.isRequired
   },
 
-  mixins: [Mixins.Dropdown],
+  mixins: [Dropdown],
 
   showCreateEventModal() {
     ModalManager.open(<CreateEventModal />);

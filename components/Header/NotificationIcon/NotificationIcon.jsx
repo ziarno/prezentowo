@@ -1,5 +1,7 @@
+import {Tooltips} from '../../../lib/Mixins';
+
 NotificationIcon = React.createClass({
-  mixins: [Mixins.Tooltips],
+  mixins: [Tooltips],
   getTooltips() {
     return {
       notificationIcon: {

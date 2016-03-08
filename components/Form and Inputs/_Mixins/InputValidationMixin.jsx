@@ -1,6 +1,8 @@
+import {Autorun} from '../../../lib/Mixins'
+
 InputValidationMixin = {
 
-  mixins: [Mixins.Autorun],
+  mixins: [Autorun],
 
   propTypes: {
     name: React.PropTypes.string.isRequired,
