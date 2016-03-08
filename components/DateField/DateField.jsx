@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 DateField = React.createClass({
 
   mixins: [Mixins.Tooltips],

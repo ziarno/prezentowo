@@ -1,0 +1,22 @@
+{
+  "name": "prezentowo",
+  "version": "1.0.0",
+  "description": "Prezentowo ==========",
+  "main": "main.jsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://ziarno@bitbucket.org/ziarno/prezentowo.git"
+  },
+  "keywords": [
+    "presents",
+    "wishlist"
+  ],
+  "author": "Filip Jarno",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.12.0"
+  }
+}
