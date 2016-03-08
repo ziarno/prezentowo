@@ -125,16 +125,16 @@ AddParticipant = React.createClass({
         <div className="ui bottom attached message actions">
           <div className="ui buttons">
             <button
-              className="ui left labeled icon button"
+              className="ui labeled icon button"
               onClick={this.hideAndReset}>
-              <T>Cancel</T>
               <i className="remove icon"></i>
+              <T>Cancel</T>
             </button>
             <button
-              className="ui right labeled icon primary button"
+              className="ui labeled icon primary button"
               disabled={!this.schema.isValid()}
               onClick={(e) => this.refs.addParticipantForm.submit(e)}>
-              <i className="plus icon"></i>
+              <i className="checkmark icon"></i>
               <T>Add participant</T>
             </button>
           </div>

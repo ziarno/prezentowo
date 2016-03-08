@@ -1,6 +1,6 @@
 InputValidationMixin = {
 
-  mixins: [ReactMeteorData],
+  mixins: [Mixins.Autorun],
 
   propTypes: {
     name: React.PropTypes.string.isRequired,
@@ -14,14 +14,17 @@ InputValidationMixin = {
     form: React.PropTypes.object
   },
 
-  getMeteorData() {
+  getInitialState() {
     return {
-      hasError: this.context.schema && this.context.schema.keyIsInvalid(this.props.name)
-    }
+      showError: false,
+      hasError: false
+    };
   },
 
-  getInitialState() {
-    return {showError: false};
+  autorunValidation() {
+    this.setState({
+      hasError: this.context.schema && this.context.schema.keyIsInvalid(this.props.name)
+    });
   },
 
   hideError() {
@@ -35,14 +38,13 @@ InputValidationMixin = {
   onChange(value) {
     var valueObject = {[this.props.name]: value};
 
-    this.context.form.setState(valueObject);
     if (_.isFunction(this.props.onChange)) {
       this.props.onChange(valueObject);
     }
   },
 
   shouldShowError() {
-    return this.state.showError && this.data.hasError;
+    return this.state.showError && this.state.hasError;
   },
 
   componentDidMount() {

@@ -32,11 +32,9 @@ react
 kadira:react-layout
 kadira:blaze-layout
 kadira:flow-router
-arillo:flow-router-helpers
 msavin:mongol
 meteorhacks:fast-render
-meteorhacks:subs-manager
-ongoworks:speakingurl
+# meteorhacks:subs-manager
 seba:minifiers-autoprefixer
 accounts-password
 accounts-facebook
