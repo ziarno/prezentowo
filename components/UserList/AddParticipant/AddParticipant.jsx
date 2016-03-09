@@ -116,7 +116,8 @@ AddParticipant = React.createClass({
         </Form>
         {!this.schema.isValid() ? (
           <Message
-            className="attached fluid error"
+            className="add-participant--error icon attached fluid error"
+            icon="warning"
             messages={this.schema.invalidKeys().map((key) => (
                 this.schema.keyErrorMessage(key.name)
             ))}

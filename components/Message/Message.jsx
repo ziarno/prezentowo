@@ -41,6 +41,10 @@ Message = React.createClass({
           </div>
         ) : null}
 
+        {this.props.icon ? (
+          <i className={classNames(this.props.icon, 'icon')}/>
+        ) : null}
+
         {this.props.message ? (
           <p>{this.props.message}</p>
         ) : null}
