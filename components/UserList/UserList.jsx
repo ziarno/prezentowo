@@ -31,31 +31,51 @@ UserList = React.createClass({
     });
   },
 
+  setSticky() {
+    $(this.refs.sticky).sticky({
+      context: '#event-container',
+      offset: 50
+    });
+  },
+
+  componentDidMount() {
+    this.setSticky();
+  },
+
+  componentDidUpdate() {
+    this.setSticky();
+  },
+
   render() {
 
     return (
       <div
         id="user-list"
         className="shadow">
-
         <div
-          className="user-list--title">
-          {this.isCreator() ? (
-            <AddParticipant
-              onSubmit={this.addParticipant}
-            />
-          ) : null}
-          <T>Participants</T>
-        </div>
+          ref="sticky"
+          className="ui sticky">
 
-        <div
-          className="user-list--list">
+          <div
+            className="user-list--title">
+            {this.isCreator() ? (
+              <AddParticipant
+                onSubmit={this.addParticipant}
+              />
+            ) : null}
+            <T>Participants</T>
+          </div>
 
-          {this.props.users.map((user) => (
-            <UserItem
-              key={user._id}
-              user={user} />
-          ))}
+          <div
+            className="user-list--list">
+
+            {this.props.users.map((user) => (
+              <UserItem
+                key={user._id}
+                user={user} />
+            ))}
+
+          </div>
 
         </div>
 

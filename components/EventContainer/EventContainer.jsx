@@ -33,6 +33,7 @@ EventContainer = React.createClass({
         <UserList
           users={this.data.participants} />
         <PresentsContainer
+          users={this.data.participants}
           presents={this.data.presents} />
       </div>
     );
