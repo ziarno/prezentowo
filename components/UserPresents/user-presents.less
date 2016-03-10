@@ -1,0 +1,28 @@
+@import '/client/styles/partials/vars.import.less';
+
+.user-presents {
+  .ui.horizontal.divider {
+    position: relative;
+    overflow: visible;
+
+    .button {
+      position: absolute;
+      height: auto;
+      background: #fff !important;
+      z-index: 1;
+      padding: 4px 8px;
+      box-shadow: none;
+      &.left {
+        left: 0;
+      }
+      &.right {
+        right: 0;
+        padding-right: 0 !important;
+      }
+      &:not(:hover) {
+        color: @grey-dark;
+      }
+    }
+  }
+
+}
