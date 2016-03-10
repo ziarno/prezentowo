@@ -13,7 +13,7 @@ EventsButton = React.createClass({
   },
 
   showEvent(event) {
-    FlowRouter.go(`/event/${event._id}`);
+    FlowRouter.go(`/event/id/${event._id}`);
   },
 
   render() {

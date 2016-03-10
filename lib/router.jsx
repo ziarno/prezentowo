@@ -10,7 +10,7 @@ FlowRouter.route('/', {
   }
 });
 
-FlowRouter.route('/event/:eventId', {
+FlowRouter.route('/event/id/:eventId', {
   action() {
     ReactLayout.render(App, {
       content: <EventContainer />

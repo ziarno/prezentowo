@@ -61,9 +61,9 @@ Header = React.createClass({
 
   render() {
     return (
-      <div className="app-header shadow no-selection">
+      <div className="app-header shadow">
         <div className="app-header--container">
-          <h1 className="title no-selection">
+          <h1 className="title">
             {this.state.title}
           </h1>
           {this.data.user ?
