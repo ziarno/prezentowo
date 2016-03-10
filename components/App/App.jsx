@@ -1,9 +1,11 @@
+import {attachWaves} from '../../lib/utilities';
+
 App = React.createClass({
   componentDidMount() {
-    Utils.attachWaves();
+    attachWaves();
   },
   componentDidUpdate() {
-    Utils.attachWaves();
+    attachWaves();
   },
   render() {
     return (

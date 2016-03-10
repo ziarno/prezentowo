@@ -12,11 +12,13 @@ EventContainer = React.createClass({
         var name1 = participant1.profile.name.capitalizeFirstLetter();
         var name2 = participant2.profile.name.capitalizeFirstLetter();
 
-        if (participant1._id === Meteor.userId()) {
-          return -1;
-        }
         return  name1 > name2 ? 1 : -1;
       });
+
+    //move current user to top
+    participants.moveToTop((participant) => (
+      participant._id === Meteor.userId()
+    ));
 
     return {
       ready: subscription.ready(),
