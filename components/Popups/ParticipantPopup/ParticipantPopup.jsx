@@ -1,6 +1,8 @@
-AddParticipant = React.createClass({
+import {Popup} from '../../../lib/Mixins';
 
-  mixins: [ReactMeteorData],
+ParticipantPopup = React.createClass({
+
+  mixins: [ReactMeteorData, Popup],
 
   propTypes: {
     onSubmit: React.PropTypes.func.isRequired
@@ -15,14 +17,16 @@ AddParticipant = React.createClass({
     };
   },
 
+  getPopupSettings() {
+    return {
+      onHide: () => this.schema.resetValidation()
+    };
+  },
+
   getInitialState() {
     return {
       images: []
     };
-  },
-
-  hide(callback) {
-    $(this.refs.addParticipantButton).popup('hide', callback);
   },
 
   reset() {
@@ -30,7 +34,7 @@ AddParticipant = React.createClass({
   },
 
   hideAndReset() {
-    this.hide(this.reset);
+    this.hidePopup(this.reset);
   },
 
   updateImages({gender}) {
@@ -50,39 +54,40 @@ AddParticipant = React.createClass({
   },
 
   componentDidMount() {
-    $(this.refs.addParticipantButton).popup({
-      popup: '.add-participant.popup',
-      on: 'click',
-      position: 'bottom left',
-      lastResort: 'bottom left',
-      preserve: true,
-      transition: 'slide down',
-      onHide: () => {
-        this.schema.resetValidation();
-      }
-    });
     this.updateImages({gender: 'male'});
   },
 
   render() {
-    var addParticipantPopup = (
-      <FormPopup
-        className="add-participant">
-        <div className="add-participant--content ui attached message">
+
+    var AddParticipantButton = (
+      <div
+        ref="popupTrigger"
+        className={`user-list--add-participant-button
+                  circular ui icon button
+                  waves-effect waves-button`}>
+        <i className="add user large icon"></i>
+      </div>
+    );
+
+    var Popup = (
+      <div
+        ref="popup"
+        className="ui flowing popup form-popup">
+        <div className="ui attached message">
           <div className="header">
             <T>New participant</T>
           </div>
         </div>
         <Form
           ref="addParticipantForm"
-          className="add-participant--form attached fluid segment"
+          className="form-popup--form attached fluid segment"
           onSubmit={this.submit}
           schema={this.schema}>
           <ImagePicker
             name="pictureUrl"
             images={this.state.images}
           />
-          <div className="add-participant--form-right" >
+          <div className="form-popup--form-right" >
             <Input
               name="name"
               placeholder={_i18n.__('Fullname')}
@@ -116,7 +121,7 @@ AddParticipant = React.createClass({
         </Form>
         {!this.schema.isValid() ? (
           <Message
-            className="add-participant--error icon attached fluid error"
+            className="form-popup--error icon attached fluid error"
             icon="warning"
             messages={this.schema.invalidKeys().map((key) => (
                 this.schema.keyErrorMessage(key.name)
@@ -140,24 +145,15 @@ AddParticipant = React.createClass({
             </button>
           </div>
         </div>
-      </FormPopup>
-    );
-
-    var addParticipantButton = (
-      <div
-        ref="addParticipantButton"
-        className={`user-list--add-participant-button
-                circular ui icon button
-                waves-effect waves-button`}>
-        <i className="add user large icon"></i>
       </div>
     );
 
     return (
       <div>
-        {addParticipantButton}
-        {addParticipantPopup}
+        {AddParticipantButton}
+        {Popup}
       </div>
     );
+
   }
 });

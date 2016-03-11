@@ -59,7 +59,7 @@ UserList = React.createClass({
           <div
             className="user-list--title">
             {this.isCreator() ? (
-              <AddParticipant
+              <ParticipantPopup
                 onSubmit={this.addParticipant}
               />
             ) : null}

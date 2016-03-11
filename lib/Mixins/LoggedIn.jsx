@@ -1,5 +1,5 @@
 /**
- * VALIDATED METHOD MIXINS
+ * ValidatedMethod mixin (not a React mixin)
  */
 var LoggedIn = function loggedInMixin(methodOptions) {
   var originalRun = methodOptions.run;

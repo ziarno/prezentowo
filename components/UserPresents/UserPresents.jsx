@@ -6,17 +6,15 @@ UserPresents = React.createClass({
   },
 
   render() {
+
     return (
       <div className="user-presents">
+
+        <PresentPopup />
+
         <div className="ui horizontal divider">
           <User user={this.props.user} />
-          <div className="circular ui icon button left waves-effect waves-button">
-            <i className="large icons">
-              <i className="gift icon"></i>
-              <i className="plus corner icon"></i>
-            </i>
-          </div>
-          <div className="ui icon button right waves-effect waves-button">
+          <div className="circular ui icon button right waves-effect waves-button">
             <i className="chevron up icon"></i>
           </div>
         </div>

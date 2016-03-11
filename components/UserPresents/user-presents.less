@@ -1,27 +1,34 @@
 @import '/client/styles/partials/vars.import.less';
 
 .user-presents {
+  position: relative;
+
   .ui.horizontal.divider {
     position: relative;
     overflow: visible;
+  }
 
-    .button {
-      position: absolute;
-      height: auto;
-      background: #fff !important;
-      z-index: 1;
-      padding: 4px 8px;
-      box-shadow: none;
-      &.left {
-        left: 0;
-      }
-      &.right {
-        right: 0;
-        padding-right: 0 !important;
-      }
-      &:not(:hover) {
-        color: @grey-dark;
-      }
+  .ui.button {
+    position: absolute;
+    height: auto;
+    background: #fff !important;
+    z-index: 1;
+    padding: 4px 8px;
+    box-shadow: none;
+    top: 0;
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+    }
+    &:not(:hover) {
+      color: @grey-dark;
+    }
+    .corner.icon {
+      font-size: 0.65em;
+      right: -1px;
+      bottom: -3px;
     }
   }
 
