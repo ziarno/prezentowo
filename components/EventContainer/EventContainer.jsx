@@ -27,6 +27,16 @@ EventContainer = React.createClass({
     };
   },
 
+  childContextTypes: {
+    eventId: React.PropTypes.string,
+  },
+
+  getChildContext: function() {
+    return {
+      eventId: FlowRouter.getParam('eventId')
+    };
+  },
+
   render() {
 
     return (

@@ -4,10 +4,6 @@ ParticipantPopup = React.createClass({
 
   mixins: [ReactMeteorData, Popup],
 
-  propTypes: {
-    onSubmit: React.PropTypes.func.isRequired
-  },
-
   getMeteorData() {
     this.schema = this.schema || Events.Schemas.NewParticipant
         .namedContext('newParticipant');
@@ -25,12 +21,17 @@ ParticipantPopup = React.createClass({
 
   getInitialState() {
     return {
-      images: []
+      images: [],
+      isSaving: false
     };
   },
 
+  contextTypes: {
+    eventId: React.PropTypes.string
+  },
+
   reset() {
-    this.refs.addParticipantForm.reset();
+    this.refs.form.reset();
   },
 
   hideAndReset() {
@@ -46,10 +47,19 @@ ParticipantPopup = React.createClass({
     this.setState({images: avatars});
   },
 
-  submit(formData) {
+  addParticipant(formData) {
     if (this.schema.validate(_.omit(formData, 'sendEmail'))) {
-      this.props.onSubmit(formData);
-      this.hideAndReset();
+      this.setState({isSaving: true});
+      Events.methods.addParticipant.call({
+        eventId: this.context.eventId,
+        sendEmail: data.sendEmail,
+        participant: _.omit(data, 'sendEmail')
+      }, function (error, participant) {
+        this.setState({isSaving: false});
+        this.hideAndReset();
+        console.log('error', error);
+        console.log('new participant', participant);
+      });
     }
   },
 
@@ -73,15 +83,17 @@ ParticipantPopup = React.createClass({
       <div
         ref="popup"
         className="ui flowing popup form-popup">
+
         <div className="ui attached message">
           <div className="header">
             <T>New participant</T>
           </div>
         </div>
+
         <Form
-          ref="addParticipantForm"
+          ref="form"
           className="form-popup--form attached fluid segment"
-          onSubmit={this.submit}
+          onSubmit={this.addParticipant}
           schema={this.schema}>
           <ImagePicker
             name="pictureUrl"
@@ -119,15 +131,9 @@ ParticipantPopup = React.createClass({
             </SelectInput>
           </div>
         </Form>
-        {!this.schema.isValid() ? (
-          <Message
-            className="form-popup--error icon attached fluid error"
-            icon="warning"
-            messages={this.schema.invalidKeys().map((key) => (
-                this.schema.keyErrorMessage(key.name)
-            ))}
-          />
-        ) : null}
+
+        <FormErrorMessage schema={this.schema} />
+
         <div className="ui bottom attached message actions">
           <div className="ui buttons">
             <button
@@ -137,14 +143,17 @@ ParticipantPopup = React.createClass({
               <T>Cancel</T>
             </button>
             <button
-              className="ui labeled icon primary button"
+              className={classNames('ui labeled icon primary button', {
+                loading: this.state.isSaving
+              })}
               disabled={!this.schema.isValid()}
-              onClick={(e) => this.refs.addParticipantForm.submit(e)}>
+              onClick={(e) => this.refs.form.submit(e)}>
               <i className="checkmark icon"></i>
               <T>Add participant</T>
             </button>
           </div>
         </div>
+
       </div>
     );
 

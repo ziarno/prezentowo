@@ -10,13 +10,16 @@ UserPresents = React.createClass({
     return (
       <div className="user-presents">
 
-        <PresentPopup />
+        <PresentPopup
+          forUserId={this.props.user._id}
+        />
+
+        <div className="user-presents--control-button circular ui icon button right waves-effect waves-button">
+          <i className="chevron up icon"></i>
+        </div>
 
         <div className="ui horizontal divider">
           <User user={this.props.user} />
-          <div className="circular ui icon button right waves-effect waves-button">
-            <i className="chevron up icon"></i>
-          </div>
         </div>
 
         {this.props.presents.length ? this.props.presents.map((present) => (

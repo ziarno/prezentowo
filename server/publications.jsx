@@ -68,10 +68,8 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
               },
               //for me find only those added by me
               {
-                $and: {
-                  forUserId: this.userId,
-                  creatorId: this.userId
-                }
+                forUserId: this.userId,
+                creatorId: this.userId
               }
             ]
           }, {

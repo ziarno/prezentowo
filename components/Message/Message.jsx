@@ -17,7 +17,7 @@ Message = React.createClass({
 
   close() {
     this.setState({
-      visible: true
+      hidden: true
     });
   },
 
@@ -25,9 +25,10 @@ Message = React.createClass({
     var key = 0;
 
     return (
-      <div className={classNames('ui message', this.props.className, {
-        hidden: this.state.visible || this.props.visible
-      })}>
+      <div
+        className={classNames('ui message', this.props.className, {
+          hidden: this.state.hidden || this.props.hidden
+        })}>
 
         {this.props.closable ? (
           <i className="close icon"

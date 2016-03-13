@@ -66,6 +66,8 @@ ImagePicker = React.createClass({
   },
 
   render() {
+    this.inputId = this.inputId || `image-picker-input-${_.uniqueId()}`
+
     return (
       <div className="image-picker shadow">
         <Loader visible={this.state.isLoading} />
@@ -84,15 +86,15 @@ ImagePicker = React.createClass({
         </Img>
         <div className="ui compact small buttons image-picker--actions">
           <label
-            htmlFor="picture"
+            htmlFor={this.inputId}
             className="ui icon right labeled button
               image-picker--upload waves-effect waves-button">
             <T>Upload file</T>
             <i className="upload icon"></i>
           </label>
           <input
-            name="picture"
-            id="picture"
+            name={this.inputId}
+            id={this.inputId}
             type="file"
             onChange={this.uploadImage}
           />

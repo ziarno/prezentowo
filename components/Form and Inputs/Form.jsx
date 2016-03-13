@@ -50,7 +50,7 @@ Form = React.createClass({
     return (
       <form
         className={classNames('ui form', this.props.className)}
-        onSubmit={this.onSubmit}
+        onSubmit={this.submit}
       >
         {this.props.children}
       </form>

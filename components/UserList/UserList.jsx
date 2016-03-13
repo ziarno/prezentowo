@@ -20,17 +20,6 @@ UserList = React.createClass({
       (this.data.event.creatorId === this.data.user._id);
   },
 
-  addParticipant(data) {
-    Events.methods.addParticipant.call({
-      eventId: this.data.event._id,
-      sendEmail: data.sendEmail,
-      participant: _.omit(data, 'sendEmail')
-    }, function (error, participant) {
-      console.log('error', error);
-      console.log('data', participant);
-    });
-  },
-
   setSticky() {
     $(this.refs.sticky).sticky({
       context: '#event-container',
@@ -59,9 +48,7 @@ UserList = React.createClass({
           <div
             className="user-list--title">
             {this.isCreator() ? (
-              <ParticipantPopup
-                onSubmit={this.addParticipant}
-              />
+              <ParticipantPopup />
             ) : null}
             <T>Participants</T>
           </div>

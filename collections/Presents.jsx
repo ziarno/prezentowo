@@ -15,15 +15,15 @@ Presents.Schemas = {};
 Presents.Schemas.NewPresent = new SimpleSchema({
   title: {
     type: String,
-    label: _i18n.__('Title')
+    label: () => _i18n.__('Title')
   },
   pictureUrl: {
     type: String,
-    label: _i18n.__('Picture')
+    label: () => _i18n.__('Picture')
   },
   description: {
     type: String,
-    label: _i18n.__('Description'),
+    label: () => _i18n.__('Description'),
     optional: true
   },
   eventId: {
@@ -43,17 +43,17 @@ Presents.Schemas.Main = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       defaultValue: [],
-      label: _i18n.__('Buyers')
+      label: () => _i18n.__('Buyers')
     },
     commentsSecret: {
       type: [String],
       defaultValue: [],
-      label: _i18n.__('Secret comments')
+      label: () => _i18n.__('Secret comments')
     },
     commentsShared: {
       type: [String],
       defaultValue: [],
-      label: _i18n.__('Shared comments')
+      label: () => _i18n.__('Shared comments')
     },
     creatorId: {
       type: String,
@@ -86,8 +86,9 @@ Presents.functions = {};
 Presents.functions.updatePresentsCount = function (incrementValue, userId, present) {
   var isOwnPresent = (present.forUserId === present.creatorId);
   var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount';
-  var countModifier = {$inc: {}};
-  countModifier.$inc[`participants.$.${countFieldName}`] = incrementValue;
+  var countModifier = {$inc: {
+    [`participants.$.${countFieldName}`]: incrementValue
+  }};
 
   Events.update({
     _id: present.eventId,
