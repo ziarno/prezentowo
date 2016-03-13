@@ -39,14 +39,23 @@ EventContainer = React.createClass({
 
   render() {
 
-    return (
+    var event = Events.findOne(FlowRouter.getParam('eventId'));
+    var eventTitle = event && event.title;
+
+    return this.data.ready ? (
       <div id="event-container">
-        <Loader visible= {!this.data.ready} />
         <UserList
           users={this.data.participants} />
         <PresentsContainer
           users={this.data.participants}
           presents={this.data.presents} />
+      </div>
+    ) : (
+      <div id="event-container">
+        <Loader
+          size="large"
+          text={_i18n.__('Loading event', {title: eventTitle})}
+        />
       </div>
     );
   }

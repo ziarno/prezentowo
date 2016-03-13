@@ -27,6 +27,23 @@ UserList = React.createClass({
     });
   },
 
+  scrollToUser(userId) {
+    var userPresentsEl = $(`[data-user-id='${userId}']`);
+
+    $('body').scrollTo(userPresentsEl, {
+      duration: 500,
+      offset: -60,
+      onAfter() {
+        var userDivider = userPresentsEl
+          .find('.ui.divider')
+          .addClass('waves-effect waves-circle');
+
+        Waves.ripple(userDivider);
+        setTimeout(() => userDivider.removeClass('waves-effect waves-circle'), 1000);
+      }
+    });
+  },
+
   componentDidMount() {
     this.setSticky();
   },
@@ -55,9 +72,12 @@ UserList = React.createClass({
 
           <div
             className="user-list--list">
-
             {this.props.users.map((user) => (
               <UserItem
+                presentsCount={Presents.find({
+                  forUserId: user._id
+                }).count()}
+                onClick={this.scrollToUser}
                 key={user._id}
                 user={user} />
             ))}

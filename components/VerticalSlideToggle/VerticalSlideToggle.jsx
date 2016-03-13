@@ -37,7 +37,9 @@ VerticalSlideToggle = React.createClass({
   },
 
   render() {
-    var style = {};
+    var style = {
+      opacity: this.state.visible ? 1 : 0
+    };
 
     if (this.state.maxHeight !== false) {
       style.maxHeight = this.state.maxHeight;
