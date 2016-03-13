@@ -33,7 +33,7 @@ Form = React.createClass({
     this.props.schema.resetValidation();
   },
 
-  submit(event) {
+  submitForm(event) {
     event.preventDefault();
     var formValues = {};
 
@@ -50,7 +50,7 @@ Form = React.createClass({
     return (
       <form
         className={classNames('ui form', this.props.className)}
-        onSubmit={this.submit}
+        onSubmit={this.submitForm}
       >
         {this.props.children}
       </form>

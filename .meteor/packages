@@ -24,7 +24,7 @@ digilord:faker
 ongoworks:security
 aldeed:simple-schema
 aldeed:collection2
-kadira:debug
+# kadira:debug
 
 # client
 less

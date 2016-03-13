@@ -5,6 +5,21 @@ UserPresents = React.createClass({
     presents: React.PropTypes.array.isRequired
   },
 
+  getInitialState() {
+    return {
+      presentsVisible: true
+    }
+  },
+
+  shouldComponentUpdate(newProps, {presentsVisible}) {
+    return !_.isEqual(newProps, this.props) ||
+        presentsVisible !== this.state.presentsVisible;
+  },
+
+  onToggle(visible) {
+    this.setState({presentsVisible: visible});
+  },
+
   render() {
 
     return (
@@ -14,7 +29,13 @@ UserPresents = React.createClass({
           forUserId={this.props.user._id}
         />
 
-        <div className="user-presents--control-button circular ui icon button right waves-effect waves-button">
+        <div
+          onClick={() => this.refs.toggle.toggle()}
+          className={classNames(
+            'user-presents--control-button user-presents--toggle',
+            'circular ui icon button right waves-effect waves-button',
+            {rotated: !this.state.presentsVisible}
+          )}>
           <i className="chevron up icon"></i>
         </div>
 
@@ -22,16 +43,19 @@ UserPresents = React.createClass({
           <User user={this.props.user} />
         </div>
 
-        {this.props.presents.length ? this.props.presents.map((present) => (
-          <Present key={present._id} present={present} />
-        )) : (
-          <div className="no-results">
-            <i className="huge gift icon" />
-            <br />
-            <T>No presents</T>
-          </div>
-        )}
-
+        <VerticalSlideToggle
+          onToggle={this.onToggle}
+          ref="toggle">
+          {this.props.presents.length ? this.props.presents.map((present) => (
+            <Present key={present._id} present={present} />
+          )) : (
+            <div className="no-results">
+              <i className="huge gift icon" />
+              <br />
+              <T>No presents</T>
+            </div>
+          )}
+        </VerticalSlideToggle>
       </div>
     );
   }

@@ -7,6 +7,13 @@
     overflow: visible;
   }
 
+  .user-presents--toggle {
+    transition: transform @transition-time;
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
+
   .user-presents--control-button.ui.button {
     position: absolute;
     height: auto;

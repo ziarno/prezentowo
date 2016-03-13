@@ -145,7 +145,7 @@ ParticipantPopup = React.createClass({
                 loading: this.state.isSaving
               })}
               disabled={!this.schema.isValid()}
-              onClick={(e) => this.refs.form.submit(e)}>
+              onClick={(e) => this.refs.form.submitForm(e)}>
               <i className="checkmark icon"></i>
               <T>Add participant</T>
             </button>

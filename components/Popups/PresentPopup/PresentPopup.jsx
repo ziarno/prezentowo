@@ -39,14 +39,11 @@ PresentPopup = React.createClass({
   addPresent(presentData) {
     if (this.schema.validate(presentData)) {
       this.hideAndReset();
-      console.time('rerender');
-      console.time('method');
       Presents.methods.createPresent.call({
         eventId: this.context.eventId,
         forUserId: this.props.forUserId,
         ...presentData
-      }, (e,d) => console.timeEnd('method'));
-      setTimeout(()=>console.timeEnd('rerender'));
+      });
     }
   },
 
@@ -119,7 +116,7 @@ PresentPopup = React.createClass({
             <button
               className="ui labeled icon primary button"
               disabled={!this.schema.isValid()}
-              onClick={(e) => this.refs.form.submit(e)}>
+              onClick={(e) => this.refs.form.submitForm(e)}>
               <i className="checkmark icon"></i>
               <T>Add present</T>
             </button>
