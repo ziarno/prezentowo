@@ -52,13 +52,11 @@ ParticipantPopup = React.createClass({
       this.setState({isSaving: true});
       Events.methods.addParticipant.call({
         eventId: this.context.eventId,
-        sendEmail: data.sendEmail,
-        participant: _.omit(data, 'sendEmail')
-      }, function (error, participant) {
-        this.setState({isSaving: false});
+        sendEmail: formData.sendEmail,
+        participant: _.omit(formData, 'sendEmail')
+      }, () => {
         this.hideAndReset();
-        console.log('error', error);
-        console.log('new participant', participant);
+        this.setState({isSaving: false});
       });
     }
   },
