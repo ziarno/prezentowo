@@ -15,6 +15,7 @@ Presents.Schemas = {};
 Presents.Schemas.NewPresent = new SimpleSchema({
   title: {
     type: String,
+    max: 70,
     label: () => _i18n.__('Title')
   },
   pictureUrl: {

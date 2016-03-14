@@ -10,6 +10,10 @@
     border-radius: 40px;
     cursor: default;
     min-height: 28px;
+    //fix for ripple highlighting:
+    width: 99%;
+    margin-left: auto;
+    margin-right: auto;
     .user {
       text-transform: uppercase;
     }
@@ -45,6 +49,14 @@
       right: -1px;
       bottom: -3px;
     }
+  }
+
+  .presents {
+    justify-content: center;
+  }
+
+  &:not(:first-child) {
+    margin-top: 60px;
   }
 
 }

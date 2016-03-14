@@ -6,13 +6,14 @@ ImagePicker = React.createClass({
 
   propTypes: {
     images: React.PropTypes.array,
-    uploadOptions: React.PropTypes.object
+    uploadOptions: React.PropTypes.object,
+    randomizeInitialImage: React.PropTypes.bool
   },
 
   getInitialState() {
     return {
       uploadedImages: [],
-      currentIndex: 0,
+      currentIndex: this.props.randomizeInitialImage ? _.random(0, this.props.images.length - 1) : 0,
       isLoading: false
     }
   },

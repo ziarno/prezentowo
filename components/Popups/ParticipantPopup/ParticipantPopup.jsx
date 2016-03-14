@@ -4,6 +4,10 @@ ParticipantPopup = React.createClass({
 
   mixins: [Popup],
 
+  contextTypes: {
+    eventId: React.PropTypes.string
+  },
+
   getPopupSettings() {
     return {
       onHide: () => this.schema.resetValidation()
@@ -15,10 +19,6 @@ ParticipantPopup = React.createClass({
       images: [],
       isSaving: false
     };
-  },
-
-  contextTypes: {
-    eventId: React.PropTypes.string
   },
 
   reset() {

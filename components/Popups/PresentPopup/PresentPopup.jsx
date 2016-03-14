@@ -86,6 +86,7 @@ PresentPopup = React.createClass({
           <ImagePicker
             name="pictureUrl"
             images={avatars}
+            randomizeInitialImage
             uploadOptions={{
               folder: 'presents'
             }}

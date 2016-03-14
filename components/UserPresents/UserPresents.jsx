@@ -46,6 +46,7 @@ UserPresents = React.createClass({
         </div>
 
         <VerticalSlideToggle
+          className="ui cards presents"
           onToggle={this.onToggle}
           ref="toggle">
           {this.props.presents.length ? this.props.presents.map((present) => (

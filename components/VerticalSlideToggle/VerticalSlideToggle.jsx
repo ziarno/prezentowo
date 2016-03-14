@@ -1,7 +1,8 @@
 VerticalSlideToggle = React.createClass({
 
   propTypes: {
-    onToggle: React.PropTypes.func
+    onToggle: React.PropTypes.func,
+    className: React.PropTypes.string
   },
 
   getInitialState() {
@@ -38,7 +39,7 @@ VerticalSlideToggle = React.createClass({
 
   render() {
     var style = {
-      opacity: this.state.visible ? 1 : 0
+      opacity: this.state.visible ? 1 : 0.2
     };
 
     if (this.state.maxHeight !== false) {
@@ -49,7 +50,7 @@ VerticalSlideToggle = React.createClass({
       <div
         ref="slideToggle"
         style={style}
-        className="vertical-slide-toggle">
+        className={classNames('vertical-slide-toggle', this.props.className)}>
         {this.props.children}
       </div>
     );
