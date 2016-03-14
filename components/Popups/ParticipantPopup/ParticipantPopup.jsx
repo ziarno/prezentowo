@@ -2,16 +2,7 @@ import {Popup} from '../../../lib/Mixins';
 
 ParticipantPopup = React.createClass({
 
-  mixins: [ReactMeteorData, Popup],
-
-  getMeteorData() {
-    this.schema = this.schema || Events.Schemas.NewParticipant
-        .namedContext('newParticipant');
-
-    return {
-      errors: this.schema.invalidKeys()
-    };
-  },
+  mixins: [Popup],
 
   getPopupSettings() {
     return {
@@ -66,6 +57,8 @@ ParticipantPopup = React.createClass({
   },
 
   render() {
+    this.schema = this.schema || Events.Schemas.NewParticipant
+        .namedContext('newParticipant');
 
     var AddParticipantButton = (
       <div

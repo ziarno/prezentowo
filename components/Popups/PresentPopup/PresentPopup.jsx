@@ -2,20 +2,10 @@ import {Popup} from '../../../lib/Mixins';
 
 PresentPopup = React.createClass({
 
-  mixins: [ReactMeteorData, Popup],
+  mixins: [Popup],
 
   propTypes: {
     user: React.PropTypes.object
-  },
-
-  getMeteorData() {
-    this.schema = this.schema || Presents.Schemas.NewPresent
-      .pick(['title', 'pictureUrl', 'description'])
-      .namedContext('newPresent');
-
-    return {
-      errors: this.schema.invalidKeys()
-    };
   },
 
   contextTypes: {
@@ -53,6 +43,9 @@ PresentPopup = React.createClass({
   },
 
   render() {
+    this.schema = this.schema || Presents.Schemas.NewPresent
+        .pick(['title', 'pictureUrl', 'description'])
+        .namedContext('newPresent');
 
     var avatars = _.range(20).map((index) => (
       `/images/presents/p${index + 1}-150px.png`
