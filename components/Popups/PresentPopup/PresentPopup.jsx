@@ -5,7 +5,7 @@ PresentPopup = React.createClass({
   mixins: [ReactMeteorData, Popup],
 
   propTypes: {
-    forUserId: React.PropTypes.string
+    user: React.PropTypes.object
   },
 
   getMeteorData() {
@@ -41,21 +41,21 @@ PresentPopup = React.createClass({
       this.hideAndReset();
       Presents.methods.createPresent.call({
         eventId: this.context.eventId,
-        forUserId: this.props.forUserId,
+        forUserId: this.props.user._id,
         ...presentData
       });
     }
   },
 
-  shouldComponentUpdate({forUserId}) {
+  shouldComponentUpdate({user}) {
     //note: very important here! otherwise a lot of unnecessary re-renders happen, and block the thread!
-    return forUserId !== this.props.forUserId;
+    return user._id !== this.props.user._id;
   },
 
   render() {
 
-    var avatars = _.range(12).map((index) => (
-      `/images/avatars/m${index + 1}.png`
+    var avatars = _.range(20).map((index) => (
+      `/images/presents/p${index + 1}-150px.png`
     ));
 
     var AddPresentButton = (
@@ -77,6 +77,11 @@ PresentPopup = React.createClass({
         <div className="ui attached message">
           <div className="header">
             <T>New present</T>
+            <div className="form-popup--header-label">
+              <T>for</T>
+              <span>:&nbsp;</span>
+              <User user={this.props.user} />
+            </div>
           </div>
         </div>
 
@@ -88,6 +93,9 @@ PresentPopup = React.createClass({
           <ImagePicker
             name="pictureUrl"
             images={avatars}
+            uploadOptions={{
+              folder: 'presents'
+            }}
           />
           <div className="form-popup--form-right" >
             <Input

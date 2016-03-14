@@ -54,7 +54,9 @@ EventContainer = React.createClass({
       <div id="event-container">
         <Loader
           size="large"
-          text={_i18n.__('Loading event', {title: eventTitle})}
+          text={eventTitle ?
+            _i18n.__('Loading event', {title: eventTitle}) :
+            null}
         />
       </div>
     );

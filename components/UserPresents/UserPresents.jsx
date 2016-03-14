@@ -28,7 +28,7 @@ UserPresents = React.createClass({
         className="user-presents">
 
         <PresentPopup
-          forUserId={this.props.user._id}
+          user={this.props.user}
         />
 
         <div

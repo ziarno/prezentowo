@@ -96,6 +96,10 @@ ParticipantPopup = React.createClass({
           <ImagePicker
             name="pictureUrl"
             images={this.state.images}
+            uploadOptions={{
+              folder: 'users',
+              transformation: 'avatar-large'
+            }}
           />
           <div className="form-popup--form-right" >
             <Input

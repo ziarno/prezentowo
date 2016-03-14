@@ -5,7 +5,8 @@ ImagePicker = React.createClass({
   mixins: [InputValidation],
 
   propTypes: {
-    images: React.PropTypes.array
+    images: React.PropTypes.array,
+    uploadOptions: React.PropTypes.object
   },
 
   getInitialState() {
@@ -48,10 +49,7 @@ ImagePicker = React.createClass({
 
     this.setState({isLoading: true});
 
-    Cloudinary.upload(files, {
-      folder: 'users',
-      transformation: 'avatar-large'
-    }, (err, res) => {
+    Cloudinary.upload(files, this.props.uploadOptions, (err, res) => {
       this.setState({
         isLoading: false
       });
