@@ -53,12 +53,11 @@ EventContainer = React.createClass({
       <div id="event-container">
         <UserList
           isCreator={this.isCreator()}
-          users={this.data.participants} />
-        <EventSettings
-          isCreator={this.isCreator()}
-          usersCount={this.data.participants.length}
-          presentsCount={this.data.presents.length}
-        />
+          users={this.data.participants}
+          presents={this.data.presents} />
+        {this.isCreator() ? (
+          <EventSettings />
+        ) : null}
         <PresentsContainer
           users={this.data.participants}
           presents={this.data.presents} />

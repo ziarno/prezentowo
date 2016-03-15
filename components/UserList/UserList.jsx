@@ -60,6 +60,18 @@ UserList = React.createClass({
           <div
             className="user-list--title">
             <T>Participants</T>
+            <div className="counts">
+              <CountLabel
+                icon="gift"
+                className="basic"
+                count={this.props.presents.length}
+              />
+              <CountLabel
+                icon="user"
+                className="basic"
+                count={this.props.users.length}
+              />
+            </div>
           </div>
 
           <div
@@ -76,7 +88,6 @@ UserList = React.createClass({
           </div>
 
         </div>
-
       </div>
     );
   }
