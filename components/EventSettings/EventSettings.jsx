@@ -1,33 +1,30 @@
-EventSettings = React.createClass({
+EventSettings = ({presentsCount, usersCount, isCreator}) => (
+  <div
+    id="event-settings">
 
-  render() {
-    return (
+    {isCreator ? (
       <div
-        id="event-settings">
+        className="event-settings--buttons
+          ui attached compact buttons">
 
-        <div
-          className="event-settings--buttons
-            ui attached compact buttons">
-          <div className="ui button waves-effect waves-button">
-            <i className="setting large icon"/>
-            Opcje
-          </div>
-
-          <ParticipantPopup />
-
+        <div className="ui button waves-effect waves-button">
+          <i className="setting large icon"/>
+          <T>Options</T>
         </div>
+        <ParticipantPopup />
 
-        <div className="counts ui attached segment">
-          <CountLabel
-            icon="gift"
-            count={this.props.presentsCount}
-          />
-          <CountLabel
-            icon="user"
-            count={this.props.usersCount}
-          />
-        </div>
       </div>
-    );
-  }
-});
+    ) : null}
+
+    <div className="counts ui attached segment">
+      <CountLabel
+        icon="gift"
+        count={presentsCount}
+      />
+      <CountLabel
+        icon="user"
+        count={usersCount}
+      />
+    </div>
+  </div>
+);

@@ -15,11 +15,6 @@ UserList = React.createClass({
     };
   },
 
-  isCreator() {
-    return this.data.event && this.data.user &&
-      (this.data.event.creatorId === this.data.user._id);
-  },
-
   setSticky() {
     $(this.refs.sticky).sticky({
       context: '#event-container',

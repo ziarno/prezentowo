@@ -12,7 +12,7 @@ EventContainer = React.createClass({
         var name1 = participant1.profile.name.capitalizeFirstLetter();
         var name2 = participant2.profile.name.capitalizeFirstLetter();
 
-        return  name1 > name2 ? 1 : -1;
+        return name1 > name2 ? 1 : -1;
       });
 
     //move current user to top
@@ -37,6 +37,13 @@ EventContainer = React.createClass({
     };
   },
 
+  isCreator() {
+    var eventId = FlowRouter.getParam('eventId');
+    var event = Events.findOne(eventId);
+
+    return event && (event.creatorId === Meteor.userId());
+  },
+
   render() {
 
     var event = Events.findOne(FlowRouter.getParam('eventId'));
@@ -45,8 +52,10 @@ EventContainer = React.createClass({
     return this.data.ready ? (
       <div id="event-container">
         <UserList
+          isCreator={this.isCreator()}
           users={this.data.participants} />
         <EventSettings
+          isCreator={this.isCreator()}
           usersCount={this.data.participants.length}
           presentsCount={this.data.presents.length}
         />
