@@ -1,11 +1,12 @@
 @import '/client/styles/partials/vars.import.less';
 
 #user-list {
-  width: 300px;
+  width: @user-list-width;
   min-width: 300px;
   min-height: calc(~"100vh" - @header-height);
   position: relative;
   z-index: 2;
+  padding-bottom: 75px;
 
   .user-list--title {
     padding: 15px;
@@ -14,14 +15,11 @@
     position: relative;
   }
 
-  .user-list--add-participant-button {
-    position: absolute;
-    left: 12px;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    height: 37px;
-    padding: 8px;
+  .user-list--list {
+    padding-bottom: 75px;
   }
 
+  .count-label {
+    margin: 0 10px !important;
+  }
 }

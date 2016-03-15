@@ -64,9 +64,6 @@ UserList = React.createClass({
 
           <div
             className="user-list--title">
-            {this.isCreator() ? (
-              <ParticipantPopup />
-            ) : null}
             <T>Participants</T>
           </div>
 
@@ -81,7 +78,6 @@ UserList = React.createClass({
                 key={user._id}
                 user={user} />
             ))}
-
           </div>
 
         </div>

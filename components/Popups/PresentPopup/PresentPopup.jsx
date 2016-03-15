@@ -117,7 +117,6 @@ PresentPopup = React.createClass({
             </button>
             <button
               className="ui labeled icon primary button"
-              disabled={!this.schema.isValid()}
               onClick={(e) => this.refs.form.submitForm(e)}>
               <i className="checkmark icon"></i>
               <T>Add present</T>

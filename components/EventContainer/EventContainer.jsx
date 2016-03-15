@@ -46,6 +46,10 @@ EventContainer = React.createClass({
       <div id="event-container">
         <UserList
           users={this.data.participants} />
+        <EventSettings
+          usersCount={this.data.participants.length}
+          presentsCount={this.data.presents.length}
+        />
         <PresentsContainer
           users={this.data.participants}
           presents={this.data.presents} />

@@ -10,7 +10,9 @@ ParticipantPopup = React.createClass({
 
   getPopupSettings() {
     return {
-      onHide: () => this.schema.resetValidation()
+      onHide: () => this.schema.resetValidation(),
+      position: 'top left',
+      lastResotr: 'top left'
     };
   },
 
@@ -59,16 +61,6 @@ ParticipantPopup = React.createClass({
   render() {
     this.schema = this.schema || Events.Schemas.NewParticipant
         .namedContext('newParticipant');
-
-    var AddParticipantButton = (
-      <div
-        ref="popupTrigger"
-        className={`user-list--add-participant-button
-                  circular ui icon button
-                  waves-effect waves-button`}>
-        <i className="add user large icon"></i>
-      </div>
-    );
 
     var Popup = (
       <div
@@ -141,7 +133,6 @@ ParticipantPopup = React.createClass({
               className={classNames('ui labeled icon primary button', {
                 loading: this.state.isSaving
               })}
-              disabled={!this.schema.isValid()}
               onClick={(e) => this.refs.form.submitForm(e)}>
               <i className="checkmark icon"></i>
               <T>Add participant</T>
@@ -153,8 +144,11 @@ ParticipantPopup = React.createClass({
     );
 
     return (
-      <div>
-        {AddParticipantButton}
+      <div
+        className="ui button waves-effect waves-button"
+        ref="popupTrigger">
+        <i className="add user large icon"/>
+        <T>Add participant</T>
         {Popup}
       </div>
     );
