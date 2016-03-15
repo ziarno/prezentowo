@@ -15,15 +15,21 @@
   text-align: center;
   font-size: 14px;
   text-transform: capitalize;
-  background: #3c8d0d;
-  background: -webkit-gradient(linear, left top, left bottom, from(@color-primary), to(#2d6a0a));
-  background: -webkit-linear-gradient(top, @color-primary, #2d6a0a);
-  background: -moz-linear-gradient(top, @color-primary, #2d6a0a);
-  background: -ms-linear-gradient(top, @color-primary, #2d6a0a);
-  background: -o-linear-gradient(top, @color-primary, #2d6a0a);
-  background-image: -ms-linear-gradient(top, #3c8d0d 0%, #2d6a0a 100%);
-  box-shadow: rgba(000,000,000,0.3) 0 1px 1px;
+  background: @gradient-bg;
+  box-shadow: rgba(0,0,0,0.3) 0 1px 1px;
   color: white;
+
+  &.red {
+    background: @gradient-bg-red;
+    &:before, &:after {
+      border-color: darken(@red-dark, 5%);
+    }
+    .ribbon-content {
+      &:before, &:after {
+        border-color: darken(@red-dark, 20%) transparent transparent transparent;
+      }
+    }
+  }
 
   &.small {
     margin-left: -@small-size;
@@ -68,13 +74,6 @@
     padding: 10px 30px;
   }
 
-  button.close {
-    position: absolute;
-    right: 15px;
-    top: 11px;
-    cursor: default;
-  }
-
   &:before, &:after {
     content: '';
     position: absolute;
@@ -88,12 +87,12 @@
   &:before {
     left: -2em;
     border-right-width: 1.5em;
-    border-left-color: transparent;
+    border-left-color: transparent !important;
   }
   &:after {
     right: -2em;
     border-left-width: 1.5em;
-    border-right-color: transparent;
+    border-right-color: transparent !important;
   }
 
   .ribbon-content {
