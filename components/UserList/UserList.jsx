@@ -3,7 +3,9 @@ UserList = React.createClass({
   mixins: [ReactMeteorData],
 
   propTypes: {
-    users: React.PropTypes.array.isRequired
+    users: React.PropTypes.array.isRequired,
+    presents: React.PropTypes.array.isRequired,
+    isCreator: React.PropTypes.bool.isRequired
   },
 
   getMeteorData() {
@@ -25,16 +27,21 @@ UserList = React.createClass({
   scrollToUser(userId) {
     var userPresentsEl = $(`[data-user-id='${userId}']`);
 
-    $('body').scrollTo(userPresentsEl, {
-      duration: 500,
-      offset: -60,
-      onAfter() {
-        var userDivider = userPresentsEl
-          .find('.ui.divider')
-          .addClass('waves-effect waves-circle');
+    clearTimeout(this.rippleTimeout);
 
-        Waves.ripple(userDivider);
-        setTimeout(() => userDivider.removeClass('waves-effect waves-circle'), 1000);
+    $('body').scrollTo(userPresentsEl, {
+      duration: 1000,
+      offset: -75,
+      onAfter() {
+        var userEl = userPresentsEl
+          .find('.user')
+          .addClass('waves-effect waves-button');
+
+        Waves.ripple(userEl);
+        this.rippleTimeout = setTimeout(() => {
+          userEl.removeClass('waves-effect waves-button');
+          Waves.calm(userEl);
+        }, 2000);
       }
     });
   },
@@ -62,20 +69,22 @@ UserList = React.createClass({
             <T>Participants</T>
             <div className="counts">
               <CountLabel
-                icon="gift"
-                className="basic"
-                count={this.props.presents.length}
-              />
-              <CountLabel
                 icon="user"
                 className="basic"
                 count={this.props.users.length}
+              />
+              <CountLabel
+                icon="gift"
+                className="basic"
+                count={this.props.presents.length}
               />
             </div>
           </div>
 
           <div
-            className="user-list--list">
+            className={classNames('user-list--list', {
+              'user-list--list__with-settings': this.props.isCreator
+            })}>
             {this.props.users.map((user) => (
               <UserItem
                 presentsCount={Presents.find({

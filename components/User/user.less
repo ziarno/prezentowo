@@ -1,4 +1,17 @@
 .user {
   display: inline-block;
   text-transform: capitalize;
+
+  &.large {
+    display: inline-flex;
+    align-items: center;
+    .img {
+      width: 70px;
+      height: 70px;
+    }
+    span {
+      margin-left: 10px;
+      font-size: 1.6em;
+    }
+  }
 }

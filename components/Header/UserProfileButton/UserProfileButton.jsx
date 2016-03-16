@@ -3,7 +3,7 @@ import {Tooltips} from '../../../lib/Mixins';
 UserProfileButton = React.createClass({
   mixins: [Tooltips],
   propTypes: {
-    pictureUrl: React.PropTypes.object.isRequired,
+    pictureUrl: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
     onClick: React.PropTypes.func
   },
@@ -23,7 +23,7 @@ UserProfileButton = React.createClass({
   },
   render() {
     var pictureBackground = {
-      backgroundImage: `url(${this.props.pictureUrl.small})`
+      backgroundImage: `url(${this.props.pictureUrl})`
     };
 
     return (

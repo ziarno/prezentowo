@@ -1,8 +1,10 @@
-User = ({user, className}) => (
-  <div className={classNames('user', className)}>
+User = ({user, className, large}) => (
+  <div className={classNames('user', className, {
+    large: large
+  })}>
     <Img
       className="ui avatar image"
-      src={user.profile.pictureUrl.small}
+      src={user.profile.pictureUrl}
       hideLoader
     />
     <span>

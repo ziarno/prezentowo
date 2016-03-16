@@ -66,6 +66,15 @@ db.system.js.save({
 });
 ```
 
+3. Change pictureUrl object to string
+
+```
+db.users.find({}).forEach(function (user) {
+    db.users.update({_id: user._id}, {$set: {'profile.pictureUrl': user.profile.pictureUrl.large}});
+});
+
+```
+
 Index for unique userId's in participants array
 Note: doesn't work :(
 

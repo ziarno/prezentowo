@@ -3,51 +3,12 @@
 .user-presents {
   position: relative;
 
-  .ui.horizontal.divider {
-    overflow: hidden;
-    position: relative;
+  .user {
     border-radius: 40px;
     cursor: default;
-    min-height: 28px;
-    //fix for ripple highlighting:
-    width: 99%;
-    margin-left: auto;
-    margin-right: auto;
-    .user {
-      text-transform: uppercase;
-    }
-  }
-
-  .user-presents--toggle {
-    transition: transform @transition-time;
-    &.rotated {
-      transform: rotate(180deg);
-    }
-  }
-
-  .user-presents--control-button.ui.button {
-    position: absolute;
-    height: auto;
-    background: #fff !important;
-    z-index: 1;
-    padding: 4px 8px;
-    box-shadow: none;
-    top: 0;
-    margin: 0;
-    &.left {
-      left: 0;
-    }
-    &.right {
-      right: 0;
-    }
-    &:not(:hover) {
-      color: @grey-dark;
-    }
-    .corner.icon {
-      font-size: 0.65em;
-      right: -1px;
-      bottom: -3px;
-    }
+    padding: 0 10px;
+    letter-spacing: 0;
+    font-weight: normal;
   }
 
   .presents {
@@ -55,12 +16,14 @@
   }
 
   &:not(:first-child) {
-    margin-top: 60px;
+    margin: 50px 0;
   }
 
   h2 {
-    margin: 15px;
-    font-size: 1.5em;
+    margin: 30px 0 15px 0;
+    font-size: 1.1em;
+    font-weight: normal;
+    color: @grey-dark;
   }
 
 }

@@ -27,6 +27,19 @@ Meteor.users.findByVerifiedEmail = function (email) {
     });
 };
 
+Meteor.users.createTemp = function ({name, gender, pictureUrl, email}) {
+  var user = {profile: {name, gender, pictureUrl}};
+
+  if (email) {
+    user.registered_emails = [{
+      address: email,
+      verified: false
+    }];
+  }
+  user.isTemp = true;
+  return Meteor.users.insert(user);
+};
+
 /**
  * Collection helpers
  */

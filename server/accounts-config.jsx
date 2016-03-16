@@ -4,17 +4,11 @@ Accounts.onCreateUser(function(options = {profile: {}}, user) {
   //set picture url
   if (!options.profile.pictureUrl) {
     if (user.services && user.services.facebook) {
-      options.profile.pictureUrl = {
-        large: `http://graph.facebook.com/${user.services.facebook.id}/picture/?type=large`,
-        small: `http://graph.facebook.com/${user.services.facebook.id}/picture/?type=small`
-      }
+      options.profile.pictureUrl = `http://graph.facebook.com/${user.services.facebook.id}/picture/?type=large`;
 
     } else {
       email = user.emails.length && user.emails[0].address;
-      options.profile.pictureUrl = {
-        large: Gravatar.imageUrl(email, {secure: true, default: 'mm'}),
-        small: Gravatar.imageUrl(email, {secure: true, default: 'mm', size: 40})
-      }
+      options.profile.pictureUrl = Gravatar.imageUrl(email, {secure: true, default: 'mm'});
     }
   }
 
