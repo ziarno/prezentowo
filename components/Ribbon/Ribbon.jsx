@@ -1,5 +1,5 @@
-Ribbon = ({small, children, whiteStiches}) => (
-  <div className={classNames('ribbon', {
+Ribbon = ({small, children, whiteStiches, color}) => (
+  <div className={classNames('ribbon', color, {
     small: small,
     'white-stitches': whiteStiches
   })}>

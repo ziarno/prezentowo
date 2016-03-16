@@ -22,6 +22,17 @@ UserPresents = React.createClass({
 
   render() {
 
+    var ownPresents = [];
+    var otherPresents = [];
+
+    this.props.presents.forEach((present) => {
+      if (present.isOwn()) {
+        ownPresents.push(present);
+      } else {
+        otherPresents.push(present);
+      }
+    });
+
     return (
       <div
         data-user-id={this.props.user._id}
@@ -46,18 +57,47 @@ UserPresents = React.createClass({
         </div>
 
         <VerticalSlideToggle
-          className="ui cards presents"
           onToggle={this.onToggle}
           ref="toggle">
-          {this.props.presents.length ? this.props.presents.map((present) => (
-            <Present key={present._id} present={present} />
-          )) : (
+
+          {ownPresents.length ? (
+            <div>
+              <h2>
+                <T name={this.props.user.profile.name.capitalizeFirstLetter()}>
+                  hints.ownPresents
+                </T>
+              </h2>
+              <div className="ui cards presents">
+                {ownPresents.map((present) => (
+                  <Present key={present._id} present={present} />
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {otherPresents.length ? (
+            <div>
+              <h2>
+                <T name={this.props.user.profile.name.capitalizeFirstLetter()}>
+                  hints.otherPresents
+                </T>
+              </h2>
+              <div className="ui cards presents">
+                {otherPresents.map((present) => (
+                  <Present key={present._id} present={present} />
+                ))}
+              </div>
+            </div>
+          ): null}
+
+          {!this.props.presents.length ? (
             <div className="no-results">
               <i className="huge gift icon" />
               <br />
               <T>No presents</T>
             </div>
-          )}
+          ) : null}
+
         </VerticalSlideToggle>
       </div>
     );

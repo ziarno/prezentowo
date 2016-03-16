@@ -3,3 +3,5 @@ hints:
   Christmas: Ex. Christmas
   Birthday: Ex. Birthday
   EmailOptional: Email (optional)
+  ownPresents: Presents that [name] wants
+  otherPresents: Presents for [name] added by others

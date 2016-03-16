@@ -11,10 +11,12 @@ Present = React.createClass({
           className="image"
           src={this.props.present.pictureUrl}
         />
-        <Ribbon small>
+        <Ribbon
+          color={this.props.present.isOwn() ? 'green' : 'red'}
+          small>
           {this.props.present.title}
         </Ribbon>
-        <div></div>{/* leave this because semantic ui has strong css rules for the last element in a card (for border-radius)*/}
+        <div></div>{/* leave this empty div because semantic ui has strong css rules for the last element in a card (for border-radius)*/}
       </div>
     );
   }
