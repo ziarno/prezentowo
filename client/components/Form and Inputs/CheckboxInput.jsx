@@ -1,4 +1,4 @@
-import {InputValidation} from '../../lib/Mixins';
+import {InputValidation} from '../../../lib/Mixins';
 
 CheckboxInput = React.createClass({
 

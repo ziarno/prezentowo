@@ -1,4 +1,4 @@
-import {Autorun} from '../../lib/Mixins';
+import {Autorun} from '../../../lib/Mixins';
 
 FormErrorMessage = React.createClass({
 

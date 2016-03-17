@@ -1,4 +1,4 @@
-import {attachWaves} from '../../lib/utilities';
+import {attachWaves} from '../../../lib/utilities';
 
 ModalManager = function () {
 

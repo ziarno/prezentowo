@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {Tooltips} from '../../lib/Mixins';
+import {Tooltips} from '../../../lib/Mixins';
 
 DateField = React.createClass({
 

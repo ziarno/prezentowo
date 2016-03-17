@@ -1,4 +1,4 @@
-import {Popup} from '../../../lib/Mixins';
+import {Popup} from '../../../../lib/Mixins';
 
 ParticipantPopup = React.createClass({
 

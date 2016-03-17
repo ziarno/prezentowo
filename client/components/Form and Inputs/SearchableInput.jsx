@@ -1,4 +1,4 @@
-import {InputValidation} from '../../lib/Mixins';
+import {InputValidation} from '../../../lib/Mixins';
 
 SearchableInput = React.createClass({
 
