@@ -16,13 +16,15 @@ SelectInput = React.createClass({
 
     $dropdown.dropdown({
       action(text, value) {
-        var nodeString = $(this)
-          .addClass('active selected')
-          .children()
-          .removeAttr('data-reactid')
-          .parent()
-          .html();
         var $placeholder = $dropdown.find('.text');
+        var node = $(this);
+        var nodeString;
+
+        node
+          .addClass('active selected')
+          .find('*')
+          .removeAttr('data-reactid');
+        nodeString = node.html();
         $placeholder.removeClass('default');
 
         $(this).siblings().removeClass('active selected');
