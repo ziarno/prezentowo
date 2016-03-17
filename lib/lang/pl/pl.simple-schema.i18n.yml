@@ -12,22 +12,22 @@ SimpleSchema:
   maxCount: "Podaj maksymalnie [maxCount] wartości"
   noDecimal: "[label] musi być liczbą całkowitą"
   notAllowed: "[label] - wartość jest nieprawidłowa"
-  expectedString: "[label] musi być tekstem"
+  expectedString: "[label] - pole jest wymagane"
   expectedNumber: "[label] musi być liczbą"
   expectedBoolean: "[label] musi być wartością logiczną"
   expectedArray: "[label] musi być tablicą"
   expectedObject: "[label] musi być obiektem"
   expectedConstructor: "[label] musi być typu [type]"
-  keyNotInSchema: "[key] nie jest dozwolony przez schemat"
+  keyNotInSchema: "[key] - pole nie jest dozwolone"
   regEx:
   - {msg: "[label] - walidacja wyrażeniem regularnym nie powiodła się"}
-  - {expression: Email, msg: "[label] musi być poprawnym adresem e-mail"}
-  - {expression: WeakEmail, msg: "[label] musi być poprawnym adresem e-mail"}
-  - {expression: Domain, msg: "[label] musi być poprawną domeną"}
-  - {expression: WeakDomain, msg: "[label] musi być poprawną domeną"}
-  - {expression: IP, msg: "[label] musi być poprawnym adresem IPv4 lub IPv6"}
-  - {expression: IPv4, msg: "[label] musi być poprawnym adresem IPv4"}
-  - {expression: IPv6, msg: "[label] musi być poprawnym adresem IPv6"}
-  - {expression: Url, msg: "[label] musi być poprawnym adresem URL"}
-  - {expression: Id, msg: "[label] musi być poprawnym ID alfanumerycznym"}
+  - {expression: Email, msg: "[label] - nieprawidłowy adres email"}
+  - {expression: WeakEmail, msg: "[label] - nieprawidłowy adres email"}
+  - {expression: Domain, msg: "[label] - musi być poprawną domeną"}
+  - {expression: WeakDomain, msg: "[label] - musi być poprawną domeną"}
+  - {expression: IP, msg: "[label] - musi być poprawnym adresem IPv4 lub IPv6"}
+  - {expression: IPv4, msg: "[label] - musi być poprawnym adresem IPv4"}
+  - {expression: IPv6, msg: "[label] - musi być poprawnym adresem IPv6"}
+  - {expression: Url, msg: "[label] - musi być poprawnym adresem URL"}
+  - {expression: Id, msg: "[label] - musi być poprawnym ID"}
   invalidEmail: "Nieprawidłowy adres email"

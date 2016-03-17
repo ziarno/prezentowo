@@ -12,7 +12,7 @@ ParticipantPopup = React.createClass({
     return {
       onHide: () => this.schema.resetValidation(),
       position: 'top left',
-      lastResotr: 'top left'
+      lastResort: 'top left'
     };
   },
 
@@ -105,7 +105,6 @@ ParticipantPopup = React.createClass({
             <SelectInput
               placeholder={_i18n.__('Gender')}
               name="gender"
-              ref="genderDropdown"
               onChange={this.updateImages}>
               <div className="item" data-value="male">
                 <i className="man icon"></i>

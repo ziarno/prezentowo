@@ -11,9 +11,10 @@ var PopupMixin = {
   setPopup() {
     var popupSettings = _.isFunction(this.getPopupSettings) ?
       this.getPopupSettings() : {};
+    var popupRefName = popupSettings.popupRefName || 'popup';
 
     $(this.refs.popupTrigger).popup({
-      popup: $(this.refs.popup),
+      popup: $(ReactDOM.findDOMNode(this.refs[popupRefName])),
       on: 'click',
       hideOnScroll: false,
       position: 'bottom left',

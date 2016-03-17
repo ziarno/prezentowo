@@ -61,6 +61,10 @@ EventContainer = React.createClass({
         <PresentsContainer
           users={this.data.participants}
           presents={this.data.presents} />
+        <PresentPopup
+          className="add-present-button"
+          users={this.data.participants}
+        />
       </div>
     ) : (
       <div id="event-container">

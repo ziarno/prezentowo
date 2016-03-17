@@ -25,7 +25,7 @@ FormErrorMessage = React.createClass({
   render() {
     return (
       <Message
-        hidden={this.props.schema.isValid()}
+        hidden={!this.state.errors.length}
         className="form-popup--error icon attached fluid error"
         icon="warning"
         messages={this.state.errors}

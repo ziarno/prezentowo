@@ -1,0 +1,28 @@
+@import '/client/styles/partials/vars.import.less';
+
+.present-popup {
+  .header {
+    min-height: 32px;
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+.ui.top.right.popup:before {
+  background: @color-primary;
+  box-shadow: 1px 1px 0px 0px @color-secondary;
+}
+
+.present-button.present-button--add {
+  border: 1px solid @color-secondary;
+  .icons {
+    width: 1em;
+    height: 1em;
+    font-size: 2.5em;
+    .corner.inverted.icon {
+      right: -4px;
+      font-size: 0.55em;
+      text-shadow: -1px -1px 0 @color-primary, 1px -1px 0 @color-primary, -1px 1px 0 @color-primary, 1px 1px 0 @color-primary;
+    }
+  }
+}

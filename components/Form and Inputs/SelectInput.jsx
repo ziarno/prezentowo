@@ -5,7 +5,10 @@ SelectInput = React.createClass({
   mixins: [InputValidation],
 
   propTypes: {
-    placeholder: React.PropTypes.string
+    placeholder: React.PropTypes.string,
+    className: React.PropTypes.string,
+    label: React.PropTypes.string,
+    name: React.PropTypes.string
   },
 
   componentDidMount() {
@@ -52,15 +55,15 @@ SelectInput = React.createClass({
     return (
       <div
         ref="dropdown"
-        className={classNames('ui fluid selection dropdown', this.props.className, {
+        className={classNames('ui dropdown', this.props.className, {
+          'fluid selection': !this.props.inline,
+          inline: this.props.inline,
           error: this.shouldShowError()
         })}>
 
-        {this.props.placeholder ? (
-          <div className="default text">
-            {this.props.placeholder}
-          </div>
-        ) : null}
+        <div className="default text">
+          {this.props.placeholder}
+        </div>
 
         <i className="dropdown icon"></i>
 

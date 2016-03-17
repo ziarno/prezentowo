@@ -33,7 +33,8 @@ Presents.Schemas.NewPresent = new SimpleSchema({
   },
   forUserId: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
+    label: () => _i18n.__('User')
   }
 });
 

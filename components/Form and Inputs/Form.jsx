@@ -1,14 +1,13 @@
+import {Autorun} from '../../lib/Mixins';
+
 Form = React.createClass({
+
+  mixins: [Autorun],
 
   propTypes: {
     schema: React.PropTypes.object,
+    className: React.PropTypes.string,
     onSubmit: React.PropTypes.func,
-  },
-
-  getInitialState() {
-    return {
-      components: []
-    };
   },
 
   childContextTypes: {
@@ -25,6 +24,19 @@ Form = React.createClass({
       schema: this.props.schema,
       form: this
      };
+  },
+
+  getInitialState() {
+    return {
+      components: [],
+      hasError: false
+    };
+  },
+
+  autorunSetError() {
+    this.setState({
+      hasError: !this.props.schema.isValid()
+    });
   },
 
   reset() {
@@ -49,7 +61,9 @@ Form = React.createClass({
   render() {
     return (
       <form
-        className={classNames('ui form', this.props.className)}
+        className={classNames('ui form', this.props.className, {
+          error: this.state.hasError
+        })}
         onSubmit={this.submitForm}
       >
         {this.props.children}
