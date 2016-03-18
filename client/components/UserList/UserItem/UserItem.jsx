@@ -1,7 +1,7 @@
-UserItem = ({onClick, user, presentsCount}) => (
+UserItem = ({onClick, user, presentsCount, isActive}) => (
   <div
-    onClick={() => onClick(user._id)}
-    className="user-list--item waves-effect">
+    onClick={() => onClick(user)}
+    className="user-item waves-effect">
     <User user={user} />
     <CountLabel
       icon="gift"

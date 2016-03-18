@@ -1,6 +1,8 @@
+import {Autorun} from '../../../lib/Mixins';
+
 UserList = React.createClass({
 
-  mixins: [ReactMeteorData],
+  mixins: [Autorun],
 
   propTypes: {
     users: React.PropTypes.array.isRequired,
@@ -8,13 +10,20 @@ UserList = React.createClass({
     isCreator: React.PropTypes.bool.isRequired
   },
 
-  getMeteorData() {
-    var eventId = FlowRouter.getParam('eventId');
+  autorunSetCurrentUser() {
+    var currentUser = Session.get('currentUser');
 
-    return {
-      event: Events.findOne(eventId),
-      user: Meteor.user()
-    };
+    if (currentUser) {
+      //note: do this manually because sticky was jumping
+      //after user-item rerendering
+      $(this.refs.userList)
+        .find('.user-item')
+        .removeClass('active')
+        .parent()
+        .find(`[data-id=${currentUser._id}]`)
+        .parent()
+        .addClass('active');
+    }
   },
 
   setSticky() {
@@ -24,21 +33,24 @@ UserList = React.createClass({
     });
   },
 
-  scrollToUser(userId) {
-    var userPresentsEl = $(`[data-user-id='${userId}']`);
+  shouldComponentUpdate(newProps) {
+    return !_.isEqual(this.props, newProps);
+  },
 
-    clearTimeout(this.rippleTimeout);
+  scrollToUser(user) {
+    var userPresentsEl = $(`#user-presents-${user._id}`);
 
-    $('body').scrollTo(userPresentsEl, {
+    $(document.body).scrollTo(userPresentsEl, {
       duration: 1000,
       offset: -75,
-      onAfter() {
+      onAfter: () => {
         var userEl = userPresentsEl
           .find('.user')
           .addClass('waves-effect waves-button');
 
         Waves.ripple(userEl);
-        this.rippleTimeout = setTimeout(() => {
+        Session.set('currentUser', user);
+        setTimeout(() => {
           userEl.removeClass('waves-effect waves-button');
           Waves.calm(userEl);
         }, 2000);
@@ -59,6 +71,7 @@ UserList = React.createClass({
     return (
       <div
         id="user-list"
+        ref="userList"
         className="shadow">
         <div
           ref="sticky"

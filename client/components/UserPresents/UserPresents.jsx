@@ -9,8 +9,38 @@ UserPresents = React.createClass({
     return !_.isEqual(newProps, this.props);
   },
 
-  render() {
+  setVisibleUsers(event, ...visibleUsers) {
+    var visibleUserIds = _.map(visibleUsers, user => (
+      $(user).attr('data-id')
+    ));
 
+    Session.set('visibleUserIds', visibleUserIds);
+  },
+
+  setScrollSpy() {
+    $(ReactDOM.findDOMNode(this))
+      .find('.user')
+      .scrollSpy({
+        offsetTop: 100,
+        offsetBottom: -100,
+        throttle: 500
+      });
+  },
+
+  componentDidMount() {
+    this.setScrollSpy();
+    $(ReactDOM.findDOMNode(this))
+      .find('.user')
+      .on('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers);
+  },
+
+  componentWillUnmount() {
+    $(ReactDOM.findDOMNode(this))
+      .find('.user')
+      .off('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers);
+  },
+
+  render() {
     var ownPresents = [];
     var otherPresents = [];
 
@@ -24,7 +54,7 @@ UserPresents = React.createClass({
 
     return (
       <div
-        data-user-id={this.props.user._id}
+        id={`user-presents-${this.props.user._id}`}
         className="user-presents">
 
         <div className="ui horizontal divider">

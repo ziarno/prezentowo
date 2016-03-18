@@ -29,10 +29,6 @@ var PopupMixin = {
 
   componentDidMount() {
     this.setPopup();
-  },
-
-  componentDidUpdate() {
-    $(this.refs.popupTrigger).popup('reposition');
   }
 
 };

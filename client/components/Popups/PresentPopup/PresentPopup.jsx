@@ -1,8 +1,8 @@
-import {Popup} from '../../../../lib/Mixins';
+import {Popup, Autorun} from '../../../../lib/Mixins';
 
 PresentPopup = React.createClass({
 
-  mixins: [Popup],
+  mixins: [Popup, Autorun],
 
   propTypes: {
     users: React.PropTypes.array,
@@ -15,13 +15,24 @@ PresentPopup = React.createClass({
 
   getPopupSettings() {
     return {
-      //popupRefName: 'formPopup',
       onHide: () => this.schema.resetValidation(),
       position: 'top right',
       lastResort: 'top right',
       movePopup: false,
       offset: -13
     };
+  },
+
+  getInitialState() {
+    return {
+      defaultSelectedUser: Session.get('currentUser')
+    };
+  },
+
+  autorunSetDefaultSelectedUser() {
+    this.setState({
+      defaultSelectedUser: Session.get('currentUser')
+    });
   },
 
   reset() {
@@ -55,6 +66,9 @@ PresentPopup = React.createClass({
       `/images/presents/p${index + 1}-150px.png`
     ));
 
+    var defaultSelectedUserId = this.state.defaultSelectedUser &&
+      this.state.defaultSelectedUser._id;
+
     var Button = (
       <div
         ref="popupTrigger"
@@ -85,6 +99,7 @@ PresentPopup = React.createClass({
                 inline
                 className="scrolling"
                 placeholder={_i18n.__('choose user')}
+                selectDefault={defaultSelectedUserId}
                 name="forUserId">
                 {this.props.users.map((user) => (
                   <div

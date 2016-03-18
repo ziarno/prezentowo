@@ -163,3 +163,4 @@ Todo:
 - lang rerendering
 - momentjs renrendering (5 minutes ago will be invalid after some time)
 - add user search in add participant
+- use semantic's Visibility plugin instead of scrollSpy (might be faster, uses getAnimationFrame)
