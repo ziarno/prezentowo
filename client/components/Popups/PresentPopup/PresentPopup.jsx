@@ -15,7 +15,7 @@ PresentPopup = React.createClass({
 
   getPopupSettings() {
     return {
-      onHide: () => this.schema.resetValidation(),
+      onShow: () => {this.schema.resetValidation()},
       position: 'top right',
       lastResort: 'top right',
       movePopup: false,
@@ -142,18 +142,18 @@ PresentPopup = React.createClass({
 
           <div className="ui bottom attached message actions">
             <div className="ui buttons">
-              <button
+              <div
                 className="ui labeled icon button"
                 onClick={this.hideAndReset}>
                 <i className="remove icon"></i>
                 <T>Cancel</T>
-              </button>
-              <button
+              </div>
+              <div
                 className="ui labeled icon primary button"
                 onClick={(e) => this.refs.form.submitForm(e)}>
                 <i className="checkmark icon"></i>
                 <T>Add present</T>
-              </button>
+              </div>
             </div>
           </div>
 

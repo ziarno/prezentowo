@@ -19,28 +19,29 @@ SelectInput = React.createClass({
   },
 
   setSelected(value) {
-    if (!value) {
-      return;
-    }
-
     //note: item selection must be done manually with react, because semantic does DOM manipulation on its own otherwise and it ends up cloning elements with the same reactid
     var $dropdown = $(this.refs.dropdown);
     var $node = $dropdown.dropdown('get item', value);
-    var $nodeCloned = $($.clone($node[0]));
-    var nodeString;
+    var $nodeCloned;
+
+    if (!value || !($node instanceof jQuery)) {
+      return;
+    }
+
+    $nodeCloned = $($.clone($node[0]));
 
     $nodeCloned
       .find('*')
       .removeAttr('data-reactid');
-    nodeString = $nodeCloned.html();
     $(this.refs.placeholder).removeClass('default');
 
     $node
       .addClass('active selected')
       .siblings()
       .removeClass('active selected');
+    ReactDOM.unmountComponentAtNode(this.refs.placeholder);
     ReactDOM.render(
-      <div dangerouslySetInnerHTML={{__html: nodeString}} />,
+      <div dangerouslySetInnerHTML={{__html: $nodeCloned.html()}} />,
       this.refs.placeholder
     );
     $dropdown.dropdown('set value', value);
@@ -57,8 +58,9 @@ SelectInput = React.createClass({
   },
 
   reset() {
-    this.setState(this.getInitialState());
     $(this.refs.dropdown).dropdown('clear');
+    this.setState(this.getInitialState());
+    this.selectDefault(this.props.selectDefault);
   },
 
   shouldComponentUpdate(newProps) {

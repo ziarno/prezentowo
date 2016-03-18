@@ -10,7 +10,7 @@ ParticipantPopup = React.createClass({
 
   getPopupSettings() {
     return {
-      onHide: () => this.schema.resetValidation(),
+      onShow: () => {this.schema.resetValidation()},
       position: 'top left',
       lastResort: 'top left'
     };
