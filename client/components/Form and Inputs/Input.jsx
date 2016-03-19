@@ -1,8 +1,8 @@
-import {InputValidation} from '../../../lib/Mixins';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
 
 Input = React.createClass({
 
-  mixins: [InputValidation],
+  mixins: [InputValidation, RefreshOnLocaleChange],
 
   propTypes: {
     name: React.PropTypes.string,
@@ -37,24 +37,24 @@ Input = React.createClass({
         })}>
 
         {this.props.label ? (
-          <label>{this.props.label}</label>
+          <label>{_i18n.__(this.props.label)}</label>
         ) : null}
 
         <div className="ui input">
           {this.props.type === 'textarea' ? (
             <textarea
               ref="input"
-              placeholder={this.props.placeholder}
+              placeholder={_i18n.__(this.props.placeholder)}
               onFocus={this.hideError}
               onBlur={(e) => this.validate(e.currentTarget.value)}
               onChange={(e) => this.onInputChange(e.currentTarget.value)}
               name={this.props.name}
               rows={this.props.rows || 8}
             />
-          ): (
+          ) : (
             <input
               ref="input"
-              placeholder={this.props.placeholder}
+              placeholder={_i18n.__(this.props.placeholder)}
               onFocus={this.hideError}
               onBlur={(e) => this.validate(e.currentTarget.value)}
               onChange={(e) => this.onInputChange(e.currentTarget.value)}
@@ -65,7 +65,7 @@ Input = React.createClass({
         </div>
 
         {this.props.hint ? (
-          <span className="hint">{this.props.hint}</span>
+          <span className="hint">{_i18n.__(this.props.hint)}</span>
         ) : null}
 
         {this.props.children}

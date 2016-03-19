@@ -7,7 +7,6 @@ SelectInput = React.createClass({
   propTypes: {
     placeholder: React.PropTypes.string,
     className: React.PropTypes.string,
-    label: React.PropTypes.string,
     name: React.PropTypes.string,
     selectDefault: React.PropTypes.string
   },
@@ -74,7 +73,7 @@ SelectInput = React.createClass({
   componentDidMount() {
     var $dropdown = $(this.refs.dropdown);
 
-    function scrollCurrentIntoView(value) {
+    function scrollCurrentIntoView() {
       var value = $dropdown.dropdown('get value');
       var $item = $dropdown.dropdown('get item', value);
 
@@ -122,7 +121,7 @@ SelectInput = React.createClass({
         <div
           ref="placeholder"
           className="default text">
-          {this.props.placeholder}
+          {_i18n.__(this.props.placeholder)}
         </div>
 
         <i className="dropdown icon"></i>

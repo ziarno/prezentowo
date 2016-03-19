@@ -98,7 +98,7 @@ PresentPopup = React.createClass({
               <SelectInput
                 inline
                 className="scrolling"
-                placeholder={_i18n.__('choose user')}
+                placeholder="choose user"
                 selectDefault={defaultSelectedUserId}
                 name="forUserId">
                 {this.props.users.map((user) => (
@@ -127,11 +127,11 @@ PresentPopup = React.createClass({
             <div className="form-popup--form-right" >
               <Input
                 name="title"
-                placeholder={_i18n.__('Title')}
+                placeholder="Title"
               />
               <Input
                 name="description"
-                placeholder={_i18n.__('Description (optional)')}
+                placeholder="Description (optional)"
                 type="textarea"
                 rows={6}
               />

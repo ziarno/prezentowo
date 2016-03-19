@@ -59,13 +59,13 @@ EventPopup = React.createClass({
           schema={this.schema}>
           <Input
             name="title"
-            label={_i18n.__('Title')}
+            label="Title"
           />
           <div className="form-popup--form flex">
             <div className="ui field">
               <Datepicker
                 name="date"
-                label={_i18n.__('Date')}
+                label="Date"
               />
             </div>
             <div className="form-popup--form-right">

@@ -153,6 +153,9 @@ Comments.methods.createComment.call({
 
 ```
 
+_i18n find regex:
+\{_i18n.__\(['"]([\w]*)['"]\)\}
+
 Todo:
 ----
 
@@ -164,3 +167,4 @@ Todo:
 - momentjs renrendering (5 minutes ago will be invalid after some time)
 - add user search in add participant
 - use semantic's Visibility plugin instead of scrollSpy (might be faster, uses getAnimationFrame)
+- BUG: SelectInput on language change looses placeholder text. Note: it seems semantic looses $().data value of dropdown

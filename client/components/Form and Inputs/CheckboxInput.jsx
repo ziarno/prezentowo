@@ -1,8 +1,8 @@
-import {InputValidation} from '../../../lib/Mixins';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
 
 CheckboxInput = React.createClass({
 
-  mixins: [InputValidation],
+  mixins: [InputValidation, RefreshOnLocaleChange],
 
   propTypes: {
     label: React.PropTypes.string
@@ -40,7 +40,7 @@ CheckboxInput = React.createClass({
           className="hidden"
         />
         <label>
-          {this.props.label}
+          {_i18n.__(this.props.label)}
         </label>
 
       </div>

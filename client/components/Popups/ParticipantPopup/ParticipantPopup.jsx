@@ -89,21 +89,21 @@ ParticipantPopup = React.createClass({
           <div className="form-popup--form-right" >
             <Input
               name="name"
-              placeholder={_i18n.__('Fullname')}
+              placeholder="Fullname"
             />
             <Input
               name="email"
-              placeholder={_i18n.__('hints.EmailOptional')}
+              placeholder="hints.EmailOptional"
               type="email">
               <CheckboxInput
                 name="sendEmail"
                 className="invitation-email-checkbox"
-                label={_i18n.__('Send invitation email')}
+                label="Send invitation email"
                 checked
               />
             </Input>
             <SelectInput
-              placeholder={_i18n.__('Gender')}
+              placeholder="Gender"
               name="gender"
               onChange={this.updateImages}>
               <div className="item" data-value="male">

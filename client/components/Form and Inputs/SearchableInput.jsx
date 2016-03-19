@@ -1,8 +1,8 @@
-import {InputValidation} from '../../../lib/Mixins';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
 
 SearchableInput = React.createClass({
 
-  mixins: [InputValidation, ReactMeteorData],
+  mixins: [InputValidation, ReactMeteorData, RefreshOnLocaleChange],
 
   propTypes: {
     label: React.PropTypes.string,
@@ -63,15 +63,15 @@ SearchableInput = React.createClass({
         })}>
 
         {this.props.label ? (
-        <label>{this.props.label}</label>
-          ) : null}
+          <label>{this.props.label}</label>
+        ) : null}
 
         <div className={classNames('ui input', {
           action: this.props.search
         })}>
           <input
             ref="input"
-            placeholder={this.props.placeholder}
+            placeholder={_i18n.__(this.props.placeholder)}
             onFocus={this.hideError}
             onBlur={(e) => this.validate(e.currentTarget.value)}
             onChange={(e) => this.onChange(e.currentTarget.value)}
@@ -96,14 +96,14 @@ SearchableInput = React.createClass({
         </div>
 
         {this.props.hint ? (
-        <span className="hint">{this.props.hint}</span>
-          ) : null}
+          <span className="hint">{_i18n.__(this.props.hint)}</span>
+        ) : null}
 
         {this.state.showSearchResults && this.data.status === 'loaded' ? (
           this.data.results.map((res) => (
-          <p key={res._id}>{res.profile.name}</p>
-            ))
-          ) : null}
+            <p key={res._id}>{res.profile.name}</p>
+          ))
+        ) : null}
 
         {this.props.children}
 

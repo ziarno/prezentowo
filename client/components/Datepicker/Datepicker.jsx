@@ -1,4 +1,4 @@
-import {InputValidation} from '../../../lib/Mixins';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
 
 Datepicker = React.createClass({
 
@@ -10,15 +10,16 @@ Datepicker = React.createClass({
   },
 
   reset() {
-    $(this.refs.datepicker).datepicker('clearDates');
+    this.setDatepicker();
   },
 
   getValue() {
     return $(this.refs.datepicker).datepicker('getDate');
   },
 
-  componentDidMount() {
+  setDatepicker() {
     $(this.refs.datepicker)
+      .datepicker('remove')
       .datepicker({
         language: Language.get(),
         defaultViewDate: {
@@ -28,7 +29,7 @@ Datepicker = React.createClass({
         startDate: new Date(),
         weekStart: 1,
         startView: 1,
-        title: () => this.props.label
+        title: () => _i18n.__(this.props.label)
       })
       .on('changeDate', () => {
         var value = this.getValue();
@@ -37,9 +38,14 @@ Datepicker = React.createClass({
       });
   },
 
+  componentDidMount() {
+    _i18n.onChangeLocale(this.setDatepicker);
+    this.setDatepicker();
+  },
+
   componentWillUnmount() {
-    $(this.refs.datepicker)
-      .datepicker('destroy');
+    _i18n.offChangeLocale(this.setDatepicker);
+    $(this.refs.datepicker).datepicker('destroy');
   },
 
   render() {
@@ -49,7 +55,7 @@ Datepicker = React.createClass({
           'with-title': this.props.label
         })}
         ref="datepicker"
-      />
+      ></div>
     );
   }
 });

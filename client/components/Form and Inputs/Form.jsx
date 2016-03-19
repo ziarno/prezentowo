@@ -31,7 +31,7 @@ Form = React.createClass({
       register: (inputComponent) => {
         if (!_.isFunction(inputComponent.getValue) ||
             !_.isFunction(inputComponent.getValue)) {
-          throw new Error(`This component must have a getValue() and reset() methods in order to be registered as an input in the Form component`);
+          throw new Error(`${inputComponent.constructor.displayName} component must have a getValue() and reset() methods in order to be registered as an input in the Form component`);
         }
         this.state.components.push(inputComponent);
       },
