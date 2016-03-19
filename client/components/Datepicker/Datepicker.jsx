@@ -1,7 +1,20 @@
+import {InputValidation} from '../../../lib/Mixins';
+
 Datepicker = React.createClass({
 
+  mixins: [InputValidation],
+
   propTypes: {
-    onChange: React.PropTypes.func.isRequired
+    name: React.PropTypes.string,
+    label: React.PropTypes.string
+  },
+
+  reset() {
+    $(this.refs.datepicker).datepicker('clearDates');
+  },
+
+  getValue() {
+    return $(this.refs.datepicker).datepicker('getDate');
   },
 
   componentDidMount() {
@@ -14,12 +27,13 @@ Datepicker = React.createClass({
         },
         startDate: new Date(),
         weekStart: 1,
-        startView: 1
+        startView: 1,
+        title: () => this.props.label
       })
       .on('changeDate', () => {
-        var date = $(this.refs.datepicker).datepicker('getDate');
-
-        this.props.onChange(date);
+        var value = this.getValue();
+        this.validate(value);
+        this.onChange(value);
       });
   },
 
@@ -29,6 +43,13 @@ Datepicker = React.createClass({
   },
 
   render() {
-    return <div ref="datepicker"></div>;
+    return (
+      <div
+        className={classNames({
+          'with-title': this.props.label
+        })}
+        ref="datepicker"
+      />
+    );
   }
 });

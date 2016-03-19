@@ -1,0 +1,38 @@
+@import '/client/styles/partials/vars.import.less';
+@import '/client/styles/partials/mixins.import.less';
+
+.event-popup {
+
+  cursor: initial;
+
+  #many-to-many, #many-to-one {
+    .selectable();
+    margin: 10px 25px 5px 25px;
+    white-space: nowrap;
+    display: block;
+    & > p {
+      margin-top: 10px;
+    }
+  }
+
+  label {
+    font-size: 14px !important;
+    text-align: center;
+  }
+
+  input[name='title'] {
+    text-align: center;
+  }
+
+  .form-popup--form-right {
+    text-align: center;
+  }
+
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: rgba(0,0,0,0.5);
+  display: inline-block;
+  margin-top: 5px;
+}

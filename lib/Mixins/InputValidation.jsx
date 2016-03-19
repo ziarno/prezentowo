@@ -1,5 +1,11 @@
 import Autorun from './Autorun';
 
+/**
+ * Input Validation Mixin
+ *
+ * Requires:
+ * - a parent Form element which provides context
+ */
 var InputValidation = {
 
   mixins: [Autorun],

@@ -53,7 +53,7 @@ UserPresents = React.createClass({
     });
 
     return (
-      <div
+      <VerticalSlideToggle
         id={`user-presents-${this.props.user._id}`}
         className="user-presents">
 
@@ -91,7 +91,7 @@ UserPresents = React.createClass({
           </div>
         ): null}
 
-      </div>
+      </VerticalSlideToggle>
     );
   }
 });

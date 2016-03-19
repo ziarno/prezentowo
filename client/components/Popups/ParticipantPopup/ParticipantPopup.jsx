@@ -75,7 +75,7 @@ ParticipantPopup = React.createClass({
 
         <Form
           ref="form"
-          className="form-popup--form attached fluid segment"
+          className="form-popup--form flex attached fluid segment"
           onSubmit={this.addParticipant}
           schema={this.schema}>
           <ImagePicker

@@ -1,13 +1,23 @@
 import {Autorun} from '../../../lib/Mixins';
 
+/**
+ * Form
+ *
+ * Use the register() method in child components
+ * provided by the context to register inputs
+ *
+ * Requires:
+ * - child input components that are registered must provide
+ *   reset() and getValue() methods
+ */
 Form = React.createClass({
 
   mixins: [Autorun],
 
   propTypes: {
-    schema: React.PropTypes.object,
+    schema: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
-    onSubmit: React.PropTypes.func,
+    onSubmit: React.PropTypes.func
   },
 
   childContextTypes: {
@@ -19,6 +29,10 @@ Form = React.createClass({
   getChildContext: function() {
     return {
       register: (inputComponent) => {
+        if (!_.isFunction(inputComponent.getValue) ||
+            !_.isFunction(inputComponent.getValue)) {
+          throw new Error(`This component must have a getValue() and reset() methods in order to be registered as an input in the Form component`);
+        }
         this.state.components.push(inputComponent);
       },
       schema: this.props.schema,

@@ -115,7 +115,7 @@ PresentPopup = React.createClass({
           </div>
 
           <div
-            className="form-popup--form ui form attached fluid segment">
+            className="form-popup--form flex ui form attached fluid segment">
             <ImagePicker
               name="pictureUrl"
               images={avatars}
@@ -131,7 +131,7 @@ PresentPopup = React.createClass({
               />
               <Input
                 name="description"
-                placeholder={_i18n.__('Description')}
+                placeholder={_i18n.__('Description (optional)')}
                 type="textarea"
                 rows={6}
               />

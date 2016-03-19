@@ -20,6 +20,14 @@ Input = React.createClass({
     return this.refs.input.value;
   },
 
+  onInputChange(value) {
+    //if input is in error state then we want to get rid of it as soon as the user types in correct input
+    if (this.state.hasError) {
+      this.validate(value);
+    }
+    this.onChange(value);
+  },
+
   render() {
 
     return (
@@ -39,7 +47,7 @@ Input = React.createClass({
               placeholder={this.props.placeholder}
               onFocus={this.hideError}
               onBlur={(e) => this.validate(e.currentTarget.value)}
-              onChange={(e) => this.onChange(e.currentTarget.value)}
+              onChange={(e) => this.onInputChange(e.currentTarget.value)}
               name={this.props.name}
               rows={this.props.rows || 8}
             />
@@ -49,7 +57,7 @@ Input = React.createClass({
               placeholder={this.props.placeholder}
               onFocus={this.hideError}
               onBlur={(e) => this.validate(e.currentTarget.value)}
-              onChange={(e) => this.onChange(e.currentTarget.value)}
+              onChange={(e) => this.onInputChange(e.currentTarget.value)}
               type={this.props.type || 'text'}
               name={this.props.name}
             />

@@ -1,6 +1,8 @@
+import {Autorun} from '../../lib/Mixins';
+
 Header = React.createClass({
 
-  mixins: [ReactMeteorData],
+  mixins: [ReactMeteorData, Autorun],
 
   getMeteorData() {
     var eventsSubscribtion = Meteor.subscribe('events');
@@ -18,24 +20,18 @@ Header = React.createClass({
     }
   },
 
-  componentDidMount() {
-    this.titleComputation = Tracker.autorun(() => {
-      var eventId = FlowRouter.getParam('eventId');
-      var event = Events.findOne(eventId);
-      var title;
+  autorun() {
+    var eventId = FlowRouter.getParam('eventId');
+    var event = Events.findOne(eventId);
+    var title;
 
-      if (!eventId) {
-        title = 'Prezentowo';
-      } else {
-        title = event && event.title || '';
-      }
+    if (!eventId) {
+      title = 'Prezentowo';
+    } else {
+      title = event && event.title || '';
+    }
 
-      this.setState({title});
-    });
-  },
-
-  componentWillUnmount() {
-    this.titleComputation.stop();
+    this.setState({title});
   },
 
   getLoggedInNavigation() {

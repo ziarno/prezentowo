@@ -1,5 +1,3 @@
-import {attachWaves} from '../../../lib/utilities';
-
 ModalManager = function () {
 
   var $modal;
@@ -23,7 +21,6 @@ ModalManager = function () {
       $modal.modal({
         //note: don't use detachable:false - instead "detach" into the same container that we render it into
         autofocus: false,
-        onShow: attachWaves,
         onHidden() {
           ReactDOM.unmountComponentAtNode(modalContainer);
         }
