@@ -5,6 +5,7 @@ CheckboxInput = React.createClass({
   mixins: [InputValidation, RefreshOnLocaleChange],
 
   propTypes: {
+    checked: React.PropTypes.bool,
     label: React.PropTypes.string
   },
 
@@ -12,10 +13,14 @@ CheckboxInput = React.createClass({
     return $(this.refs.checkbox).checkbox('is checked');
   },
 
-  reset() {
+  setValue(value) {
     $(this.refs.checkbox).checkbox(
-      this.props.checked ? 'set checked' : 'set unchecked'
+      value ? 'set checked' : 'set unchecked'
     );
+  },
+
+  reset() {
+    this.setValue(this.props.checked);
   },
 
   componentDidMount() {

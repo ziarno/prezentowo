@@ -17,7 +17,7 @@ SelectInput = React.createClass({
     }
   },
 
-  setSelected(value) {
+  setValue(value) {
     //note: item selection must be done manually with react, because semantic does DOM manipulation on its own otherwise and it ends up cloning elements with the same reactid
     var $dropdown = $(this.refs.dropdown);
     var $node = $dropdown.dropdown('get item', value);
@@ -48,7 +48,7 @@ SelectInput = React.createClass({
 
   selectDefault(value) {
     if (value && !this.state.isSelectedByUser) {
-      this.setSelected(value);
+      this.setValue(value);
     }
   },
 
@@ -91,7 +91,7 @@ SelectInput = React.createClass({
     $dropdown.dropdown({
       action: (nodeString, value) => {
         $dropdown.dropdown('hide'); //note: hide before set value, because error
-        this.setSelected(value);
+        this.setValue(value);
         this.setState({isSelectedByUser: true});
       },
       onChange: (value) => {

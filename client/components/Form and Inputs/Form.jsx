@@ -17,7 +17,8 @@ Form = React.createClass({
   propTypes: {
     schema: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
-    onSubmit: React.PropTypes.func
+    onSubmit: React.PropTypes.func,
+    data: React.PropTypes.object
   },
 
   childContextTypes: {
@@ -26,18 +27,17 @@ Form = React.createClass({
     form: React.PropTypes.object
   },
 
-  getChildContext: function() {
+  getChildContext: function () {
     return {
       register: (inputComponent) => {
-        if (!_.isFunction(inputComponent.getValue) ||
-            !_.isFunction(inputComponent.getValue)) {
+        if (!_.isFunction(inputComponent.getValue) || !_.isFunction(inputComponent.getValue)) {
           throw new Error(`${inputComponent.constructor.displayName} component must have a getValue() and reset() methods in order to be registered as an input in the Form component`);
         }
         this.state.components.push(inputComponent);
       },
       schema: this.props.schema,
       form: this
-     };
+    };
   },
 
   getInitialState() {
@@ -54,22 +54,43 @@ Form = React.createClass({
   },
 
   reset() {
-    $(ReactDOM.findDOMNode(this)).form('clear');
-    this.state.components.forEach((component) => component.reset());
+    if (this.props.data) {
+      this.setFormData(this.props.data);
+    } else {
+      this.state.components.forEach((component) => component.reset());
+    }
     this.props.schema.resetValidation();
   },
 
+  setFormData(data) {
+    if (!_.isObject(data)) {
+      return;
+    }
+
+    this.state.components.forEach((component) => {
+      component.setValue(data[component.props.name]);
+    });
+  },
+
   submitForm(event) {
-    event.preventDefault();
     var formValues = {};
 
-    this.state.components.forEach((component) => (
-      formValues[component.props.name] = component.getValue()
-    ));
+    event.preventDefault();
+    this.state.components.forEach((component) => {
+      formValues[component.props.name] = component.getValue();
+    });
 
     if (_.isFunction(this.props.onSubmit)) {
       this.props.onSubmit(formValues);
     }
+  },
+
+  componentDidMount() {
+    this.setFormData(this.props.data);
+  },
+
+  componentWillReceiveProps({data}) {
+    this.setFormData(data);
   },
 
   render() {
@@ -82,6 +103,6 @@ Form = React.createClass({
       >
         {this.props.children}
       </form>
-    )
+    );
   }
 });

@@ -18,6 +18,10 @@ EventTypeInput = React.createClass({
     return this.state.type;
   },
 
+  setValue(type) {
+    this.setState({type});
+  },
+
   setType(type) {
     this.validate(type);
     this.setState({type});

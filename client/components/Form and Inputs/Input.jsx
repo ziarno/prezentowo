@@ -14,10 +14,16 @@ Input = React.createClass({
     placeholder: React.PropTypes.string
   },
 
-  reset() {},
+  reset() {
+    this.setValue(null);
+  },
 
   getValue() {
     return this.refs.input.value;
+  },
+
+  setValue(value) {
+    this.refs.input.value = value;
   },
 
   onInputChange(value) {

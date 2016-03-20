@@ -2,6 +2,10 @@ import {Popup} from '../../../../lib/Mixins';
 
 EventPopup = React.createClass({
 
+  propTypes: {
+    event: React.PropTypes.object
+  },
+
   mixins: [Popup],
 
   getPopupSettings() {
@@ -13,11 +17,6 @@ EventPopup = React.createClass({
     };
   },
 
-  getInitialState() {
-    return {
-    };
-  },
-
   reset() {
     this.refs.form.reset();
   },
@@ -26,14 +25,27 @@ EventPopup = React.createClass({
     this.hidePopup(this.reset);
   },
 
-  createEvent(data) {
+  submitEvent(data) {
     var eventId;
 
-    if (this.schema.validate(data)) {
+    if (!this.schema.validate(data)) {
+      return;
+    }
+
+    if (this.isEdit()) {
+      Events.methods.editEvent.call({
+        eventId: FlowRouter.getParam('eventId'),
+        ...data
+      });
+    } else {
       eventId = Events.methods.createEvent.call(data);
       FlowRouter.go(`/event/id/${eventId}`);
-      this.hideAndReset();
     }
+    this.hideAndReset();
+  },
+
+  isEdit() {
+    return !!this.props.event;
   },
 
   render() {
@@ -48,14 +60,19 @@ EventPopup = React.createClass({
 
         <div className="ui attached message">
           <div className="header">
-            <T>New event</T>
+            {this.isEdit() ? (
+              <T>Edit event</T>
+            ) : (
+              <T>New event</T>
+            )}
           </div>
         </div>
 
         <Form
           ref="form"
+          data={this.props.event}
           className="form-popup--form attached fluid segment"
-          onSubmit={this.createEvent}
+          onSubmit={this.submitEvent}
           schema={this.schema}>
           <Input
             name="title"
@@ -90,7 +107,11 @@ EventPopup = React.createClass({
               className="ui labeled icon primary button"
               onClick={(e) => this.refs.form.submitForm(e)}>
               <i className="checkmark icon"></i>
-              <T>Create event</T>
+              {this.isEdit() ? (
+                <T>Save</T>
+              ) : (
+                <T>Create event</T>
+              )}
             </button>
           </div>
         </div>
@@ -102,7 +123,10 @@ EventPopup = React.createClass({
       <div
         className="ui icon button waves-effect waves-button"
         ref="popupTrigger">
-        <i className="plus icon"/>
+        <i className={classNames({
+          setting: this.isEdit(),
+          plus: !this.isEdit()
+        }, 'icon')} />
         {Popup}
       </div>
     );

@@ -8,13 +8,6 @@ EventsButton = React.createClass({
     FlowRouter.go(`/event/id/${event._id}`);
   },
 
-  isCreator() {
-    var eventId = FlowRouter.getParam('eventId');
-    var event = Events.findOne(eventId);
-
-    return event && event.creatorId === Meteor.userId();
-  },
-
   componentDidMount() {
     $(this.refs.dropdown).dropdown({
       action: 'hide'
@@ -22,11 +15,13 @@ EventsButton = React.createClass({
   },
 
   render() {
+    var eventId = FlowRouter.getParam('eventId');
+    var event = Events.findOne(eventId);
     var now = new Date();
     var activeEvents = [];
     var pastEvents = [];
     var activeEventsHeader;
-    var isCreator = this.isCreator();
+    var isCreator = event && event.creatorId === Meteor.userId();
 
     this.props.events.forEach((event) => {
       if (now < event.date) {
@@ -87,9 +82,9 @@ EventsButton = React.createClass({
         <EventPopup />
 
         {isCreator ? (
-          <div className="ui icon button waves-effect waves-button">
-            <i className="setting icon"/>
-          </div>
+          <EventPopup
+            event={event}
+          />
         ) : null}
 
         {isCreator ? (

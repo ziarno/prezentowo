@@ -28,6 +28,10 @@ SearchableInput = React.createClass({
     return this.refs.input.value;
   },
 
+  setValue(value) {
+    this.refs.input = value;
+  },
+
   search() {
     console.log('search');
     this.setState({showSearchResults: true});

@@ -34,6 +34,7 @@ Many to Many: Many to Many
 Many to One: Many to One
 Cancel: Cancel
 Create event: Create event
+Edit event: Edit event
 Event Type: Event type
 New participant: New Participant
 Add participant: Add Participant
@@ -47,3 +48,4 @@ for: for
 Options: Options
 choose user: choose user
 User: User
+Save: Save

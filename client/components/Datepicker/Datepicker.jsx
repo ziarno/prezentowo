@@ -17,7 +17,13 @@ Datepicker = React.createClass({
     return $(this.refs.datepicker).datepicker('getDate');
   },
 
-  setDatepicker() {
+  setValue(value) {
+    this.setDatepicker({startView: 0});
+    $(this.refs.datepicker)
+      .datepicker('setDate', value);
+  },
+
+  setDatepicker(options) {
     $(this.refs.datepicker)
       .datepicker('remove')
       .datepicker({
@@ -29,7 +35,8 @@ Datepicker = React.createClass({
         startDate: new Date(),
         weekStart: 1,
         startView: 1,
-        title: () => _i18n.__(this.props.label)
+        title: () => _i18n.__(this.props.label),
+        ...options
       })
       .on('changeDate', () => {
         var value = this.getValue();

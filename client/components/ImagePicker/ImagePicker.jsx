@@ -32,6 +32,15 @@ ImagePicker = React.createClass({
     return this.getImage();
   },
 
+  setValue(pictureUrl) {
+    var index = this.props.images.indexOf(pictureUrl);
+    if (index > -1) {
+      this.setImageIndex(index);
+    } else {
+      this.addImage(pictureUrl);
+    }
+  },
+
   setImageIndex(index = this.state.currentIndex) {
     this.setState({currentIndex: index});
     this.onChange(this.getImage(index));
