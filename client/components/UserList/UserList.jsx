@@ -6,8 +6,7 @@ UserList = React.createClass({
 
   propTypes: {
     users: React.PropTypes.array.isRequired,
-    presents: React.PropTypes.array.isRequired,
-    isCreator: React.PropTypes.bool.isRequired
+    presents: React.PropTypes.array.isRequired
   },
 
   autorunSetCurrentUser() {
@@ -95,9 +94,7 @@ UserList = React.createClass({
           </div>
 
           <div
-            className={classNames('user-list--list', {
-              'user-list--list__with-settings': this.props.isCreator
-            })}>
+            className="user-list--list">
             {this.props.users.map((user) => (
               <UserItem
                 presentsCount={Presents.find({

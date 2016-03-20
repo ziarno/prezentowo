@@ -23,7 +23,7 @@ UserPresents = React.createClass({
       .scrollSpy({
         offsetTop: 100,
         offsetBottom: -100,
-        throttle: 500
+        throttle: 300
       });
   },
 

@@ -31,7 +31,8 @@ var InputValidation = {
 
   autorunValidation() {
     this.setState({
-      hasError: this.context.schema && this.context.schema.keyIsInvalid(this.props.name)
+      hasError: this.context.schema &&
+        this.context.schema.keyIsInvalid(this.props.name)
     });
   },
 
@@ -61,8 +62,10 @@ var InputValidation = {
     }
   },
 
-  validate(value) {
-    this.setState({showError: true});
+  validate(value, silent) {
+    if (!silent) {
+      this.setState({showError: true});
+    }
     if (this.context.schema) {
       this.context.schema.validateOne({
         [this.props.name]: value

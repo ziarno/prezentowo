@@ -4,6 +4,7 @@ EventContainer = React.createClass({
 
   getMeteorData() {
     var eventId = FlowRouter.getParam('eventId');
+    var event = Events.findOne(eventId);
     var subscription = Meteor.subscribe('eventDetails', {eventId});
     var participants = Participants
       .find()
@@ -23,31 +24,20 @@ EventContainer = React.createClass({
     return {
       ready: subscription.ready(),
       presents: Presents.find().fetch(),
-      participants
-    };
-  },
-
-  childContextTypes: {
-    eventId: React.PropTypes.string,
-  },
-
-  getChildContext: function() {
-    return {
-      eventId: FlowRouter.getParam('eventId')
+      participants,
+      event
     };
   },
 
   isCreator() {
-    var eventId = FlowRouter.getParam('eventId');
-    var event = Events.findOne(eventId);
-
-    return event && (event.creatorId === Meteor.userId());
+    return this.data.event &&
+      (this.data.event.creatorId === Meteor.userId());
   },
 
   render() {
 
-    var event = Events.findOne(FlowRouter.getParam('eventId'));
-    var eventTitle = event && event.title;
+    var eventTitle = this.data.event
+      && this.data.event.title;
 
     return this.data.ready ? (
       <div id="event-container">
@@ -55,9 +45,6 @@ EventContainer = React.createClass({
           isCreator={this.isCreator()}
           users={this.data.participants}
           presents={this.data.presents} />
-        {this.isCreator() ? (
-          <EventSettings />
-        ) : null}
         <PresentsContainer
           users={this.data.participants}
           presents={this.data.presents} />

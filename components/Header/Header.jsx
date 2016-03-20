@@ -42,7 +42,6 @@ Header = React.createClass({
           ready={this.data.ready} />
         <UserProfileButton
           {...this.data.user.profile} />
-        <NotificationIcon />
       </div>
     );
   },

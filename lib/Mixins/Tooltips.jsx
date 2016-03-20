@@ -7,10 +7,10 @@
  * Requires:
  * getTooltips() method - must return an object:
  * {
- *  ref: {tooltipConfig},
+ *  [refName]: {tooltipConfig},
  *  ...
  * }
- * Note: Add refs to components
+ * Note: Add refNames to components
  */
 var Tooltips = {
 

@@ -11,8 +11,9 @@ ParticipantPopup = React.createClass({
   getPopupSettings() {
     return {
       onShow: () => {this.schema.resetValidation()},
-      position: 'top left',
-      lastResort: 'top left'
+      position: 'bottom right',
+      lastResort: 'bottom right',
+      transition: 'slide down',
     };
   },
 
@@ -44,7 +45,7 @@ ParticipantPopup = React.createClass({
     if (this.schema.validate(_.omit(formData, 'sendEmail'))) {
       this.setState({isSaving: true});
       Events.methods.addParticipant.call({
-        eventId: this.context.eventId,
+        eventId: FlowRouter.getParam('eventId'),
         sendEmail: formData.sendEmail,
         participant: _.omit(formData, 'sendEmail')
       }, () => {
@@ -65,7 +66,7 @@ ParticipantPopup = React.createClass({
     var Popup = (
       <div
         ref="popup"
-        className="ui flowing popup form-popup">
+        className="ui flowing popup form-popup participant-popup">
 
         <div className="ui attached message">
           <div className="header">
@@ -144,10 +145,9 @@ ParticipantPopup = React.createClass({
 
     return (
       <div
-        className="ui button waves-effect waves-button"
+        className="ui icon button waves-effect waves-button"
         ref="popupTrigger">
-        <i className="add user large icon"/>
-        <T>Add participant</T>
+        <i className="add user icon"/>
         {Popup}
       </div>
     );

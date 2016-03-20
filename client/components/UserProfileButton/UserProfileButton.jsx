@@ -9,7 +9,6 @@ UserProfileButton = React.createClass({
   },
   getTooltips() {
     return {
-      logout: {content: _i18n.__('Logout')},
       profile: {content: _i18n.__('Profile')}
     };
   },
@@ -38,12 +37,7 @@ UserProfileButton = React.createClass({
           ref="profile">
           <span>{this.props.name}</span>
         </div>
-        <div
-          className="ui icon button"
-          ref="logout"
-          onClick={this.logout}>
-          <i className="sign out icon"></i>
-        </div>
+        <NotificationIcon />
       </div>
     );
   }

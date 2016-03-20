@@ -23,7 +23,8 @@ Input = React.createClass({
   onInputChange(value) {
     //if input is in error state then we want to get rid of it as soon as the user types in correct input
     if (this.state.hasError) {
-      this.validate(value);
+      //validate silently so if input still has error, showError won't be set
+      this.validate(value, true);
     }
     this.onChange(value);
   },

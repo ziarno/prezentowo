@@ -47,7 +47,7 @@ PresentPopup = React.createClass({
     if (this.schema.validate(presentData)) {
       this.hideAndReset();
       Presents.methods.createPresent.call({
-        eventId: this.context.eventId,
+        eventId: FlowRouter.getParam('eventId'),
         ...presentData
       });
     }
