@@ -1,7 +1,11 @@
 Img = React.createClass({
 
+  loadTimeout: null,
+
+  image: null,
+
   propTypes: {
-    src: React.PropTypes.string,
+    src: React.PropTypes.string.isRequired,
     hideLoader: React.PropTypes.bool
   },
 
@@ -21,15 +25,20 @@ Img = React.createClass({
     this.loadImage();
   },
 
-  loadImage(src = this.props.src) {
-    var image = new Image();
-    var timeout = setTimeout(() => this.setState({isLoading: true}), 300);
+  componentWillUnmount() {
+    clearTimeout(this.loadTimeout);
+    this.image.onload = this.image.onerror = null;
+  },
 
-    image.onload = image.onerror = () => {
-      clearTimeout(timeout);
+  loadImage(src = this.props.src) {
+    this.image = new Image();
+    this.loadTimeout = setTimeout(() => this.setState({isLoading: true}), 300);
+
+    this.image.onload = this.image.onerror = () => {
+      clearTimeout(this.loadTimeout);
       this.setState({isLoading: false});
     };
-    image.src = src;
+    this.image.src = src;
   },
 
   render() {
@@ -38,9 +47,9 @@ Img = React.createClass({
         style={{
           backgroundImage: `url(${this.props.src})`
         }}>
-        <Loader
-          visible={this.state.isLoading && !this.props.hideLoader}
-        />
+        {this.state.isLoading && !this.props.hideLoader ? (
+          <Loader />
+        ) : null}
         {this.props.children}
       </div>
     );

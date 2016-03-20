@@ -1,4 +1,5 @@
 import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
+import moment from 'moment';
 
 Datepicker = React.createClass({
 
@@ -32,7 +33,7 @@ Datepicker = React.createClass({
           month: 11,
           day: 24
         },
-        startDate: new Date(),
+        startDate: moment().add(1, 'days').toDate(),
         weekStart: 1,
         startView: 1,
         title: () => _i18n.__(this.props.label),
