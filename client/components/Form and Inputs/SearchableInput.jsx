@@ -37,7 +37,9 @@ SearchableInput = class SearchableInput extends React.Component {
 
   reset() {
     console.log('reset')
-    this.setState(this.getInitialState())
+    this.setState({
+      showSearchResults: false
+    })
   }
 
   componentDidMount() {

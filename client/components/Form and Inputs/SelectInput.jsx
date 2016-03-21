@@ -55,7 +55,9 @@ SelectInput = class SelectInput extends React.Component {
 
   reset() {
     $(this.refs.dropdown).dropdown('clear')
-    this.setState(this.getInitialState())
+    this.setState({
+      isSelectedByUser: false
+    })
     this.selectDefault(this.props.selectDefault)
   }
 
