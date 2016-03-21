@@ -12,4 +12,4 @@ EventItem = ({event, onClick}) => (
       <DateField date={event.date} roundToDays />
     </div>
   </div>
-);
+)

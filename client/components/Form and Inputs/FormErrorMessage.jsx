@@ -1,26 +1,23 @@
-import {Autorun} from '../../../lib/Mixins';
+import {Autorun} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-FormErrorMessage = React.createClass({
+FormErrorMessage = class FormErrorMessage extends React.Component {
 
-  mixins: [Autorun],
-
-  propTypes: {
-    schema: React.PropTypes.object
-  },
-
-  getInitialState() {
-    return {
+  constructor() {
+    super()
+    this.state = {
       errors: []
     }
-  },
-
+    this.autorunGetErrorMessages = this.autorunGetErrorMessages.bind(this)
+  }
+  
   autorunGetErrorMessages() {
     this.setState({
       errors: this.props.schema.invalidKeys().map((key) => (
         this.props.schema.keyErrorMessage(key.name)
       ))
-    });
-  },
+    })
+  }
 
   render() {
     return (
@@ -30,7 +27,13 @@ FormErrorMessage = React.createClass({
         icon="warning"
         messages={this.state.errors}
       />
-    );
+    )
   }
 
-});
+}
+
+FormErrorMessage.propTypes = {
+  schema: React.PropTypes.object
+}
+
+reactMixin(FormErrorMessage.prototype, Autorun)

@@ -8,4 +8,4 @@ UserItem = ({onClick, user, presentsCount, isActive}) => (
       count={presentsCount}
     />
   </div>
-);
+)

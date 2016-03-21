@@ -1,21 +1,18 @@
 import {InputValidation} from '../../../lib/Mixins';
+import reactMixin from 'react-mixin'
 
-SelectInput = React.createClass({
+SelectInput = class SelectInput extends React.Component {
 
-  mixins: [InputValidation],
-
-  propTypes: {
-    placeholder: React.PropTypes.string,
-    className: React.PropTypes.string,
-    name: React.PropTypes.string,
-    selectDefault: React.PropTypes.string
-  },
-
-  getInitialState() {
-    return {
+  constructor() {
+    super()
+    this.state = {
       isSelectedByUser: false
     }
-  },
+    this.setValue = this.setValue.bind(this)
+    this.selectDefault = this.selectDefault.bind(this)
+    this.getValue = this.getValue.bind(this)
+    this.reset = this.reset.bind(this)
+  }
 
   setValue(value) {
     //note: item selection must be done manually with react, because semantic does DOM manipulation on its own otherwise and it ends up cloning elements with the same reactid
@@ -44,31 +41,31 @@ SelectInput = React.createClass({
       this.refs.placeholder
     );
     $dropdown.dropdown('set value', value);
-  },
+  }
 
   selectDefault(value) {
     if (value && !this.state.isSelectedByUser) {
       this.setValue(value);
     }
-  },
+  }
 
   getValue() {
     return $(this.refs.dropdown).dropdown('get value');
-  },
+  }
 
   reset() {
     $(this.refs.dropdown).dropdown('clear');
     this.setState(this.getInitialState());
     this.selectDefault(this.props.selectDefault);
-  },
+  }
 
   shouldComponentUpdate(newProps) {
     return !_.isEqual(this.props, newProps);
-  },
+  }
 
   componentWillReceiveProps({selectDefault}) {
     this.selectDefault(selectDefault);
-  },
+  }
 
   componentDidMount() {
     var $dropdown = $(this.refs.dropdown);
@@ -106,7 +103,7 @@ SelectInput = React.createClass({
     });
 
     this.selectDefault(this.props.selectDefault);
-  },
+  }
 
   render() {
     return (
@@ -133,4 +130,12 @@ SelectInput = React.createClass({
       </div>
     );
   }
-});
+}
+
+SelectInput.propTypes = {
+  placeholder: React.PropTypes.string,
+  className: React.PropTypes.string,
+  selectDefault: React.PropTypes.string
+}
+
+reactMixin.onClass(SelectInput, InputValidation)

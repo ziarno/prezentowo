@@ -1,67 +1,67 @@
-import {Popup} from '../../../../lib/Mixins';
+import {Popup} from '../../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-ParticipantPopup = React.createClass({
+ParticipantPopup = class ParticipantPopup extends React.Component {
 
-  mixins: [Popup],
-
-  contextTypes: {
-    eventId: React.PropTypes.string
-  },
+  constructor() {
+    super()
+    this.schema = Events.Schemas.NewParticipant
+      .namedContext('newParticipant')
+    this.state = {
+      images: this.getImagesForGender('male'),
+      isSaving: false
+    }
+    this.reset = this.reset.bind(this)
+    this.hideAndReset = this.hideAndReset.bind(this)
+    this.updateImages = this.updateImages.bind(this)
+    this.getImagesForGender = this.getImagesForGender.bind(this)
+    this.addParticipant = this.addParticipant.bind(this)
+  }
 
   getPopupSettings() {
     return {
       onShow: () => {this.schema.resetValidation()},
       position: 'bottom right',
       lastResort: 'bottom right',
-      transition: 'slide down',
-    };
-  },
-
-  getInitialState() {
-    return {
-      images: [],
-      isSaving: false
-    };
-  },
+      transition: 'slide down'
+    }
+  }
 
   reset() {
-    this.refs.form.reset();
-  },
+    this.refs.form.reset()
+  }
 
   hideAndReset() {
-    this.hidePopup(this.reset);
-  },
+    this.hidePopup(this.reset)
+  }
 
   updateImages({gender}) {
-    var avatarsCount = 12;
-    var fileLetterName = gender === 'female' ? 'f' : 'm';
-    var avatars = _.range(avatarsCount).map((index) => (
+    this.setState({images: this.getImagesForGender(gender)})
+  }
+
+  getImagesForGender(gender) {
+    var avatarsCount = 12
+    var fileLetterName = gender === 'female' ? 'f' : 'm'
+    return _.range(avatarsCount).map((index) => (
       `/images/avatars/${fileLetterName}${index + 1}.png`
-    ));
-    this.setState({images: avatars});
-  },
+    ))
+  }
 
   addParticipant(formData) {
     if (this.schema.validate(_.omit(formData, 'sendEmail'))) {
-      this.setState({isSaving: true});
+      this.setState({isSaving: true})
       Events.methods.addParticipant.call({
         eventId: FlowRouter.getParam('eventId'),
         sendEmail: formData.sendEmail,
         participant: _.omit(formData, 'sendEmail')
       }, () => {
-        this.hideAndReset();
-        this.setState({isSaving: false});
-      });
+        this.hideAndReset()
+        this.setState({isSaving: false})
+      })
     }
-  },
-
-  componentDidMount() {
-    this.updateImages({gender: 'male'});
-  },
+  }
 
   render() {
-    this.schema = this.schema || Events.Schemas.NewParticipant
-        .namedContext('newParticipant');
 
     var Popup = (
       <div
@@ -141,7 +141,7 @@ ParticipantPopup = React.createClass({
         </div>
 
       </div>
-    );
+    )
 
     return (
       <div
@@ -150,7 +150,13 @@ ParticipantPopup = React.createClass({
         <i className="add user icon"/>
         {Popup}
       </div>
-    );
+    )
 
   }
-});
+}
+
+ParticipantPopup.contextTypes = {
+  eventId: React.PropTypes.string
+}
+
+reactMixin(ParticipantPopup.prototype, Popup)

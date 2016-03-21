@@ -1,9 +1,5 @@
-Present = React.createClass({
-
-  propTypes: {
-    present: React.PropTypes.object.isRequired
-  },
-
+Present = class Present extends React.Component {
+  
   render() {
     return (
       <div className="present ui card">
@@ -18,6 +14,11 @@ Present = React.createClass({
         </Ribbon>
         <div></div>{/* leave this empty div because semantic ui has strong css rules for the last element in a card (for border-radius)*/}
       </div>
-    );
+    )
   }
-});
+  
+}
+
+Present.propTypes = {
+  present: React.PropTypes.object.isRequired
+}

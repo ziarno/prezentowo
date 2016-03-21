@@ -1,4 +1,4 @@
-App = React.createClass({
+App = class App extends React.Component {
   render() {
     return (
       <div>
@@ -7,6 +7,6 @@ App = React.createClass({
           {this.props.content}
         </div>
       </div>
-    );
+    )
   }
-});
+}

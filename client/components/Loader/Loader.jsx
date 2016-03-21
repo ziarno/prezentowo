@@ -9,4 +9,4 @@ Loader = ({visible, size, text}) => (
       {text || null}
     </div>
   </div>
-);
+)

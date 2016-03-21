@@ -1,12 +1,18 @@
-import {Popup} from '../../../../lib/Mixins';
+import {Popup} from '../../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-EventPopup = React.createClass({
+EventPopup = class EventPopup extends React.Component {
 
-  propTypes: {
-    event: React.PropTypes.object
-  },
-
-  mixins: [Popup],
+  constructor() {
+    super()
+    this.schema = Events.Schemas.Main
+        .pick(['title', 'type', 'date'])
+        .namedContext('newEventForm')
+    this.reset = this.reset.bind(this)
+    this.hideAndReset = this.hideAndReset.bind(this)
+    this.submitEvent = this.submitEvent.bind(this)
+    this.isEdit = this.isEdit.bind(this)
+  }
 
   getPopupSettings() {
     return {
@@ -14,44 +20,41 @@ EventPopup = React.createClass({
       position: 'bottom right',
       lastResort: 'bottom right',
       transition: 'slide down'
-    };
-  },
+    }
+  }
 
   reset() {
-    this.refs.form.reset();
-  },
+    this.refs.form.reset()
+  }
 
   hideAndReset() {
-    this.hidePopup(this.reset);
-  },
+    this.hidePopup(this.reset)
+  }
 
   submitEvent(data) {
-    var eventId;
+    var eventId
 
     if (!this.schema.validate(data)) {
-      return;
+      return
     }
 
     if (this.isEdit()) {
       Events.methods.editEvent.call({
         eventId: FlowRouter.getParam('eventId'),
         ...data
-      });
+      })
     } else {
-      eventId = Events.methods.createEvent.call(data);
-      FlowRouter.go(`/event/id/${eventId}`);
+      eventId = Events.methods.createEvent.call(data)
+      FlowRouter.go(`/event/id/${eventId}`)
     }
-    this.hideAndReset();
-  },
+    this.hideAndReset()
+  }
 
   isEdit() {
-    return !!this.props.event;
-  },
+    return !!this.props.event
+  }
 
   render() {
-    this.schema = this.schema || Events.Schemas.Main
-        .pick(['title', 'type', 'date'])
-        .namedContext('newEventForm');
 
     var Popup = (
       <div
@@ -117,7 +120,7 @@ EventPopup = React.createClass({
         </div>
 
       </div>
-    );
+    )
 
     return (
       <div
@@ -129,7 +132,14 @@ EventPopup = React.createClass({
         }, 'icon')} />
         {Popup}
       </div>
-    );
+    )
 
   }
-});
+
+}
+
+EventPopup.propTypes = {
+  event: React.PropTypes.object
+}
+
+reactMixin(EventPopup.prototype, Popup)

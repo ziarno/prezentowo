@@ -1,62 +1,59 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-SearchableInput = React.createClass({
-
-  mixins: [InputValidation, ReactMeteorData, RefreshOnLocaleChange],
-
-  propTypes: {
-    label: React.PropTypes.string,
-    hint: React.PropTypes.string,
-    placeholder: React.PropTypes.string,
-    search: React.PropTypes.object
-  },
-
-  getInitialState() {
-    return {
+SearchableInput = class SearchableInput extends React.Component {
+  
+  constructor() {
+    super()
+    this.state = {
       showSearchResults: false
-    };
-  },
-
+    }
+    this.getValue = this.getValue.bind(this)
+    this.setValue = this.setValue.bind(this)
+    this.search = this.search.bind(this)
+    this.reset = this.reset.bind(this)
+  }
+  
   getMeteorData() {
     return {
       results: this.props.search && this.props.search.getData(),
       status: this.props.search && this.props.search.getStatus()
     }
-  },
+  }
 
   getValue() {
-    return this.refs.input.value;
-  },
+    return this.refs.input.value
+  }
 
   setValue(value) {
-    this.refs.input = value;
-  },
+    this.refs.input = value
+  }
 
   search() {
-    console.log('search');
-    this.setState({showSearchResults: true});
-    this.props.search.search(this.getValue());
-  },
+    console.log('search')
+    this.setState({showSearchResults: true})
+    this.props.search.search(this.getValue())
+  }
 
   reset() {
-    console.log('reset');
-    this.setState(this.getInitialState());
-  },
+    console.log('reset')
+    this.setState(this.getInitialState())
+  }
 
   componentDidMount() {
     $(this.refs.search).dropdown({
       //on: 'custom event',
       action: 'hide',
       onHide: () => this.setState({showSearchResults: false})
-    });
-  },
+    })
+  }
 
   render() {
 
     if (this.props.search) {
-      console.log('status: ', this.data.status);
+      console.log('status: ', this.data.status)
       if (this.state.showSearchResults) {
-        console.log('results: ', this.data.results);
+        console.log('results: ', this.data.results)
       }
     }
 
@@ -112,6 +109,17 @@ SearchableInput = React.createClass({
         {this.props.children}
 
       </div>
-    );
+    )
   }
-});
+}
+
+SearchableInput.propTypes = {
+  label: React.PropTypes.string,
+  hint: React.PropTypes.string,
+  placeholder: React.PropTypes.string,
+  search: React.PropTypes.object
+}
+
+reactMixin.onClass(SearchableInput, InputValidation)
+reactMixin(SearchableInput.prototype, ReactMeteorData)
+reactMixin(SearchableInput.prototype, RefreshOnLocaleChange)

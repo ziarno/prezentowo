@@ -9,4 +9,4 @@ Ribbon = ({small, children, whiteStiches, color}) => (
     </div>
     <div className="ribbon-stitches-bottom"></div>
   </div>
-);
+)

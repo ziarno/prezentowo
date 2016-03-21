@@ -1,34 +1,35 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-CheckboxInput = React.createClass({
+CheckboxInput = class CheckboxInput extends React.Component {
 
-  mixins: [InputValidation, RefreshOnLocaleChange],
-
-  propTypes: {
-    checked: React.PropTypes.bool,
-    label: React.PropTypes.string
-  },
-
+  constructor() {
+    super()
+    this.getValue = this.getValue.bind(this)
+    this.setValue = this.setValue.bind(this)
+    this.reset = this.reset.bind(this)
+  }
+  
   getValue() {
-    return $(this.refs.checkbox).checkbox('is checked');
-  },
+    return $(this.refs.checkbox).checkbox('is checked')
+  }
 
   setValue(value) {
     $(this.refs.checkbox).checkbox(
       value ? 'set checked' : 'set unchecked'
-    );
-  },
+    )
+  }
 
   reset() {
-    this.setValue(this.props.checked);
-  },
+    this.setValue(this.props.checked)
+  }
 
   componentDidMount() {
     $(this.refs.checkbox).checkbox({
       onChecked: () => this.onChange(true),
       onUnchecked: () => this.onChange(false)
-    });
-  },
+    })
+  }
 
   render() {
     return (
@@ -49,6 +50,14 @@ CheckboxInput = React.createClass({
         </label>
 
       </div>
-    );
+    )
   }
-});
+}
+
+CheckboxInput.propTypes = {
+  checked: React.PropTypes.bool,
+  label: React.PropTypes.string
+}
+
+reactMixin.onClass(CheckboxInput, InputValidation)
+reactMixin(CheckboxInput.prototype, RefreshOnLocaleChange)

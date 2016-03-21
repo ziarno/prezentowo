@@ -1,39 +1,35 @@
-EventsButton = React.createClass({
-
-  propTypes: {
-    events: React.PropTypes.array.isRequired
-  },
+EventsButton = class EventsButton extends React.Component {
 
   showEvent(event) {
-    FlowRouter.go(`/event/id/${event._id}`);
-  },
+    FlowRouter.go(`/event/id/${event._id}`)
+  }
 
   componentDidMount() {
     $(this.refs.dropdown).dropdown({
       action: 'hide'
-    });
-  },
+    })
+  }
 
   render() {
-    var eventId = FlowRouter.getParam('eventId');
-    var event = Events.findOne(eventId);
-    var now = new Date();
-    var activeEvents = [];
-    var pastEvents = [];
-    var activeEventsHeader;
-    var isCreator = event && event.creatorId === Meteor.userId();
+    var eventId = FlowRouter.getParam('eventId')
+    var event = Events.findOne(eventId)
+    var now = new Date()
+    var activeEvents = []
+    var pastEvents = []
+    var activeEventsHeader
+    var isCreator = event && event.creatorId === Meteor.userId()
 
     this.props.events.forEach((event) => {
       if (now < event.date) {
-        activeEvents.unshift(event);
+        activeEvents.unshift(event)
       } else {
-        pastEvents.unshift(event);
+        pastEvents.unshift(event)
       }
-    });
+    })
 
     activeEventsHeader = activeEvents.length ?
       <T>Active events</T> :
-      <T>No active events</T>;
+      <T>No active events</T>
 
     return (
       <div className="ui buttons compact">
@@ -92,6 +88,10 @@ EventsButton = React.createClass({
         ) : null}
 
       </div>
-    );
+    )
   }
-});
+}
+
+EventsButton.propTypes = {
+  events: React.PropTypes.array.isRequired
+}

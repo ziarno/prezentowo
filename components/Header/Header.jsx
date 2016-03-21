@@ -1,38 +1,41 @@
-import {Autorun} from '../../lib/Mixins';
+import {Autorun} from '../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-Header = React.createClass({
-
-  mixins: [ReactMeteorData, Autorun],
-
+Header = class Header extends React.Component {
+  
+  constructor() {
+    super()
+    this.state = {
+      title: 'Prezentowo'
+    }
+    this.autorun = this.autorun.bind(this)
+    this.getLoggedInNavigation = this.getLoggedInNavigation.bind(this)
+    this.getLoggedOutNavigation = this.getLoggedOutNavigation.bind(this)
+  }
+  
   getMeteorData() {
-    var eventsSubscribtion = Meteor.subscribe('events');
+    var eventsSubscribtion = Meteor.subscribe('events')
 
     return {
       ready: eventsSubscribtion.ready(),
       events: Events.find().fetch(),
       user: Meteor.user()
-    };
-  },
-
-  getInitialState() {
-    return {
-      title: 'Prezentowo'
     }
-  },
-
+  }
+  
   autorun() {
-    var eventId = FlowRouter.getParam('eventId');
-    var event = Events.findOne(eventId);
-    var title;
+    var eventId = FlowRouter.getParam('eventId')
+    var event = Events.findOne(eventId)
+    var title
 
     if (!eventId) {
-      title = 'Prezentowo';
+      title = 'Prezentowo'
     } else {
-      title = event && event.title || '';
+      title = event && event.title || ''
     }
 
-    this.setState({title});
-  },
+    this.setState({title})
+  }
 
   getLoggedInNavigation() {
     return (
@@ -43,16 +46,16 @@ Header = React.createClass({
         <UserProfileButton
           {...this.data.user.profile} />
       </div>
-    );
-  },
+    )
+  }
 
   getLoggedOutNavigation() {
     return (
       <div id="navigation-container">
         <LoginOrRegisterButton />
       </div>
-    );
-  },
+    )
+  }
 
   render() {
     return (
@@ -66,7 +69,10 @@ Header = React.createClass({
             this.getLoggedOutNavigation()}
         </div>
       </div>
-    );
+    )
   }
 
-});
+}
+
+reactMixin(Header.prototype, ReactMeteorData)
+reactMixin(Header.prototype, Autorun)

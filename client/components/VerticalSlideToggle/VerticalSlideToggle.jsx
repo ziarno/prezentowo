@@ -1,42 +1,39 @@
-VerticalSlideToggle = React.createClass({
+VerticalSlideToggle = class VerticalSlideToggle extends React.Component {
 
-  propTypes: {
-    onToggle: React.PropTypes.func,
-    className: React.PropTypes.string,
-    id: React.PropTypes.string
-  },
-
-  getInitialState() {
-    return {
+  constructor() {
+    super()
+    this.state = {
       visible: true,
       maxHeight: false
-    };
-  },
+    }
+    this.setHeight = this.setHeight.bind(this)
+    this.toggle = this.toggle.bind(this)
+  }
 
   setHeight(visible = this.state.visible) {
     this.setState({
       visible,
       maxHeight: visible ? this.refs.slideToggle.scrollHeight : 0
     });
-  },
+  }
 
   toggle() {
     this.setHeight(!this.state.visible);
     if (_.isFunction(this.props.onToggle)) {
       this.props.onToggle(!this.state.visible);
     }
-  },
+  }
 
   componentDidUpdate(prevProps, {maxHeight}) {
     if (maxHeight !== 0 &&
       maxHeight !== this.refs.slideToggle.scrollHeight) {
       this.setHeight();
     }
-  },
+  }
 
   componentDidMount() {
     this.setHeight();
-  },
+  }
 
   render() {
     var style = {
@@ -57,4 +54,10 @@ VerticalSlideToggle = React.createClass({
       </div>
     );
   }
-});
+}
+
+VerticalSlideToggle.propTypes = {
+  onToggle: React.PropTypes.func,
+  className: React.PropTypes.string,
+  id: React.PropTypes.string
+}

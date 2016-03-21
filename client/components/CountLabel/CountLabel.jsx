@@ -3,4 +3,4 @@ CountLabel = ({count, className, icon}) => (
     <i className={classNames(icon, 'icon')}></i>
     {count}
   </div>
-);
+)

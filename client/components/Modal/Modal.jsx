@@ -1,9 +1,4 @@
-Modal = React.createClass({
-  
-  propTypes: {
-    title: React.PropTypes.string.isRequired,
-    ribbon: React.PropTypes.bool
-  },
+Modal = class Modal extends React.Component {
 
   render() {
     return (
@@ -22,6 +17,12 @@ Modal = React.createClass({
         {this.props.children}
 
       </div>
-    );
+    )
   }
-});
+
+}
+
+Modal.propTypes = {
+  title: React.PropTypes.string.isRequired,
+  ribbon: React.PropTypes.bool
+}

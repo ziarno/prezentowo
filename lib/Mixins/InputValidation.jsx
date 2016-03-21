@@ -12,8 +12,7 @@ var InputValidation = {
 
   propTypes: {
     name: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func,
-    className: React.PropTypes.string
+    onChange: React.PropTypes.func
   },
 
   contextTypes: {

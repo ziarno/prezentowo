@@ -24,6 +24,12 @@ var Tooltips = {
     duration: 100
   },
 
+  componentWillMount() {
+    this.setTooltips = this.setTooltips.bind(this);
+    this.invokeTooltipsWith = this.invokeTooltipsWith.bind(this);
+    this.hideTooltips = this.hideTooltips.bind(this);
+  },
+
   componentDidMount() {
     this.setTooltips();
     _i18n.onChangeLocale(this.setTooltips);

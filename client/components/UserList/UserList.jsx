@@ -1,16 +1,17 @@
-import {Autorun} from '../../../lib/Mixins';
+import {Autorun} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-UserList = React.createClass({
-
-  mixins: [Autorun],
-
-  propTypes: {
-    users: React.PropTypes.array.isRequired,
-    presents: React.PropTypes.array.isRequired
-  },
-
+UserList = class UserList extends React.Component {
+  
+  constructor() {
+    super()
+    this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
+    this.setSticky = this.setSticky.bind(this)
+    this.scrollToUser = this.scrollToUser.bind(this)
+  }
+  
   autorunSetCurrentUser() {
-    var currentUser = Session.get('currentUser');
+    var currentUser = Session.get('currentUser')
 
     if (currentUser) {
       //note: do this manually because sticky was jumping
@@ -21,23 +22,23 @@ UserList = React.createClass({
         .parent()
         .find(`[data-id=${currentUser._id}]`)
         .parent()
-        .addClass('active');
+        .addClass('active')
     }
-  },
+  }
 
   setSticky() {
     $(this.refs.sticky).sticky({
       context: '#event-container',
       offset: 50
-    });
-  },
+    })
+  }
 
   shouldComponentUpdate(newProps) {
-    return !_.isEqual(this.props, newProps);
-  },
+    return !_.isEqual(this.props, newProps)
+  }
 
   scrollToUser(user) {
-    var userPresentsEl = $(`#user-presents-${user._id}`);
+    var userPresentsEl = $(`#user-presents-${user._id}`)
 
     $(document.body).scrollTo(userPresentsEl, {
       duration: 1000,
@@ -45,25 +46,25 @@ UserList = React.createClass({
       onAfter: () => {
         var userEl = userPresentsEl
           .find('.user')
-          .addClass('waves-effect waves-button');
+          .addClass('waves-effect waves-button')
 
-        Waves.ripple(userEl);
-        Session.set('currentUser', user);
+        Waves.ripple(userEl)
+        Session.set('currentUser', user)
         setTimeout(() => {
-          userEl.removeClass('waves-effect waves-button');
-          Waves.calm(userEl);
-        }, 2000);
+          userEl.removeClass('waves-effect waves-button')
+          Waves.calm(userEl)
+        }, 2000)
       }
-    });
-  },
+    })
+  }
 
   componentDidMount() {
-    this.setSticky();
-  },
+    this.setSticky()
+  }
 
   componentDidUpdate() {
-    this.setSticky();
-  },
+    this.setSticky()
+  }
 
   render() {
 
@@ -108,6 +109,14 @@ UserList = React.createClass({
 
         </div>
       </div>
-    );
+    )
   }
-});
+  
+}
+
+UserList.propTypes = {
+  users: React.PropTypes.array.isRequired,
+  presents: React.PropTypes.array.isRequired
+}
+
+reactMixin(UserList.prototype, Autorun)

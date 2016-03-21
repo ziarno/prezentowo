@@ -1,28 +1,20 @@
-Message = React.createClass({
+Message = class Message extends React.Component {
 
-  propTypes: {
-    title: React.PropTypes.string,
-    type: React.PropTypes.string,
-    closable: React.PropTypes.bool,
-    hidden: React.PropTypes.bool,
-    message: React.PropTypes.string,
-    messages: React.PropTypes.array
-  },
-
-  getInitialState() {
-    return {
+  constructor() {
+    super()
+    this.state = {
       hidden: false
-    };
-  },
+    }
+  }
 
   close() {
     this.setState({
       hidden: true
-    });
-  },
+    })
+  }
 
   render() {
-    var key = 0;
+    var key = 0
 
     return (
       <div
@@ -59,6 +51,16 @@ Message = React.createClass({
         ) : null}
 
       </div>
-    );
+    )
   }
-});
+
+}
+
+Message.propTypes = {
+  title: React.PropTypes.string,
+  type: React.PropTypes.string,
+  closable: React.PropTypes.bool,
+  hidden: React.PropTypes.bool,
+  message: React.PropTypes.string,
+  messages: React.PropTypes.array
+}

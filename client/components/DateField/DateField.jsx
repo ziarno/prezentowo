@@ -1,23 +1,28 @@
-import moment from 'moment';
-import {Tooltips} from '../../../lib/Mixins';
+import moment from 'moment'
+import {Tooltips} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-DateField = React.createClass({
+DateField = class DateField extends React.Component {
 
-  mixins: [Tooltips],
+  constructor() {
+    super()
+    this.hideTooltips = this.hideTooltips.bind(this)
+    this.setTooltips = this.setTooltips.bind(this)
+  }
 
   getTooltips() {
-    var dateText = moment(this.props.date).from(new Date());
-    var startOfToday = moment().startOf('day');
-    var startOfDate = moment(this.props.date).startOf('day');
-    var daysDiff = startOfDate.diff(startOfToday, 'days');
+    var dateText = moment(this.props.date).from(new Date())
+    var startOfToday = moment().startOf('day')
+    var startOfDate = moment(this.props.date).startOf('day')
+    var daysDiff = startOfDate.diff(startOfToday, 'days')
     var days = {
       '0': _i18n.__('today'),
       '-1': _i18n.__('yesterday'),
       '1': _i18n.__('tomorrow')
-    };
+    }
 
     if (this.props.roundToDays && Math.abs(daysDiff) <= 1) {
-      dateText = days[daysDiff];
+      dateText = days[daysDiff]
     }
 
     return {
@@ -30,8 +35,8 @@ DateField = React.createClass({
         },
         content: dateText
       }
-    };
-  },
+    }
+  }
 
   render() {
     return (
@@ -43,6 +48,9 @@ DateField = React.createClass({
 
         {moment(this.props.date).format('L')}
       </span>
-    );
+    )
   }
-});
+
+}
+
+reactMixin(DateField.prototype, Tooltips)

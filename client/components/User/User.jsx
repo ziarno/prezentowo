@@ -13,4 +13,4 @@ User = ({user, className, large}) => (
       {user.profile.name}
     </span>
   </div>
-);
+)

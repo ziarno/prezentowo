@@ -1,31 +1,34 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
-import moment from 'moment';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import moment from 'moment'
+import reactMixin from 'react-mixin'
 
-Datepicker = React.createClass({
+Datepicker = class Datepicker extends React.Component {
 
-  mixins: [InputValidation],
-
-  propTypes: {
-    name: React.PropTypes.string,
-    label: React.PropTypes.string
-  },
+  constructor() {
+    super()
+    this.reset = this.reset.bind(this)
+    this.getValue = this.getValue.bind(this)
+    this.setValue = this.setValue.bind(this)
+    this.setDatepicker = this.setDatepicker.bind(this)
+  }
 
   reset() {
-    this.setDatepicker();
-  },
+    this.setDatepicker()
+  }
 
   getValue() {
-    return $(this.refs.datepicker).datepicker('getDate');
-  },
+    return $(this.refs.datepicker).datepicker('getDate')
+  }
 
   setValue(value) {
-    this.setDatepicker({startView: 0});
+    this.setDatepicker({startView: 0})
     $(this.refs.datepicker)
-      .datepicker('setDate', value);
-  },
+      .datepicker('setDate', value)
+  }
 
   setDatepicker(options) {
     $(this.refs.datepicker)
+      .off('changeDate')
       .datepicker('remove')
       .datepicker({
         language: Language.get(),
@@ -40,21 +43,23 @@ Datepicker = React.createClass({
         ...options
       })
       .on('changeDate', () => {
-        var value = this.getValue();
-        this.validate(value);
-        this.onChange(value);
-      });
-  },
+        var value = this.getValue()
+        this.validate(value)
+        this.onChange(value)
+      })
+  }
 
   componentDidMount() {
-    _i18n.onChangeLocale(this.setDatepicker);
-    this.setDatepicker();
-  },
+    _i18n.onChangeLocale(this.setDatepicker)
+    this.setDatepicker()
+  }
 
   componentWillUnmount() {
-    _i18n.offChangeLocale(this.setDatepicker);
-    $(this.refs.datepicker).datepicker('destroy');
-  },
+    _i18n.offChangeLocale(this.setDatepicker)
+    $(this.refs.datepicker)
+      .off('changeDate')
+      .datepicker('destroy')
+  }
 
   render() {
     return (
@@ -64,6 +69,12 @@ Datepicker = React.createClass({
         })}
         ref="datepicker"
       ></div>
-    );
+    )
   }
-});
+}
+
+Datepicker.propTypes = {
+  label: React.PropTypes.string
+}
+
+reactMixin.onClass(Datepicker, InputValidation)

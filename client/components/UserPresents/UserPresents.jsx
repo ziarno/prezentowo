@@ -1,13 +1,14 @@
-UserPresents = React.createClass({
+UserPresents = class UserPresents extends React.Component {
 
-  propTypes: {
-    user: React.PropTypes.object.isRequired,
-    presents: React.PropTypes.array.isRequired
-  },
+  constructor() {
+    super()
+    this.setVisibleUsers = this.setVisibleUsers.bind(this)
+    this.setScrollSpy = this.setScrollSpy.bind(this)
+  }
 
   shouldComponentUpdate(newProps) {
     return !_.isEqual(newProps, this.props);
-  },
+  }
 
   setVisibleUsers(event, ...visibleUsers) {
     var visibleUserIds = _.map(visibleUsers, user => (
@@ -15,7 +16,7 @@ UserPresents = React.createClass({
     ));
 
     Session.set('visibleUserIds', visibleUserIds);
-  },
+  }
 
   setScrollSpy() {
     $(ReactDOM.findDOMNode(this))
@@ -25,20 +26,20 @@ UserPresents = React.createClass({
         offsetBottom: -100,
         throttle: 300
       });
-  },
+  }
 
   componentDidMount() {
     this.setScrollSpy();
     $(ReactDOM.findDOMNode(this))
       .find('.user')
       .on('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers);
-  },
+  }
 
   componentWillUnmount() {
     $(ReactDOM.findDOMNode(this))
       .find('.user')
       .off('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers);
-  },
+  }
 
   render() {
     var ownPresents = [];
@@ -94,4 +95,9 @@ UserPresents = React.createClass({
       </VerticalSlideToggle>
     );
   }
-});
+}
+
+UserPresents.propTypes = {
+  user: React.PropTypes.object.isRequired,
+  presents: React.PropTypes.array.isRequired
+}

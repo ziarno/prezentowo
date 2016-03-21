@@ -1,23 +1,22 @@
-import {Autorun} from '../../../lib/Mixins';
+import {Autorun} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-PresentsContainer = React.createClass({
-
-  mixins: [Autorun],
-
-  propTypes: {
-    users: React.PropTypes.array.isRequired,
-    presents: React.PropTypes.array.isRequired
-  },
-
+PresentsContainer = class PresentsContainer extends React.Component {
+  
+  constructor() {
+    super()
+    this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
+  }
+  
   autorunSetCurrentUser() {
-    var visibleUserIds = Session.get('visibleUserIds');
+    var visibleUserIds = Session.get('visibleUserIds')
     var currentUser = _.find(this.props.users,
-      user => _.contains(visibleUserIds, user._id));
+      user => _.contains(visibleUserIds, user._id))
 
     if (currentUser) {
-      Session.set('currentUser', currentUser);
+      Session.set('currentUser', currentUser)
     }
-  },
+  }
 
   render() {
 
@@ -35,6 +34,13 @@ PresentsContainer = React.createClass({
         ))}
 
       </div>
-    );
+    )
   }
-});
+}
+
+PresentsContainer.propTypes = {
+  users: React.PropTypes.array.isRequired,
+  presents: React.PropTypes.array.isRequired
+}
+
+reactMixin(PresentsContainer.prototype, Autorun)

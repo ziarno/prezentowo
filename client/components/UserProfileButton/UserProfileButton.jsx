@@ -1,29 +1,34 @@
-import {Tooltips} from '../../../lib/Mixins';
+import {Tooltips} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-UserProfileButton = React.createClass({
-  mixins: [Tooltips],
-  propTypes: {
-    pictureUrl: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    onClick: React.PropTypes.func
-  },
+UserProfileButton = class UserProfileButton extends React.Component {
+
+  constructor() {
+    super()
+    this.getTooltips = this.getTooltips.bind(this)
+    this.logout = this.logout.bind(this)
+    this.openProfile = this.openProfile.bind(this)
+  }
+
   getTooltips() {
     return {
       profile: {content: _i18n.__('Profile')}
-    };
-  },
+    }
+  }
+
   logout() {
-    AccountsTemplates.logout();
-    this.hideTooltips();
-  },
+    AccountsTemplates.logout()
+    this.hideTooltips()
+  }
+
   openProfile() {
-    ModalManager.open(<SimpleModal title={_i18n.__('Profile')} />);
-    this.hideTooltips();
-  },
+    this.hideTooltips()
+  }
+
   render() {
     var pictureBackground = {
       backgroundImage: `url(${this.props.pictureUrl})`
-    };
+    }
 
     return (
       <div
@@ -39,6 +44,14 @@ UserProfileButton = React.createClass({
         </div>
         <NotificationIcon />
       </div>
-    );
+    )
   }
-});
+}
+
+UserProfileButton.propTypes = {
+  pictureUrl: React.PropTypes.string.isRequired,
+  name: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func
+}
+
+reactMixin(UserProfileButton.prototype, Tooltips)

@@ -1,36 +1,42 @@
-import {InputValidation} from '../../../../lib/Mixins';
+import {InputValidation} from '../../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-EventTypeInput = React.createClass({
+EventTypeInput = class EventTypeInput extends React.Component {
 
-  mixins: [InputValidation],
-
-  getInitialState() {
-    return {
+  constructor() {
+    super()
+    this.state = {
       type: null
-    };
-  },
+    }
+    this.reset = this.reset.bind(this)
+    this.getValue = this.getValue.bind(this)
+    this.setValue = this.setValue.bind(this)
+    this.setType = this.setType.bind(this)
+  }
 
   reset() {
-    this.setState(this.getInitialState());
-  },
+    this.setState({
+      type: null
+    })
+  }
 
   getValue() {
-    return this.state.type;
-  },
+    return this.state.type
+  }
 
   setValue(type) {
-    this.setState({type});
-  },
+    this.setState({type})
+  }
 
   setType(type) {
-    this.validate(type);
-    this.setState({type});
-  },
+    this.validate(type)
+    this.setState({type})
+  }
 
   render() {
 
     var getButton = (type) => {
-      var isManyToMany = (type === 'many-to-many');
+      var isManyToMany = (type === 'many-to-many')
 
       return (
         <div
@@ -44,22 +50,22 @@ EventTypeInput = React.createClass({
             <i className={classNames('large', {
               exchange: isManyToMany,
               'long arrow right': !isManyToMany
-            }, 'icon')} />
+            }, 'icon')}/>
             <i className={classNames('large', {
               users: isManyToMany,
               user: !isManyToMany
-            }, 'icon')} />
+            }, 'icon')}/>
           </div>
           <p>
             {isManyToMany ? (
-              <T>Many to Many</T>
-            ) : (
-              <T>Many to One</T>
-            )}
+            <T>Many to Many</T>
+              ) : (
+            <T>Many to One</T>
+              )}
           </p>
         </div>
-      );
-    };
+      )
+    }
 
     return (
       <div className={classNames('ui field', {
@@ -81,6 +87,9 @@ EventTypeInput = React.createClass({
         </p>
 
       </div>
-    );
+    )
   }
-});
+
+}
+
+reactMixin.onClass(EventTypeInput, InputValidation)

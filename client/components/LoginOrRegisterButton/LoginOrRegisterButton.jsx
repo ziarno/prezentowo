@@ -9,4 +9,4 @@ LoginOrRegisterButton = () => (
       <T>Register</T>
     </a>
   </div>
-);
+)

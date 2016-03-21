@@ -1,39 +1,36 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins';
+import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
-Input = React.createClass({
+Input = class Input extends React.Component {
 
-  mixins: [InputValidation, RefreshOnLocaleChange],
-
-  propTypes: {
-    name: React.PropTypes.string,
-    label: React.PropTypes.string,
-    className: React.PropTypes.string,
-    type: React.PropTypes.string,
-    hint: React.PropTypes.string,
-    rows: React.PropTypes.number,
-    placeholder: React.PropTypes.string
-  },
+  constructor() {
+    super()
+    this.reset = this.reset.bind(this)
+    this.getValue = this.getValue.bind(this)
+    this.setValue = this.setValue.bind(this)
+    this.onInputChange = this.onInputChange.bind(this)
+  }
 
   reset() {
-    this.setValue(null);
-  },
+    this.setValue(null)
+  }
 
   getValue() {
-    return this.refs.input.value;
-  },
+    return this.refs.input.value
+  }
 
   setValue(value) {
-    this.refs.input.value = value;
-  },
+    this.refs.input.value = value
+  }
 
   onInputChange(value) {
     //if input is in error state then we want to get rid of it as soon as the user types in correct input
     if (this.state.hasError) {
       //validate silently so if input still has error, showError won't be set
-      this.validate(value, true);
+      this.validate(value, true)
     }
-    this.onChange(value);
-  },
+    this.onChange(value)
+  }
 
   render() {
 
@@ -78,6 +75,18 @@ Input = React.createClass({
         {this.props.children}
 
       </div>
-    );
+    )
   }
-});
+}
+
+Input.propTypes = {
+  label: React.PropTypes.string,
+  className: React.PropTypes.string,
+  type: React.PropTypes.string,
+  hint: React.PropTypes.string,
+  rows: React.PropTypes.number,
+  placeholder: React.PropTypes.string
+}
+
+reactMixin.onClass(Input, InputValidation)
+reactMixin(Input.prototype, RefreshOnLocaleChange)

@@ -4,10 +4,10 @@
  * source: https://github.com/vazco/meteor-universe-i18n/blob/master/lib/i18n.js#L260
  */
 var RefreshOnLocaleChange = {
-  _localeChanged (locale) {
-    this.setState({locale});
-  },
   componentWillMount () {
+    this._localeChanged  = (locale) => {
+      this.setState({locale})
+    }
     _i18n.onChangeLocale(this._localeChanged);
   },
   componentWillUnmount () {
