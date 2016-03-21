@@ -1,13 +1,13 @@
 /**
  * Notifications Collection
  */
-Notifications = new Mongo.Collection('notifications');
-Notifications.permit(['insert', 'update', 'remove']).never().apply(); //ongoworks:security
+Notifications = new Mongo.Collection('notifications')
+Notifications.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
 
 /**
  * SCHEMAS
  */
-Notifications.Schemas = {};
+Notifications.Schemas = {}
 Notifications.Schemas.Main = new SimpleSchema({
   type: {
     type: String,
@@ -22,7 +22,7 @@ Notifications.Schemas.Main = new SimpleSchema({
     label: () => _i18n.__('Created'),
     autoValue() {
       if (!this.isSet) {
-        return new Date();
+        return new Date()
       }
     }
   },
@@ -98,6 +98,6 @@ Notifications.Schemas.Main = new SimpleSchema({
   'forEvent.name': {
     type: String
   }
-});
+})
 
-Notifications.attachSchema(Notifications.Schemas.Main);
+Notifications.attachSchema(Notifications.Schemas.Main)

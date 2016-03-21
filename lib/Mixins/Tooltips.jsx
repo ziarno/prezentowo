@@ -25,44 +25,44 @@ var Tooltips = {
   },
 
   componentWillMount() {
-    this.setTooltips = this.setTooltips.bind(this);
-    this.invokeTooltipsWith = this.invokeTooltipsWith.bind(this);
-    this.hideTooltips = this.hideTooltips.bind(this);
+    this.setTooltips = this.setTooltips.bind(this)
+    this.invokeTooltipsWith = this.invokeTooltipsWith.bind(this)
+    this.hideTooltips = this.hideTooltips.bind(this)
   },
 
   componentDidMount() {
-    this.setTooltips();
-    _i18n.onChangeLocale(this.setTooltips);
+    this.setTooltips()
+    _i18n.onChangeLocale(this.setTooltips)
   },
 
   componentWillUnmount() {
-    this.invokeTooltipsWith('destroy');
-    _i18n.offChangeLocale(this.setTooltips);
+    this.invokeTooltipsWith('destroy')
+    _i18n.offChangeLocale(this.setTooltips)
   },
 
   setTooltips() {
     this.invokeTooltipsWith((tooltipConfig) => ({
       ...this.defaultConfig,
       ...tooltipConfig
-    }));
+    }))
   },
 
   hideTooltips() {
-    this.invokeTooltipsWith('hide');
+    this.invokeTooltipsWith('hide')
   },
 
   invokeTooltipsWith(action) {
     var tooltips = _.isFunction(this.getTooltips) ?
-      this.getTooltips() : {};
+      this.getTooltips() : {}
 
     _.each(tooltips, (tooltipConfig, key) => {
       var tooltipAction = _.isFunction(action) ?
-        action(tooltipConfig, key) : action;
+        action(tooltipConfig, key) : action
 
-      $(this.refs[key]).popup(tooltipAction);
-    }, this);
+      $(this.refs[key]).popup(tooltipAction)
+    }, this)
   }
 
-};
+}
 
-export default Tooltips;
+export default Tooltips

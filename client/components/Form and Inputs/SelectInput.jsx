@@ -1,4 +1,4 @@
-import {InputValidation} from '../../../lib/Mixins';
+import {InputValidation} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
 SelectInput = class SelectInput extends React.Component {
@@ -16,93 +16,93 @@ SelectInput = class SelectInput extends React.Component {
 
   setValue(value) {
     //note: item selection must be done manually with react, because semantic does DOM manipulation on its own otherwise and it ends up cloning elements with the same reactid
-    var $dropdown = $(this.refs.dropdown);
-    var $node = $dropdown.dropdown('get item', value);
-    var $nodeCloned;
+    var $dropdown = $(this.refs.dropdown)
+    var $node = $dropdown.dropdown('get item', value)
+    var $nodeCloned
 
     if (!value || !($node instanceof jQuery)) {
-      return;
+      return
     }
 
-    $nodeCloned = $($.clone($node[0]));
+    $nodeCloned = $($.clone($node[0]))
 
     $nodeCloned
       .find('*')
-      .removeAttr('data-reactid');
-    $(this.refs.placeholder).removeClass('default');
+      .removeAttr('data-reactid')
+    $(this.refs.placeholder).removeClass('default')
 
     $node
       .addClass('active selected')
       .siblings()
-      .removeClass('active selected');
-    ReactDOM.unmountComponentAtNode(this.refs.placeholder);
+      .removeClass('active selected')
+    ReactDOM.unmountComponentAtNode(this.refs.placeholder)
     ReactDOM.render(
       <div dangerouslySetInnerHTML={{__html: $nodeCloned.html()}} />,
       this.refs.placeholder
-    );
-    $dropdown.dropdown('set value', value);
+    )
+    $dropdown.dropdown('set value', value)
   }
 
   selectDefault(value) {
     if (value && !this.state.isSelectedByUser) {
-      this.setValue(value);
+      this.setValue(value)
     }
   }
 
   getValue() {
-    return $(this.refs.dropdown).dropdown('get value');
+    return $(this.refs.dropdown).dropdown('get value')
   }
 
   reset() {
-    $(this.refs.dropdown).dropdown('clear');
-    this.setState(this.getInitialState());
-    this.selectDefault(this.props.selectDefault);
+    $(this.refs.dropdown).dropdown('clear')
+    this.setState(this.getInitialState())
+    this.selectDefault(this.props.selectDefault)
   }
 
   shouldComponentUpdate(newProps) {
-    return !_.isEqual(this.props, newProps);
+    return !_.isEqual(this.props, newProps)
   }
 
   componentWillReceiveProps({selectDefault}) {
-    this.selectDefault(selectDefault);
+    this.selectDefault(selectDefault)
   }
 
   componentDidMount() {
-    var $dropdown = $(this.refs.dropdown);
+    var $dropdown = $(this.refs.dropdown)
 
     function scrollCurrentIntoView() {
-      var value = $dropdown.dropdown('get value');
-      var $item = $dropdown.dropdown('get item', value);
+      var value = $dropdown.dropdown('get value')
+      var $item = $dropdown.dropdown('get item', value)
 
       if ($item) {
         setTimeout(() => {
           if (_.isFunction($item[0].scrollIntoViewIfNeeded)) {
-            $item[0].scrollIntoViewIfNeeded(true);
+            $item[0].scrollIntoViewIfNeeded(true)
           } else {
-            $item[0].scrollIntoView();
+            $item[0].scrollIntoView()
           }
-        }, 300);
+        }, 300)
       }
     }
 
     $dropdown.dropdown({
       action: (nodeString, value) => {
-        $dropdown.dropdown('hide'); //note: hide before set value, because error
-        this.setValue(value);
-        this.setState({isSelectedByUser: true});
+        $dropdown.dropdown('hide') //note: hide before set value, because error
+        this.setValue(value)
+        this.setState({isSelectedByUser: true})
       },
       onChange: (value) => {
-        this.validate(value);
-        this.onChange(value);
+        this.validate(value)
+        this.onChange(value)
       },
       onShow: () => {
-        scrollCurrentIntoView();
-        this.hideError();
+        scrollCurrentIntoView()
+        this.hideError()
       },
       onHide: () => this.showError()
-    });
+    })
 
-    this.selectDefault(this.props.selectDefault);
+    this.selectDefault(this.props.selectDefault)
   }
 
   render() {
@@ -128,7 +128,7 @@ SelectInput = class SelectInput extends React.Component {
         </div>
 
       </div>
-    );
+    )
   }
 }
 

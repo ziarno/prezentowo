@@ -1,7 +1,7 @@
 //universe:i18n
-_i18n.options.open = '[';
-_i18n.options.close = ']';
-T = _i18n.createComponent();
+_i18n.options.open = '['
+_i18n.options.close = ']'
+T = _i18n.createComponent()
 
 /**
  * Configuration for AccountsTemplates.
@@ -56,10 +56,10 @@ ConfigureAccountsTemplates = function () {
     //preSignUpHook: function(){},
     //postSignUpHook: function(){},
 
-  });
+  })
 
-  var password = AccountsTemplates.removeField('password');
-  var email = AccountsTemplates.removeField('email');
+  var password = AccountsTemplates.removeField('password')
+  var email = AccountsTemplates.removeField('email')
 
   AccountsTemplates.addFields([
     {
@@ -88,12 +88,12 @@ ConfigureAccountsTemplates = function () {
       ]
     },
     password
-  ]);
+  ])
 
-  AccountsTemplates.configureRoute('signIn');
-  AccountsTemplates.configureRoute('signUp');
-  AccountsTemplates.configureRoute('changePwd');
-  AccountsTemplates.configureRoute('forgotPwd');
-  AccountsTemplates.configureRoute('resetPwd');
-  AccountsTemplates.configureRoute('enrollAccount');
-};
+  AccountsTemplates.configureRoute('signIn')
+  AccountsTemplates.configureRoute('signUp')
+  AccountsTemplates.configureRoute('changePwd')
+  AccountsTemplates.configureRoute('forgotPwd')
+  AccountsTemplates.configureRoute('resetPwd')
+  AccountsTemplates.configureRoute('enrollAccount')
+}

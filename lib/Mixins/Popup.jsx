@@ -10,8 +10,8 @@ var PopupMixin = {
 
   setPopup() {
     var popupSettings = _.isFunction(this.getPopupSettings) ?
-      this.getPopupSettings() : {};
-    var popupRefName = popupSettings.popupRefName || 'popup';
+      this.getPopupSettings() : {}
+    var popupRefName = popupSettings.popupRefName || 'popup'
 
     $(this.refs.popupTrigger).popup({
       popup: $(ReactDOM.findDOMNode(this.refs[popupRefName])),
@@ -20,17 +20,17 @@ var PopupMixin = {
       position: 'bottom left',
       lastResort: 'bottom left',
       ...popupSettings
-    });
+    })
   },
 
   hidePopup(callback) {
-    $(this.refs.popupTrigger).popup('hide', callback);
+    $(this.refs.popupTrigger).popup('hide', callback)
   },
 
   componentDidMount() {
-    this.setPopup();
+    this.setPopup()
   }
 
-};
+}
 
-export default PopupMixin;
+export default PopupMixin

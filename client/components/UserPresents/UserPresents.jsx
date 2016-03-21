@@ -7,15 +7,15 @@ UserPresents = class UserPresents extends React.Component {
   }
 
   shouldComponentUpdate(newProps) {
-    return !_.isEqual(newProps, this.props);
+    return !_.isEqual(newProps, this.props)
   }
 
   setVisibleUsers(event, ...visibleUsers) {
     var visibleUserIds = _.map(visibleUsers, user => (
       $(user).attr('data-id')
-    ));
+    ))
 
-    Session.set('visibleUserIds', visibleUserIds);
+    Session.set('visibleUserIds', visibleUserIds)
   }
 
   setScrollSpy() {
@@ -25,33 +25,33 @@ UserPresents = class UserPresents extends React.Component {
         offsetTop: 100,
         offsetBottom: -100,
         throttle: 300
-      });
+      })
   }
 
   componentDidMount() {
-    this.setScrollSpy();
+    this.setScrollSpy()
     $(ReactDOM.findDOMNode(this))
       .find('.user')
-      .on('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers);
+      .on('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers)
   }
 
   componentWillUnmount() {
     $(ReactDOM.findDOMNode(this))
       .find('.user')
-      .off('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers);
+      .off('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers)
   }
 
   render() {
-    var ownPresents = [];
-    var otherPresents = [];
+    var ownPresents = []
+    var otherPresents = []
 
     this.props.presents.forEach((present) => {
       if (present.isOwn()) {
-        ownPresents.push(present);
+        ownPresents.push(present)
       } else {
-        otherPresents.push(present);
+        otherPresents.push(present)
       }
-    });
+    })
 
     return (
       <VerticalSlideToggle
@@ -93,7 +93,7 @@ UserPresents = class UserPresents extends React.Component {
         ): null}
 
       </VerticalSlideToggle>
-    );
+    )
   }
 }
 

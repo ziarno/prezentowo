@@ -2,20 +2,20 @@
  * ValidatedMethod mixin (not a React mixin)
  */
 var LoggedIn = function loggedInMixin(methodOptions) {
-  var originalRun = methodOptions.run;
+  var originalRun = methodOptions.run
   if (_.isFunction(originalRun)) {
     methodOptions.run = function () {
       if (!this.userId) {
         throw new Meteor.Error(
           `${this.name}.unauthorized`,
           _i18n.__('Must be logged in')
-        );
+        )
       }
-      return originalRun.apply(this, arguments);
-    };
+      return originalRun.apply(this, arguments)
+    }
   }
 
-  return methodOptions;
-};
+  return methodOptions
+}
 
-export default LoggedIn;
+export default LoggedIn

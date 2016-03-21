@@ -14,34 +14,34 @@ VerticalSlideToggle = class VerticalSlideToggle extends React.Component {
     this.setState({
       visible,
       maxHeight: visible ? this.refs.slideToggle.scrollHeight : 0
-    });
+    })
   }
 
   toggle() {
-    this.setHeight(!this.state.visible);
+    this.setHeight(!this.state.visible)
     if (_.isFunction(this.props.onToggle)) {
-      this.props.onToggle(!this.state.visible);
+      this.props.onToggle(!this.state.visible)
     }
   }
 
   componentDidUpdate(prevProps, {maxHeight}) {
     if (maxHeight !== 0 &&
       maxHeight !== this.refs.slideToggle.scrollHeight) {
-      this.setHeight();
+      this.setHeight()
     }
   }
 
   componentDidMount() {
-    this.setHeight();
+    this.setHeight()
   }
 
   render() {
     var style = {
       opacity: this.state.visible ? 1 : 0.4
-    };
+    }
 
     if (this.state.maxHeight !== false) {
-      style.maxHeight = this.state.maxHeight;
+      style.maxHeight = this.state.maxHeight
     }
 
     return (
@@ -52,7 +52,7 @@ VerticalSlideToggle = class VerticalSlideToggle extends React.Component {
         className={classNames('vertical-slide-toggle', this.props.className)}>
         {this.props.children}
       </div>
-    );
+    )
   }
 }
 

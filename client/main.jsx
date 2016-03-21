@@ -1,10 +1,10 @@
 $.cloudinary.config({
   cloud_name: 'dyerfydu8'
-});
+})
 
 Meteor.startup(() => {
-  ModalManager.init();
+  ModalManager.init()
   Waves.init({
     delay: 0
-  });
-});
+  })
+})

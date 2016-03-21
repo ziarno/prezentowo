@@ -1,12 +1,12 @@
 //defined in lib/config.jsx
-Language.set('pl');
-ConfigureAccountsTemplates();
+Language.set('pl')
+ConfigureAccountsTemplates()
 
 Meteor.startup(function () {
   if (Meteor.isServer) {
-    SimpleSchema.updateMessages();
+    SimpleSchema.updateMessages()
   } else {
     //load on document ready
-    $(SimpleSchema.updateMessages);
+    $(SimpleSchema.updateMessages)
   }
-});
+})

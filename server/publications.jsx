@@ -3,7 +3,7 @@
  */
 Meteor.publish('events', function () {
   if (!this.userId) {
-    return this.ready();
+    return this.ready()
   }
 
   return Events.find({
@@ -16,11 +16,11 @@ Meteor.publish('events', function () {
     sort: {
       date: -1
     }
-  });
-});
+  })
+})
 
 Meteor.publishComposite('eventDetails', function ({eventId}) {
-  //Meteor._sleepForMs(2000);
+  //Meteor._sleepForMs(2000)
   return {
     find: function () {
       return Events.find({
@@ -30,14 +30,14 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
             userId: this.userId
           }
         }
-      });
+      })
     },
     children: [
       {
         collectionName: 'participants',
         find: function (event) {
           var participantIds = event.participants
-            .map(participant => participant.userId);
+            .map(participant => participant.userId)
 
           return Meteor.users.find({
             _id: {
@@ -48,13 +48,13 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
               profile: 1,
               isTemp: 1
             }
-          });
+          })
         }
       },
       {
         find: function (event) {
           if (!event) {
-            return this.ready();
+            return this.ready()
           }
 
           return Presents.find({
@@ -75,18 +75,18 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
           }, {
             commentsShared: 0,
             commentsSecret: 0
-          });
+          })
         }
       }
     ]
-  };
-});
+  }
+})
 
 Meteor.publish('comments', function ({presentId, limit = 10}) {
-  var present = Presents.find(presentId);
+  var present = Presents.find(presentId)
   var commentIds = present.forUserId === this.userId ?
     present.commentsShared :
-    [...present.commentsShared, ...present.commentsSecret];
+    [...present.commentsShared, ...present.commentsSecret]
 
   return Comments.find({
     _id: {
@@ -97,5 +97,5 @@ Meteor.publish('comments', function ({presentId, limit = 10}) {
     sort: {
       date: -1
     }
-  });
-});
+  })
+})

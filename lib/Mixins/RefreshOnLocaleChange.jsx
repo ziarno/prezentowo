@@ -8,11 +8,11 @@ var RefreshOnLocaleChange = {
     this._localeChanged  = (locale) => {
       this.setState({locale})
     }
-    _i18n.onChangeLocale(this._localeChanged);
+    _i18n.onChangeLocale(this._localeChanged)
   },
   componentWillUnmount () {
-    _i18n.offChangeLocale(this._localeChanged);
+    _i18n.offChangeLocale(this._localeChanged)
   }
-};
+}
 
-export default RefreshOnLocaleChange;
+export default RefreshOnLocaleChange

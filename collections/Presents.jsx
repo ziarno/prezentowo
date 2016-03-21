@@ -1,16 +1,16 @@
-import {LoggedIn} from '../lib/Mixins';
+import {LoggedIn} from '../lib/Mixins'
 
 /**
  * Presents Collection
  */
-Presents = new Mongo.Collection('presents');
-Presents.permit(['insert', 'update', 'remove']).never().apply(); //ongoworks:security
+Presents = new Mongo.Collection('presents')
+Presents.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
 
 
 /**
  * SCHEMAS
  */
-Presents.Schemas = {};
+Presents.Schemas = {}
 
 Presents.Schemas.NewPresent = new SimpleSchema({
   title: {
@@ -36,7 +36,7 @@ Presents.Schemas.NewPresent = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     label: () => _i18n.__('User')
   }
-});
+})
 
 Presents.Schemas.Main = new SimpleSchema([
   Presents.Schemas.NewPresent,
@@ -62,7 +62,7 @@ Presents.Schemas.Main = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       autoValue() {
         if (this.isInsert) {
-          return this.userId;
+          return this.userId
         }
       }
     },
@@ -71,46 +71,46 @@ Presents.Schemas.Main = new SimpleSchema([
       label: () => _i18n.__('Created'),
       autoValue() {
         if (this.isInsert) {
-          return new Date();
+          return new Date()
         }
       }
     }
   }
-]);
+])
 
-Presents.attachSchema(Presents.Schemas.Main);
+Presents.attachSchema(Presents.Schemas.Main)
 
 /**
  * HELPER FUNCTIONS
  */
-Presents.functions = {};
+Presents.functions = {}
 
 Presents.functions.updatePresentsCount = function (incrementValue, userId, present) {
-  var isOwnPresent = (present.forUserId === present.creatorId);
-  var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount';
+  var isOwnPresent = (present.forUserId === present.creatorId)
+  var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount'
   var countModifier = {$inc: {
     [`participants.$.${countFieldName}`]: incrementValue
-  }};
+  }}
 
   Events.update({
     _id: present.eventId,
     'participants.userId': present.forUserId
-  }, countModifier);
-};
+  }, countModifier)
+}
 
 /**
  * Collection helpers
  */
 Presents.helpers({
   isOwn() {
-    return this.forUserId === this.creatorId;
+    return this.forUserId === this.creatorId
   }
-});
+})
 
 /**
  * METHODS
  */
-Presents.methods = {};
+Presents.methods = {}
 
 Presents.methods.createPresent = new ValidatedMethod({
   name: 'Presents.methods.createPresent',
@@ -120,15 +120,15 @@ Presents.methods.createPresent = new ValidatedMethod({
     if (!Meteor.user().isEventParticipant({eventId: present.eventId})) {
       throw new Meteor.Error(
         `${this.name}.notParticipant`,
-        _i18n.__('Not participant'));
+        _i18n.__('Not participant'))
     }
 
-    return Presents.insert(present); //auto clean ok - no sub schemas
+    return Presents.insert(present) //auto clean ok - no sub schemas
   }
-});
+})
 Presents.after.insert(
   Presents.functions.updatePresentsCount.bind(null, 1)
-);
+)
 
 Presents.methods.removePresent = new ValidatedMethod({
   name: 'Presents.methods.removePresent',
@@ -142,18 +142,18 @@ Presents.methods.removePresent = new ValidatedMethod({
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
         `${this.name}.notCreatedPresent`,
-        _i18n.__('Presents deleted by creators'));
+        _i18n.__('Presents deleted by creators'))
     }
 
     return Presents.remove({
       _id: presentId,
       creatorId: this.userId
-    });
+    })
   }
-});
+})
 Presents.after.remove(
   Presents.functions.updatePresentsCount.bind(null, -1)
-);
+)
 
 Presents.methods.editPresent = new ValidatedMethod({
   name: 'Presents.methods.editPresent',
@@ -167,17 +167,17 @@ Presents.methods.editPresent = new ValidatedMethod({
     }
   }).validator(),
   run({presentId, present}) {
-    var {title, pictureUrl, description} = present;
+    var {title, pictureUrl, description} = present
 
     if (!Meteor.user().hasCreatedPresent(presentId)) {
-      throw new Meteor.Error(`${this.name}.notCreatedPresent`, _i18n.__('Presents edited by creators'));
+      throw new Meteor.Error(`${this.name}.notCreatedPresent`, _i18n.__('Presents edited by creators'))
     }
 
     return Presents.update(presentId, {$set: {
       title, pictureUrl, description
-    }});
+    }})
   }
-});
+})
 
 Presents.methods.addBuyer = new ValidatedMethod({
   name: 'Presents.methods.addBuyer',
@@ -189,13 +189,13 @@ Presents.methods.addBuyer = new ValidatedMethod({
   }).validator(),
   run({presentId}) {
     if (!Meteor.user().isEventParticipant({presentId})) {
-      throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'));
+      throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'))
     }
     return Presents.update(presentId, {$addToSet: {
       buyers: this.userId
-    }});
+    }})
   }
-});
+})
 
 Presents.methods.removeBuyer = new ValidatedMethod({
   name: 'Presents.methods.removeBuyer',
@@ -207,10 +207,10 @@ Presents.methods.removeBuyer = new ValidatedMethod({
   }).validator(),
   run({presentId}) {
     if (!Meteor.user().isEventParticipant({presentId})) {
-      throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'));
+      throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'))
     }
     return Presents.update(presentId, {$pull: {
       buyers: this.userId
-    }});
+    }})
   }
-});
+})

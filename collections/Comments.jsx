@@ -1,23 +1,23 @@
-import {LoggedIn} from '../lib/Mixins';
+import {LoggedIn} from '../lib/Mixins'
 
 /**
  * Comments Collection
  */
-Comments = new Mongo.Collection('comments');
-Comments.permit(['insert', 'update', 'remove']).never().apply(); //ongoworks:security
+Comments = new Mongo.Collection('comments')
+Comments.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
 
 
 /**
  * SCHEMAS
  */
-Comments.Schemas = {};
+Comments.Schemas = {}
 
 Comments.Schemas.Main = new SimpleSchema({
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     autoValue() {
-      return this.userId;
+      return this.userId
     }
   },
   presentId: {
@@ -29,7 +29,7 @@ Comments.Schemas.Main = new SimpleSchema({
     label: () => _i18n.__('Created'),
     autoValue() {
       if (this.isInsert) {
-        return new Date();
+        return new Date()
       }
     }
   },
@@ -37,14 +37,14 @@ Comments.Schemas.Main = new SimpleSchema({
     type: String,
     label: () => _i18n.__('Message')
   }
-});
+})
 
-Comments.attachSchema(Comments.Schemas.Main);
+Comments.attachSchema(Comments.Schemas.Main)
 
 /**
  * METHODS
  */
-Comments.methods = {};
+Comments.methods = {}
 
 Comments.methods.createComment = new ValidatedMethod({
   name: 'Comments.methods.createComment',
@@ -62,16 +62,16 @@ Comments.methods.createComment = new ValidatedMethod({
     }
   }).validator(),
   run({presentId, type, message}) {
-    var commentId;
-    var presentModifier = {$addToSet: {}};
-    var commentsCollectionName = type === 'secret' ? 'commentsSecret' : 'commentsShared';
+    var commentId
+    var presentModifier = {$addToSet: {}}
+    var commentsCollectionName = type === 'secret' ? 'commentsSecret' : 'commentsShared'
 
-    commentId = Comments.insert({message, presentId});
-    presentModifier.$addToSet[commentsCollectionName] = commentId;
-    Presents.update(presentId, presentModifier);
-    return commentId;
+    commentId = Comments.insert({message, presentId})
+    presentModifier.$addToSet[commentsCollectionName] = commentId
+    Presents.update(presentId, presentModifier)
+    return commentId
   }
-});
+})
 
 Comments.methods.removeComment = new ValidatedMethod({
   name: 'Comments.methods.removeComment',
@@ -85,12 +85,12 @@ Comments.methods.removeComment = new ValidatedMethod({
     return Comments.remove({
       _id: commentId,
       userId: this.userId
-    });
+    })
   }
-});
+})
 Comments.after.remove(function (userId, comment) {
   if (!comment.presentId) {
-    return;
+    return
   }
 
   return Presents.update(comment.presentId, {
@@ -98,8 +98,8 @@ Comments.after.remove(function (userId, comment) {
       commentsSecret: comment._id,
       commentsShared: comment._id
     }
-  });
-});
+  })
+})
 
 Comments.methods.editComment = new ValidatedMethod({
   name: 'Comments.methods.editComment',
@@ -118,6 +118,6 @@ Comments.methods.editComment = new ValidatedMethod({
       userId: this.userId
     }, {
       $set: {message}
-    });
+    })
   }
-});
+})

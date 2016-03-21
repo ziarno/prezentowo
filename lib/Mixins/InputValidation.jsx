@@ -1,4 +1,4 @@
-import Autorun from './Autorun';
+import Autorun from './Autorun'
 
 /**
  * Input Validation Mixin
@@ -25,53 +25,53 @@ var InputValidation = {
     return {
       showError: false,
       hasError: false
-    };
+    }
   },
 
   autorunValidation() {
     this.setState({
       hasError: this.context.schema &&
         this.context.schema.keyIsInvalid(this.props.name)
-    });
+    })
   },
 
   hideError() {
-    this.setState({showError: false});
+    this.setState({showError: false})
   },
 
   showError() {
-    this.setState({showError: true});
+    this.setState({showError: true})
   },
 
   onChange(value) {
-    var valueObject = {[this.props.name]: value};
+    var valueObject = {[this.props.name]: value}
 
     if (_.isFunction(this.props.onChange)) {
-      this.props.onChange(valueObject);
+      this.props.onChange(valueObject)
     }
   },
 
   shouldShowError() {
-    return this.state.showError && this.state.hasError;
+    return this.state.showError && this.state.hasError
   },
 
   componentDidMount() {
     if (this.context.register) {
-      this.context.register(this);
+      this.context.register(this)
     }
   },
 
   validate(value, silent) {
     if (!silent) {
-      this.setState({showError: true});
+      this.setState({showError: true})
     }
     if (this.context.schema) {
       this.context.schema.validateOne({
         [this.props.name]: value
-      }, this.props.name);
+      }, this.props.name)
     }
   }
 
-};
+}
 
-export default InputValidation;
+export default InputValidation
