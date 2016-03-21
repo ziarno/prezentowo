@@ -17,7 +17,7 @@ UserList = class UserList extends React.Component {
       //note: do this manually because sticky was jumping
       //after user-item rerendering
       $(this.refs.userList)
-        .find('.user-item')
+        .find('.user-item--user')
         .removeClass('active')
         .parent()
         .find(`[data-id=${currentUser._id}]`)
@@ -101,6 +101,7 @@ UserList = class UserList extends React.Component {
                 presentsCount={Presents.find({
                   forUserId: user._id
                 }).count()}
+                isCreator={this.props.isCreator}
                 onClick={this.scrollToUser}
                 key={user._id}
                 user={user} />
@@ -116,7 +117,8 @@ UserList = class UserList extends React.Component {
 
 UserList.propTypes = {
   users: React.PropTypes.array.isRequired,
-  presents: React.PropTypes.array.isRequired
+  presents: React.PropTypes.array.isRequired,
+  isCreator: React.PropTypes.bool
 }
 
 reactMixin(UserList.prototype, Autorun)
