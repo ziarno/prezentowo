@@ -17,6 +17,7 @@
   "author": "Filip Jarno",
   "license": "ISC",
   "dependencies": {
-    "moment": "^2.12.0"
+    "moment": "^2.12.0",
+    "react-mixin": "^3.0.4"
   }
 }
