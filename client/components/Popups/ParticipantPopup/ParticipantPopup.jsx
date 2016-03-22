@@ -144,10 +144,13 @@ ParticipantPopup = class ParticipantPopup extends React.Component {
     )
 
     return (
-      <div
-        className="ui icon button waves-effect waves-button"
-        ref="popupTrigger">
-        <i className="add user icon"/>
+      <div className={this.props.wrapperClassName}>
+        <div
+          className={classNames('ui compact icon button waves-effect',
+            this.props.buttonClassName)}
+          ref="popupTrigger">
+          <i className="add user icon"/>
+        </div>
         {Popup}
       </div>
     )
@@ -156,7 +159,9 @@ ParticipantPopup = class ParticipantPopup extends React.Component {
 }
 
 ParticipantPopup.contextTypes = {
-  eventId: React.PropTypes.string
+  eventId: React.PropTypes.string,
+  wrapperClassName: React.PropTypes.string,
+  wrapperbuttonClassName: React.PropTypes.string
 }
 
 reactMixin(ParticipantPopup.prototype, Popup)

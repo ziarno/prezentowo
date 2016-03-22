@@ -21,7 +21,7 @@ EventContainer = class EventContainer extends React.Component {
         return name1 > name2 ? 1 : -1
       })
 
-    //move current user to top
+    //move current user to the top
     participants.moveToTop((participant) => (
       participant._id === Meteor.userId()
     ))
@@ -54,7 +54,7 @@ EventContainer = class EventContainer extends React.Component {
           users={this.data.participants}
           presents={this.data.presents} />
         <PresentPopup
-          className="add-present-button"
+          wrapperClassName="add-present-button"
           users={this.data.participants}
         />
       </div>

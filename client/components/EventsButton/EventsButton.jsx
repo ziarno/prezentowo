@@ -32,10 +32,11 @@ EventsButton = class EventsButton extends React.Component {
       <T>No active events</T>
 
     return (
-      <div className="ui buttons compact">
+      <div id="event-buttons">
 
-        <div id="events-button"
-             className={classNames('ui icon right labeled top right pointing scrolling dropdown button', {
+        <div className={classNames('events-dropdown event-button first ' +
+              'ui compact icon right labeled top right ' +
+              'pointing scrolling dropdown button', {
               loading: !this.props.ready
              })}
              ref="dropdown">
@@ -75,16 +76,21 @@ EventsButton = class EventsButton extends React.Component {
           </div>
         </div>
 
-        <EventPopup />
+        <EventPopup
+          buttonClassName="event-button"
+        />
 
         {isCreator ? (
           <EventPopup
+            buttonClassName="event-button"
             event={event}
           />
         ) : null}
 
         {isCreator ? (
-          <ParticipantPopup />
+          <ParticipantPopup
+            buttonClassName="event-button"
+          />
         ) : null}
 
       </div>

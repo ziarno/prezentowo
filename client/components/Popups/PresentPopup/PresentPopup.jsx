@@ -67,9 +67,10 @@ PresentPopup = class PresentPopup extends React.Component {
     var Button = (
       <div
         ref="popupTrigger"
-        className="present-button present-button--add
-          circular ui icon primary button left
-          waves-effect waves-button">
+        className={classNames('present-button present-button--add ' +
+          'circular ui icon primary button left ' +
+          'waves-effect waves-button',
+          this.props.buttonClassName)}>
         <i className="large icons">
           <i className="plus icon"></i>
           <i className="gift corner inverted icon"></i>
@@ -157,7 +158,7 @@ PresentPopup = class PresentPopup extends React.Component {
     )
 
     return (
-      <div className={this.props.className}>
+      <div className={this.props.wrapperClassName}>
         {Button}
         {Popup}
       </div>
@@ -169,7 +170,8 @@ PresentPopup = class PresentPopup extends React.Component {
 
 PresentPopup.propTypes = {
   users: React.PropTypes.array,
-  className: React.PropTypes.string
+  wrapperClassName: React.PropTypes.string,
+  buttonClassName: React.PropTypes.string
 }
 PresentPopup.contextTypes = {
   eventId: React.PropTypes.string

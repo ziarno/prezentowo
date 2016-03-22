@@ -1,28 +1,52 @@
 @import '/client/styles/partials/vars.import.less';
 
-.ui.dropdown  {
-  .new-event {
-    text-align: center !important;
+@border-radius: 3px !important;
+
+#event-buttons {
+  display: flex;
+  height: 38px;
+
+  .first {
+    border-top-left-radius: @border-radius;
+    border-bottom-left-radius: @border-radius;
   }
-  .header.inactive {
-    text-align: center;
-    cursor: default;
-    color: #aaa;
-    &::selection {
-      background: transparent;
+  & > :last-child .event-button {
+    border-top-right-radius: @border-radius;
+    border-bottom-right-radius: @border-radius;
+  }
+
+  .event-button {
+    height: 38px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .ui.dropdown  {
+    .new-event {
+      text-align: center !important;
+    }
+    .header.inactive {
+      text-align: center;
+      cursor: default;
+      color: #aaa;
+      &::selection {
+        background: transparent;
+      }
     }
   }
+
+  .events-dropdown {
+    .caret.down.icon {
+      transition: transform @transition-time;
+    }
+    &.active .caret.down.icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .item.event {
+    text-transform: capitalize !important;
+  }
+
 }
 
-#events-button {
-  .caret.down.icon {
-    transition: transform @transition-time;
-  }
-  &.active .caret.down.icon {
-    transform: rotate(180deg);
-  }
-}
-
-.item.event {
-  text-transform: capitalize !important;
-}

@@ -19,6 +19,7 @@ var PopupMixin = {
       hideOnScroll: false,
       position: 'bottom left',
       lastResort: 'bottom left',
+      movePopup: false,
       ...popupSettings
     })
   },

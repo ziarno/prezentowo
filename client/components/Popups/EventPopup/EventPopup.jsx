@@ -65,8 +65,10 @@ EventPopup = class EventPopup extends React.Component {
     Events.methods.removeEvent.call({
       eventId: FlowRouter.getParam('eventId')
     })
-    this.hideAndReset()
-    FlowRouter.go('/')
+    this.hidePopup(() => {
+      this.reset()
+      FlowRouter.go('/')
+    })
   }
 
   isEdit() {
@@ -170,23 +172,26 @@ EventPopup = class EventPopup extends React.Component {
     )
 
     return (
-      <div
-        className="ui icon button waves-effect waves-button"
-        ref="popupTrigger">
-        <i className={classNames({
-          setting: this.isEdit(),
-          plus: !this.isEdit()
-        }, 'icon')} />
+      <div className={this.props.wrapperClassName}>
+        <div
+          ref="popupTrigger"
+          className={classNames('ui compact icon button waves-effect', this.props.buttonClassName)}>
+          <i className={classNames({
+            setting: this.isEdit(),
+            plus: !this.isEdit()
+          }, 'icon')} />
+        </div>
         {Popup}
       </div>
     )
-
   }
 
 }
 
 EventPopup.propTypes = {
-  event: React.PropTypes.object
+  event: React.PropTypes.object,
+  wrapperClassName: React.PropTypes.string,
+  wrapperbuttonClassName: React.PropTypes.string
 }
 
 reactMixin(EventPopup.prototype, Popup)
