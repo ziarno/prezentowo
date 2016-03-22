@@ -5,3 +5,4 @@ hints:
   EmailOptional: Email (opcjonalnie)
   ownPresents: Własne
   otherPresents: Od uczestników
+  deleteConfirmation: Na pewno usunąć?

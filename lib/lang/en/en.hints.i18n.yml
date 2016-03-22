@@ -5,3 +5,4 @@ hints:
   EmailOptional: Email (optional)
   ownPresents: Own presents
   otherPresents: From participants
+  deleteConfirmation: Are you sure?

@@ -1,13 +1,14 @@
 /**
  * Users Collection
  */
-Meteor.users.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
+Users = Meteor.users
+Users.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
 
 /**
  * HELPER FUNCTIONS
  */
-Meteor.users.findByEmail = function (email) {
-  return email && Meteor.users.findOne({
+Users.findByEmail = function (email) {
+  return email && Users.findOne({
       registered_emails: {
         $elemMatch: {
           address: email
@@ -16,8 +17,8 @@ Meteor.users.findByEmail = function (email) {
     })
 }
 
-Meteor.users.findByVerifiedEmail = function (email) {
-  return email && Meteor.users.findOne({
+Users.findByVerifiedEmail = function (email) {
+  return email && Users.findOne({
       registered_emails: {
         $elemMatch: {
           address: email,
@@ -27,7 +28,7 @@ Meteor.users.findByVerifiedEmail = function (email) {
     })
 }
 
-Meteor.users.createTemp = function ({name, gender, pictureUrl, email}) {
+Users.createTemp = function ({name, gender, pictureUrl, email}) {
   var user = {profile: {name, gender, pictureUrl}}
 
   if (email) {
@@ -37,13 +38,13 @@ Meteor.users.createTemp = function ({name, gender, pictureUrl, email}) {
     }]
   }
   user.isTemp = true
-  return Meteor.users.insert(user)
+  return Users.insert(user)
 }
 
 /**
  * Collection helpers
  */
-Meteor.users.helpers({
+Users.helpers({
   isEventParticipant({eventId, presentId}) {
     var present
 

@@ -81,7 +81,9 @@ Form = class Form extends React.Component {
   }
 
   componentWillReceiveProps({data}) {
-    this.setFormData(data)
+    if (!_.isEqual(this.props.data, data)) {
+      this.setFormData(data)
+    }
   }
 
   render() {

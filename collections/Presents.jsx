@@ -85,18 +85,21 @@ Presents.attachSchema(Presents.Schemas.Main)
  */
 Presents.functions = {}
 
-Presents.functions.updatePresentsCount = function (incrementValue, userId, present) {
-  var isOwnPresent = (present.forUserId === present.creatorId)
-  var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount'
-  var countModifier = {$inc: {
-    [`participants.$.${countFieldName}`]: incrementValue
-  }}
+Presents.functions.updatePresentsCount = function (incrementValue) {
+  return function (userId, present) {
+    var isOwnPresent = (present.forUserId === present.creatorId)
+    var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount'
+    var countModifier = {$inc: {
+      [`participants.$.${countFieldName}`]: incrementValue
+    }}
 
-  Events.update({
-    _id: present.eventId,
-    'participants.userId': present.forUserId
-  }, countModifier)
+    Events.update({
+      _id: present.eventId,
+      'participants.userId': present.forUserId
+    }, countModifier)
+  }
 }
+
 
 /**
  * Collection helpers
@@ -127,7 +130,7 @@ Presents.methods.createPresent = new ValidatedMethod({
   }
 })
 Presents.after.insert(
-  Presents.functions.updatePresentsCount.bind(null, 1)
+  Presents.functions.updatePresentsCount(1)
 )
 
 Presents.methods.removePresent = new ValidatedMethod({
@@ -152,7 +155,7 @@ Presents.methods.removePresent = new ValidatedMethod({
   }
 })
 Presents.after.remove(
-  Presents.functions.updatePresentsCount.bind(null, -1)
+  Presents.functions.updatePresentsCount.bind(-1)
 )
 
 Presents.methods.editPresent = new ValidatedMethod({
