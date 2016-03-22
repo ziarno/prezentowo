@@ -1,13 +1,13 @@
-import {InputValidation} from '../../../../lib/Mixins'
+import {ValidatedInput} from '../../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-EventTypeInput = class EventTypeInput extends React.Component {
+EventTypeInput = class EventTypeInput extends ValidatedInput {
 
   constructor() {
     super()
-    this.state = {
+    this.state = _.extend(this.getDefaultState(), {
       type: null
-    }
+    })
     this.reset = this.reset.bind(this)
     this.getValue = this.getValue.bind(this)
     this.setValue = this.setValue.bind(this)
@@ -91,5 +91,3 @@ EventTypeInput = class EventTypeInput extends React.Component {
   }
 
 }
-
-reactMixin.onClass(EventTypeInput, InputValidation)

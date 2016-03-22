@@ -1,7 +1,7 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-Input = class Input extends React.Component {
+Input = class Input extends ValidatedInput {
 
   constructor() {
     super()
@@ -88,5 +88,4 @@ Input.propTypes = {
   placeholder: React.PropTypes.string
 }
 
-reactMixin.onClass(Input, InputValidation)
 reactMixin(Input.prototype, RefreshOnLocaleChange)

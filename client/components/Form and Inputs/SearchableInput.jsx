@@ -1,13 +1,13 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-SearchableInput = class SearchableInput extends React.Component {
+SearchableInput = class SearchableInput extends ValidatedInput {
   
   constructor() {
     super()
-    this.state = {
+    this.state = _.extend(this.getDefaultState(), {
       showSearchResults: false
-    }
+    })
     this.getValue = this.getValue.bind(this)
     this.setValue = this.setValue.bind(this)
     this.search = this.search.bind(this)
@@ -43,6 +43,7 @@ SearchableInput = class SearchableInput extends React.Component {
   }
 
   componentDidMount() {
+    super.componentDidMount()
     $(this.refs.search).dropdown({
       //on: 'custom event',
       action: 'hide',
@@ -122,6 +123,5 @@ SearchableInput.propTypes = {
   search: React.PropTypes.object
 }
 
-reactMixin.onClass(SearchableInput, InputValidation)
 reactMixin(SearchableInput.prototype, ReactMeteorData)
 reactMixin(SearchableInput.prototype, RefreshOnLocaleChange)

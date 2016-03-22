@@ -1,7 +1,7 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-CheckboxInput = class CheckboxInput extends React.Component {
+CheckboxInput = class CheckboxInput extends ValidatedInput {
 
   constructor() {
     super()
@@ -25,6 +25,7 @@ CheckboxInput = class CheckboxInput extends React.Component {
   }
 
   componentDidMount() {
+    super.componentDidMount()
     $(this.refs.checkbox).checkbox({
       onChecked: () => this.onChange(true),
       onUnchecked: () => this.onChange(false)
@@ -59,5 +60,4 @@ CheckboxInput.propTypes = {
   label: React.PropTypes.string
 }
 
-reactMixin.onClass(CheckboxInput, InputValidation)
 reactMixin(CheckboxInput.prototype, RefreshOnLocaleChange)

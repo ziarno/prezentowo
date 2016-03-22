@@ -1,8 +1,7 @@
-import {InputValidation, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import moment from 'moment'
-import reactMixin from 'react-mixin'
 
-Datepicker = class Datepicker extends React.Component {
+Datepicker = class Datepicker extends ValidatedInput {
 
   constructor() {
     super()
@@ -50,11 +49,13 @@ Datepicker = class Datepicker extends React.Component {
   }
 
   componentDidMount() {
+    super.componentDidMount()
     _i18n.onChangeLocale(this.setDatepicker)
     this.setDatepicker()
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount()
     _i18n.offChangeLocale(this.setDatepicker)
     $(this.refs.datepicker)
       .off('changeDate')
@@ -76,5 +77,3 @@ Datepicker = class Datepicker extends React.Component {
 Datepicker.propTypes = {
   label: React.PropTypes.string
 }
-
-reactMixin.onClass(Datepicker, InputValidation)

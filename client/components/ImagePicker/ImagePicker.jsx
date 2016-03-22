@@ -1,17 +1,17 @@
-import {InputValidation} from '../../../lib/Mixins'
+import {ValidatedInput} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-ImagePicker = class ImagePicker extends React.Component {
+ImagePicker = class ImagePicker extends ValidatedInput {
 
   constructor(props) {
     super(props)
     this.inputId = `image-picker-input-${_.uniqueId()}`
-    this.state = {
+    this.state = _.extend(this.getDefaultState(), {
       uploadedImages: [],
       currentIndex: props.randomizeInitialImage ?
         _.random(0, props.images.length - 1) : 0,
       isLoading: false
-    }
+    })
     this.changeImageIndex = this.changeImageIndex.bind(this)
     this.getImage = this.getImage.bind(this)
     this.getValue = this.getValue.bind(this)
@@ -132,5 +132,3 @@ ImagePicker.propTypes = {
   uploadOptions: React.PropTypes.object,
   randomizeInitialImage: React.PropTypes.bool
 }
-
-reactMixin.onClass(ImagePicker, InputValidation)

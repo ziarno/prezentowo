@@ -1,13 +1,13 @@
-import {InputValidation} from '../../../lib/Mixins'
+import {ValidatedInput} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-SelectInput = class SelectInput extends React.Component {
+SelectInput = class SelectInput extends ValidatedInput {
 
   constructor() {
     super()
-    this.state = {
+    this.state = _.extend(this.getDefaultState(), {
       isSelectedByUser: false
-    }
+    })
     this.setValue = this.setValue.bind(this)
     this.selectDefault = this.selectDefault.bind(this)
     this.getValue = this.getValue.bind(this)
@@ -70,6 +70,7 @@ SelectInput = class SelectInput extends React.Component {
   }
 
   componentDidMount() {
+    super.componentDidMount()
     var $dropdown = $(this.refs.dropdown)
 
     function scrollCurrentIntoView() {
@@ -139,5 +140,3 @@ SelectInput.propTypes = {
   className: React.PropTypes.string,
   selectDefault: React.PropTypes.string
 }
-
-reactMixin.onClass(SelectInput, InputValidation)
