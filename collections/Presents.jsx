@@ -155,7 +155,7 @@ Presents.methods.removePresent = new ValidatedMethod({
   }
 })
 Presents.after.remove(
-  Presents.functions.updatePresentsCount.bind(-1)
+  Presents.functions.updatePresentsCount(-1)
 )
 
 Presents.methods.editPresent = new ValidatedMethod({
