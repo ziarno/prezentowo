@@ -82,23 +82,20 @@ Comments.methods.removeComment = new ValidatedMethod({
     }
   }).validator(),
   run({commentId}) {
-    return Comments.remove({
+    var comment = Comments.find(commentId)
+    var removedCount = Comments.remove({
       _id: commentId,
       userId: this.userId
     })
-  }
-})
-Comments.after.remove(function (userId, comment) {
-  if (!comment.presentId) {
-    return
-  }
+    Presents.update(comment.presentId, {
+      $pull: {
+        commentsSecret: comment._id,
+        commentsShared: comment._id
+      }
+    })
 
-  return Presents.update(comment.presentId, {
-    $pull: {
-      commentsSecret: comment._id,
-      commentsShared: comment._id
-    }
-  })
+    return removedCount
+  }
 })
 
 Comments.methods.editComment = new ValidatedMethod({
