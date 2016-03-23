@@ -34,12 +34,19 @@ ImagePicker = class ImagePicker extends ValidatedInput {
     return [...this.state.uploadedImages, ...this.props.images][index]
   }
 
+  getIndexOfPicture(pictureUrl) {
+    return [
+      ...this.state.uploadedImages,
+      ...this.props.images]
+      .indexOf(pictureUrl)
+  }
+
   getValue() {
     return this.getImage()
   }
 
   setValue(pictureUrl) {
-    var index = this.props.images.indexOf(pictureUrl)
+    var index = this.getIndexOfPicture(pictureUrl)
     if (index > -1) {
       this.setImageIndex(index)
     } else {

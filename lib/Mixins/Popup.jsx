@@ -20,6 +20,7 @@ var PopupMixin = {
       position: 'bottom left',
       lastResort: 'bottom left',
       movePopup: false,
+      jitter: 0,
       ...popupSettings
     })
   },

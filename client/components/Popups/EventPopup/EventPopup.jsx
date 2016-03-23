@@ -16,7 +16,6 @@ EventPopup = class EventPopup extends React.Component {
     this.submitEvent = this.submitEvent.bind(this)
     this.isEdit = this.isEdit.bind(this)
     this.removeEvent = this.removeEvent.bind(this)
-    this.setState = this.setState.bind(this)
   }
 
   getPopupSettings() {
@@ -175,11 +174,9 @@ EventPopup = class EventPopup extends React.Component {
       <div className={this.props.wrapperClassName}>
         <div
           ref="popupTrigger"
-          className={classNames('ui compact icon button waves-effect', this.props.buttonClassName)}>
-          <i className={classNames({
-            setting: this.isEdit(),
-            plus: !this.isEdit()
-          }, 'icon')} />
+          className={classNames('ui compact icon button waves-effect',
+            this.props.buttonClassName)}>
+          <i className={classNames(this.props.icon, 'icon')} />
         </div>
         {Popup}
       </div>
@@ -191,7 +188,8 @@ EventPopup = class EventPopup extends React.Component {
 EventPopup.propTypes = {
   event: React.PropTypes.object,
   wrapperClassName: React.PropTypes.string,
-  wrapperbuttonClassName: React.PropTypes.string
+  buttonClassName: React.PropTypes.string,
+  icon: React.PropTypes.string
 }
 
 reactMixin(EventPopup.prototype, Popup)

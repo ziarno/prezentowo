@@ -14,9 +14,11 @@ UserItem = ({onClick, user, presentsCount, isCreator}) => (
       </div>
     </div>
     {isCreator && (user._id !== Meteor.userId()) ? (
-      <div className="waves-effect ui icon button user-item--edit ">
-        <i className="ellipsis vertical icon"></i>
-      </div>
+      <ParticipantPopup
+        buttonClassName="user-item--edit"
+        icon="ellipsis vertical"
+        user={user}
+      />
     ) : null}
   </div>
 )

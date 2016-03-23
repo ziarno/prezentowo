@@ -20,7 +20,7 @@ Input = class Input extends ValidatedInput {
   }
 
   setValue(value) {
-    this.refs.input.value = value
+    this.refs.input.value = value || null
   }
 
   onInputChange(value) {

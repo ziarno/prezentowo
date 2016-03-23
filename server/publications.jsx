@@ -34,6 +34,7 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
     },
     children: [
       {
+        //tempUsers - publish emails
         collectionName: 'participants',
         find: function (event) {
           var participantIds = event.participants
@@ -42,7 +43,32 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
           return Meteor.users.find({
             _id: {
               $in: participantIds
+            },
+            isTemp: true
+          }, {
+            fields: {
+              profile: 1,
+              isTemp: 1,
+              registered_emails: 1
             }
+          })
+        }
+      },
+      {
+        //registeredUsers - don't publish emails
+        collectionName: 'participants',
+        find: function (event) {
+          var participantIds = event.participants
+            .map(participant => participant.userId)
+
+          return Meteor.users.find({
+            _id: {
+              $in: participantIds
+            },
+            $or: [
+              {isTemp: {$exists: false}},
+              {isTemp: {$ne: true}}
+            ]
           }, {
             fields: {
               profile: 1,
@@ -52,6 +78,7 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
         }
       },
       {
+        //presents
         find: function (event) {
           if (!event) {
             return this.ready()

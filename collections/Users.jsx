@@ -7,7 +7,9 @@ Users.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:securit
 /**
  * HELPER FUNCTIONS
  */
-Users.findByEmail = function (email) {
+Users.functions = {}
+
+Users.functions.findByEmail = function (email) {
   return email && Users.findOne({
       registered_emails: {
         $elemMatch: {
@@ -17,18 +19,18 @@ Users.findByEmail = function (email) {
     })
 }
 
-Users.findByVerifiedEmail = function (email) {
+Users.functions.findByVerifiedEmail = function (email) {
   return email && Users.findOne({
-      registered_emails: {
-        $elemMatch: {
-          address: email,
-          verified: true
-        }
+    registered_emails: {
+      $elemMatch: {
+        address: email,
+        verified: true
       }
-    })
+    }
+  })
 }
 
-Users.createTemp = function ({name, gender, pictureUrl, email}) {
+Users.functions.createTemp = function ({name, gender, pictureUrl, email}) {
   var user = {profile: {name, gender, pictureUrl}}
 
   if (email) {
@@ -41,8 +43,36 @@ Users.createTemp = function ({name, gender, pictureUrl, email}) {
   return Users.insert(user)
 }
 
+Users.functions.update = function ({_id, name, gender, pictureUrl, email}) {
+  if (email) {
+    Users.functions.updateEmail({userId: _id, email})
+  }
+
+  return Users.update(_id, {
+    $set: {
+      'profile.name': name,
+      'profile.gender': gender,
+      'profile.pictureUrl': pictureUrl
+    }
+  })
+}
+
+Users.functions.updateEmail = function ({userId, email}) {
+  var emailObject = {
+    address: email,
+    verified: false
+  }
+
+  Users.update({_id: userId}, {
+    $set: {
+      emails: [emailObject],
+      registered_emails: [emailObject]
+    }
+  })
+}
+
 /**
- * Collection helpers
+ * Collection helpers - methods attached to each instance
  */
 Users.helpers({
   isEventParticipant({eventId, presentId}) {
