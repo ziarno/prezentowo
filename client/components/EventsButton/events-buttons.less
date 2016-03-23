@@ -6,13 +6,16 @@
   display: flex;
   height: 38px;
 
-  .first {
+  & > :first-child.event-button {
     border-top-left-radius: @border-radius;
     border-bottom-left-radius: @border-radius;
   }
   & > :last-child .event-button {
     border-top-right-radius: @border-radius;
     border-bottom-right-radius: @border-radius;
+  }
+  & > div {
+    margin-left: -1px;
   }
 
   .event-button {
@@ -36,6 +39,9 @@
   }
 
   .events-dropdown {
+    //ff fix (text was too low)
+    display: flex;
+    align-items: center;
     .caret.down.icon {
       transition: transform @transition-time;
     }

@@ -34,7 +34,7 @@ EventsButton = class EventsButton extends React.Component {
     return (
       <div id="event-buttons">
 
-        <div className={classNames('events-dropdown event-button first ' +
+        <div className={classNames('events-dropdown event-button ' +
               'ui compact icon right labeled top right ' +
               'pointing scrolling dropdown button', {
               loading: !this.props.ready
