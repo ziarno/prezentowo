@@ -54,7 +54,7 @@ UserPresents = class UserPresents extends React.Component {
     })
 
     return (
-      <VerticalSlideToggle
+      <div
         id={`user-presents-${this.props.user._id}`}
         className="user-presents">
 
@@ -92,7 +92,7 @@ UserPresents = class UserPresents extends React.Component {
           </div>
         ): null}
 
-      </VerticalSlideToggle>
+      </div>
     )
   }
 }

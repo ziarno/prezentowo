@@ -1,0 +1,25 @@
+@import '/client/styles/partials/vars.import.less';
+
+.button.small-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  width: 28px;
+  height: 28px;
+  box-shadow: none;
+  background-color: transparent !important;
+  line-height: normal;
+
+  i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default !important;
+  }
+
+  &:hover {
+    box-shadow: 0px 0px 0px 1px @grey-card inset;
+  }
+
+}

@@ -54,7 +54,14 @@ EventContainer = class EventContainer extends React.Component {
           users={this.data.participants}
           presents={this.data.presents} />
         <PresentPopup
+          buttonClassName="present-button--add circular primary"
           wrapperClassName="add-present-button"
+          icon={(
+            <i className="large icons">
+              <i className="plus icon"></i>
+              <i className="gift corner inverted icon"></i>
+            </i>
+          )}
           users={this.data.participants}
         />
       </div>

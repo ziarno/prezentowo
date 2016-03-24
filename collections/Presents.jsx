@@ -105,6 +105,9 @@ Presents.functions = {}
 Presents.helpers({
   isOwn() {
     return this.forUserId === this.creatorId
+  },
+  isUserCreator() {
+    return this.creatorId === Meteor.userId()
   }
 })
 

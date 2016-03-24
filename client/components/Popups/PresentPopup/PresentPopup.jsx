@@ -67,14 +67,11 @@ PresentPopup = class PresentPopup extends React.Component {
     var Button = (
       <div
         ref="popupTrigger"
-        className={classNames('present-button present-button--add ' +
-          'circular ui icon primary button left ' +
-          'waves-effect waves-button',
-          this.props.buttonClassName)}>
-        <i className="large icons">
-          <i className="plus icon"></i>
-          <i className="gift corner inverted icon"></i>
-        </i>
+        className={classNames(this.props.buttonClassName,
+          'present-button',
+          'ui icon button left',
+          'waves-effect waves-button')}>
+        {this.props.icon}
       </div>
     )
 

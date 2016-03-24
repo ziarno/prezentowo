@@ -12,7 +12,17 @@ Present = class Present extends React.Component {
           small>
           {this.props.present.title}
         </Ribbon>
-        <div></div>{/* leave this empty div because semantic ui has strong css rules for the last element in a card (for border-radius)*/}
+
+        {this.props.present.isUserCreator() ? (
+          <PresentPopup
+            present={this.props.present}
+            buttonClassName="edit-present small-icon-button"
+            icon={(
+              <i className="vertical ellipsis icon"></i>
+            )}
+            users={Participants.find().fetch()}
+          />
+        ) : null}
       </div>
     )
   }
