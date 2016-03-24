@@ -1,18 +1,17 @@
-import {Popup} from '../../../../lib/Mixins'
-import reactMixin from 'react-mixin'
+import {PopupComponent} from '../../../../lib/Mixins'
 
-ParticipantPopup = class ParticipantPopup extends React.Component {
+ParticipantPopup = class ParticipantPopup extends PopupComponent {
 
   constructor(props) {
     super(props)
     var initialGender = props.user ?
       props.user.profile.gender : 'male'
 
-    this.state = {
+    this.state = _.extend(this.state, {
       showDeleteConfirmation: false,
       images: this.getImagesForGender(initialGender),
       isSaving: false
-    }
+    })
     this.schema = Events.Schemas.NewParticipant
       .namedContext('newParticipant')
 
@@ -25,19 +24,20 @@ ParticipantPopup = class ParticipantPopup extends React.Component {
   }
 
   getPopupSettings() {
+    var position = this.isEdit() ? 'right center' : 'top right'
     return {
-      onShow: () => {this.schema.resetValidation()},
-      position: 'bottom right',
-      lastResort: 'bottom right',
+      onShow: () => {
+        this.schema.resetValidation()
+        this.setState({showDeleteConfirmation: false})
+      },
+      position,
+      lastResort: position,
       transition: 'slide down'
     }
   }
 
   reset() {
-    this.state = {
-      showDeleteConfirmation: false
-    }
-    this.refs.form && this.refs.form.reset()
+    this.destroyPopup()
   }
 
   hideAndReset() {
@@ -104,11 +104,22 @@ ParticipantPopup = class ParticipantPopup extends React.Component {
     return !!this.props.user
   }
 
-  render() {
-
-    var Popup = (
+  renderTrigger() {
+    return (
       <div
-        ref="popup"
+        onClick={this.showPopup}
+        className={classNames('ui compact icon button waves-effect',
+            this.props.buttonClassName)}
+        ref="popupTrigger">
+        <i className={classNames(this.props.icon, 'icon')} />
+      </div>
+    )
+  }
+
+  renderPopup() {
+    return (
+      <div
+        ref="popupTarget"
         className="ui flowing popup form-popup participant-popup">
 
         <div className="ui attached message">
@@ -224,28 +235,12 @@ ParticipantPopup = class ParticipantPopup extends React.Component {
 
       </div>
     )
-
-    return (
-      <div className={this.props.wrapperClassName}>
-        <div
-          className={classNames('ui compact icon button waves-effect',
-            this.props.buttonClassName)}
-          ref="popupTrigger">
-          <i className={classNames(this.props.icon, 'icon')} />
-        </div>
-        {Popup}
-      </div>
-    )
-
   }
+
 }
 
-ParticipantPopup.contextTypes = {
+ParticipantPopup.propTypes = {
   user: React.PropTypes.object,
-  eventId: React.PropTypes.string,
-  wrapperClassName: React.PropTypes.string,
   buttonClassName: React.PropTypes.string,
   icon: React.PropTypes.string
 }
-
-reactMixin(ParticipantPopup.prototype, Popup)

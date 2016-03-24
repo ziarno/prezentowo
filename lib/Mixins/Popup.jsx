@@ -1,38 +1,114 @@
 /**
- * Popup Mixin
+ * PopupComponent
  *
  * requires:
- *  this.refs.popupTrigger (typically a button)
- *  this.refs.popup
- *  this.getPopupSettings() (optional) - settings passed to semantic ui's popup() method
+ *  renderTrigger() (typically a button)
+ *  renderTarget() - popup
+ *  getPopupSettings() (optional) - settings passed to semantic ui's popup() method
+ *
+ *  note: do not create a render() function for inheriting components
  */
-var PopupMixin = {
+class PopupComponent extends React.Component {
+
+  constructor() {
+    super()
+    this.state = {
+      showPopup: false
+    }
+    this.setPopup = this.setPopup.bind(this)
+    this.hidePopup = this.hidePopup.bind(this)
+    this.showPopup = this.showPopup.bind(this)
+    this.destroyPopup = this.destroyPopup.bind(this)
+  }
 
   setPopup() {
     var popupSettings = _.isFunction(this.getPopupSettings) ?
       this.getPopupSettings() : {}
-    var popupRefName = popupSettings.popupRefName || 'popup'
+    var $popupTrigger = $(ReactDOM.findDOMNode(this.refs.popupTrigger))
+    var $popupTarget = $(ReactDOM.findDOMNode(this.refs.popupTarget))
 
-    $(this.refs.popupTrigger).popup({
-      popup: $(ReactDOM.findDOMNode(this.refs[popupRefName])),
+    $popupTrigger.popup({
+      popup: $popupTarget,
       on: 'click',
       hideOnScroll: false,
       position: 'bottom left',
       lastResort: 'bottom left',
       movePopup: false,
-      jitter: 0,
       ...popupSettings
     })
-  },
+  }
+
+  destroyPopup() {
+    this.setState({showPopup: false})
+    $(ReactDOM.findDOMNode(this.refs.popupTrigger))
+      .popup('destroy')
+  }
 
   hidePopup(callback) {
-    $(this.refs.popupTrigger).popup('hide', callback)
-  },
+    $(ReactDOM.findDOMNode(this.refs.popupTrigger))
+      .popup('hide', callback)
+  }
 
-  componentDidMount() {
-    this.setPopup()
+  showPopup() {
+    this.setState({showPopup: true})
+  }
+
+  /**
+   * Renders popup trigger.
+   * Must have:
+   * - ref="popupTrigger"
+   * - onClick={this.showPopup}
+   * @override
+   * @returns {React.Component}
+   */
+  renderTrigger() {
+    return (
+      <div
+        ref="popupTrigger"
+        onClick={this.showPopup}
+      ></div>
+    )
+  }
+
+  /**
+   * Renders popup target.
+   * Must have:
+   * - ref="popupTarget"
+   * @override
+   * @returns {React.Component}
+   */
+  renderPopup() {
+    return <div ref="popupTarget"></div>
+  }
+
+  componentDidUpdate(prevProps, {showPopup}) {
+    if (this.state.showPopup &&
+        this.state.showPopup !== showPopup) {
+      this.setPopup()
+      $(ReactDOM.findDOMNode(this.refs.popupTrigger))
+        .popup('show')
+    }
+  }
+
+  componentWillUnmount() {
+    this.destroyPopup()
+  }
+
+  render() {
+    return (
+      <div className={this.props.wrapperClassName}>
+        {this.renderTrigger()}
+        {this.state.showPopup ? (
+          this.renderPopup()
+        ) : null}
+      </div>
+    )
   }
 
 }
 
-export default PopupMixin
+PopupComponent.propTypes = {
+  wrapperClassName: React.PropTypes.string
+}
+
+export default PopupComponent

@@ -1,16 +1,16 @@
-import {Popup, Autorun} from '../../../../lib/Mixins'
+import {PopupComponent, Autorun} from '../../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-PresentPopup = class PresentPopup extends React.Component {
+PresentPopup = class PresentPopup extends PopupComponent {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.schema = Presents.Schemas.NewPresent
         .pick(['title', 'pictureUrl', 'description', 'forUserId'])
         .namedContext('newPresent')
-    this.state = {
+    this.state = _.extend(this.state, {
       defaultSelectedUser: Session.get('currentUser')
-    }
+    })
     this.avatars = _.range(20).map((index) => (
       `/images/presents/p${index + 1}-150px.png`
     ))
@@ -22,23 +22,25 @@ PresentPopup = class PresentPopup extends React.Component {
   }
 
   getPopupSettings() {
+    var position = this.isEdit() ? 'bottom center' : 'top right'
     return {
       onShow: () => {this.schema.resetValidation()},
-      position: 'top right',
-      lastResort: 'top right',
+      position,
+      lastResort: position,
       movePopup: false,
-      offset: -13
+      offset: !this.isEdit() && -11
     }
   }
 
   autorunSetDefaultSelectedUser() {
-    this.setState({
-      defaultSelectedUser: Session.get('currentUser')
-    })
+    var defaultSelectedUser = Session.get('currentUser')
+    if (this.state.showPopup) {
+      this.setState({defaultSelectedUser})
+    }
   }
 
   reset() {
-    this.refs.form.reset()
+    this.destroyPopup()
   }
 
   hideAndReset() {
@@ -55,17 +57,18 @@ PresentPopup = class PresentPopup extends React.Component {
     }
   }
 
+  isEdit() {
+    return !!this.props.present
+  }
+
   //shouldComponentUpdate({users, selectedDefaultUser}) {
   //  return user._id !== this.props.user._id
   //}
 
-  render() {
-
-    var defaultSelectedUserId = this.state.defaultSelectedUser &&
-      this.state.defaultSelectedUser._id
-
-    var Button = (
+  renderTrigger() {
+    return (
       <div
+        onClick={this.showPopup}
         ref="popupTrigger"
         className={classNames(this.props.buttonClassName,
           'present-button',
@@ -74,13 +77,24 @@ PresentPopup = class PresentPopup extends React.Component {
         {this.props.icon}
       </div>
     )
+  }
 
-    var Popup = (
+  renderPopup() {
+    var defaultSelectedUserId
+    if (!this.props.present &&
+      this.state.defaultSelectedUser) {
+      defaultSelectedUserId = this.state.defaultSelectedUser._id
+    } else {
+      defaultSelectedUserId = ''
+    }
+
+    return (
       <div
-        ref="popup"
+        ref="popupTarget"
         className="present-popup form-popup ui flowing popup">
         <Form
           ref="form"
+          data={this.props.present}
           onSubmit={this.addPresent}
           schema={this.schema}>
 
@@ -95,13 +109,13 @@ PresentPopup = class PresentPopup extends React.Component {
                 selectDefault={defaultSelectedUserId}
                 name="forUserId">
                 {this.props.users.map((user) => (
-                  <div
-                    className="item"
-                    key={user._id}
-                    data-value={user._id}>
-                    <User user={user} />
-                  </div>
-                ))}
+                <div
+                  className="item"
+                  key={user._id}
+                  data-value={user._id}>
+                  <User user={user} />
+                </div>
+                  ))}
               </SelectInput>
             </div>
 
@@ -153,26 +167,14 @@ PresentPopup = class PresentPopup extends React.Component {
         </Form>
       </div>
     )
-
-    return (
-      <div className={this.props.wrapperClassName}>
-        {Button}
-        {Popup}
-      </div>
-    )
-
   }
 
 }
 
 PresentPopup.propTypes = {
+  present: React.PropTypes.object,
   users: React.PropTypes.array,
-  wrapperClassName: React.PropTypes.string,
   buttonClassName: React.PropTypes.string
 }
-PresentPopup.contextTypes = {
-  eventId: React.PropTypes.string
-}
 
-reactMixin(PresentPopup.prototype, Popup)
 reactMixin(PresentPopup.prototype, Autorun)

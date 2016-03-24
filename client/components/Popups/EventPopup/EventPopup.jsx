@@ -1,13 +1,12 @@
-import {Popup} from '../../../../lib/Mixins'
-import reactMixin from 'react-mixin'
+import {PopupComponent} from '../../../../lib/Mixins'
 
-EventPopup = class EventPopup extends React.Component {
+EventPopup = class EventPopup extends PopupComponent {
 
   constructor() {
     super()
-    this.state = {
+    this.state = _.extend(this.state, {
       showDeleteConfirmation: false
-    }
+    })
     this.schema = Events.Schemas.Main
         .pick(['title', 'type', 'date'])
         .namedContext('newEventForm')
@@ -31,10 +30,7 @@ EventPopup = class EventPopup extends React.Component {
   }
 
   reset() {
-    this.state = {
-      showDeleteConfirmation: false
-    }
-    this.refs.form && this.refs.form.reset()
+    this.destroyPopup()
   }
 
   hideAndReset() {
@@ -74,11 +70,22 @@ EventPopup = class EventPopup extends React.Component {
     return !!this.props.event
   }
 
-  render() {
-
-    var Popup = (
+  renderTrigger() {
+    return (
       <div
-        ref="popup"
+        onClick={this.showPopup}
+        ref="popupTrigger"
+        className={classNames('ui compact icon button waves-effect',
+            this.props.buttonClassName)}>
+        <i className={classNames(this.props.icon, 'icon')} />
+      </div>
+    )
+  }
+
+  renderPopup() {
+    return (
+      <div
+        ref="popupTarget"
         className="ui flowing popup form-popup event-popup">
 
         <div className="ui attached message">
@@ -169,27 +176,12 @@ EventPopup = class EventPopup extends React.Component {
 
       </div>
     )
-
-    return (
-      <div className={this.props.wrapperClassName}>
-        <div
-          ref="popupTrigger"
-          className={classNames('ui compact icon button waves-effect',
-            this.props.buttonClassName)}>
-          <i className={classNames(this.props.icon, 'icon')} />
-        </div>
-        {Popup}
-      </div>
-    )
   }
 
 }
 
 EventPopup.propTypes = {
   event: React.PropTypes.object,
-  wrapperClassName: React.PropTypes.string,
   buttonClassName: React.PropTypes.string,
   icon: React.PropTypes.string
 }
-
-reactMixin(EventPopup.prototype, Popup)
