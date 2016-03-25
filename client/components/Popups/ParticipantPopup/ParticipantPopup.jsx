@@ -36,14 +36,6 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
     }
   }
 
-  reset() {
-    this.destroyPopup()
-  }
-
-  hideAndReset() {
-    this.hidePopup(this.reset)
-  }
-
   updateImages({gender}) {
     this.setState({images: this.getImagesForGender(gender)})
   }
@@ -111,7 +103,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
         className={classNames('ui compact icon button waves-effect',
             this.props.buttonClassName)}
         ref="popupTrigger">
-        <i className={classNames(this.props.icon, 'icon')} />
+        {this.props.icon}
       </div>
     )
   }
@@ -120,119 +112,78 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
     return (
       <div
         ref="popupTarget"
-        className="ui flowing popup form-popup participant-popup">
-
-        <div className="ui attached message">
-          <div className="header">
-            {this.isEdit() ? (
-              <T>Edit participant</T>
-            ) : (
-              <T>New participant</T>
-            )}
-          </div>
-        </div>
-
+        className="participant-popup form-popup ui flowing popup">
         <Form
           ref="form"
           data={this.mapToFormData(this.props.user)}
-          className="form-popup--form flex attached fluid segment"
           onSubmit={this.submitParticipant}
           schema={this.schema}>
-          <ImagePicker
-            name="pictureUrl"
-            images={this.state.images}
-            uploadOptions={{
-              folder: 'users',
-              transformation: 'avatar-large'
-            }}
-          />
-          <div className="form-popup--form-right" >
-            <Input
-              name="name"
-              placeholder="Fullname"
-            />
-            <Input
-              name="email"
-              placeholder="hints.EmailOptional"
-              type="email">
-              {!this.isEdit() ? (
-                <CheckboxInput
-                  name="sendEmail"
-                  className="invitation-email-checkbox"
-                  label="Send invitation email"
-                  checked
-                />
-              ) : null}
-            </Input>
-            <SelectInput
-              placeholder="Gender"
-              name="gender"
-              onChange={this.updateImages}>
-              <div className="item" data-value="male">
-                <i className="man icon"></i>
-                <T>Male</T>
-              </div>
-              <div className="item" data-value="female">
-                <i className="woman icon"></i>
-                <T>Female</T>
-              </div>
-            </SelectInput>
-          </div>
-        </Form>
 
-        <FormErrorMessage schema={this.schema} />
-
-        {this.state.showDeleteConfirmation ? (
-          <div className="ui bottom attached error message actions">
-            <T>hints.deleteConfirmation</T>
-            <div className="ui buttons">
-              <button
-                className="ui labeled icon button"
-                onClick={() => this.setState({showDeleteConfirmation: false})}>
-                <i className="caret left icon"></i>
-                <T>Back</T>
-              </button>
-              <button
-                className="ui labeled icon red button"
-                onClick={this.removeParticipant}>
-                <i className="trash icon"></i>
-                <T>Delete</T>
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="ui bottom attached message actions">
-            <div className="ui buttons">
-              <button
-                className="ui labeled icon button"
-                onClick={this.hideAndReset}>
-                <i className="remove icon"></i>
-                <T>Cancel</T>
-              </button>
+          <div className="ui attached message">
+            <div className="header">
               {this.isEdit() ? (
-                <button
-                  className="ui labeled icon red button"
-                  onClick={() => this.setState({showDeleteConfirmation: true})}>
-                  <i className="trash icon"></i>
-                  <T>Delete</T>
-                </button>
-              ) : null}
-              <button
-                className={classNames('ui labeled icon primary button', {
-                  loading: this.state.isSaving
-                })}
-                onClick={(e) => this.refs.form.submitForm(e)}>
-                <i className="checkmark icon"></i>
-                {this.isEdit() ? (
-                  <T>Save</T>
-                ) : (
-                  <T>Add participant</T>
-                )}
-              </button>
+                <T>Edit participant</T>
+              ) : (
+                <T>New participant</T>
+              )}
             </div>
           </div>
-        )}
 
+          <div
+            className="form-popup--form flex ui form attached fluid segment">
+            <ImagePicker
+              name="pictureUrl"
+              images={this.state.images}
+              uploadOptions={{
+                folder: 'users',
+                transformation: 'avatar-large'
+              }}
+            />
+            <div className="form-popup--form-right" >
+              <Input
+                name="name"
+                placeholder="Fullname"
+              />
+              <Input
+                name="email"
+                placeholder="hints.EmailOptional"
+                type="email">
+                {!this.isEdit() ? (
+                  <CheckboxInput
+                    name="sendEmail"
+                    className="invitation-email-checkbox"
+                    label="Send invitation email"
+                    checked
+                  />
+                ) : null}
+              </Input>
+              <SelectInput
+                placeholder="Gender"
+                name="gender"
+                onChange={this.updateImages}>
+                <div className="item" data-value="male">
+                  <i className="man icon"></i>
+                  <T>Male</T>
+                </div>
+                <div className="item" data-value="female">
+                  <i className="woman icon"></i>
+                  <T>Female</T>
+                </div>
+              </SelectInput>
+            </div>
+          </div>
+
+          <FormErrorMessage />
+
+          <FormActionButtons
+            showRemove={this.isEdit()}
+            acceptButtonText={this.isEdit() ? 'Save' : 'Add participant'}
+            onRemove={this.removeParticipant}
+            onCancel={this.hideAndReset}
+            onAccept={(e) => this.refs.form.submitForm(e)}
+          />
+
+        </Form>
       </div>
     )
   }
@@ -242,5 +193,5 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
 ParticipantPopup.propTypes = {
   user: React.PropTypes.object,
   buttonClassName: React.PropTypes.string,
-  icon: React.PropTypes.string
+  icon: React.PropTypes.element
 }

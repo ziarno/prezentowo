@@ -29,14 +29,6 @@ EventPopup = class EventPopup extends PopupComponent {
     }
   }
 
-  reset() {
-    this.destroyPopup()
-  }
-
-  hideAndReset() {
-    this.hidePopup(this.reset)
-  }
-
   submitEvent(data) {
     var eventId
 
@@ -75,9 +67,10 @@ EventPopup = class EventPopup extends PopupComponent {
       <div
         onClick={this.showPopup}
         ref="popupTrigger"
-        className={classNames('ui compact icon button waves-effect',
-            this.props.buttonClassName)}>
-        <i className={classNames(this.props.icon, 'icon')} />
+        className={classNames(
+          'ui compact icon button waves-effect',
+          this.props.buttonClassName)}>
+        {this.props.icon}
       </div>
     )
   }
@@ -87,93 +80,54 @@ EventPopup = class EventPopup extends PopupComponent {
       <div
         ref="popupTarget"
         className="ui flowing popup form-popup event-popup">
-
-        <div className="ui attached message">
-          <div className="header">
-            {this.isEdit() ? (
-              <T>Edit event</T>
-            ) : (
-              <T>New event</T>
-            )}
-          </div>
-        </div>
-
         <Form
           ref="form"
           data={this.props.event}
-          className="form-popup--form attached fluid segment"
           onSubmit={this.submitEvent}
           schema={this.schema}>
-          <Input
-            name="title"
-            label="Title"
-          />
-          <div className="form-popup--form flex">
-            <div className="ui field">
-              <Datepicker
-                name="date"
-                label="Date"
-              />
-            </div>
-            <div className="form-popup--form-right">
-              <EventTypeInput
-                name="type"
-              />
-            </div>
-          </div>
-        </Form>
 
-        <FormErrorMessage schema={this.schema} />
-
-        {this.state.showDeleteConfirmation ? (
-          <div className="ui bottom attached error message actions">
-            <T>hints.deleteConfirmation</T>
-            <div className="ui buttons">
-              <button
-                className="ui labeled icon button"
-                onClick={() => this.setState({showDeleteConfirmation: false})}>
-                <i className="caret left icon"></i>
-                <T>Back</T>
-              </button>
-              <button
-                className="ui labeled icon red button"
-                onClick={this.removeEvent}>
-                <i className="trash icon"></i>
-                <T>Delete</T>
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="ui bottom attached message actions">
-            <div className="ui buttons">
-              <button
-                className="ui labeled icon button"
-                onClick={this.hideAndReset}>
-                <i className="remove icon"></i>
-                <T>Cancel</T>
-              </button>
+          <div className="ui attached message">
+            <div className="header">
               {this.isEdit() ? (
-                <button
-                  className="ui labeled icon red button"
-                  onClick={() => this.setState({showDeleteConfirmation: true})}>
-                  <i className="trash icon"></i>
-                  <T>Delete</T>
-                </button>
-              ) : null}
-              <button
-                className="ui labeled icon primary button"
-                onClick={(e) => this.refs.form.submitForm(e)}>
-                <i className="checkmark icon"></i>
-                {this.isEdit() ? (
-                  <T>Save</T>
-                ) : (
-                  <T>Create event</T>
-                )}
-              </button>
+                <T>Edit event</T>
+              ) : (
+                <T>New event</T>
+              )}
             </div>
           </div>
-        )}
 
+          <div
+            className="form-popup--form ui form attached fluid segment">
+            <Input
+              name="title"
+              label="Title"
+            />
+            <div className="form-popup--form flex">
+              <div className="ui field">
+                <Datepicker
+                  name="date"
+                  label="Date"
+                />
+              </div>
+              <div className="form-popup--form-right">
+                <EventTypeInput
+                  name="type"
+                />
+              </div>
+            </div>
+          </div>
+
+          <FormErrorMessage />
+
+          <FormActionButtons
+            showRemove={this.isEdit()}
+            acceptButtonText={this.isEdit() ? 'Save' : 'Create Event'}
+            onRemove={this.removeEvent}
+            onCancel={this.hideAndReset}
+            onAccept={(e) => this.refs.form.submitForm(e)}
+          />
+
+        </Form>
       </div>
     )
   }
@@ -183,5 +137,5 @@ EventPopup = class EventPopup extends PopupComponent {
 EventPopup.propTypes = {
   event: React.PropTypes.object,
   buttonClassName: React.PropTypes.string,
-  icon: React.PropTypes.string
+  icon: React.PropTypes.element
 }

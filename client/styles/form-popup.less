@@ -6,10 +6,13 @@
   text-align: left;
   width: 500px;
 
+  .flex {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .form-popup--form {
-    &.flex {
-      display: flex;
-    }
     margin: 0;
   }
 
@@ -45,11 +48,9 @@
   .actions  {
     overflow: auto;
     padding: 0 0 0 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 
     .ui.buttons {
+      z-index: 3;
       margin-left: auto;
       & :first-child {
         border-radius: 0;

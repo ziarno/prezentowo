@@ -38,6 +38,14 @@ class PopupComponent extends React.Component {
     })
   }
 
+  reset() {
+    this.destroyPopup()
+  }
+
+  hideAndReset() {
+    this.hidePopup(this.reset)
+  }
+
   destroyPopup() {
     this.setState({showPopup: false})
     $(ReactDOM.findDOMNode(this.refs.popupTrigger))

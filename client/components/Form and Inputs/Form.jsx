@@ -10,6 +10,9 @@ import reactMixin from 'react-mixin'
  * Requires:
  * - child input components that are registered must provide
  *   reset() and getValue() methods
+ *
+ * Note: keys defined in the provided schema must match
+ * name attributes in inputs inside the form
  */
 Form = class Form extends React.Component {
 

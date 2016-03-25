@@ -39,14 +39,6 @@ PresentPopup = class PresentPopup extends PopupComponent {
     }
   }
 
-  reset() {
-    this.destroyPopup()
-  }
-
-  hideAndReset() {
-    this.hidePopup(this.reset)
-  }
-
   addPresent(presentData) {
     if (this.schema.validate(presentData)) {
       this.hideAndReset()
@@ -55,6 +47,10 @@ PresentPopup = class PresentPopup extends PopupComponent {
         ...presentData
       })
     }
+  }
+
+  removePresent() {
+
   }
 
   isEdit() {
@@ -81,6 +77,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
 
   renderPopup() {
     var defaultSelectedUserId
+
     if (!this.props.present &&
       this.state.defaultSelectedUser) {
       defaultSelectedUserId = this.state.defaultSelectedUser._id
@@ -118,7 +115,6 @@ PresentPopup = class PresentPopup extends PopupComponent {
                   ))}
               </SelectInput>
             </div>
-
           </div>
 
           <div
@@ -145,24 +141,15 @@ PresentPopup = class PresentPopup extends PopupComponent {
             </div>
           </div>
 
-          <FormErrorMessage schema={this.schema} />
+          <FormErrorMessage />
 
-          <div className="ui bottom attached message actions">
-            <div className="ui buttons">
-              <div
-                className="ui labeled icon button"
-                onClick={this.hideAndReset}>
-                <i className="remove icon"></i>
-                <T>Cancel</T>
-              </div>
-              <div
-                className="ui labeled icon primary button"
-                onClick={(e) => this.refs.form.submitForm(e)}>
-                <i className="checkmark icon"></i>
-                <T>Add present</T>
-              </div>
-            </div>
-          </div>
+          <FormActionButtons
+            showRemove={this.isEdit()}
+            acceptButtonText={this.isEdit() ? 'Save' : 'Add present'}
+            onRemove={this.removePresent}
+            onCancel={this.hideAndReset}
+            onAccept={(e) => this.refs.form.submitForm(e)}
+          />
 
         </Form>
       </div>
@@ -174,7 +161,8 @@ PresentPopup = class PresentPopup extends PopupComponent {
 PresentPopup.propTypes = {
   present: React.PropTypes.object,
   users: React.PropTypes.array,
-  buttonClassName: React.PropTypes.string
+  buttonClassName: React.PropTypes.string,
+  icon: React.PropTypes.element
 }
 
 reactMixin(PresentPopup.prototype, Autorun)

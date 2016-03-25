@@ -13,8 +13,8 @@ FormErrorMessage = class FormErrorMessage extends React.Component {
   
   autorunGetErrorMessages() {
     this.setState({
-      errors: this.props.schema.invalidKeys().map((key) => (
-        this.props.schema.keyErrorMessage(key.name)
+      errors: this.context.schema.invalidKeys().map((key) => (
+        this.context.schema.keyErrorMessage(key.name)
       ))
     })
   }
@@ -32,7 +32,7 @@ FormErrorMessage = class FormErrorMessage extends React.Component {
 
 }
 
-FormErrorMessage.propTypes = {
+FormErrorMessage.contextTypes = {
   schema: React.PropTypes.object
 }
 

@@ -77,13 +77,17 @@ EventsButton = class EventsButton extends React.Component {
         </div>
 
         <EventPopup
-          icon="plus"
+          icon={(
+            <i className="plus icon" />
+          )}
           buttonClassName="event-button"
         />
 
         {isCreator ? (
           <EventPopup
-            icon="setting"
+            icon={(
+              <i className="setting icon" />
+            )}
             buttonClassName="event-button"
             event={event}
           />
@@ -91,7 +95,9 @@ EventsButton = class EventsButton extends React.Component {
 
         {isCreator ? (
           <ParticipantPopup
-            icon="add user"
+            icon={(
+              <i className="add user icon" />
+            )}
             buttonClassName="event-button"
           />
         ) : null}
