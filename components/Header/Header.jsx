@@ -8,7 +8,7 @@ Header = class Header extends React.Component {
     this.state = {
       title: 'Prezentowo'
     }
-    this.autorun = this.autorun.bind(this)
+    this.autorunSetTitle = this.autorunSetTitle.bind(this)
     this.getLoggedInNavigation = this.getLoggedInNavigation.bind(this)
     this.getLoggedOutNavigation = this.getLoggedOutNavigation.bind(this)
   }
@@ -23,18 +23,10 @@ Header = class Header extends React.Component {
     }
   }
   
-  autorun() {
-    var eventId = FlowRouter.getParam('eventId')
-    var event = Events.findOne(eventId)
-    var title
-
-    if (!eventId) {
-      title = 'Prezentowo'
-    } else {
-      title = event && event.title || ''
-    }
-
-    this.setState({title})
+  autorunSetTitle() {
+    this.setState({
+      title: Session.get('event').title || 'Prezentowo'
+    })
   }
 
   getLoggedInNavigation() {

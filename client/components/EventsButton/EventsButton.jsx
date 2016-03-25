@@ -11,13 +11,12 @@ EventsButton = class EventsButton extends React.Component {
   }
 
   render() {
-    var eventId = FlowRouter.getParam('eventId')
-    var event = Events.findOne(eventId)
+    var event = Session.get('event')
     var now = new Date()
     var activeEvents = []
     var pastEvents = []
     var activeEventsHeader
-    var isCreator = event && event.creatorId === Meteor.userId()
+    var isCreator = event.creatorId === Meteor.userId()
 
     this.props.events.forEach((event) => {
       if (now < event.date) {

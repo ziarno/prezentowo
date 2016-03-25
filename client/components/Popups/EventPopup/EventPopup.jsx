@@ -38,7 +38,7 @@ EventPopup = class EventPopup extends PopupComponent {
 
     if (this.isEdit()) {
       Events.methods.editEvent.call({
-        eventId: FlowRouter.getParam('eventId'),
+        eventId: Session.get('event')._id,
         ...data
       })
     } else {
@@ -50,7 +50,7 @@ EventPopup = class EventPopup extends PopupComponent {
 
   removeEvent() {
     Events.methods.removeEvent.call({
-      eventId: FlowRouter.getParam('eventId')
+      eventId: Session.get('event')._id
     })
     this.hidePopup(() => {
       this.reset()

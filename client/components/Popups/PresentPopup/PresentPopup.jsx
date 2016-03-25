@@ -45,7 +45,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
     if (this.schema.validate(presentData)) {
       this.hideAndReset()
       Presents.methods.createPresent.call({
-        eventId: FlowRouter.getParam('eventId'),
+        eventId: Session.get('event')._id,
         ...presentData
       })
     }

@@ -20,7 +20,7 @@ Present = class Present extends React.Component {
             icon={(
               <i className="vertical ellipsis icon"></i>
             )}
-            users={Participants.find().fetch()}
+            users={Session.get('participants')}
           />
         ) : null}
       </div>

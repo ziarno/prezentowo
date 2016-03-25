@@ -1,3 +1,4 @@
+import {Autorun} from '../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
 EventContainer = class EventContainer extends React.Component {
@@ -5,11 +6,12 @@ EventContainer = class EventContainer extends React.Component {
   constructor() {
     super()
     this.isCreator = this.isCreator.bind(this)
+    this.autorunSetEvent = this.autorunSetEvent.bind(this)
   }
   
   getMeteorData() {
-    var eventId = FlowRouter.getParam('eventId')
-    var event = Events.findOne(eventId)
+    var event = Session.get('event')
+    var eventId = event._id
     var subscription = Meteor.subscribe('eventDetails', {eventId})
     var participants = Participants
       .find()
@@ -26,32 +28,37 @@ EventContainer = class EventContainer extends React.Component {
       participant._id === Meteor.userId()
     ))
 
+    Session.set('participants', participants)
+
     return {
       ready: subscription.ready(),
-      presents: Presents.find().fetch(),
-      participants,
-      event
+      presents: Presents.find().fetch()
+    }
+  }
+
+  autorunSetEvent() {
+    var eventId = FlowRouter.getParam('eventId')
+    var event = Events.findOne(eventId)
+    if (event) {
+      Session.set('event', event)
     }
   }
 
   isCreator() {
-    return this.data.event &&
-      (this.data.event.creatorId === Meteor.userId())
+    return Session.get('event').creatorId === Meteor.userId()
   }
 
   render() {
-
-    var eventTitle = this.data.event
-      && this.data.event.title
+    var eventTitle = Session.get('event').title
 
     return this.data.ready ? (
       <div id="event-container">
         <UserList
           isCreator={this.isCreator()}
-          users={this.data.participants}
+          users={Session.get('participants')}
           presents={this.data.presents} />
         <PresentsContainer
-          users={this.data.participants}
+          users={Session.get('participants')}
           presents={this.data.presents} />
         <PresentPopup
           buttonClassName="present-button--add circular primary"
@@ -62,7 +69,7 @@ EventContainer = class EventContainer extends React.Component {
               <i className="gift corner inverted icon"></i>
             </i>
           )}
-          users={this.data.participants}
+          users={Session.get('participants')}
         />
       </div>
     ) : (
@@ -80,3 +87,4 @@ EventContainer = class EventContainer extends React.Component {
 }
 
 reactMixin(EventContainer.prototype, ReactMeteorData)
+reactMixin(EventContainer.prototype, Autorun)

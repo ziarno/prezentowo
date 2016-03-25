@@ -53,7 +53,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
       return
     }
 
-    var eventId = FlowRouter.getParam('eventId')
+    var eventId = Session.get('event')._id
     var participant = _.omit(formData, 'sendEmail')
 
     if (this.isEdit()) {
@@ -78,7 +78,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
 
   removeParticipant() {
     Events.methods.removeParticipant.call({
-      eventId: FlowRouter.getParam('eventId'),
+      eventId: Session.get('event')._id,
       participantId: this.props.user._id
     })
     this.hidePopup()
