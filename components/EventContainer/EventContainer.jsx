@@ -39,9 +39,8 @@ EventContainer = class EventContainer extends React.Component {
   autorunSetEvent() {
     var eventId = FlowRouter.getParam('eventId')
     var event = Events.findOne(eventId)
-    if (event) {
-      Session.set('event', event)
-    }
+
+    Session.set('event', event || {})
   }
 
   isCreator() {

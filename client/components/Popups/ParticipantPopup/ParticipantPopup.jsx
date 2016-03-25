@@ -109,6 +109,10 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   renderPopup() {
+    var userGender = this.props.user &&
+      this.props.user.profile.gender
+      || Meteor.user().profile.gender
+
     return (
       <div
         ref="popupTarget"
@@ -160,6 +164,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
               <SelectInput
                 placeholder="Gender"
                 name="gender"
+                selectDefault={userGender}
                 onChange={this.updateImages}>
                 <div className="item" data-value="male">
                   <i className="man icon"></i>

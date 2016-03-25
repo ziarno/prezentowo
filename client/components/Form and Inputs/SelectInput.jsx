@@ -44,7 +44,9 @@ SelectInput = class SelectInput extends ValidatedInput {
   }
 
   selectDefault(value) {
-    if (value && !this.state.isSelectedByUser) {
+    if (value &&
+      !this.state.isSelectedByUser &&
+      value !== this.getValue()) {
       this.setValue(value)
     }
   }
@@ -90,9 +92,9 @@ SelectInput = class SelectInput extends ValidatedInput {
 
     $dropdown.dropdown({
       action: (nodeString, value) => {
-        $dropdown.dropdown('hide') //note: hide before set value, because error
+        $dropdown.dropdown('hide')
+        this.setState({isSelectedByUser: true}) //note: setState before setValue, because causes am update after setting a value -> which causes the value to be set as default
         this.setValue(value)
-        this.setState({isSelectedByUser: true})
       },
       onChange: (value) => {
         this.validate(value)
