@@ -17,6 +17,8 @@ PresentPopup = class PresentPopup extends PopupComponent {
     this.hideAndReset = this.hideAndReset.bind(this)
     this.reset = this.reset.bind(this)
     this.addPresent = this.addPresent.bind(this)
+    this.editPresent = this.editPresent.bind(this)
+    this.removePresent = this.removePresent.bind(this)
     this.autorunSetDefaultSelectedUser = this.autorunSetDefaultSelectedUser.bind(this)
     this.getPopupSettings = this.getPopupSettings.bind(this)
   }
@@ -49,8 +51,21 @@ PresentPopup = class PresentPopup extends PopupComponent {
     }
   }
 
-  removePresent() {
+  editPresent(presentData) {
+    if (this.schema.validate(presentData)) {
+      this.hideAndReset()
+      Presents.methods.editPresent.call({
+        _id: this.props.present._id,
+        ...presentData
+      })
+    }
+  }
 
+  removePresent() {
+    this.hidePopup()
+    Presents.methods.removePresent.call({
+      presentId: this.props.present._id
+    })
   }
 
   isEdit() {
@@ -92,7 +107,13 @@ PresentPopup = class PresentPopup extends PopupComponent {
         <Form
           ref="form"
           data={this.props.present}
-          onSubmit={this.addPresent}
+          onSubmit={(presentData) => {
+            if (this.isEdit()) {
+              this.editPresent(presentData)
+            } else {
+              this.addPresent(presentData)
+            }
+          }}
           schema={this.schema}>
 
           <div className="ui attached message">

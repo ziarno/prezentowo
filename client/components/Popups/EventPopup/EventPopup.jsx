@@ -121,7 +121,7 @@ EventPopup = class EventPopup extends PopupComponent {
 
           <FormActionButtons
             showRemove={this.isEdit()}
-            acceptButtonText={this.isEdit() ? 'Save' : 'Create Event'}
+            acceptButtonText={this.isEdit() ? 'Save' : 'Create event'}
             onRemove={this.removeEvent}
             onCancel={this.hideAndReset}
             onAccept={(e) => this.refs.form.submitForm(e)}

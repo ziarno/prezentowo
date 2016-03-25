@@ -156,24 +156,25 @@ Presents.methods.removePresent = new ValidatedMethod({
 Presents.methods.editPresent = new ValidatedMethod({
   name: 'Presents.methods.editPresent',
   mixins: [LoggedIn],
-  validate: new SimpleSchema({
-    presentId: {
-      type: String
+  validate: new SimpleSchema([
+    {
+      _id: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
     },
-    present: {
-      type: Presents.Schemas.NewPresent.pick(['title', 'description', 'pictureUrl'])
+    Presents.Schemas.NewPresent.pick([
+      'title', 'description', 'forUserId', 'pictureUrl'
+    ])
+  ]).validator(),
+  run(present) {
+    if (!Meteor.user().hasCreatedPresent(present._id)) {
+      throw new Meteor.Error(
+        `${this.name}.notCreatedPresent`,
+        _i18n.__('Presents edited by creators'))
     }
-  }).validator(),
-  run({presentId, present}) {
-    var {title, pictureUrl, description} = present
 
-    if (!Meteor.user().hasCreatedPresent(presentId)) {
-      throw new Meteor.Error(`${this.name}.notCreatedPresent`, _i18n.__('Presents edited by creators'))
-    }
-
-    return Presents.update(presentId, {$set: {
-      title, pictureUrl, description
-    }})
+    return Presents.update(present._id, {$set: present})
   }
 })
 
