@@ -11,12 +11,12 @@ Users.functions = {}
 
 Users.functions.findByEmail = function (email) {
   return email && Users.findOne({
-      registered_emails: {
-        $elemMatch: {
-          address: email
-        }
+    registered_emails: {
+      $elemMatch: {
+        address: email
       }
-    })
+    }
+  })
 }
 
 Users.functions.findByVerifiedEmail = function (email) {
@@ -43,12 +43,12 @@ Users.functions.createTemp = function ({name, gender, pictureUrl, email}) {
   return Users.insert(user)
 }
 
-Users.functions.update = function ({_id, name, gender, pictureUrl, email}) {
+Users.functions.update = function (selector, {name, gender, pictureUrl, email}) {
   if (email) {
-    Users.functions.updateEmail({userId: _id, email})
+    Users.functions.updateEmail(selector, email)
   }
 
-  return Users.update(_id, {
+  return Users.update(selector, {
     $set: {
       'profile.name': name,
       'profile.gender': gender,
@@ -57,18 +57,24 @@ Users.functions.update = function ({_id, name, gender, pictureUrl, email}) {
   })
 }
 
-Users.functions.updateEmail = function ({userId, email}) {
+Users.functions.updateEmail = function (selector, email) {
   var emailObject = {
     address: email,
     verified: false
   }
 
-  Users.update({_id: userId}, {
+  Users.update(selector, {
     $set: {
       emails: [emailObject],
       registered_emails: [emailObject]
     }
   })
+}
+
+Users.functions.removeTempUsers = function (selector) {
+  //TODO: check if each temp user is not a part of another event!
+  var selector = _.extend(selector, {isTemp: true})
+  Users.remove(selector)
 }
 
 /**
