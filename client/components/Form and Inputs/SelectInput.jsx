@@ -83,8 +83,6 @@ SelectInput = class SelectInput extends ValidatedInput {
         setTimeout(() => {
           if (_.isFunction($item[0].scrollIntoViewIfNeeded)) {
             $item[0].scrollIntoViewIfNeeded(true)
-          } else {
-            $item[0].scrollIntoView()
           }
         }, 300)
       }
