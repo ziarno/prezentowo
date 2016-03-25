@@ -26,7 +26,10 @@ PresentPopup = class PresentPopup extends PopupComponent {
   getPopupSettings() {
     var position = this.isEdit() ? 'bottom center' : 'top right'
     return {
-      onShow: () => {this.schema.resetValidation()},
+      onShow: () => {
+        this.autorunSetDefaultSelectedUser()
+        this.schema.resetValidation()
+      },
       position,
       lastResort: position,
       movePopup: false,
@@ -118,7 +121,11 @@ PresentPopup = class PresentPopup extends PopupComponent {
 
           <div className="ui attached message">
             <div className="header">
-              <T>New present</T>
+              {this.isEdit() ? (
+                <T>Edit present</T>
+              ) : (
+                <T>New present</T>
+              )}
               <T>for</T>
               <SelectInput
                 inline
