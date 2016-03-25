@@ -14,10 +14,8 @@ Header = class Header extends React.Component {
   }
   
   getMeteorData() {
-    var eventsSubscribtion = Meteor.subscribe('events')
-
     return {
-      ready: eventsSubscribtion.ready(),
+      ready: Meteor.subscribe('events').ready(),
       events: Events.find().fetch(),
       user: Meteor.user()
     }
