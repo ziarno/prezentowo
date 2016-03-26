@@ -1,15 +1,16 @@
-import {PopupComponent} from '../../../../lib/Mixins'
+import {PopupComponent, Autorun} from '../../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
 ParticipantPopup = class ParticipantPopup extends PopupComponent {
 
   constructor(props) {
     super(props)
-    var initialGender = props.user ?
-      props.user.profile.gender : 'male'
-
+    this.initialGender = props.user ?
+      props.user.profile.gender :
+      Meteor.user().profile.gender
     this.state = _.extend(this.state, {
       showDeleteConfirmation: false,
-      images: this.getImagesForGender(initialGender),
+      images: this.getImagesForGender(this.initialGender),
       isSaving: false
     })
     this.schema = Events.Schemas.NewParticipant
@@ -24,7 +25,8 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   getPopupSettings() {
-    var position = this.isEdit() ? 'right center' : 'top right'
+    var position = this.isEdit() ? 'bottom left' : 'top right'
+    var transition = this.isEdit() ? 'scale' : 'slide down'
     return {
       onShow: () => {
         this.schema.resetValidation()
@@ -32,7 +34,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
       },
       position,
       lastResort: position,
-      transition: 'slide down'
+      transition
     }
   }
 
@@ -77,11 +79,23 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   removeParticipant() {
-    Events.methods.removeParticipant.call({
-      eventId: Session.get('event')._id,
-      participantId: this.props.user._id
+    this.hidePopup(() => {
+      Events.methods.removeParticipant.call({
+        eventId: Session.get('event')._id,
+        participantId: this.props.user._id
+      })
     })
-    this.hidePopup()
+  }
+
+  setBeneficiary(action) {
+    var methodName = action ? 'addBeneficiary' : 'removeBeneficiary'
+    this.hidePopup(() => {
+      this.reset()
+      Events.methods[methodName].call({
+        eventId: Session.get('event')._id,
+        participantId: this.props.user._id
+      })
+    })
   }
 
   mapToFormData(user) {
@@ -109,9 +123,12 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   renderPopup() {
-    var userGender = this.props.user &&
-      this.props.user.profile.gender
-      || Meteor.user().profile.gender
+    var isEdit = this.isEdit()
+    var event = Session.get('event')
+    var showBeneficiaryButton = isEdit &&
+      event.type === 'many-to-one'
+    var isBeneficiary = this.props.user &&
+      event.beneficiaryIds.indexOf(this.props.user._id) > -1
 
     return (
       <div
@@ -123,14 +140,35 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
           onSubmit={this.submitParticipant}
           schema={this.schema}>
 
-          <div className="ui attached message">
-            <div className="header">
-              {this.isEdit() ? (
+          <div className={classNames(
+            'form-popup--title ui attached message',
+            {'with-button': showBeneficiaryButton}
+          )}>
+            {isEdit ? (
+              <div className="header">
                 <T>Edit participant</T>
-              ) : (
+                {showBeneficiaryButton ? (
+                  <button
+                    type="button"
+                    onClick={() => this.setBeneficiary(!isBeneficiary)}
+                    className="ui compact icon left labeled button">
+                    <i className={classNames({
+                      plus: !isBeneficiary,
+                      minus: isBeneficiary
+                    }, 'icon')} />
+                    {isBeneficiary ? (
+                      <T>Remove as beneficiary</T>
+                    ) : (
+                      <T>Add as beneficiary</T>
+                    )}
+                  </button>
+                ) : null}
+              </div>
+            ) : (
+              <div className="header">
                 <T>New participant</T>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           <div
@@ -152,7 +190,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
                 name="email"
                 placeholder="hints.EmailOptional"
                 type="email">
-                {!this.isEdit() ? (
+                {!isEdit ? (
                   <CheckboxInput
                     name="sendEmail"
                     className="invitation-email-checkbox"
@@ -164,7 +202,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
               <SelectInput
                 placeholder="Gender"
                 name="gender"
-                selectDefault={userGender}
+                selectDefault={this.initialGender}
                 onChange={this.updateImages}>
                 <div className="item" data-value="male">
                   <i className="man icon"></i>
@@ -181,8 +219,8 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
           <FormErrorMessage />
 
           <FormActionButtons
-            showRemove={this.isEdit()}
-            acceptButtonText={this.isEdit() ? 'Save' : 'Add participant'}
+            showRemove={isEdit}
+            acceptButtonText={isEdit ? 'Save' : 'Add participant'}
             onRemove={this.removeParticipant}
             onCancel={this.hideAndReset}
             onAccept={(e) => this.refs.form.submitForm(e)}
@@ -194,6 +232,8 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
 }
+
+reactMixin(ParticipantPopup.prototype, Autorun)
 
 ParticipantPopup.propTypes = {
   user: React.PropTypes.object,

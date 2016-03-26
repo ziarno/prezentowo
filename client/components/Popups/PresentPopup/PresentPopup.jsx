@@ -65,9 +65,10 @@ PresentPopup = class PresentPopup extends PopupComponent {
   }
 
   removePresent() {
-    this.hidePopup()
-    Presents.methods.removePresent.call({
-      presentId: this.props.present._id
+    this.hidePopup(() => {
+      Presents.methods.removePresent.call({
+        presentId: this.props.present._id
+      })
     })
   }
 

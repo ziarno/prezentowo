@@ -13,7 +13,7 @@ UserItem = ({onClick, user, presentsCount, isCreator}) => (
         />
       </div>
     </div>
-    {isCreator && (user._id !== Meteor.userId()) ? (
+    {isCreator ? (
       <ParticipantPopup
         buttonClassName="user-item--edit small-icon-button"
         icon={(

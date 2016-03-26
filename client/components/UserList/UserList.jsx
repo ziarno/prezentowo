@@ -1,11 +1,14 @@
 import {Autorun} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
+import _ from 'underscore'
 
 UserList = class UserList extends React.Component {
   
   constructor() {
     super()
+    this.state = {event: {}}
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
+    this.autorunSetEvent = this.autorunSetEvent.bind(this)
     this.setSticky = this.setSticky.bind(this)
     this.scrollToUser = this.scrollToUser.bind(this)
   }
@@ -26,6 +29,10 @@ UserList = class UserList extends React.Component {
     }
   }
 
+  autorunSetEvent() {
+    this.setState({event: Session.get('event')})
+  }
+
   setSticky() {
     $(this.refs.sticky).sticky({
       context: '#event-container',
@@ -33,8 +40,9 @@ UserList = class UserList extends React.Component {
     })
   }
 
-  shouldComponentUpdate(newProps) {
-    return !_.isEqual(this.props, newProps)
+  shouldComponentUpdate(newProps, {event}) {
+    return !_.isEqual(this.props, newProps) ||
+      !_.isEqual(this.state.event.beneficiaryIds, event.beneficiaryIds)
   }
 
   scrollToUser(user) {
@@ -67,15 +75,54 @@ UserList = class UserList extends React.Component {
   }
 
   render() {
+    var event = this.state.event
+    var isManyToOne = event.type === 'many-to-one'
+    var participants = this.props.users
+    var beneficiaries
+    var beneficiariesTitle
+
+    if (isManyToOne) {
+      [beneficiaries, participants] = _.partition(
+        this.props.users, u => event.beneficiaryIds.indexOf(u._id) > -1)
+      beneficiariesTitle = beneficiaries.length > 1 ?
+        'Beneficiaries' : 'Beneficiary'
+    }
 
     return (
       <div
         id="user-list"
         ref="userList"
-        className="shadow">
+        className={classNames('shadow', {
+          'many-to-one': isManyToOne
+        })}>
         <div
           ref="sticky"
           className="ui sticky">
+
+
+          {isManyToOne ? (
+            <div
+              className="user-list--title">
+              <T>{beneficiariesTitle}</T>
+            </div>
+          ) : null}
+          {isManyToOne ? (
+            <div
+              className="user-list--list">
+              {beneficiaries.map((user) => (
+                <UserItem
+                  presentsCount={Presents.find({
+                      forUserId: user._id
+                    }).count()}
+                  isCreator={this.props.isCreator}
+                  onClick={this.scrollToUser}
+                  key={user._id}
+                  user={user} />
+              ))}
+            </div>
+          ) : null}
+
+
 
           <div
             className="user-list--title">
@@ -96,7 +143,7 @@ UserList = class UserList extends React.Component {
 
           <div
             className="user-list--list">
-            {this.props.users.map((user) => (
+            {participants.map((user) => (
               <UserItem
                 presentsCount={Presents.find({
                   forUserId: user._id

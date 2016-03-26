@@ -49,11 +49,11 @@ EventPopup = class EventPopup extends PopupComponent {
   }
 
   removeEvent() {
-    Events.methods.removeEvent.call({
-      eventId: Session.get('event')._id
-    })
     this.hidePopup(() => {
       this.reset()
+      Events.methods.removeEvent.call({
+        eventId: Session.get('event')._id
+      })
       FlowRouter.go('/')
     })
   }
