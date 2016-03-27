@@ -65,9 +65,7 @@ UserPresents = class UserPresents extends React.Component {
         {ownPresents.length ? (
           <div>
             <h2>
-              <T>
-                hints.ownPresents
-              </T>
+              <T>hints.ownPresents</T>
             </h2>
             <div className="ui cards presents">
               {ownPresents.map((present) => (
@@ -80,9 +78,7 @@ UserPresents = class UserPresents extends React.Component {
         {otherPresents.length ? (
           <div>
             <h2>
-              <T>
-                hints.otherPresents
-              </T>
+              <T>hints.otherPresents</T>
             </h2>
             <div className="ui cards presents">
               {otherPresents.map((present) => (

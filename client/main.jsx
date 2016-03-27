@@ -3,6 +3,7 @@ $.cloudinary.config({
 })
 
 Session.setDefault('event', {})
+Session.setDefault('currentUser', {})
 Session.setDefault('participants', [])
 
 Meteor.startup(() => {

@@ -1,9 +1,9 @@
 import {isMobile} from '../../../../lib/utilities'
 
-UserItem = ({onClick, user, presentsCount, isCreator}) => (
+UserItem = ({onClick, user, presentsCount, isCreator, active}) => (
   <div
     onClick={() => onClick(user)}
-    className="user-item">
+    className={classNames('user-item', {active})}>
     <User user={user} />
     <CountLabel
       icon="gift"

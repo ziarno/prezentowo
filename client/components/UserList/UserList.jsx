@@ -6,23 +6,27 @@ UserList = class UserList extends React.Component {
   
   constructor() {
     super()
-    this.state = {event: {}}
+    this.state = {
+      event: {},
+      currentUser: {}
+    }
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
     this.autorunSetEvent = this.autorunSetEvent.bind(this)
     this.scrollToUser = this.scrollToUser.bind(this)
   }
 
   autorunSetCurrentUser() {
-    var currentUser = Session.get('currentUser')
+    this.setState({currentUser: Session.get('currentUser')})
   }
 
   autorunSetEvent() {
     this.setState({event: Session.get('event')})
   }
 
-  shouldComponentUpdate(newProps, {event}) {
+  shouldComponentUpdate(newProps, {event, currentUser}) {
     return !_.isEqual(this.props, newProps) ||
-      !_.isEqual(this.state.event.beneficiaryIds, event.beneficiaryIds)
+      !_.isEqual(this.state.event.beneficiaryIds, event.beneficiaryIds) ||
+      this.state.currentUser._id !== currentUser._id
   }
 
   scrollToUser(user) {
@@ -110,6 +114,7 @@ UserList = class UserList extends React.Component {
           className="user-list--list">
           {participants.map((user) => (
             <UserItem
+              active={this.state.currentUser._id === user._id}
               presentsCount={Presents.find({
                 forUserId: user._id
               }).count()}
