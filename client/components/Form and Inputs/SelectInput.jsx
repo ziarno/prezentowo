@@ -71,6 +71,10 @@ SelectInput = class SelectInput extends ValidatedInput {
     this.selectDefault(selectDefault)
   }
 
+  componentWillUnmount() {
+    ReactDOM.unmountComponentAtNode(this.refs.placeholder)
+  }
+
   componentDidMount() {
     super.componentDidMount()
     var $dropdown = $(this.refs.dropdown)
