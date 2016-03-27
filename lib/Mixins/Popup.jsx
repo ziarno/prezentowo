@@ -34,7 +34,8 @@ class PopupComponent extends React.Component {
       position: 'bottom left',
       lastResort: 'bottom left',
       movePopup: false,
-      ...popupSettings
+      ...popupSettings,
+      ...this.props.popupSettings
     })
   }
 
@@ -104,7 +105,9 @@ class PopupComponent extends React.Component {
 
   render() {
     return (
-      <div className={this.props.wrapperClassName}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={this.props.wrapperClassName}>
         {this.renderTrigger()}
         {this.state.showPopup ? (
           this.renderPopup()

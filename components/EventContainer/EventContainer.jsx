@@ -5,8 +5,12 @@ EventContainer = class EventContainer extends React.Component {
   
   constructor() {
     super()
+    this.state = {
+      isSidebarVisible: true
+    }
     this.isCreator = this.isCreator.bind(this)
     this.autorunSetEvent = this.autorunSetEvent.bind(this)
+    this.onSidebarVisibilityChange = this.onSidebarVisibilityChange.bind(this)
   }
   
   getMeteorData() {
@@ -43,6 +47,10 @@ EventContainer = class EventContainer extends React.Component {
     Session.set('event', event || {})
   }
 
+  onSidebarVisibilityChange(isSidebarVisible) {
+    this.setState({isSidebarVisible})
+  }
+
   isCreator() {
     return Session.get('event').creatorId === Meteor.userId()
   }
@@ -51,11 +59,19 @@ EventContainer = class EventContainer extends React.Component {
     var eventTitle = Session.get('event').title
 
     return this.data.ready ? (
-      <div id="event-container">
-        <UserList
-          isCreator={this.isCreator()}
-          users={Session.get('participants')}
-          presents={this.data.presents} />
+      <div
+        id="event-container"
+        className={classNames({
+          padded: this.state.isSidebarVisible
+        })}>
+        <Sidebar
+          initiallyVisible={this.state.isSidebarVisible}
+          onVisibilityChange={this.onSidebarVisibilityChange}>
+          <UserList
+            isCreator={this.isCreator()}
+            users={Session.get('participants')}
+            presents={this.data.presents} />
+        </Sidebar>
         <PresentsContainer
           users={Session.get('participants')}
           presents={this.data.presents} />
@@ -72,14 +88,12 @@ EventContainer = class EventContainer extends React.Component {
         />
       </div>
     ) : (
-      <div id="event-container">
-        <Loader
-          size="large"
-          text={eventTitle ?
-            _i18n.__('Loading event', {title: eventTitle}) :
-            null}
-        />
-      </div>
+      <Loader
+        size="large"
+        text={eventTitle ?
+          _i18n.__('Loading event', {title: eventTitle}) :
+          null}
+      />
     )
   }
   

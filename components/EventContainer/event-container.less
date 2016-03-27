@@ -5,20 +5,22 @@
   min-height: calc(~"100vh" - @header-height);
   position: relative;
   display: flex;
+  transition: margin @transition-time * 2;
+  z-index: @z-index-event-container;
 
-  .popup {
-    z-index: 90;
+  &.padded {
+    margin-left: @sidebar-width;
   }
 
-  & > .ui.dimmer {
-    z-index: 890;
+  .popup {
+    z-index: @z-index-popup;
   }
 
   .add-present-button {
     position: fixed;
     bottom: 15px;
     right: 15px;
-    z-index: 90;
+    z-index: @z-index-add-present-button;
     .button {
       margin: 0;
     }

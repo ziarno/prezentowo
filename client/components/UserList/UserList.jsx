@@ -9,35 +9,15 @@ UserList = class UserList extends React.Component {
     this.state = {event: {}}
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
     this.autorunSetEvent = this.autorunSetEvent.bind(this)
-    this.setSticky = this.setSticky.bind(this)
     this.scrollToUser = this.scrollToUser.bind(this)
   }
-  
+
   autorunSetCurrentUser() {
     var currentUser = Session.get('currentUser')
-
-    if (currentUser) {
-      //note: do this manually because sticky was jumping
-      //after user-item rerendering
-      $(this.refs.userList)
-        .find('.user-item--user')
-        .removeClass('active')
-        .parent()
-        .find(`[data-id=${currentUser._id}]`)
-        .parent()
-        .addClass('active')
-    }
   }
 
   autorunSetEvent() {
     this.setState({event: Session.get('event')})
-  }
-
-  setSticky() {
-    $(this.refs.sticky).sticky({
-      context: '#event-container',
-      offset: 50
-    })
   }
 
   shouldComponentUpdate(newProps, {event}) {
@@ -66,14 +46,6 @@ UserList = class UserList extends React.Component {
     })
   }
 
-  componentDidMount() {
-    this.setSticky()
-  }
-
-  componentDidUpdate() {
-    this.setSticky()
-  }
-
   render() {
     var event = this.state.event
     var isManyToOne = event.type === 'many-to-one'
@@ -90,72 +62,64 @@ UserList = class UserList extends React.Component {
 
     return (
       <div
-        id="user-list"
         ref="userList"
-        className={classNames('shadow', {
+        className={classNames('user-list', {
           'many-to-one': isManyToOne
         })}>
-        <div
-          ref="sticky"
-          className="ui sticky">
 
-
-          {isManyToOne ? (
-            <div
-              className="user-list--title">
-              <T>{beneficiariesTitle}</T>
-            </div>
-          ) : null}
-          {isManyToOne ? (
-            <div
-              className="user-list--list">
-              {beneficiaries.map((user) => (
-                <UserItem
-                  presentsCount={Presents.find({
-                      forUserId: user._id
-                    }).count()}
-                  isCreator={this.props.isCreator}
-                  onClick={this.scrollToUser}
-                  key={user._id}
-                  user={user} />
-              ))}
-            </div>
-          ) : null}
-
-
-
+        {isManyToOne ? (
           <div
             className="user-list--title">
-            <T>Participants</T>
-            <div className="counts">
-              <CountLabel
-                icon="user"
-                className="basic"
-                count={this.props.users.length}
-              />
-              <CountLabel
-                icon="gift"
-                className="basic"
-                count={this.props.presents.length}
-              />
-            </div>
+            <T>{beneficiariesTitle}</T>
           </div>
-
+        ) : null}
+        {isManyToOne ? (
           <div
             className="user-list--list">
-            {participants.map((user) => (
+            {beneficiaries.map((user) => (
               <UserItem
                 presentsCount={Presents.find({
-                  forUserId: user._id
-                }).count()}
+                    forUserId: user._id
+                  }).count()}
                 isCreator={this.props.isCreator}
                 onClick={this.scrollToUser}
                 key={user._id}
                 user={user} />
             ))}
           </div>
+        ) : null}
 
+        <div
+          className="user-list--title">
+          <T>Participants</T>
+          <div className="counts">
+            <CountLabel
+              icon="user"
+              className="basic"
+              count={this.props.users.length}
+            />
+            <CountLabel
+              icon="gift"
+              className="basic"
+              count={this.props.presents.length}
+            />
+          </div>
         </div>
+
+        <div
+          className="user-list--list">
+          {participants.map((user) => (
+            <UserItem
+              presentsCount={Presents.find({
+                forUserId: user._id
+              }).count()}
+              isCreator={this.props.isCreator}
+              onClick={this.scrollToUser}
+              key={user._id}
+              user={user} />
+          ))}
+        </div>
+
       </div>
     )
   }

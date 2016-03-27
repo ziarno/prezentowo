@@ -1,0 +1,50 @@
+@import '/client/styles/partials/vars.import.less';
+@import '/client/styles/index.less';
+
+#sidebar {
+  position: fixed;
+  left: 0;
+  top: @header-height;
+  min-width: @sidebar-width;
+  width: @sidebar-width;
+  height: calc(~"100vh" - @header-height);
+  transition: left @transition-time * 2;
+  z-index: @z-index-sidebar;
+  left: -@sidebar-width;
+
+  .sidebar-wrapper {
+    //note: needed >>breaking out of overflow: hidden<< for participant popups
+    //basically nothing inside sidebar can have a position: relative or absolute
+    //so the popup can position itself relatively to the element without overflow:hidden,
+    //which is the .sidebar
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #fff;
+  }
+
+  .sidebar-controller {
+    .shadow();
+    position: absolute;
+    left: 100%;
+    top: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    z-index: @z-index-sidebar-controller;
+    i {
+      height: 100%;
+      transition: transform @transition-time;
+    }
+  }
+
+  &.visible {
+    left: 0;
+  }
+
+  &:not(.visible) .sidebar-controller i {
+    transform: rotate(180deg);
+  }
+
+}
