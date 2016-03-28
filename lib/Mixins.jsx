@@ -1,3 +1,5 @@
+import React from 'react'
+
 import Autorun from './Mixins/Autorun'
 import LoggedIn from './Mixins/LoggedIn'
 import Tooltips from './Mixins/Tooltips'

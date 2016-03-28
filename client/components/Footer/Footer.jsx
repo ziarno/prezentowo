@@ -1,3 +1,5 @@
+import React from 'react'
+
 Footer = () => (
   <footer>
     <span className="pull-right">

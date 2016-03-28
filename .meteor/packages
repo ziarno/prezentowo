@@ -14,8 +14,9 @@ tracker                 # Meteor's client-side reactive programming library
 
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
+react-meteor-data
 
-# server
+### server ###
 dburles:collection-helpers
 reywood:publish-composite
 mdg:validated-method
@@ -25,10 +26,9 @@ aldeed:simple-schema
 aldeed:collection2
 # kadira:debug
 
-# client
+### client ###
 less
-react
-kadira:react-layout
+# kadira:react-layout
 kadira:blaze-layout
 kadira:flow-router
 msavin:mongol
@@ -39,9 +39,8 @@ accounts-password
 accounts-facebook
 komorebi:waves
 useraccounts:semantic-ui
-useraccounts:flow-routing
-gwendall:blaze-to-react
-underscore
+# useraccounts:flow-routing
+# gwendall:blaze-to-react
 jparker:gravatar
 universe:i18n
 splendido:accounts-emails-field

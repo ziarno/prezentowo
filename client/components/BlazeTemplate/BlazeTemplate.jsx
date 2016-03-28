@@ -1,3 +1,5 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
 import reactMixin from 'react-mixin'
 
 BlazeTemplate = class BlazeTemplate extends React.Component {

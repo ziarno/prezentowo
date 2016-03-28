@@ -1,3 +1,4 @@
+import React from 'react'
 import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import moment from 'moment'
 

@@ -1,3 +1,5 @@
+import React from 'react'
+
 ButtonRemove = ({onClick}) => (
   <button
     type="button"

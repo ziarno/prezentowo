@@ -1,3 +1,4 @@
+import React from 'react'
 import {ValidatedInput} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 

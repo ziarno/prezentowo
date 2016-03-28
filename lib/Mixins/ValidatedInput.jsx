@@ -1,3 +1,4 @@
+import React from 'react'
 import Autorun from './Autorun'
 import reactMixin from 'react-mixin'
 

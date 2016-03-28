@@ -1,3 +1,5 @@
+import React from 'react'
+
 Message = class Message extends React.Component {
 
   constructor() {

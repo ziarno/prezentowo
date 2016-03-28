@@ -1,3 +1,5 @@
+import React from 'react'
+
 Img = class Img extends React.Component {
 
   constructor() {

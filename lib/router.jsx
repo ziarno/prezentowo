@@ -1,3 +1,6 @@
+import React from 'react'
+import {mount} from 'react-mounter'
+
 FlowRouter.notFound = {
   action() {
     console.warn('404 :(')
@@ -6,13 +9,13 @@ FlowRouter.notFound = {
 
 FlowRouter.route('/', {
   action() {
-    ReactLayout.render(App)
+    mount(App)
   }
 })
 
 FlowRouter.route('/event/id/:eventId', {
   action() {
-    ReactLayout.render(App, {
+    mount(App, {
       content: <EventContainer />
     })
   }

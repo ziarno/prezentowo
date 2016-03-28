@@ -1,3 +1,6 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
+
 UserPresents = class UserPresents extends React.Component {
 
   constructor() {

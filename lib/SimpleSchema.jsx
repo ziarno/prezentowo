@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * Updates error messages to current language
  */

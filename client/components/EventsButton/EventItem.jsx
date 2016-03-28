@@ -1,3 +1,4 @@
+import React from 'react'
 EventItem = ({event, onClick}) => (
   <div className="item event flex"
        onClick={() => onClick(event)}>

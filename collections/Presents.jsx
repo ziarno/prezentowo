@@ -1,3 +1,4 @@
+import React from 'react'
 import {LoggedIn} from '../lib/Mixins'
 
 /**

@@ -1,3 +1,5 @@
+import React from 'react'
+
 App = class App extends React.Component {
   render() {
     return (

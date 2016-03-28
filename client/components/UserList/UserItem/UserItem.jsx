@@ -1,3 +1,4 @@
+import React from 'react'
 import {isMobile} from '../../../../lib/utilities'
 
 UserItem = ({onClick, user, presentsCount, isCreator, active}) => (

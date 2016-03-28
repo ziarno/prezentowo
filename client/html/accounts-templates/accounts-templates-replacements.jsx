@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * Accounts Templates - templates
  * overrides settings

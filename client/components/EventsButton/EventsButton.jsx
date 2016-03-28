@@ -1,3 +1,5 @@
+import React from 'react'
+
 EventsButton = class EventsButton extends React.Component {
 
   showEvent(event) {

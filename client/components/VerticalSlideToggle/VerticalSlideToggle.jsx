@@ -1,3 +1,5 @@
+import React from 'react'
+
 VerticalSlideToggle = class VerticalSlideToggle extends React.Component {
 
   constructor() {

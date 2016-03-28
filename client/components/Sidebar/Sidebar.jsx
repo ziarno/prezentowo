@@ -1,3 +1,5 @@
+import React from 'react'
+
 Sidebar = class Sidebar extends React.Component {
 
   constructor({initiallyVisible}) {

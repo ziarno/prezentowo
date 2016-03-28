@@ -1,3 +1,5 @@
+import React from 'react'
+
 LoginOrRegisterButton = () => (
   <div className="ui buttons compact">
     <a href="/sign-in" className="ui button">

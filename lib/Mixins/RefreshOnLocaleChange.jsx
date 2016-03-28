@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * copied from universe:i18n
  * (I don't know how to import this from universe:i18n! :( )

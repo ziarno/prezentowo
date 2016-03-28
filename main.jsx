@@ -1,6 +1,8 @@
+import React from 'react'
+
 //defined in lib/config.jsx
 Language.set('pl')
-ConfigureAccountsTemplates()
+//ConfigureAccountsTemplates()
 
 Meteor.startup(function () {
   if (Meteor.isServer) {

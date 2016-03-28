@@ -1,3 +1,5 @@
+import React from 'react'
+
 $.cloudinary.config({
   cloud_name: 'dyerfydu8'
 })

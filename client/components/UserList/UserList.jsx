@@ -1,3 +1,4 @@
+import React from 'react'
 import {Autorun} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 import _ from 'underscore'

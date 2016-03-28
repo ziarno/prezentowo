@@ -1,3 +1,5 @@
+import React from 'react'
+
 Ribbon = ({small, children, whiteStiches, color}) => (
   <div className={classNames('ribbon', color, {
     small: small,

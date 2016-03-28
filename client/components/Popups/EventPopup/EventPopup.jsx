@@ -1,3 +1,4 @@
+import React from 'react'
 import {PopupComponent} from '../../../../lib/Mixins'
 
 EventPopup = class EventPopup extends PopupComponent {

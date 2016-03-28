@@ -1,3 +1,5 @@
+import React from 'react'
+
 Present = class Present extends React.Component {
   
   render() {

@@ -1,3 +1,4 @@
+import React from 'react'
 import _ from 'underscore'
 
 String.prototype.capitalizeFirstLetter = function () {

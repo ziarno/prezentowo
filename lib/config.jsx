@@ -1,7 +1,9 @@
+import React from 'react'
+
 //universe:i18n
 _i18n.options.open = '['
 _i18n.options.close = ']'
-T = _i18n.createComponent()
+T = _i18n.createComponent(_i18n.createTranslator(), undefined, React)
 
 /**
  * Configuration for AccountsTemplates.

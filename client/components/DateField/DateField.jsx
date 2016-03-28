@@ -1,3 +1,4 @@
+import React from 'react'
 import moment from 'moment'
 import {Tooltips} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'

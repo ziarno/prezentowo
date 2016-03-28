@@ -1,3 +1,5 @@
+import React from 'react'
+
 Accounts.onCreateUser(function(options = {profile: {}}, user) {
   var email
 

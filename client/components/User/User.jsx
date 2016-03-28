@@ -1,3 +1,5 @@
+import React from 'react'
+
 User = ({user, className, large}) => (
   <div
     className={classNames('user', className, {

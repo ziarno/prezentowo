@@ -2,6 +2,7 @@
 //! locale : polish (pl)
 //! author : Rafal Hirsz : https://github.com/evoL
 
+import React from 'react'
 import moment from 'moment';
 
 var monthsNominative = 'styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień'.split('_'),

@@ -1,3 +1,5 @@
+import React from 'react'
+
 Loader = ({visible, size, text}) => (
   <div
     className={classNames('ui inverted dimmer', {

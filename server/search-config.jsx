@@ -1,3 +1,5 @@
+import React from 'react'
+
 SearchSource.defineSource('userEmail', function (searchText) {
   return Meteor.users.find({
     registered_emails: {

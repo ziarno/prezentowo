@@ -1,3 +1,5 @@
+import React from 'react'
+
 ButtonAccept = ({onClick, text, className}) => (
   <button
     type="submit"
