@@ -82,8 +82,7 @@ ValidatedInput.propTypes = {
 
 ValidatedInput.contextTypes = {
   register: React.PropTypes.func,
-  schema: React.PropTypes.object,
-  form: React.PropTypes.object
+  schema: React.PropTypes.object
 }
 
 reactMixin(ValidatedInput.prototype, Autorun)

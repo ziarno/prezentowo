@@ -14,9 +14,9 @@ FlowRouter.route('/', {
 })
 
 FlowRouter.route('/event/id/:eventId', {
-  action() {
+  action({eventId}) {
     mount(App, {
-      content: <EventContainer />
+      content: <EventContainer eventId={eventId} />
     })
   }
 })

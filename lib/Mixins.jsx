@@ -5,6 +5,7 @@ import LoggedIn from './Mixins/LoggedIn'
 import Tooltips from './Mixins/Tooltips'
 import ValidatedInput from './Mixins/ValidatedInput'
 import PopupComponent from './Mixins/Popup'
+import ScrollableComponent from './Mixins/ScrollableComponent'
 import RefreshOnLocaleChange from './Mixins/RefreshOnLocaleChange'
 
 export {
@@ -13,5 +14,6 @@ export {
   Tooltips,
   ValidatedInput,
   PopupComponent,
-  RefreshOnLocaleChange
+  RefreshOnLocaleChange,
+  ScrollableComponent
 }

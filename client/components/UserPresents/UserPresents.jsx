@@ -27,7 +27,7 @@ UserPresents = class UserPresents extends React.Component {
       .scrollSpy({
         offsetTop: 100,
         offsetBottom: -100,
-        throttle: 300
+        throttle: 1000
       })
   }
 

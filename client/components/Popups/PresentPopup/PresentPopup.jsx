@@ -9,9 +9,6 @@ PresentPopup = class PresentPopup extends PopupComponent {
     this.schema = Presents.Schemas.NewPresent
         .pick(['title', 'pictureUrl', 'description', 'forUserId'])
         .namedContext('newPresent')
-    this.state = _.extend(this.state, {
-      defaultSelectedUser: Session.get('currentUser')
-    })
     this.avatars = _.range(20).map((index) => (
       `/images/presents/p${index + 1}-150px.png`
     ))
@@ -20,7 +17,6 @@ PresentPopup = class PresentPopup extends PopupComponent {
     this.addPresent = this.addPresent.bind(this)
     this.editPresent = this.editPresent.bind(this)
     this.removePresent = this.removePresent.bind(this)
-    this.autorunSetDefaultSelectedUser = this.autorunSetDefaultSelectedUser.bind(this)
     this.getPopupSettings = this.getPopupSettings.bind(this)
   }
 
@@ -28,20 +24,12 @@ PresentPopup = class PresentPopup extends PopupComponent {
     var position = this.isEdit() ? 'bottom center' : 'top right'
     return {
       onShow: () => {
-        this.autorunSetDefaultSelectedUser()
         this.schema.resetValidation()
       },
       position,
       lastResort: position,
       movePopup: false,
       offset: !this.isEdit() && -11
-    }
-  }
-
-  autorunSetDefaultSelectedUser() {
-    var defaultSelectedUser = Session.get('currentUser')
-    if (this.state.showPopup) {
-      this.setState({defaultSelectedUser})
     }
   }
 
@@ -77,9 +65,10 @@ PresentPopup = class PresentPopup extends PopupComponent {
     return !!this.props.present
   }
 
-  //shouldComponentUpdate({users, selectedDefaultUser}) {
-  //  return user._id !== this.props.user._id
-  //}
+  shouldComponentUpdate(newProps, newState) {
+    return !_.isEqual(this.props, newProps) ||
+      !_.isEqual(newState, this.state)
+  }
 
   renderTrigger() {
     return (
@@ -99,8 +88,8 @@ PresentPopup = class PresentPopup extends PopupComponent {
     var defaultSelectedUserId
 
     if (!this.props.present &&
-      this.state.defaultSelectedUser) {
-      defaultSelectedUserId = this.state.defaultSelectedUser._id
+      this.props.defaultSelectedUser) {
+      defaultSelectedUserId = this.props.defaultSelectedUser._id
     } else {
       defaultSelectedUserId = ''
     }
@@ -190,6 +179,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
 
 PresentPopup.propTypes = {
   present: React.PropTypes.object,
+  defaultSelectedUser: React.PropTypes.object,
   users: React.PropTypes.array,
   buttonClassName: React.PropTypes.string,
   icon: React.PropTypes.element

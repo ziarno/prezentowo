@@ -122,23 +122,32 @@
    * @returns {jQuery}
    */
   $.scrollSpy = function(selector, options) {
+    var scrollFunc
     selector = $(selector);
     selector.each(function(i, element) {
       elements.push($(element));
     });
-    options = options || {
-        throttle: 100
-      };
+    options = _.defaults(options, {
+      throttle: 100,
+      offsetTop: 0,
+      offsetRight: 0,
+      offsetBottom: 0,
+      offsetLeft: 0
+    })
 
-    offset.top = options.offsetTop || 0;
-    offset.right = options.offsetRight || 0;
-    offset.bottom = options.offsetBottom || 0;
-    offset.left = options.offsetLeft || 0;
+    offset.top = options.offsetTop
+    offset.right = options.offsetRight
+    offset.bottom = options.offsetBottom
+    offset.left = options.offsetLeft
 
-    var throttledScroll = _.throttle(onScroll, options.throttle || 100);
-    var readyScroll = function(){
-      $(document).ready(throttledScroll);
-    };
+
+    if (options.debounce) {
+      scrollFunc = _.debounce(onScroll, options.debounce);
+    } else {
+      scrollFunc = _.throttle(onScroll, options.throttle);
+    }
+
+    var readyScroll = $(document).ready.bind($, scrollFunc)
 
     if (!isSpying) {
       jWindow.on('scroll', readyScroll);

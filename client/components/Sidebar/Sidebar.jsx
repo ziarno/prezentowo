@@ -1,6 +1,7 @@
 import React from 'react'
+import {ScrollableComponent} from '../../../lib/Mixins'
 
-Sidebar = class Sidebar extends React.Component {
+Sidebar = class Sidebar extends ScrollableComponent {
 
   constructor({initiallyVisible}) {
     super()
@@ -12,13 +13,22 @@ Sidebar = class Sidebar extends React.Component {
 
   toggleVisibility() {
     var visible = !this.state.visible
+
+    this.isScrollable = visible
     this.setState({visible})
     if (_.isFunction(this.props.onVisibilityChange)) {
       this.props.onVisibilityChange(visible)
     }
   }
 
+  getScrollToOptions() {
+    return {
+      offset: 'middle'
+    }
+  }
+
   render() {
+
     return (
       <div
         id="sidebar"
@@ -30,7 +40,9 @@ Sidebar = class Sidebar extends React.Component {
           className="sidebar-controller ui compact icon button">
           <i className="left chevron icon" />
         </div>
-        <div className="sidebar-wrapper shadow">
+        <div
+          ref="scrollContainer"
+          className="sidebar-wrapper shadow">
           {this.props.children}
         </div>
       </div>

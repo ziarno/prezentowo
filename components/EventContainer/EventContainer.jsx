@@ -7,16 +7,15 @@ EventContainer = class EventContainer extends React.Component {
   constructor() {
     super()
     this.state = {
-      isSidebarVisible: true
+      isSidebarVisible: true,
+      currentUser: Session.get('currentUser')
     }
-    this.isCreator = this.isCreator.bind(this)
-    this.autorunSetEvent = this.autorunSetEvent.bind(this)
-    this.onSidebarVisibilityChange = this.onSidebarVisibilityChange.bind(this)
+    this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
   }
-  
+
   getMeteorData() {
-    var event = Session.get('event')
-    var eventId = event._id
+    var eventId = this.props.eventId
+    var event = Events.findOne(eventId)
     var subscription = Meteor.subscribe('eventDetails', {eventId})
     var participants = Participants
       .find()
@@ -34,70 +33,77 @@ EventContainer = class EventContainer extends React.Component {
     ))
 
     Session.set('participants', participants)
+    Session.set('event', event || {})
 
     return {
       ready: subscription.ready(),
-      presents: Presents.find().fetch()
+      presents: Presents.find().fetch(),
+      participants,
+      event
     }
   }
 
-  autorunSetEvent() {
-    var eventId = FlowRouter.getParam('eventId')
-    var event = Events.findOne(eventId)
-
-    Session.set('event', event || {})
-  }
-
-  onSidebarVisibilityChange(isSidebarVisible) {
-    this.setState({isSidebarVisible})
-  }
-
-  isCreator() {
-    return Session.get('event').creatorId === Meteor.userId()
+  autorunSetCurrentUser() {
+    this.setState({currentUser: Session.get('currentUser')})
   }
 
   render() {
     var eventTitle = Session.get('event').title
 
-    return this.data.ready ? (
+    if (!this.data.ready) {
+      return (
+        <Loader
+          size="large"
+          text={eventTitle ?
+            _i18n.__('Loading event', {title: eventTitle}) :
+          null}
+        />
+      )
+    }
+
+    return (
       <div
         id="event-container"
         className={classNames({
           padded: this.state.isSidebarVisible
         })}>
+
         <Sidebar
+          scrollToEl={`.user-list [data-id=${this.state.currentUser._id}]`}
           initiallyVisible={this.state.isSidebarVisible}
-          onVisibilityChange={this.onSidebarVisibilityChange}>
+          onVisibilityChange={isSidebarVisible =>
+            this.setState({isSidebarVisible})}>
           <UserList
-            isCreator={this.isCreator()}
-            users={Session.get('participants')}
+            users={this.data.participants}
             presents={this.data.presents} />
         </Sidebar>
+
         <PresentsContainer
-          users={Session.get('participants')}
+          scrollToEl={`#user-presents-${this.state.currentUser._id}`}
+          users={this.data.participants}
           presents={this.data.presents} />
+
         <PresentPopup
           buttonClassName="present-button--add circular primary"
           wrapperClassName="add-present-button"
+          defaultSelectedUser={this.state.currentUser}
           icon={(
             <i className="large icons">
               <i className="plus icon"></i>
               <i className="gift corner inverted icon"></i>
             </i>
           )}
-          users={Session.get('participants')}
+          users={this.data.participants}
         />
+
       </div>
-    ) : (
-      <Loader
-        size="large"
-        text={eventTitle ?
-          _i18n.__('Loading event', {title: eventTitle}) :
-          null}
-      />
     )
   }
   
+}
+
+EventContainer.propTypes = {
+  eventId: React.PropTypes.string.isRequired
 }
 
 reactMixin(EventContainer.prototype, ReactMeteorData)

@@ -1,12 +1,14 @@
 import React from 'react'
-import {Autorun} from '../../../lib/Mixins'
+import ReactDOM from 'react-dom'
+import {Autorun, ScrollableComponent} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-PresentsContainer = class PresentsContainer extends React.Component {
+PresentsContainer = class PresentsContainer extends ScrollableComponent {
   
   constructor() {
     super()
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
+    this.getScrollToOptions = this.getScrollToOptions.bind(this)
   }
   
   autorunSetCurrentUser() {
@@ -14,15 +16,43 @@ PresentsContainer = class PresentsContainer extends React.Component {
     var currentUser = _.find(this.props.users,
       user => _.contains(visibleUserIds, user._id))
 
-    if (currentUser) {
+    if (currentUser && this.canSetCurrentUser) {
+      //note: current user from scrolling this component
+      // will only be set is mouse is over it
       Session.set('currentUser', currentUser)
+    }
+  }
+
+  getScrollToOptions() {
+    return {
+      offset: -75,
+      onAfter: ($scrollToEl) => {
+        var userEl = $scrollToEl
+          .find('.user')
+          .addClass('waves-effect waves-button')
+
+        Waves.ripple(userEl)
+        setTimeout(() => {
+          userEl.removeClass('waves-effect waves-button')
+          Waves.calm(userEl)
+        }, 2000)
+      }
     }
   }
 
   render() {
 
     return (
-      <div id="presents-container">
+      <div
+        id="presents-container"
+        onMouseEnter={() => {
+          this.canSetCurrentUser = true
+          this.isScrollable = false
+        }}
+        onMouseLeave={() => {
+          this.canSetCurrentUser = false
+          this.isScrollable = true
+        }}>
 
         {this.props.users.map((user) => (
           <UserPresents

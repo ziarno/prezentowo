@@ -74,6 +74,7 @@ SelectInput = class SelectInput extends ValidatedInput {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount()
     ReactDOM.unmountComponentAtNode(this.refs.placeholder)
   }
 
