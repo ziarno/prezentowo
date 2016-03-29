@@ -7,7 +7,7 @@ EventContainer = class EventContainer extends React.Component {
   constructor() {
     super()
     this.state = {
-      isSidebarVisible: true,
+      isSidebarVisible: $(window).width() > 720,
       currentUser: Session.get('currentUser')
     }
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
