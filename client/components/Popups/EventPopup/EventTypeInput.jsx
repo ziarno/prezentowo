@@ -6,7 +6,7 @@ EventTypeInput = class EventTypeInput extends ValidatedInput {
 
   constructor() {
     super()
-    this.state = _.extend(this.getDefaultState(), {
+    this.state = _.extend(this.state, {
       type: null
     })
     this.reset = this.reset.bind(this)

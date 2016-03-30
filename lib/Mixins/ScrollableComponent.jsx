@@ -13,8 +13,7 @@ export default class ScrollableComponent extends React.Component {
       return
     }
 
-    var scrollContainer = this.refs.scrollContainer ||
-      document.body
+    var scrollContainer = this.refs.scrollContainer || 'body, html'
     var scrollToOptions = _.isFunction(this.getScrollToOptions) &&
       this.getScrollToOptions()
 

@@ -24,7 +24,7 @@ Present = class Present extends React.Component {
             )}
             users={Session.get('participants')}
           />
-        ) : null}
+        ) : <div></div> /*empty div because semantic has strong css rules for last element in a card for border-radius */}
       </div>
     )
   }

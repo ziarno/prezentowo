@@ -7,7 +7,7 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   constructor(props) {
     super(props)
     this.inputId = `image-picker-input-${_.uniqueId()}`
-    this.state = _.extend(this.getDefaultState(), {
+    this.state = _.extend(this.state, {
       uploadedImages: [],
       currentIndex: props.randomizeInitialImage ?
         _.random(0, props.images.length - 1) : 0,

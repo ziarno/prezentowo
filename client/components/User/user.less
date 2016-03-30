@@ -1,17 +1,45 @@
+@import '/client/styles/partials/vars.import.less';
+@import '/client/styles/partials/mixins.import.less';
+
 .user {
   display: inline-block;
-  text-transform: capitalize;
+
+  & > .user--name {
+    text-transform: capitalize;
+  }
 
   &.large {
     display: inline-flex;
     align-items: center;
-    .img {
-      width: 70px;
-      height: 70px;
+    & > .user--avatar,
+    .user--picture-wrapper > .user--avatar {
+      width: @large-user-image;
+      height: @large-user-image;
     }
-    span {
+    & > .user--name {
       margin-left: 10px;
       font-size: 1.6em;
     }
   }
+
+  .user--picture-wrapper {
+    position: relative;
+    height: @large-user-image;
+    width: @large-user-image;
+    .present-button--add {
+      .flex-center();
+      background-color: rgba(255,255,255,0.7);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity @transition-time;
+    }
+    &:hover .present-button--add {
+      opacity: 1;
+    }
+  }
+
 }

@@ -62,7 +62,7 @@ UserPresents = class UserPresents extends React.Component {
         className="user-presents">
 
         <div className="ui horizontal divider">
-          <User user={this.props.user} large />
+          <User user={this.props.user} large showAddPresentOnHover />
         </div>
 
         {ownPresents.length ? (

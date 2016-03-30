@@ -6,7 +6,7 @@ SearchableInput = class SearchableInput extends ValidatedInput {
   
   constructor() {
     super()
-    this.state = _.extend(this.getDefaultState(), {
+    this.state = _.extend(this.state, {
       showSearchResults: false
     })
     this.getValue = this.getValue.bind(this)

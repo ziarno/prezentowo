@@ -12,7 +12,10 @@ var ValidatedInput = class ValidatedInput extends React.Component {
 
   constructor() {
     super()
-    this.state = this.getDefaultState()
+    this.state = {
+      showError: false,
+      hasError: false
+    }
     this.autorunValidation = this.autorunValidation.bind(this)
     this.hideError = this.hideError.bind(this)
     this.showError = this.showError.bind(this)
@@ -21,20 +24,20 @@ var ValidatedInput = class ValidatedInput extends React.Component {
     this.validate = this.validate.bind(this)
   }
 
-  //note: custom function, not React's getInitialState
-  getDefaultState() {
-    return {
-      showError: false,
-      hasError: false
-    }
-  }
-
   autorunValidation() {
     this.setState({
       hasError: this.context.schema &&
         this.context.schema.keyIsInvalid(this.props.name)
     })
   }
+
+  //override
+  getValue() {
+    return this.props.staticValue
+  }
+
+  //override
+  setValue() {}
 
   hideError() {
     this.setState({showError: false})
@@ -73,11 +76,20 @@ var ValidatedInput = class ValidatedInput extends React.Component {
     }
   }
 
+  //override
+  render() {
+    return this.props.children
+  }
+
 }
 
 ValidatedInput.propTypes = {
   name: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func
+  onChange: React.PropTypes.func,
+  staticValue: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ])
 }
 
 ValidatedInput.contextTypes = {

@@ -7,7 +7,7 @@ SelectInput = class SelectInput extends ValidatedInput {
 
   constructor() {
     super()
-    this.state = _.extend(this.getDefaultState(), {
+    this.state = _.extend(this.state, {
       isSelectedByUser: false
     })
     this.setValue = this.setValue.bind(this)

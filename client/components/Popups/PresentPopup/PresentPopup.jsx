@@ -1,5 +1,5 @@
 import React from 'react'
-import {PopupComponent, Autorun} from '../../../../lib/Mixins'
+import {PopupComponent, Autorun, ValidatedInput} from '../../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
 PresentPopup = class PresentPopup extends PopupComponent {
@@ -21,15 +21,14 @@ PresentPopup = class PresentPopup extends PopupComponent {
   }
 
   getPopupSettings() {
-    var position = this.isEdit() ? 'bottom center' : 'top right'
+    var position = 'bottom center'
     return {
       onShow: () => {
         this.schema.resetValidation()
       },
       position,
       lastResort: position,
-      movePopup: false,
-      offset: !this.isEdit() && -11
+      movePopup: false
     }
   }
 
@@ -45,10 +44,12 @@ PresentPopup = class PresentPopup extends PopupComponent {
 
   editPresent(presentData) {
     if (this.schema.validate(presentData)) {
-      this.hideAndReset()
-      Presents.methods.editPresent.call({
-        _id: this.props.present._id,
-        ...presentData
+      this.hidePopup(() => {
+        Presents.methods.editPresent.call({
+          _id: this.props.present._id,
+          ...presentData
+        })
+        this.reset()
       })
     }
   }
@@ -77,8 +78,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
         ref="popupTrigger"
         className={classNames(this.props.buttonClassName,
           'present-button',
-          'ui icon button left',
-          'waves-effect waves-button')}>
+          'ui icon button left')}>
         {this.props.icon}
       </div>
     )
@@ -118,21 +118,29 @@ PresentPopup = class PresentPopup extends PopupComponent {
                 <T>New present</T>
               )}
               <T>for</T>
-              <SelectInput
-                inline
-                className="scrolling"
-                placeholder="choose user"
-                selectDefault={defaultSelectedUserId}
-                name="forUserId">
-                {this.props.users.map((user) => (
-                <div
-                  className="item"
-                  key={user._id}
-                  data-value={user._id}>
-                  <User user={user} />
-                </div>
-                  ))}
-              </SelectInput>
+              {this.props.users.length > 1 ? (
+                <SelectInput
+                  inline
+                  className="scrolling"
+                  placeholder="choose user"
+                  selectDefault={defaultSelectedUserId}
+                  name="forUserId">
+                  {this.props.users.map((user) => (
+                  <div
+                    className="item"
+                    key={user._id}
+                    data-value={user._id}>
+                    <User user={user} />
+                  </div>
+                    ))}
+                </SelectInput>
+              ) : (
+                <ValidatedInput
+                  name="forUserId"
+                  staticValue={this.props.users[0]._id}>
+                  <User user={this.props.users[0]} />
+                </ValidatedInput>
+              )}
             </div>
           </div>
 
@@ -180,7 +188,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
 PresentPopup.propTypes = {
   present: React.PropTypes.object,
   defaultSelectedUser: React.PropTypes.object,
-  users: React.PropTypes.array,
+  users: React.PropTypes.array.isRequired,
   buttonClassName: React.PropTypes.string,
   icon: React.PropTypes.element
 }

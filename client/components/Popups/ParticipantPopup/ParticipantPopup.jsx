@@ -26,7 +26,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   getPopupSettings() {
-    var position = this.isEdit() ? 'bottom left' : 'top right'
+    var position = this.isEdit() ? 'bottom left' : 'bottom right'
     var transition = this.isEdit() ? 'scale' : 'slide down'
     return {
       onShow: () => {
