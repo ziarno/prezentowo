@@ -1,10 +1,32 @@
 import React from 'react'
+import {LoggedIn} from '../lib/Mixins'
 
 /**
  * Users Collection
  */
 Users = Meteor.users
 Users.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
+
+
+/**
+ * SCHEMAS
+ */
+Users.schemas = {}
+
+Users.schemas.viewMode = new SimpleSchema({
+  participantsMode: {
+    type: String,
+    allowedValues: ['single-participant', 'all-participants'],
+    defaultValue: 'single-participant',
+    optional: true
+  },
+  presentMode: {
+    type: String,
+    allowedValues: ['card', 'full-width'],
+    defaultValue: 'full-width',
+    optional: true
+  }
+})
 
 /**
  * HELPER FUNCTIONS
@@ -74,9 +96,19 @@ Users.functions.updateEmail = function (selector, email) {
 }
 
 Users.functions.removeTempUsers = function (selector) {
-  //TODO: check if each temp user is not a part of another event!
+  //TODO: check if each temp user is not a part of another event
   var selector = _.extend(selector, {isTemp: true})
   Users.remove(selector)
+}
+
+Users.functions.getPresentsCount = function (user) {
+  return parseInt(
+      user && user._id === Meteor.userId() ? (
+        user.ownPresentsCount
+      ) : (
+        user.ownPresentsCount + user.otherPresentsCount
+      )
+    ) || 0
 }
 
 /**
@@ -101,5 +133,19 @@ Users.helpers({
       _id: presentId,
       creatorId: this._id
     })
+  }
+})
+
+/**
+ * METHODS
+ */
+Users.methods = {}
+
+Users.methods.setViewMode = new ValidatedMethod({
+  name: 'Users.methods.setViewMode',
+  mixins: [LoggedIn],
+  validate: Users.schemas.viewMode.validator(),
+  run(viewMode) {
+    return Users.update(this.userId, {$set: {settings: {viewMode}}})
   }
 })

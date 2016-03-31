@@ -1,7 +1,7 @@
 import React from 'react'
 import {isMobile} from '../../../../lib/utilities'
 
-UserItem = ({onClick, user, presentsCount, isCreator, active}) => (
+UserItem = ({onClick, onRemove, user, presentsCount, isCreator, active}) => (
   <div
     onClick={() => onClick(user)}
     className={classNames('user-item', {active})}>
@@ -12,6 +12,7 @@ UserItem = ({onClick, user, presentsCount, isCreator, active}) => (
     />
     {isCreator ? (
       <ParticipantPopup
+        onRemove={onRemove}
         popupSettings={{
           hideOnScroll: !isMobile() /* normally hide because popup doesn't reposition, but on mobile don't hide because it also hides on input focus */
         }}

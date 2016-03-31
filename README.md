@@ -9,8 +9,9 @@ To use functions saved in system.js collection, connect to `meteor mongo` and ty
 ```
 db.loadServerScripts();
 //now you can use saved functions, example:
-updatePresentsCount();
 resetDB();
+updatePresentCounts();
+setDefaultSettings();
 ```
 
 1. `resetDB()` - remove all docs from collections
@@ -73,6 +74,36 @@ db.users.find({}).forEach(function (user) {
     db.users.update({_id: user._id}, {$set: {'profile.pictureUrl': user.profile.pictureUrl.large}});
 });
 
+```
+
+4. Set default settings
+
+```
+db.system.js.save({
+    _id: 'setDefaultSettings',
+    value: function () {
+        db.users.find({}).forEach(function (user) {
+            var defaultSettings = {
+                viewMode: {
+                    participantsMode: 'single-participant',
+                    presentMode: 'full-width',
+                    sidebarMode: 'fluid'
+                }
+            }
+            var settings = user.settings || {}
+
+            settings.viewMode = settings.viewMode || {}
+            settings.viewMode.participantsMode = settings.viewMode.participantsMode
+                || defaultSettings.viewMode.participantsMode
+            settings.viewMode.presentMode = settings.viewMode.presentMode
+                || defaultSettings.viewMode.presentMode
+            settings.viewMode.sidebarMode = settings.viewMode.sidebarMode
+                || defaultSettings.viewMode.sidebarMode
+
+            db.users.update({_id: user._id}, {$set: {settings: settings}})
+        });
+    }
+});
 ```
 
 Index for unique userId's in participants array
@@ -171,6 +202,4 @@ Todo:
 - add MongodDb indexes
 
 Todo features:
-- separate view for each user
 - row present view
-- add present - on user click

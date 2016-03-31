@@ -9,5 +9,6 @@ Session.setDefault('currentUser', {})
 Session.setDefault('participants', [])
 
 Meteor.startup(() => {
+  Meteor.subscribe('userData')
   ModalManager.init()
 })

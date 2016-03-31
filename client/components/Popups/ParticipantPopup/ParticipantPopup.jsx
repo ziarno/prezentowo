@@ -80,6 +80,9 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   removeParticipant() {
+    if (_.isFunction(this.props.onRemove)) {
+      this.props.onRemove(this.props.user)
+    }
     this.hidePopup(() => {
       Events.methods.removeParticipant.call({
         eventId: Session.get('event')._id,
@@ -239,5 +242,6 @@ reactMixin(ParticipantPopup.prototype, Autorun)
 ParticipantPopup.propTypes = {
   user: React.PropTypes.object,
   buttonClassName: React.PropTypes.string,
-  icon: React.PropTypes.element
+  icon: React.PropTypes.element,
+  onRemove: React.PropTypes.func
 }

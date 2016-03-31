@@ -4,11 +4,11 @@ import reactMixin from 'react-mixin'
 
 EventContainer = class EventContainer extends React.Component {
   
-  constructor() {
+  constructor(props) {
     super()
     this.state = {
       isSidebarVisible: $(window).width() > 720,
-      currentUser: Session.get('currentUser')
+      currentUser: props.userId ? Users.findOne(props.userId) : Session.get('currentUser')
     }
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
   }
@@ -16,7 +16,7 @@ EventContainer = class EventContainer extends React.Component {
   getMeteorData() {
     var eventId = this.props.eventId
     var event = Events.findOne(eventId)
-    var subscription = Meteor.subscribe('eventDetails', {eventId})
+    var subscription = Meteor.subscribe('eventParticipants', {eventId})
     var participants = Participants
       .find()
       .fetch()
@@ -31,6 +31,14 @@ EventContainer = class EventContainer extends React.Component {
     participants.moveToTop((participant) => (
       participant._id === Meteor.userId()
     ))
+
+    //mix with event participant data
+    if (participants && participants.length && event) {
+      participants.forEach((participant) => {
+        _.extend(participant, _.find(event.participants,
+          p => p.userId === participant._id))
+      })
+    }
 
     Session.set('participants', participants)
     Session.set('event', event || {})
@@ -49,6 +57,10 @@ EventContainer = class EventContainer extends React.Component {
 
   render() {
     var eventTitle = Session.get('event').title
+    var viewUsers = this.props.userId ?
+      [_.find(this.data.participants,
+        p => p._id === this.props.userId)]
+      : this.data.participants
 
     if (!this.data.ready) {
       return (
@@ -58,6 +70,13 @@ EventContainer = class EventContainer extends React.Component {
             _i18n.__('Loading event', {title: eventTitle}) :
           null}
         />
+      )
+    }
+
+    if (viewUsers.length === 0 || !viewUsers[0]) {
+      //TODO: implement no results page
+      return (
+        <div>U has errorz!</div>
       )
     }
 
@@ -74,14 +93,12 @@ EventContainer = class EventContainer extends React.Component {
           onVisibilityChange={isSidebarVisible =>
             this.setState({isSidebarVisible})}>
           <UserList
-            users={this.data.participants}
-            presents={this.data.presents} />
+            users={this.data.participants} />
         </Sidebar>
 
         <PresentsContainer
           scrollToEl={`#user-presents-${this.state.currentUser._id}`}
-          users={this.data.participants}
-          presents={this.data.presents} />
+          users={viewUsers} />
 
         <PresentPopup
           buttonClassName="present-button--add circular primary"
@@ -103,7 +120,8 @@ EventContainer = class EventContainer extends React.Component {
 }
 
 EventContainer.propTypes = {
-  eventId: React.PropTypes.string.isRequired
+  eventId: React.PropTypes.string.isRequired,
+  userId: React.PropTypes.string
 }
 
 reactMixin(EventContainer.prototype, ReactMeteorData)

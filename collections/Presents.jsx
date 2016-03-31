@@ -86,6 +86,19 @@ Presents.attachSchema(Presents.Schemas.Main)
  */
 Presents.functions = {}
 
+Presents.functions.updatePresentsCount = function (incrementValue, present) {
+  var isOwnPresent = (present.forUserId === present.creatorId)
+  var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount'
+  var countModifier = {$inc: {
+    [`participants.$.${countFieldName}`]: incrementValue
+  }}
+
+  Events.update({
+    _id: present.eventId,
+    'participants.userId': present.forUserId
+  }, countModifier)
+}
+
 
 /**
  * Collection helpers
@@ -115,7 +128,9 @@ Presents.methods.createPresent = new ValidatedMethod({
         _i18n.__('Not participant'))
     }
 
-    return Presents.insert(present) //auto clean ok - no sub schemas
+    var presentId = Presents.insert(present) //auto clean ok - no sub schemas
+    Presents.functions.updatePresentsCount(1, present)
+    return presentId
   }
 })
 
@@ -133,11 +148,13 @@ Presents.methods.removePresent = new ValidatedMethod({
         `${this.name}.notCreatedPresent`,
         _i18n.__('Presents deleted by creators'))
     }
-
-    return Presents.remove({
+    var present = Presents.findOne(presentId)
+    var removeCount = Presents.remove({
       _id: presentId,
       creatorId: this.userId
     })
+    Presents.functions.updatePresentsCount(-1, present)
+    return removeCount
   }
 })
 

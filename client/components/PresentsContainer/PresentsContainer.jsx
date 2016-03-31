@@ -10,6 +10,19 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
     this.getScrollToOptions = this.getScrollToOptions.bind(this)
   }
+
+  getMeteorData() {
+    var eventId = Session.get('event')._id
+    var forUserId = this.props.users.length === 1 ?
+      this.props.users[0]._id : null
+
+    return {
+      ready: Meteor.subscribe('presents', {
+        eventId, forUserId
+      }).ready(),
+      presents: Presents.find().fetch()
+    }
+  }
   
   autorunSetCurrentUser() {
     var visibleUserIds = Session.get('visibleUserIds')
@@ -35,12 +48,26 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
         setTimeout(() => {
           userEl.removeClass('waves-effect waves-button')
           Waves.calm(userEl)
-        }, 2000)
+        }, 1500)
       }
     }
   }
 
   render() {
+
+    if (!this.data.ready) {
+      let text = this.props.users.length === 1 ?
+        this.props.users[0].profile.name.capitalizeFirstLetter()
+        : null
+      return (
+        <div id="presents-container">
+          <Loader
+            size="large"
+            text={text}
+          />
+        </div>
+      )
+    }
 
     return (
       <div
@@ -58,7 +85,7 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
           <UserPresents
             key={user._id}
             user={user}
-            presents={this.props.presents.filter((present) => (
+            presents={this.data.presents.filter((present) => (
               present.forUserId === user._id
             ))}
           />
@@ -70,8 +97,8 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
 }
 
 PresentsContainer.propTypes = {
-  users: React.PropTypes.array.isRequired,
-  presents: React.PropTypes.array.isRequired
+  users: React.PropTypes.array.isRequired
 }
 
+reactMixin(PresentsContainer.prototype, ReactMeteorData)
 reactMixin(PresentsContainer.prototype, Autorun)

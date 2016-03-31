@@ -1,26 +1,33 @@
 import React from 'react'
 
-$.fn.scrollTo = function (target, settings = {}) {
+$.fn.scrollTo = function (targetSelector, settings = {}) {
   return this.each(function () {
     var $this = $(this)
-    var $target = $this.find(target)
-    var scrollTop = $target[0].offsetTop
-    var offsetParentEl = $target[0].offsetParent
+    var $target = $this.find(targetSelector)
+    var target = $target[0]
     var offset = 0
+    var scrollTop
+    var offsetParentEl
+
+    if (!target) {
+      return
+    }
+
+    offsetParentEl = target.offsetParent
 
     while (offsetParentEl && offsetParentEl !== this) {
-      scrollTop += offsetParentEl.offsetTop
+      offset += offsetParentEl.offsetTop
       offsetParentEl = offsetParentEl.offsetParent
     }
 
     if (_.isNumber(settings.offset)) {
-      offset = parseInt(settings.offset, 10)
+      offset +=parseInt(settings.offset, 10)
     }
     if (settings.offset === 'middle') {
-      offset = - ($this[0].offsetHeight - $target[0].offsetHeight) / 2
+      offset -= (this.offsetHeight - target.offsetHeight) / 2
     }
 
-    scrollTop += offset
+    scrollTop = target.offsetTop + offset
 
     $this.animate({
       scrollTop

@@ -10,7 +10,8 @@ UserList = class UserList extends React.Component {
   }
   
   getMeteorData() {
-    var event = Session.get('event')
+    var eventId = Session.get('event')._id
+    var event = Events.findOne(eventId)
     var currentUser = Session.get('currentUser')
     return {
       event,
@@ -24,7 +25,14 @@ UserList = class UserList extends React.Component {
   }
 
   setCurrentUser(user) {
+    if (FlowRouter.getParam('userId')) {
+      FlowRouter.setParams({userId: user._id})
+    }
     Session.set('currentUser', user)
+  }
+
+  onUserItemRemove() {
+    FlowRouter.go(`/event/id/${Session.get('event')._id}`)
   }
 
   render() {
@@ -82,7 +90,7 @@ UserList = class UserList extends React.Component {
             <CountLabel
               icon="gift"
               className="basic"
-              count={this.props.presents.length}
+              count={Events.functions.getPresentsCount(event)}
             />
           </div>
         </div>
@@ -92,9 +100,7 @@ UserList = class UserList extends React.Component {
           {participants.map((user) => (
             <UserItem
               active={this.data.currentUser._id === user._id}
-              presentsCount={Presents.find({
-                forUserId: user._id
-              }).count()}
+              presentsCount={Users.functions.getPresentsCount(user)}
               isCreator={this.data.isCreator}
               onClick={this.setCurrentUser}
               key={user._id}
@@ -109,8 +115,7 @@ UserList = class UserList extends React.Component {
 }
 
 UserList.propTypes = {
-  users: React.PropTypes.array.isRequired,
-  presents: React.PropTypes.array.isRequired
+  users: React.PropTypes.array.isRequired
 }
 
 reactMixin(UserList.prototype, ReactMeteorData)

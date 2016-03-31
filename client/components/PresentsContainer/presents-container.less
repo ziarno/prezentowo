@@ -1,5 +1,11 @@
+@import '/client/styles/partials/vars.import.less';
+
 #presents-container {
   flex-grow: 1;
   padding: 15px;
   text-align: center;
+
+  .dimmer {
+    z-index: @z-index-present-container-dimmer;
+  }
 }
