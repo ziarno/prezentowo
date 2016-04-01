@@ -1,6 +1,6 @@
 import React from 'react'
 
-Meteor.publishComposite('eventParticipants', function ({eventId}) {
+Meteor.publishComposite('participants', function ({eventId}) {
   //Meteor._sleepForMs(2000)
   return {
     find: function () {

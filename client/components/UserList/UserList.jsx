@@ -1,46 +1,18 @@
 import React from 'react'
 import reactMixin from 'react-mixin'
 import _ from 'underscore'
+import {createContainer} from 'meteor/react-meteor-data'
 
 UserList = class UserList extends React.Component {
 
-  constructor() {
-    super()
-    this.setCurrentUser = this.setCurrentUser.bind(this)
-  }
-  
-  getMeteorData() {
-    var eventId = Session.get('event')._id
-    var event = Events.findOne(eventId)
-    var currentUser = Session.get('currentUser')
-    return {
-      event,
-      currentUser,
-      isCreator: event.creatorId === Meteor.userId()
-    }
-  }
-
-  shouldComponentUpdate(newProps) {
-    return !_.isEqual(this.props, newProps)
-  }
-
-  setCurrentUser(user) {
-    if (FlowRouter.getParam('userId')) {
-      FlowRouter.setParams({userId: user._id})
-    }
-    Session.set('currentUser', user)
-  }
-
-  onUserItemRemove() {
-    FlowRouter.go(`/event/id/${Session.get('event')._id}`)
-  }
-
   render() {
-    var event = this.data.event
+    var event = this.props.event
     var isManyToOne = event.type === 'many-to-one'
     var participants = this.props.users
     var beneficiaries
     var beneficiariesTitle
+    var activeUserId = this.props.activeUser &&
+      this.props.activeUser._id
 
     if (isManyToOne) {
       [beneficiaries, participants] = _.partition(
@@ -67,11 +39,8 @@ UserList = class UserList extends React.Component {
             className="user-list--list">
             {beneficiaries.map((user) => (
               <UserItem
-                presentsCount={Presents.find({
-                    forUserId: user._id
-                  }).count()}
-                isCreator={this.data.isCreator}
-                onClick={this.setCurrentUser}
+                presentsCount={Users.functions.getPresentsCount(user)}
+                isCreator={this.props.isCreator}
                 key={user._id}
                 user={user} />
             ))}
@@ -99,10 +68,10 @@ UserList = class UserList extends React.Component {
           className="user-list--list">
           {participants.map((user) => (
             <UserItem
-              active={this.data.currentUser._id === user._id}
+              active={activeUserId === user._id}
               presentsCount={Users.functions.getPresentsCount(user)}
-              isCreator={this.data.isCreator}
-              onClick={this.setCurrentUser}
+              isCreator={this.props.isCreator}
+              onClick={this.props.onUserSelect}
               key={user._id}
               user={user} />
           ))}
@@ -115,7 +84,16 @@ UserList = class UserList extends React.Component {
 }
 
 UserList.propTypes = {
-  users: React.PropTypes.array.isRequired
+  users: React.PropTypes.array.isRequired,
+  activeUser: React.PropTypes.object,
+  onUserSelect: React.PropTypes.func.isRequired
 }
 
-reactMixin(UserList.prototype, ReactMeteorData)
+UserList = createContainer(() => {
+  var event = Session.get('event')
+  return {
+    activeUser: Session.get('currentUser'),
+    event,
+    isCreator: event.creatorId === Meteor.userId()
+  }
+}, UserList)

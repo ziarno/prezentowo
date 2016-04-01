@@ -1,41 +1,22 @@
 import React from 'react'
-import {Autorun} from '../../lib/Mixins'
-import reactMixin from 'react-mixin'
+import {createContainer} from 'meteor/react-meteor-data'
 
 Header = class Header extends React.Component {
   
   constructor() {
     super()
-    this.state = {
-      title: 'Prezentowo'
-    }
-    this.autorunSetTitle = this.autorunSetTitle.bind(this)
     this.getLoggedInNavigation = this.getLoggedInNavigation.bind(this)
     this.getLoggedOutNavigation = this.getLoggedOutNavigation.bind(this)
-  }
-  
-  getMeteorData() {
-    return {
-      ready: Meteor.subscribe('events').ready(),
-      events: Events.find().fetch(),
-      user: Meteor.user()
-    }
-  }
-  
-  autorunSetTitle() {
-    this.setState({
-      title: Session.get('event').title || 'Prezentowo'
-    })
   }
 
   getLoggedInNavigation() {
     return (
       <div id="navigation-container">
         <EventsButton
-          events={this.data.events}
-          ready={this.data.ready} />
+          events={this.props.events}
+          ready={this.props.ready} />
         <UserProfileButton
-          {...this.data.user.profile} />
+          {...this.props.user.profile} />
       </div>
     )
   }
@@ -53,17 +34,21 @@ Header = class Header extends React.Component {
       <div className="app-header shadow">
         <div className="app-header--container">
           <h1 className="title">
-            {this.state.title}
+            {this.props.title}
           </h1>
-          {this.data.user ?
+          {this.props.user ?
             this.getLoggedInNavigation() :
             this.getLoggedOutNavigation()}
         </div>
       </div>
     )
   }
-
 }
 
-reactMixin(Header.prototype, ReactMeteorData)
-reactMixin(Header.prototype, Autorun)
+Header = createContainer(({}) => {
+  return {
+    events: Events.find().fetch(),
+    user: Meteor.user(),
+    title: Session.get('event').title || 'Prezentowo'
+  }
+}, Header)

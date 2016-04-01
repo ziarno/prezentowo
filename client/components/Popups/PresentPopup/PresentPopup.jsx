@@ -1,6 +1,6 @@
 import React from 'react'
-import {PopupComponent, Autorun, ValidatedInput} from '../../../../lib/Mixins'
-import reactMixin from 'react-mixin'
+import {PopupComponent, ValidatedInput} from '../../../../lib/Mixins'
+import {createContainer} from 'meteor/react-meteor-data'
 
 PresentPopup = class PresentPopup extends PopupComponent {
 
@@ -193,4 +193,8 @@ PresentPopup.propTypes = {
   icon: React.PropTypes.element
 }
 
-reactMixin(PresentPopup.prototype, Autorun)
+PresentPopup = createContainer(() => {
+  return {
+    defaultSelectedUser: Session.get('currentUser')
+  }
+}, PresentPopup)

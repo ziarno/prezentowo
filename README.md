@@ -85,9 +85,8 @@ db.system.js.save({
         db.users.find({}).forEach(function (user) {
             var defaultSettings = {
                 viewMode: {
-                    participantsMode: 'single-participant',
-                    presentMode: 'full-width',
-                    sidebarMode: 'fluid'
+                    participantsMode: 'single',
+                    presentMode: 'full-width'
                 }
             }
             var settings = user.settings || {}
@@ -97,8 +96,6 @@ db.system.js.save({
                 || defaultSettings.viewMode.participantsMode
             settings.viewMode.presentMode = settings.viewMode.presentMode
                 || defaultSettings.viewMode.presentMode
-            settings.viewMode.sidebarMode = settings.viewMode.sidebarMode
-                || defaultSettings.viewMode.sidebarMode
 
             db.users.update({_id: user._id}, {$set: {settings: settings}})
         });

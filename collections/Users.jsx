@@ -16,8 +16,8 @@ Users.schemas = {}
 Users.schemas.viewMode = new SimpleSchema({
   participantsMode: {
     type: String,
-    allowedValues: ['single-participant', 'all-participants'],
-    defaultValue: 'single-participant',
+    allowedValues: ['single', 'multi'],
+    defaultValue: 'single',
     optional: true
   },
   presentMode: {

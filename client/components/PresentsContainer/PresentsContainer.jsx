@@ -1,7 +1,7 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import {Autorun, ScrollableComponent} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
+import {createContainer} from 'meteor/react-meteor-data'
 
 PresentsContainer = class PresentsContainer extends ScrollableComponent {
   
@@ -11,19 +11,6 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
     this.getScrollToOptions = this.getScrollToOptions.bind(this)
   }
 
-  getMeteorData() {
-    var eventId = Session.get('event')._id
-    var forUserId = this.props.users.length === 1 ?
-      this.props.users[0]._id : null
-
-    return {
-      ready: Meteor.subscribe('presents', {
-        eventId, forUserId
-      }).ready(),
-      presents: Presents.find().fetch()
-    }
-  }
-  
   autorunSetCurrentUser() {
     var visibleUserIds = Session.get('visibleUserIds')
     var currentUser = _.find(this.props.users,
@@ -54,19 +41,40 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
   }
 
   render() {
+    var isParticipantsViewModeSingle =
+      this.props.participantsViewMode === 'single'
+    var UserPresentsItems
 
-    if (!this.data.ready) {
-      let text = this.props.users.length === 1 ?
-        this.props.users[0].profile.name.capitalizeFirstLetter()
-        : null
+    if (!this.props.ready || !this.props.showUser) {
+      //let text = isParticipantsViewModeSingle ?
+      //  this.props.showUser.profile.name.capitalizeFirstLetter()
+      //  : null
       return (
         <div id="presents-container">
           <Loader
             size="large"
-            text={text}
           />
         </div>
       )
+    }
+
+    if (isParticipantsViewModeSingle) {
+      UserPresentsItems = (
+        <UserPresents
+          user={this.props.showUser}
+          presents={this.props.presents}
+        />
+      )
+    } else {
+      UserPresentsItems = this.props.users.map((user) => (
+        <UserPresents
+          key={user._id}
+          user={user}
+          presents={this.props.presents.filter((present) => (
+              present.forUserId === user._id
+            ))}
+        />
+      ))
     }
 
     return (
@@ -81,15 +89,7 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
           this.isScrollable = true
         }}>
 
-        {this.props.users.map((user) => (
-          <UserPresents
-            key={user._id}
-            user={user}
-            presents={this.data.presents.filter((present) => (
-              present.forUserId === user._id
-            ))}
-          />
-        ))}
+        {UserPresentsItems}
 
       </div>
     )
@@ -97,8 +97,38 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
 }
 
 PresentsContainer.propTypes = {
-  users: React.PropTypes.array.isRequired
+  ready: React.PropTypes.bool.isRequired,
+  users: React.PropTypes.array.isRequired,
+  showUser: React.PropTypes.object.isRequired,
+  participantsViewMode: React.PropTypes.string.isRequired
 }
 
-reactMixin(PresentsContainer.prototype, ReactMeteorData)
 reactMixin(PresentsContainer.prototype, Autorun)
+
+PresentsContainer = createContainer(() => {
+  var eventId = Session.get('event')._id
+  var currentUser = Session.get('currentUser')
+  var user = Meteor.user()
+  var participantsViewMode = user &&
+    user.settings.viewMode.participantsMode
+  var subscriptionReady = false
+  var forUserId
+  var scrollToEl
+
+  if (eventId && !_.isEmpty(currentUser)) {
+    forUserId = participantsViewMode === 'single' ?
+      currentUser._id : null
+    subscriptionReady = Meteor.subscribe('presents', {
+      eventId, forUserId
+    }).ready()
+    scrollToEl = `#user-presents-${currentUser._id}`
+  }
+
+  return {
+    ready: subscriptionReady,
+    presents: Presents.find().fetch(),
+    showUser: currentUser,
+    scrollToEl,
+    participantsViewMode
+  }
+}, PresentsContainer)
