@@ -1,36 +1,40 @@
 import React from 'react'
 
-Present = class Present extends React.Component {
-  
-  render() {
-    return (
-      <div className="present ui card">
+Present = ({present, viewMode}) => {
+  var isFullWidth = viewMode === 'full-width'
+
+  return (
+    <div className={classNames('present', {
+      'full-width': isFullWidth
+    })}>
+      <div className="ui card">
         <Img
           className="image"
-          src={this.props.present.pictureUrl}
+          src={present.pictureUrl}
         />
-        <Ribbon
-          color={this.props.present.isOwn() ? 'green' : 'red'}
-          small>
-          {this.props.present.title}
-        </Ribbon>
 
-        {this.props.present.isUserCreator() ? (
+        {present.isUserCreator() ? (
           <PresentPopup
-            present={this.props.present}
+            present={present}
             buttonClassName="edit-present small-icon-button"
             icon={(
               <i className="vertical ellipsis icon"></i>
             )}
             users={Session.get('participants')}
           />
-        ) : <div></div> /*empty div because semantic has strong css rules for last element in a card for border-radius */}
+        ) : null}
       </div>
-    )
-  }
-  
-}
-
-Present.propTypes = {
-  present: React.PropTypes.object.isRequired
+      <Ribbon
+        rightFlatEnding={isFullWidth}
+        withEndings={!isFullWidth}
+        color={present.isOwn() ? 'green' : 'red'}
+        small={!isFullWidth}>
+        {isFullWidth ? (
+          <h1>
+            <span>{present.title}</span>
+          </h1>
+        ) : present.title}
+      </Ribbon>
+    </div>
+  )
 }

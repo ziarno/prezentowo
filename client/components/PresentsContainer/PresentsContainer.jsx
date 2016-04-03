@@ -46,13 +46,14 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
     var UserPresentsItems
 
     if (!this.props.ready || !this.props.showUser) {
-      //let text = isParticipantsViewModeSingle ?
-      //  this.props.showUser.profile.name.capitalizeFirstLetter()
-      //  : null
+      let text = isParticipantsViewModeSingle && this.props.showUser ?
+        this.props.showUser.profile.name.capitalizeFirstLetter()
+        : null
       return (
         <div id="presents-container">
           <Loader
             size="large"
+            text={text}
           />
         </div>
       )
@@ -61,6 +62,7 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
     if (isParticipantsViewModeSingle) {
       UserPresentsItems = (
         <UserPresents
+          presentViewMode={this.props.presentViewMode}
           user={this.props.showUser}
           presents={this.props.presents}
         />
@@ -69,10 +71,11 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
       UserPresentsItems = this.props.users.map((user) => (
         <UserPresents
           key={user._id}
+          presentViewMode={this.props.presentViewMode}
           user={user}
           presents={this.props.presents.filter((present) => (
-              present.forUserId === user._id
-            ))}
+            present.forUserId === user._id
+          ))}
         />
       ))
     }
@@ -111,6 +114,8 @@ PresentsContainer = createContainer(() => {
   var user = Meteor.user()
   var participantsViewMode = user &&
     user.settings.viewMode.participantsMode
+  var presentViewMode = user &&
+    user.settings.viewMode.presentMode
   var subscriptionReady = false
   var forUserId
   var scrollToEl
@@ -129,6 +134,7 @@ PresentsContainer = createContainer(() => {
     presents: Presents.find().fetch(),
     showUser: currentUser,
     scrollToEl,
-    participantsViewMode
+    participantsViewMode,
+    presentViewMode,
   }
 }, PresentsContainer)

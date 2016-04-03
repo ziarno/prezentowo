@@ -47,6 +47,26 @@ UserPresents = class UserPresents extends React.Component {
   render() {
     var ownPresents = []
     var otherPresents = []
+    var getPresents = (title, presents) => {
+      if (!presents.length) {
+        return null
+      }
+      return (
+        <div>
+          <h2>
+            <T>{title}</T>
+          </h2>
+          <div className="ui cards presents">
+            {presents.map((present) => (
+              <Present
+                viewMode={this.props.presentViewMode}
+                key={present._id}
+                present={present} />
+            ))}
+          </div>
+        </div>
+      )
+    }
 
     this.props.presents.forEach((present) => {
       if (present.isOwn()) {
@@ -65,31 +85,8 @@ UserPresents = class UserPresents extends React.Component {
           <User user={this.props.user} large showAddPresentOnHover />
         </div>
 
-        {ownPresents.length ? (
-          <div>
-            <h2>
-              <T>hints.ownPresents</T>
-            </h2>
-            <div className="ui cards presents">
-              {ownPresents.map((present) => (
-                <Present key={present._id} present={present} />
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        {otherPresents.length ? (
-          <div>
-            <h2>
-              <T>hints.otherPresents</T>
-            </h2>
-            <div className="ui cards presents">
-              {otherPresents.map((present) => (
-                <Present key={present._id} present={present} />
-              ))}
-            </div>
-          </div>
-        ): null}
+        {getPresents('hints.ownPresents', ownPresents)}
+        {getPresents('hints.otherPresents', otherPresents)}
 
       </div>
     )
@@ -98,5 +95,6 @@ UserPresents = class UserPresents extends React.Component {
 
 UserPresents.propTypes = {
   user: React.PropTypes.object.isRequired,
-  presents: React.PropTypes.array.isRequired
+  presents: React.PropTypes.array.isRequired,
+  presentViewMode: React.PropTypes.string
 }

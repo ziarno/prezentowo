@@ -1,5 +1,6 @@
 import React from 'react'
 import {LoggedIn} from '../lib/Mixins'
+import {flattenObject} from '../lib/utilities'
 
 /**
  * Users Collection
@@ -146,6 +147,8 @@ Users.methods.setViewMode = new ValidatedMethod({
   mixins: [LoggedIn],
   validate: Users.schemas.viewMode.validator(),
   run(viewMode) {
-    return Users.update(this.userId, {$set: {settings: {viewMode}}})
+    return Users.update(this.userId, {
+      $set: flattenObject({settings: {viewMode}})
+    })
   }
 })
