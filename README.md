@@ -197,6 +197,3 @@ Todo:
 - use semantic's Visibility plugin instead of scrollSpy (might be faster, uses getAnimationFrame)
 - BUG: SelectInput on language change looses placeholder text. Note: it seems semantic looses $().data value of dropdown
 - add MongodDb indexes
-
-Todo features:
-- row present view

@@ -1,14 +1,17 @@
 import React from 'react'
 
-ButtonRemove = ({onClick}) => (
-  <button
-    type="button"
-    className="ui labeled icon red button"
-    onClick={(e) => {
+ButtonRemove = ({onClick, icon}) => {
+  var removeIcon = icon || 'trash'
+  return (
+    <button
+      type="button"
+      className="ui labeled icon red button"
+      onClick={(e) => {
       e.preventDefault()
       onClick(e)
     }}>
-    <i className="trash icon"></i>
-    <T>Delete</T>
-  </button>
-)
+      <i className={`${removeIcon} icon`}></i>
+      <T>Delete</T>
+    </button>
+  )
+}

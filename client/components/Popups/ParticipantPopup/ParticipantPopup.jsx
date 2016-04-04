@@ -224,6 +224,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
 
           <FormActionButtons
             showRemove={isEdit}
+            removeIcon="remove user"
             acceptButtonText={isEdit ? 'Save' : 'Add participant'}
             onRemove={this.removeParticipant}
             onCancel={this.hideAndReset}

@@ -19,6 +19,7 @@ FormActionButtons = class FormActionButtons extends React.Component {
               onClick={() => this.setState({showDeleteConfirmation: false})}
             />
             <ButtonRemove
+              icon={this.props.removeIcon}
               onClick={this.props.onRemove}
             />
           </div>
@@ -34,6 +35,7 @@ FormActionButtons = class FormActionButtons extends React.Component {
           />
           {this.props.showRemove ? (
             <ButtonRemove
+              icon={this.props.removeIcon}
               onClick={() => this.setState({showDeleteConfirmation: true})}
             />
           ) : null}
@@ -51,6 +53,7 @@ FormActionButtons = class FormActionButtons extends React.Component {
 FormActionButtons.propTypes = {
   showRemove: React.PropTypes.bool,
   acceptButtonText: React.PropTypes.string,
+  removeIcon: React.PropTypes.string,
   onRemove: React.PropTypes.func.isRequired,
   onAccept: React.PropTypes.func.isRequired,
   onCancel: React.PropTypes.func.isRequired,
