@@ -20,6 +20,10 @@ export function isMobile() {
 /**
  * Flatten javascript objects into a single-depth object
  * source: https://gist.github.com/penguinboy/762197
+ *
+ * ex.
+ *  {x: {a: 5, b: {y: 7}} c: 3} =>
+ *  {x.a: 5, x.b.y: 7, c: 3}
  */
 export function flattenObject(ob) {
   var toReturn = {}
@@ -39,4 +43,17 @@ export function flattenObject(ob) {
     }
   }
   return toReturn
+}
+
+export function getAvatarImages(gender) {
+  var fileLetterName = gender === 'female' ? 'f' : 'm'
+  return _.range(12).map((index) => (
+    `/images/avatars/${fileLetterName}${index + 1}.png`
+  ))
+}
+
+export function getPresentImages() {
+  return _.range(20).map((index) => (
+    `/images/presents/p${index + 1}-150px.png`
+  ))
 }
