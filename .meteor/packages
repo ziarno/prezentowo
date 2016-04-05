@@ -28,7 +28,7 @@ aldeed:collection2
 
 ### client ###
 less
-# kadira:react-layout
+kadira:react-layout
 kadira:blaze-layout
 kadira:flow-router
 msavin:mongol
@@ -39,8 +39,8 @@ accounts-password
 accounts-facebook
 komorebi:waves
 useraccounts:semantic-ui
-# useraccounts:flow-routing
-# gwendall:blaze-to-react
+useraccounts:flow-routing
+gwendall:blaze-to-react
 jparker:gravatar
 universe:i18n
 splendido:accounts-emails-field
