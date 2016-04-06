@@ -26,15 +26,17 @@ Users.Schemas.Email = new SimpleSchema({
 
 Users.Schemas.Profile = new SimpleSchema({
   name: {
-    type: String
+    type: String,
+    label: () => _i18n.__('Fullname')
   },
   pictureUrl: {
-    type: String
-    //don't add SimpleSchema's url regex here, because internal urls don't pass that regex
+    type: String,
+    label: () => _i18n.__('Picture')
   },
   gender: {
     type: String,
-    allowedValues: ['male', 'female']
+    allowedValues: ['male', 'female'],
+    label: () => _i18n.__('Gender')
   }
 })
 
@@ -43,13 +45,15 @@ Users.Schemas.ViewMode = new SimpleSchema({
     type: String,
     allowedValues: ['single', 'multi'],
     defaultValue: 'single',
-    optional: true
+    optional: true,
+    label: () => _i18n.__('Participants mode')
   },
   presentMode: {
     type: String,
     allowedValues: ['card', 'full-width'],
     defaultValue: 'full-width',
-    optional: true
+    optional: true,
+    label: () => _i18n.__('Present mode')
   }
 })
 
