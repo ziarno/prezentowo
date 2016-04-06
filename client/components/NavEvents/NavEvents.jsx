@@ -53,6 +53,10 @@ NavEvents = class NavEvents extends React.Component {
               })}>
               {activeEventsHeader}
             </div>
+            {this.props.events.length === 0 ? ( //dummy div - semantic only shows dropdown if there is at least 1 .item
+              <div className="item" style={{display: 'none'}}></div>
+            ) : null}
+
             {activeEvents.map((event) => (
               <EventItem
                 key={event._id}

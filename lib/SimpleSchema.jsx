@@ -27,6 +27,3 @@ SimpleSchema.addValidator(function () {
     return 'required'
   }
 })
-
-//SimpleSchema.debug = true //TODO: remove
-
