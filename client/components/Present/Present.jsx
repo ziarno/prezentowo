@@ -20,7 +20,7 @@ Present = ({present, viewMode}) => {
             icon={(
               <i className="vertical ellipsis icon"></i>
             )}
-            users={Session.get('participants')}
+            users={[Participants.findOne(present.forUserId)]}
           />
         ) : null}
       </div>

@@ -1,11 +1,11 @@
 import React from 'react'
-import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import {ValidatedInput, RefreshOnLocaleChange} from '../../../../lib/Mixins'
 import moment from 'moment'
 
 Datepicker = class Datepicker extends ValidatedInput {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.reset = this.reset.bind(this)
     this.getValue = this.getValue.bind(this)
     this.setValue = this.setValue.bind(this)
@@ -69,8 +69,8 @@ Datepicker = class Datepicker extends ValidatedInput {
         className={classNames({
           'with-title': this.props.label
         })}
-        ref="datepicker"
-      ></div>
+        ref="datepicker">
+      </div>
     )
   }
 }

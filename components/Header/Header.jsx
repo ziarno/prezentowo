@@ -12,10 +12,10 @@ Header = class Header extends React.Component {
   getLoggedInNavigation() {
     return (
       <div id="navigation-container">
-        <EventsButton
+        <NavEvents
           events={this.props.events}
           ready={this.props.ready} />
-        <UserProfileButton
+        <NavProfile
           {...this.props.user.profile} />
       </div>
     )

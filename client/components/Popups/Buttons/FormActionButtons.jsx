@@ -40,6 +40,7 @@ FormActionButtons = class FormActionButtons extends React.Component {
             />
           ) : null}
           <ButtonAccept
+            isLoading={this.props.isSaving}
             onClick={this.props.onAccept}
             text={this.props.acceptButtonText || 'Save'}
           />
@@ -52,9 +53,10 @@ FormActionButtons = class FormActionButtons extends React.Component {
 
 FormActionButtons.propTypes = {
   showRemove: React.PropTypes.bool,
+  isSaving: React.PropTypes.bool,
   acceptButtonText: React.PropTypes.string,
   removeIcon: React.PropTypes.string,
-  onRemove: React.PropTypes.func.isRequired,
-  onAccept: React.PropTypes.func.isRequired,
-  onCancel: React.PropTypes.func.isRequired,
+  onRemove: React.PropTypes.func,
+  onAccept: React.PropTypes.func,
+  onCancel: React.PropTypes.func
 }

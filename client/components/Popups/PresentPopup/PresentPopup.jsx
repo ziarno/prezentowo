@@ -1,5 +1,6 @@
 import React from 'react'
 import {PopupComponent, ValidatedInput} from '../../../../lib/Mixins'
+import {getPresentImages} from '../../../../lib/utilities'
 import {createContainer} from 'meteor/react-meteor-data'
 
 PresentPopup = class PresentPopup extends PopupComponent {
@@ -9,9 +10,6 @@ PresentPopup = class PresentPopup extends PopupComponent {
     this.schema = Presents.Schemas.NewPresent
         .pick(['title', 'pictureUrl', 'description', 'forUserId'])
         .namedContext('newPresent')
-    this.avatars = _.range(20).map((index) => (
-      `/images/presents/p${index + 1}-150px.png`
-    ))
     this.hideAndReset = this.hideAndReset.bind(this)
     this.reset = this.reset.bind(this)
     this.addPresent = this.addPresent.bind(this)
@@ -27,35 +25,30 @@ PresentPopup = class PresentPopup extends PopupComponent {
         this.schema.resetValidation()
       },
       position,
-      lastResort: position,
-      movePopup: false
+      lastResort: position
     }
   }
 
   addPresent(presentData) {
-    if (this.schema.validate(presentData)) {
-      this.hideAndReset()
-      Presents.methods.createPresent.call({
-        eventId: Session.get('event')._id,
-        ...presentData
-      })
-    }
+    this.hideAndReset()
+    Presents.methods.createPresent.call({
+      eventId: Session.get('event')._id,
+      ...presentData
+    })
   }
 
   editPresent(presentData) {
-    if (this.schema.validate(presentData)) {
-      this.hidePopup(() => {
-        Presents.methods.editPresent.call({
-          _id: this.props.present._id,
-          ...presentData
-        })
-        this.reset()
+    this.hidePopup(() => {
+      Presents.methods.editPresent.call({
+        _id: this.props.present._id,
+        ...presentData
       })
-    }
+      this.reset()
+    })
   }
 
   removePresent() {
-    this.hidePopup(() => {
+    this.hideAndReset(() => {
       Presents.methods.removePresent.call({
         presentId: this.props.present._id
       })
@@ -74,11 +67,12 @@ PresentPopup = class PresentPopup extends PopupComponent {
   renderTrigger() {
     return (
       <div
-        onClick={this.showPopup}
         ref="popupTrigger"
+        onClick={this.showPopup}
         className={classNames(this.props.buttonClassName,
           'present-button',
-          'ui icon button left')}>
+          'ui icon button',
+          'waves-effect waves-button')}>
         {this.props.icon}
       </div>
     )
@@ -126,13 +120,13 @@ PresentPopup = class PresentPopup extends PopupComponent {
                   selectDefault={defaultSelectedUserId}
                   name="forUserId">
                   {this.props.users.map((user) => (
-                  <div
-                    className="item"
-                    key={user._id}
-                    data-value={user._id}>
-                    <User user={user} />
-                  </div>
-                    ))}
+                    <div
+                      className="item"
+                      key={user._id}
+                      data-value={user._id}>
+                      <User user={user} />
+                    </div>
+                  ))}
                 </SelectInput>
               ) : (
                 <ValidatedInput
@@ -148,7 +142,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
             className="form-popup--form flex ui form attached fluid segment">
             <ImagePicker
               name="pictureUrl"
-              images={this.avatars}
+              images={getPresentImages()}
               randomizeInitialImage
               uploadOptions={{
                 folder: 'presents'
@@ -175,7 +169,6 @@ PresentPopup = class PresentPopup extends PopupComponent {
             acceptButtonText={this.isEdit() ? 'Save' : 'Add present'}
             onRemove={this.removePresent}
             onCancel={this.hideAndReset}
-            onAccept={(e) => this.refs.form.submitForm(e)}
           />
 
         </Form>

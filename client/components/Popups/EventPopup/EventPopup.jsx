@@ -33,10 +33,6 @@ EventPopup = class EventPopup extends PopupComponent {
   submitEvent(data) {
     var eventId
 
-    if (!this.schema.validate(data)) {
-      return
-    }
-
     if (this.isEdit()) {
       Events.methods.editEvent.call({
         eventId: Session.get('event')._id,
@@ -125,7 +121,6 @@ EventPopup = class EventPopup extends PopupComponent {
             acceptButtonText={this.isEdit() ? 'Save' : 'Create event'}
             onRemove={this.removeEvent}
             onCancel={this.hideAndReset}
-            onAccept={(e) => this.refs.form.submitForm(e)}
           />
 
         </Form>

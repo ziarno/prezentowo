@@ -1,6 +1,7 @@
 import React from 'react'
 import Autorun from './Autorun'
 import reactMixin from 'react-mixin'
+import {unflattenObject} from '../utilities'
 
 /**
  * Input Validation Mixin
@@ -10,12 +11,15 @@ import reactMixin from 'react-mixin'
  */
 var ValidatedInput = class ValidatedInput extends React.Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       showError: false,
       hasError: false
     }
+    //fieldName is the last name part (if name is dot-separated)
+    //ex. name = a.b.c, then fieldName = c
+    this.fieldName = _.last(props.name.split('.'))
     this.autorunValidation = this.autorunValidation.bind(this)
     this.hideError = this.hideError.bind(this)
     this.showError = this.showError.bind(this)
@@ -25,9 +29,11 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   }
 
   autorunValidation() {
+    var name = this.fieldName
+
     this.setState({
       hasError: this.context.schema &&
-        this.context.schema.keyIsInvalid(this.props.name)
+        this.context.schema.keyIsInvalid(name)
     })
   }
 
@@ -37,6 +43,8 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   }
 
   //override
+  //note: should not trigger onChange or validation -
+  // should set the value silently
   setValue() {}
 
   hideError() {
@@ -48,7 +56,8 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   }
 
   onChange(value) {
-    var valueObject = {[this.props.name]: value}
+    var name = this.fieldName
+    var valueObject = {[name]: value}
 
     if (_.isFunction(this.props.onChange)) {
       this.props.onChange(valueObject)
@@ -70,9 +79,9 @@ var ValidatedInput = class ValidatedInput extends React.Component {
       this.setState({showError: true})
     }
     if (this.context.schema) {
-      this.context.schema.validateOne({
+      this.context.schema.validateOne(unflattenObject({
         [this.props.name]: value
-      }, this.props.name)
+      }), this.props.name)
     }
   }
 
@@ -88,7 +97,8 @@ ValidatedInput.propTypes = {
   onChange: React.PropTypes.func,
   staticValue: React.PropTypes.oneOfType([
     React.PropTypes.string,
-    React.PropTypes.number
+    React.PropTypes.number,
+    React.PropTypes.bool
   ])
 }
 

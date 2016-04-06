@@ -1,6 +1,6 @@
 import React from 'react'
 
-EventsButton = class EventsButton extends React.Component {
+NavEvents = class NavEvents extends React.Component {
 
   showEvent(event) {
     FlowRouter.go(`/event/id/${event._id}`)
@@ -33,9 +33,11 @@ EventsButton = class EventsButton extends React.Component {
       <T>No active events</T>
 
     return (
-      <div id="event-buttons">
+      <div
+        id="nav-events"
+        className="popup-button-group">
 
-        <div className={classNames('events-dropdown event-button ' +
+        <div className={classNames('events-dropdown popup-button ' +
               'ui compact icon right labeled top right ' +
               'pointing scrolling dropdown button', {
               loading: !this.props.ready
@@ -81,7 +83,7 @@ EventsButton = class EventsButton extends React.Component {
           icon={(
             <i className="plus icon" />
           )}
-          buttonClassName="event-button"
+          buttonClassName="popup-button"
         />
 
         {isCreator ? (
@@ -89,7 +91,7 @@ EventsButton = class EventsButton extends React.Component {
             icon={(
               <i className="setting icon" />
             )}
-            buttonClassName="event-button"
+            buttonClassName="popup-button"
             event={event}
           />
         ) : null}
@@ -99,7 +101,7 @@ EventsButton = class EventsButton extends React.Component {
             icon={(
               <i className="add user icon" />
             )}
-            buttonClassName="event-button"
+            buttonClassName="popup-button"
           />
         ) : null}
 
@@ -108,6 +110,6 @@ EventsButton = class EventsButton extends React.Component {
   }
 }
 
-EventsButton.propTypes = {
+NavEvents.propTypes = {
   events: React.PropTypes.array.isRequired
 }

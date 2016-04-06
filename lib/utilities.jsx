@@ -19,30 +19,51 @@ export function isMobile() {
 
 /**
  * Flatten javascript objects into a single-depth object
- * source: https://gist.github.com/penguinboy/762197
+ * source: https://gist.github.com/fantactuka/4989737
+ * (old: https://gist.github.com/penguinboy/762197)
  *
  * ex.
  *  {x: {a: 5, b: {y: 7}} c: 3} =>
  *  {x.a: 5, x.b.y: 7, c: 3}
+ *
+ * Note: does not alter arrays or dates
  */
-export function flattenObject(ob) {
-  var toReturn = {}
+export function flattenObject(object, target, prefix) {
+  prefix = prefix || '';
 
-  for (var i in ob) {
-    if (!ob.hasOwnProperty(i)) continue
-
-    if ((typeof ob[i]) == 'object') {
-      var flatObject = flattenObject(ob[i])
-      for (var x in flatObject) {
-        if (!flatObject.hasOwnProperty(x)) continue
-
-        toReturn[i + '.' + x] = flatObject[x]
-      }
+  return _(object).inject(function(result, value, key) {
+    if (_.isObject(value) &&
+        !_.isArray(value) &&
+        !_.isDate(value)) {
+      flattenObject(value, result, prefix + key + '.');
     } else {
-      toReturn[i] = ob[i]
+      result[prefix + key] = value;
     }
-  }
-  return toReturn
+
+    return result;
+  }, target || {});
+}
+
+/**
+ * Opposite to flatten object
+ * source: https://gist.github.com/fantactuka/4989737
+ *
+ * ex.
+ *  {x.a: 5, x.b.y: 7, c: 3} =>
+ *  {x: {a: 5, b: {y: 7}} c: 3}
+ */
+export function unflattenObject(object) {
+  return _(object).inject(function(result, value, keys) {
+    var current = result,
+      partitions = keys.split('.'),
+      limit = partitions.length - 1
+
+    _(partitions).each(function(key, index) {
+      current = current[key] = (index == limit ? value : (current[key] || {}))
+    })
+
+    return result
+  }, {})
 }
 
 export function getAvatarImages(gender) {

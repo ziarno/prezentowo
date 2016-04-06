@@ -1,11 +1,11 @@
 import React from 'react'
-import {ValidatedInput} from '../../../../lib/Mixins'
+import {ValidatedInput} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
 EventTypeInput = class EventTypeInput extends ValidatedInput {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = _.extend(this.state, {
       type: null
     })

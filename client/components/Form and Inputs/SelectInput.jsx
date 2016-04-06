@@ -5,8 +5,8 @@ import reactMixin from 'react-mixin'
 
 SelectInput = class SelectInput extends ValidatedInput {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = _.extend(this.state, {
       isSelectedByUser: false
     })

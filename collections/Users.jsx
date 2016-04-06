@@ -12,9 +12,33 @@ Users.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:securit
 /**
  * SCHEMAS
  */
-Users.schemas = {}
+Users.Schemas = {}
 
-Users.schemas.viewMode = new SimpleSchema({
+Users.Schemas.Email = new SimpleSchema({
+  address: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email
+  },
+  verified: {
+    type: Boolean
+  }
+})
+
+Users.Schemas.Profile = new SimpleSchema({
+  name: {
+    type: String
+  },
+  pictureUrl: {
+    type: String
+    //don't add SimpleSchema's url regex here, because internal urls don't pass that regex
+  },
+  gender: {
+    type: String,
+    allowedValues: ['male', 'female']
+  }
+})
+
+Users.Schemas.ViewMode = new SimpleSchema({
   participantsMode: {
     type: String,
     allowedValues: ['single', 'multi'],
@@ -26,6 +50,24 @@ Users.schemas.viewMode = new SimpleSchema({
     allowedValues: ['card', 'full-width'],
     defaultValue: 'full-width',
     optional: true
+  }
+})
+
+Users.Schemas.Settings = new SimpleSchema({
+  viewMode: {
+    type: Users.Schemas.ViewMode
+  }
+})
+
+Users.Schemas.Main = new SimpleSchema({
+  registered_emails: {
+    type: [Users.Schemas.Email]
+  },
+  profile: {
+    type: Users.Schemas.Profile
+  },
+  settings: {
+    type: Users.Schemas.Settings
   }
 })
 
@@ -103,13 +145,12 @@ Users.functions.removeTempUsers = function (selector) {
 }
 
 Users.functions.getPresentsCount = function (user) {
-  return parseInt(
-      user && user._id === Meteor.userId() ? (
-        user.ownPresentsCount
+  return user && user._id === Meteor.userId() ? (
+        parseInt(user.ownPresentsCount)
       ) : (
-        user.ownPresentsCount + user.otherPresentsCount
-      )
-    ) || 0
+        parseInt(user.ownPresentsCount) +
+        parseInt(user.otherPresentsCount)
+      ) || 0
 }
 
 /**
@@ -145,10 +186,33 @@ Users.methods = {}
 Users.methods.setViewMode = new ValidatedMethod({
   name: 'Users.methods.setViewMode',
   mixins: [LoggedIn],
-  validate: Users.schemas.viewMode.validator(),
+  validate: Users.Schemas.ViewMode.validator(),
   run(viewMode) {
     return Users.update(this.userId, {
       $set: flattenObject({settings: {viewMode}})
     })
+  }
+})
+
+Users.methods.saveUserProfile = new ValidatedMethod({
+  name: 'Users.methods.saveUserProfile',
+  mixins: [LoggedIn],
+  validate: new SimpleSchema({
+    profile: {
+      type: Users.Schemas.Profile
+    },
+    settings: {
+      type: Users.Schemas.Settings
+    },
+    email: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Email
+    }
+  }).validator(),
+  run({profile, settings, email}) {
+    Users.functions.updateEmail(this.userId, email)
+    return Users.update(this.userId, {$set: {
+      profile, settings
+    }})
   }
 })

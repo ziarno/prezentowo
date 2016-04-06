@@ -4,8 +4,8 @@ import reactMixin from 'react-mixin'
 
 Input = class Input extends ValidatedInput {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.reset = this.reset.bind(this)
     this.getValue = this.getValue.bind(this)
     this.setValue = this.setValue.bind(this)
@@ -42,7 +42,9 @@ Input = class Input extends ValidatedInput {
         })}>
 
         {this.props.label ? (
-          <label>{_i18n.__(this.props.label)}</label>
+          <label>
+            <T>{this.props.label}</T>
+          </label>
         ) : null}
 
         <div className="ui input">

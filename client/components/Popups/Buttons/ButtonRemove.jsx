@@ -6,10 +6,7 @@ ButtonRemove = ({onClick, icon}) => {
     <button
       type="button"
       className="ui labeled icon red button"
-      onClick={(e) => {
-      e.preventDefault()
-      onClick(e)
-    }}>
+      onClick={onClick}>
       <i className={`${removeIcon} icon`}></i>
       <T>Delete</T>
     </button>

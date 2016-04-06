@@ -16,7 +16,10 @@ NotificationIcon = class NotificationIcon extends React.Component {
   render() {
     return (
       <div
-        className="ui button compact icon"
+        className={classNames(
+          'ui button compact icon',
+          this.props.buttonClassName
+        )}
         onClick={this.hideTooltips}
         ref="notificationIcon">
         <i className="alarm outline icon"></i>
@@ -24,6 +27,10 @@ NotificationIcon = class NotificationIcon extends React.Component {
     )
   }
 
+}
+
+NotificationIcon.propTypes = {
+  buttonClassName: React.PropTypes.string
 }
 
 reactMixin(NotificationIcon.prototype, Tooltips)

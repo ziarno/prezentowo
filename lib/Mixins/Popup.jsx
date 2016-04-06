@@ -22,6 +22,7 @@ class PopupComponent extends React.Component {
     this.hidePopup = this.hidePopup.bind(this)
     this.showPopup = this.showPopup.bind(this)
     this.destroyPopup = this.destroyPopup.bind(this)
+    this.hideAndReset = this.hideAndReset.bind(this)
   }
 
   setPopup() {
@@ -46,8 +47,13 @@ class PopupComponent extends React.Component {
     this.destroyPopup()
   }
 
-  hideAndReset() {
-    this.hidePopup(this.reset)
+  hideAndReset(callback) {
+    this.hidePopup(() => {
+      this.reset()
+      if (_.isFunction(callback)) {
+        callback.call(this)
+      }
+    })
   }
 
   destroyPopup() {

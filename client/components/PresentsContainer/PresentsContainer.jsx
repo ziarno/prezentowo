@@ -135,6 +135,6 @@ PresentsContainer = createContainer(() => {
     showUser: currentUser,
     scrollToEl,
     participantsViewMode,
-    presentViewMode,
+    presentViewMode
   }
 }, PresentsContainer)

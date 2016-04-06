@@ -1,0 +1,26 @@
+.ui.popup.user-profile-popup {
+  width: 700px;
+
+  .user-settings {
+    flex-grow: 0;
+    justify-content: space-around;
+    align-items: center;
+
+    & > .field {
+      text-align: center;
+      width: 100%;
+      .buttons {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.button.user-profile-button {
+  padding-left: 42px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  //ff fix (text was too low)
+  display: flex;
+  align-items: center;
+}

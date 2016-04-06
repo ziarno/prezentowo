@@ -4,8 +4,8 @@ import reactMixin from 'react-mixin'
 
 CheckboxInput = class CheckboxInput extends ValidatedInput {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.getValue = this.getValue.bind(this)
     this.setValue = this.setValue.bind(this)
     this.reset = this.reset.bind(this)
@@ -48,7 +48,7 @@ CheckboxInput = class CheckboxInput extends ValidatedInput {
           className="hidden"
         />
         <label>
-          {_i18n.__(this.props.label)}
+          <T>{this.props.label}</T>
         </label>
 
       </div>

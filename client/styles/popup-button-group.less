@@ -1,0 +1,27 @@
+@border-radius: 3px !important;
+
+.popup-button-group {
+  display: flex;
+  height: 38px;
+
+  & > :first-child.popup-button,
+  & > :first-child .popup-button{
+    border-top-left-radius: @border-radius;
+    border-bottom-left-radius: @border-radius;
+  }
+  & > :last-child.popup-button,
+  & > :last-child .popup-button {
+    border-top-right-radius: @border-radius;
+    border-bottom-right-radius: @border-radius;
+  }
+  & > div {
+    margin-left: -1px;
+  }
+
+  .popup-button {
+    height: 38px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+}

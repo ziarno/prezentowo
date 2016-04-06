@@ -2,7 +2,7 @@ import React from 'react'
 import {Tooltips} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-UserProfileButton = class UserProfileButton extends React.Component {
+NavProfile = class NavProfile extends React.Component {
 
   constructor() {
     super()
@@ -13,46 +13,40 @@ UserProfileButton = class UserProfileButton extends React.Component {
 
   getTooltips() {
     return {
-      profile: {content: _i18n.__('Profile')}
+      //profile: {content: _i18n.__('Profile')}
     }
   }
 
   logout() {
     AccountsTemplates.logout()
-    this.hideTooltips()
+    //this.hideTooltips()
   }
 
   openProfile() {
-    this.hideTooltips()
+    //this.hideTooltips()
   }
 
   render() {
-    var pictureBackground = {
-      backgroundImage: `url(${this.props.pictureUrl})`
-    }
-
     return (
       <div
         id="user-profile-button"
-        className="ui buttons compact"
+        className="popup-button-group"
         onClick={this.hideTooltips}>
-        <div
-          className="user-profile-button--name ui button capitalize"
-          onClick={this.openProfile}
-          style={pictureBackground}
-          ref="profile">
-          <span>{this.props.name}</span>
-        </div>
-        <NotificationIcon />
+        <UserProfilePopup
+          buttonClassName="popup-button"
+        />
+        <NotificationIcon
+          buttonClassName="popup-button"
+        />
       </div>
     )
   }
 }
 
-UserProfileButton.propTypes = {
+NavProfile.propTypes = {
   pictureUrl: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func
 }
 
-reactMixin(UserProfileButton.prototype, Tooltips)
+reactMixin(NavProfile.prototype, Tooltips)

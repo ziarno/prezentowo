@@ -3,9 +3,9 @@ import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
 SearchableInput = class SearchableInput extends ValidatedInput {
-  
-  constructor() {
-    super()
+
+  constructor(props) {
+    super(props)
     this.state = _.extend(this.state, {
       showSearchResults: false
     })

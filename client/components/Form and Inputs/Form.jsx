@@ -1,5 +1,6 @@
 import React from 'react'
 import {Autorun} from '../../../lib/Mixins'
+import {flattenObject, unflattenObject} from '../../../lib/utilities'
 import reactMixin from 'react-mixin'
 
 /**
@@ -10,10 +11,11 @@ import reactMixin from 'react-mixin'
  *
  * Requires:
  * - child input components that are registered must provide
- *   reset() and getValue() methods
+ *   reset(), setValue() and getValue() methods
  *
  * Note: keys defined in the provided schema must match
  * name attributes in inputs inside the form
+ * Name attributes of objects can be dot-separated, ex: a.b.c
  */
 Form = class Form extends React.Component {
 
@@ -62,20 +64,26 @@ Form = class Form extends React.Component {
       return
     }
 
+    var flatData = flattenObject(data)
+
     this.state.components.forEach((component) => {
-      component.setValue(data[component.props.name])
+      component.setValue(flatData[component.props.name])
     })
   }
 
   submitForm(event) {
-    var formValues = {}
+    var flatFormValues = {}
+    var formValues
 
-    event.preventDefault()
+    event && event.preventDefault()
     this.state.components.forEach((component) => {
-      formValues[component.props.name] = component.getValue()
+      flatFormValues[component.props.name] = component.getValue()
     })
 
-    if (_.isFunction(this.props.onSubmit)) {
+    formValues = unflattenObject(flatFormValues)
+
+    if (this.props.schema.validate(formValues) &&
+        _.isFunction(this.props.onSubmit)) {
       this.props.onSubmit(formValues)
     }
   }

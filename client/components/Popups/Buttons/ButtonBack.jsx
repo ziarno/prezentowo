@@ -4,10 +4,7 @@ ButtonBack = ({onClick}) => (
   <button
     type="button"
     className="ui labeled icon button"
-    onClick={(e) => {
-      e.preventDefault()
-      onClick(e)
-    }}>
+    onClick={onClick}>
     <i className="caret left icon"></i>
     <T>Back</T>
   </button>
