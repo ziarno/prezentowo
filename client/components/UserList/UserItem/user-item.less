@@ -1,6 +1,8 @@
 @import '/client/styles/partials/vars.import.less';
+@import '/client/styles/partials/mixins.import.less';
 
 .user-item {
+  .hover-label();
   width: 100%;
   display: flex;
   transition: background-color @transition-time;
@@ -12,11 +14,6 @@
   &.active,
   &:hover {
     background-color: @grey-light;
-    .count-label {
-      background: none #fff;
-      color: rgba(0, 0, 0, 0.87);
-      box-shadow: none;
-    }
   }
 
   .user {
@@ -24,12 +21,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-  }
-
-  .count-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   .user-item--edit {

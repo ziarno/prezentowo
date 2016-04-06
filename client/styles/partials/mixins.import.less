@@ -15,3 +15,13 @@
   align-items: center;
   justify-content: center;
 }
+
+.hover-label() {
+  &:hover, &.active {
+    .ui.label {
+      background: none #fff;
+      color: rgba(0, 0, 0, 0.87);
+      box-shadow: none;
+    }
+  }
+}

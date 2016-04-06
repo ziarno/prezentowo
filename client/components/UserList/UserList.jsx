@@ -52,11 +52,17 @@ UserList = class UserList extends React.Component {
           <T>Participants</T>
           <div className="counts">
             <CountLabel
+              tooltip={{
+                content: _i18n.__('Participants count')
+              }}
               icon="user"
               className="basic"
               count={this.props.users.length}
             />
             <CountLabel
+              tooltip={{
+                content: _i18n.__('Presents count')
+              }}
               icon="gift"
               className="basic"
               count={Events.functions.getPresentsCount(event)}

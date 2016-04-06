@@ -28,12 +28,6 @@ DateField = class DateField extends React.Component {
 
     return {
       dateField: {
-        position: 'right center',
-        variation: 'mini',
-        delay: {
-          show: 100,
-          hide: 0
-        },
         content: dateText
       }
     }

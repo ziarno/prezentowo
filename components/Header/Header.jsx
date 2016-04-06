@@ -13,6 +13,7 @@ Header = class Header extends React.Component {
     return (
       <div id="navigation-container">
         <NavEvents
+          event={this.props.event}
           events={this.props.events}
           ready={this.props.ready} />
         <NavProfile
@@ -46,9 +47,11 @@ Header = class Header extends React.Component {
 }
 
 Header = createContainer(({}) => {
+  var event = Session.get('event')
   return {
     events: Events.find().fetch(),
     user: Meteor.user(),
-    title: Session.get('event').title || 'Prezentowo'
+    title: event.title || 'Prezentowo',
+    event
   }
 }, Header)

@@ -13,7 +13,8 @@ NavEvents = class NavEvents extends React.Component {
   }
 
   render() {
-    var event = Session.get('event')
+    var event = this.props.event
+    var eventId = event._id
     var now = new Date()
     var activeEvents = []
     var pastEvents = []
@@ -61,6 +62,7 @@ NavEvents = class NavEvents extends React.Component {
               <EventItem
                 key={event._id}
                 event={event}
+                active={eventId === event._id}
                 onClick={this.showEvent}
               />
             ))}
@@ -77,6 +79,7 @@ NavEvents = class NavEvents extends React.Component {
               <EventItem
                 key={event._id}
                 event={event}
+                active={eventId === event._id}
                 onClick={this.showEvent}
               />
             ))}
@@ -115,5 +118,6 @@ NavEvents = class NavEvents extends React.Component {
 }
 
 NavEvents.propTypes = {
-  events: React.PropTypes.array.isRequired
+  events: React.PropTypes.array.isRequired,
+  event: React.PropTypes.object
 }

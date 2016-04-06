@@ -1,4 +1,5 @@
 @import '/client/styles/partials/vars.import.less';
+@import '/client/styles/partials/mixins.import.less';
 
 @border-radius: 3px !important;
 
@@ -22,9 +23,11 @@
   }
 
   .events-dropdown {
-    //ff fix (text was too low)
-    display: flex;
-    align-items: center;
+    .text {
+      display: flex;
+      align-items: center;
+      padding-right: 10px;
+    }
     .caret.down.icon {
       transition: transform @transition-time;
     }
@@ -35,6 +38,11 @@
 
   .item.event {
     text-transform: capitalize !important;
+    transition: background @transition-time, background-color @transition-time;
+    &:hover, &.active {
+      font-weight: normal;
+      background-color: @grey-light;
+    }
   }
 
 }

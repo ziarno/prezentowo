@@ -1,5 +1,5 @@
 import React from 'react'
-import {ValidatedInput, RefreshOnLocaleChange} from '../../../../lib/Mixins'
+import {ValidatedInput} from '../../../../lib/Mixins'
 import moment from 'moment'
 
 Datepicker = class Datepicker extends ValidatedInput {

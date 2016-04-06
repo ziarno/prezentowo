@@ -20,7 +20,7 @@ var Tooltips = {
     variation: 'inverted tiny',
     position: 'bottom center',
     delay: {
-      show: 500,
+      show: 300,
       hide: 0
     },
     duration: 100
