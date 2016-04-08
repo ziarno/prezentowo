@@ -124,9 +124,11 @@ ImagePicker = class ImagePicker extends ValidatedInput {
             type="file"
             onChange={this.uploadImage}
           />
-          <div className="ui icon button waves-effect waves-button">
-            <i className="search icon"></i>
-          </div>
+          {this.props.enableSearch ? (
+            <div className="ui icon button waves-effect waves-button">
+              <i className="search icon"></i>
+            </div>
+          ) : null}
         </div>
 
       </div>
@@ -138,5 +140,6 @@ ImagePicker = class ImagePicker extends ValidatedInput {
 ImagePicker.propTypes = {
   images: React.PropTypes.array,
   uploadOptions: React.PropTypes.object,
-  randomizeInitialImage: React.PropTypes.bool
+  randomizeInitialImage: React.PropTypes.bool,
+  enableSearch: React.PropTypes.bool
 }
