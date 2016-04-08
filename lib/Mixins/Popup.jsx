@@ -44,6 +44,9 @@ class PopupComponent extends React.Component {
   }
 
   reset() {
+    if (this.schema) {
+      this.schema.resetValidation()
+    }
     this.destroyPopup()
   }
 

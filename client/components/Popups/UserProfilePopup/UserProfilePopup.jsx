@@ -31,6 +31,9 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
   getPopupSettings() {
     var position = 'bottom right'
     return {
+      onShow: () => {
+        this.schema.resetValidation()
+      },
       position,
       lastResort: position,
       transition: 'slide down'
@@ -163,7 +166,7 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
               </div>
               <div className="ui field">
                 <label>
-                  <T>Present view mode</T>
+                  <T>Presents view mode</T>
                 </label>
                 <RadioButtons
                   name="settings.viewMode.presentMode">
