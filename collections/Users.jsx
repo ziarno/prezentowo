@@ -157,6 +157,10 @@ Users.functions.getPresentsCount = function (user) {
       ) || 0
 }
 
+Users.functions.isBeneficiary = function (event, userId) {
+  return event.beneficiaryIds.indexOf(userId) > -1
+}
+
 /**
  * Collection helpers - methods attached to each instance
  */
@@ -179,6 +183,9 @@ Users.helpers({
       _id: presentId,
       creatorId: this._id
     })
+  },
+  isBeneficiary(event) {
+    return Users.functions.isBeneficiary(event, this._id)
   }
 })
 

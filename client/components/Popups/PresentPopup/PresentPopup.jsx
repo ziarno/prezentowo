@@ -80,12 +80,46 @@ PresentPopup = class PresentPopup extends PopupComponent {
 
   renderPopup() {
     var defaultSelectedUserId
+    var title = `${this.isEdit() ? 'Edit' : 'New'} present`
+    var ForUser
 
+    //set defaultSelectedUserId
     if (!this.props.present &&
       this.props.defaultSelectedUser) {
       defaultSelectedUserId = this.props.defaultSelectedUser._id
     } else {
       defaultSelectedUserId = ''
+    }
+
+    //set ForUser
+    if (!this.props.users || this.props.users.length === 0) {
+      ForUser = null
+    } else if (this.props.users.length === 1) {
+      ForUser = (
+        <ValidatedInput
+          name="forUserId"
+          staticValue={this.props.users[0]._id}>
+          <User user={this.props.users[0]} />
+        </ValidatedInput>
+      )
+    } else if (this.props.users.length > 1) {
+      ForUser = (
+        <SelectInput
+          inline
+          className="scrolling"
+          placeholder="choose user"
+          selectDefault={defaultSelectedUserId}
+          name="forUserId">
+          {this.props.users.map((user) => (
+            <div
+              className="item"
+              key={user._id}
+              data-value={user._id}>
+              <User user={user} />
+            </div>
+          ))}
+        </SelectInput>
+      )
     }
 
     return (
@@ -106,35 +140,11 @@ PresentPopup = class PresentPopup extends PopupComponent {
 
           <div className="ui attached message">
             <div className="header">
-              {this.isEdit() ? (
-                <T>Edit present</T>
-              ) : (
-                <T>New present</T>
-              )}
-              <T>for</T>
-              {this.props.users.length > 1 ? (
-                <SelectInput
-                  inline
-                  className="scrolling"
-                  placeholder="choose user"
-                  selectDefault={defaultSelectedUserId}
-                  name="forUserId">
-                  {this.props.users.map((user) => (
-                    <div
-                      className="item"
-                      key={user._id}
-                      data-value={user._id}>
-                      <User user={user} />
-                    </div>
-                  ))}
-                </SelectInput>
-              ) : (
-                <ValidatedInput
-                  name="forUserId"
-                  staticValue={this.props.users[0]._id}>
-                  <User user={this.props.users[0]} />
-                </ValidatedInput>
-              )}
+              <T>{title}</T>
+              {ForUser ? (
+                <T>for</T>
+              ) : null}
+              {ForUser}
             </div>
           </div>
 
@@ -181,7 +191,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
 PresentPopup.propTypes = {
   present: React.PropTypes.object,
   defaultSelectedUser: React.PropTypes.object,
-  users: React.PropTypes.array.isRequired,
+  users: React.PropTypes.array,
   buttonClassName: React.PropTypes.string,
   icon: React.PropTypes.element
 }

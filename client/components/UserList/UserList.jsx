@@ -8,18 +8,49 @@ UserList = class UserList extends React.Component {
   render() {
     var event = this.props.event
     var isManyToOne = event.type === 'many-to-one'
-    var participants = this.props.users
-    var beneficiaries
     var beneficiariesTitle
     var activeUserId = this.props.activeUser &&
       this.props.activeUser._id
 
-    if (isManyToOne) {
-      [beneficiaries, participants] = _.partition(
-        this.props.users, u => event.beneficiaryIds.indexOf(u._id) > -1)
-      beneficiariesTitle = beneficiaries.length > 1 ?
-        'Beneficiaries' : 'Beneficiary'
-    }
+    var Counts = (
+      <div className="counts">
+        <CountLabel
+          tooltip={_i18n.__('Participants count')}
+          icon="user"
+          className="basic"
+          count={this.props.users.length}
+        />
+        <CountLabel
+          tooltip={_i18n.__('Presents count')}
+          icon="gift"
+          className="basic"
+          count={Events.functions.getPresentsCount(event)}
+        />
+      </div>
+    )
+
+    var [BeneficiariesUserItems, ParticipantsUserItems] = _(this.props.users)
+      .partition(
+        user => isManyToOne && event.beneficiaryIds.indexOf(user._id) > -1
+      )
+      .map((userGroup) => (
+        userGroup.map((user) => (
+          <UserItem
+            active={activeUserId === user._id}
+            disabled={isManyToOne}
+            presentsCount={
+              !isManyToOne &&
+              Users.functions.getPresentsCount(user)}
+            isCreator={this.props.isCreator}
+            onClick={this.props.onUserSelect}
+            key={user._id}
+            user={user} />
+        ))
+      ))
+
+    beneficiariesTitle = BeneficiariesUserItems &&
+      BeneficiariesUserItems.length > 1 ?
+      'Beneficiaries' : 'Beneficiary'
 
     return (
       <div
@@ -32,55 +63,24 @@ UserList = class UserList extends React.Component {
           <div
             className="user-list--title">
             <T>{beneficiariesTitle}</T>
+            {Counts}
           </div>
         ) : null}
         {isManyToOne ? (
           <div
             className="user-list--list">
-            {beneficiaries.map((user) => (
-              <UserItem
-                presentsCount={Users.functions.getPresentsCount(user)}
-                isCreator={this.props.isCreator}
-                key={user._id}
-                user={user} />
-            ))}
+            {BeneficiariesUserItems}
           </div>
         ) : null}
 
         <div
           className="user-list--title">
           <T>Participants</T>
-          <div className="counts">
-            <CountLabel
-              tooltip={{
-                content: _i18n.__('Participants count')
-              }}
-              icon="user"
-              className="basic"
-              count={this.props.users.length}
-            />
-            <CountLabel
-              tooltip={{
-                content: _i18n.__('Presents count')
-              }}
-              icon="gift"
-              className="basic"
-              count={Events.functions.getPresentsCount(event)}
-            />
-          </div>
+          {!isManyToOne ? Counts : null}
         </div>
-
         <div
           className="user-list--list">
-          {participants.map((user) => (
-            <UserItem
-              active={activeUserId === user._id}
-              presentsCount={Users.functions.getPresentsCount(user)}
-              isCreator={this.props.isCreator}
-              onClick={this.props.onUserSelect}
-              key={user._id}
-              user={user} />
-          ))}
+          {ParticipantsUserItems}
         </div>
 
       </div>
@@ -97,8 +97,9 @@ UserList.propTypes = {
 
 UserList = createContainer(() => {
   var event = Session.get('event')
+  var activeUser = Session.get('currentUser')
   return {
-    activeUser: Session.get('currentUser'),
+    activeUser,
     event,
     isCreator: event.creatorId === Meteor.userId()
   }

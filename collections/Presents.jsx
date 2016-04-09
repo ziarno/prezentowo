@@ -35,6 +35,7 @@ Presents.Schemas.NewPresent = new SimpleSchema({
   forUserId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
+    optional: true, //not needed for events many-to-one
     label: () => _i18n.__('User')
   }
 })
@@ -75,6 +76,23 @@ Presents.Schemas.Main = new SimpleSchema([
           return new Date()
         }
       }
+    },
+    isOwn: {
+      type: Boolean,
+      autoValue() {
+        if (!this.isInsert) {
+          return
+        }
+
+        var eventId = this.field('eventId').value
+        var event = Events.findOne(eventId)
+
+        return Presents.functions.isOwn({
+          event,
+          forUserId: this.field('forUserId').value,
+          creatorId: this.field('creatorId').value
+        })
+      }
     }
   }
 ])
@@ -86,26 +104,49 @@ Presents.attachSchema(Presents.Schemas.Main)
  */
 Presents.functions = {}
 
-Presents.functions.updatePresentsCount = function (incrementValue, present) {
-  var isOwnPresent = (present.forUserId === present.creatorId)
-  var countFieldName = isOwnPresent ? 'ownPresentsCount' : 'otherPresentsCount'
-  var countModifier = {$inc: {
-    [`participants.$.${countFieldName}`]: incrementValue
-  }}
+Presents.functions.updatePresentsCount = function (incrementValue, presentId) {
+  var present = Presents.findOne(presentId)
+  var countFieldName = present.isOwn ? 'ownPresentsCount' : 'otherPresentsCount'
 
-  Events.update({
-    _id: present.eventId,
-    'participants.userId': present.forUserId
-  }, countModifier)
+  if (present.forUserId) {
+    Events.update({
+      _id: present.eventId,
+      'participants.userId': present.forUserId
+    }, {$inc: {
+      [countFieldName]: incrementValue,
+      [`participants.$.${countFieldName}`]: incrementValue
+    }})
+  } else {
+    Events.update({
+      _id: presents.eventId
+    }, {$inc: {
+      [countFieldName]: incrementValue
+    }})
+  }
+
 }
 
+Presents.functions.isOwn = function ({
+  present,
+  event,
+  forUserId = present && present.forUserId,
+  creatorId = present && present.creatorId
+  }) {
+    var isManyToOneEvent = event && event.type === 'many-to-one'
+    if (isManyToOneEvent) {
+      //present isOwn if its creator is one of the beneficiaries
+      return Users.functions.isBeneficiary(event, creatorId)
+    }
+
+    return forUserId === creatorId
+}
 
 /**
  * Collection helpers
  */
 Presents.helpers({
-  isOwn() {
-    return this.forUserId === this.creatorId
+  isOwnPresent(event) {
+    return Presents.functions.isOwn({present: this, event})
   },
   isUserCreator() {
     return this.creatorId === Meteor.userId()
@@ -129,7 +170,7 @@ Presents.methods.createPresent = new ValidatedMethod({
     }
 
     var presentId = Presents.insert(present) //auto clean ok - no sub schemas
-    Presents.functions.updatePresentsCount(1, present)
+    Presents.functions.updatePresentsCount(1, presentId)
     return presentId
   }
 })
@@ -148,13 +189,12 @@ Presents.methods.removePresent = new ValidatedMethod({
         `${this.name}.notCreatedPresent`,
         _i18n.__('Presents deleted by creators'))
     }
-    var present = Presents.findOne(presentId)
-    var removeCount = Presents.remove({
+    var removedCount = Presents.remove({
       _id: presentId,
       creatorId: this.userId
     })
-    Presents.functions.updatePresentsCount(-1, present)
-    return removeCount
+    Presents.functions.updatePresentsCount(-1, presentId)
+    return removedCount
   }
 })
 

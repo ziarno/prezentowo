@@ -9,6 +9,28 @@ UserPresents = class UserPresents extends React.Component {
     this.setScrollSpy = this.setScrollSpy.bind(this)
   }
 
+  static getPresents({title, presents, viewMode}) {
+    if (!presents.length) {
+      return null
+    }
+    return (
+      <div>
+        <h2>
+          <T>{title}</T>
+        </h2>
+        <div className="ui cards presents">
+          {presents.map((present) => (
+            <Present
+              viewMode={viewMode}
+              key={present._id}
+              present={present} />
+            ))
+          }
+        </div>
+      </div>
+    )
+  }
+
   shouldComponentUpdate(newProps) {
     return !_.isEqual(newProps, this.props)
   }
@@ -47,29 +69,9 @@ UserPresents = class UserPresents extends React.Component {
   render() {
     var ownPresents = []
     var otherPresents = []
-    var getPresents = (title, presents) => {
-      if (!presents.length) {
-        return null
-      }
-      return (
-        <div>
-          <h2>
-            <T>{title}</T>
-          </h2>
-          <div className="ui cards presents">
-            {presents.map((present) => (
-              <Present
-                viewMode={this.props.presentViewMode}
-                key={present._id}
-                present={present} />
-            ))}
-          </div>
-        </div>
-      )
-    }
 
     this.props.presents.forEach((present) => {
-      if (present.isOwn()) {
+      if (present.isOwn) {
         ownPresents.push(present)
       } else {
         otherPresents.push(present)
@@ -78,15 +80,36 @@ UserPresents = class UserPresents extends React.Component {
 
     return (
       <div
-        id={`user-presents-${this.props.user._id}`}
+        id={`user-presents-${this.props.user && this.props.user._id}`}
         className="user-presents">
 
-        <div className="ui horizontal divider">
-          <User user={this.props.user} large showAddPresentOnHover />
-        </div>
+        <HorizontalDivider>
+          {this.props.combine ? (
+            this.props.users.map(user => (
+              <User
+                showAddPresentOnHover
+                key={user._id}
+                user={user}
+                large />
+            ))
+          ) : (
+            <User
+              user={this.props.user}
+              large
+              showAddPresentOnHover />
+          )}
+        </HorizontalDivider>
 
-        {getPresents('hints.ownPresents', ownPresents)}
-        {getPresents('hints.otherPresents', otherPresents)}
+        {UserPresents.getPresents({
+          title: 'hints.ownPresents',
+          presents: ownPresents,
+          viewMode: this.props.presentViewMode
+        })}
+        {UserPresents.getPresents({
+          title: 'hints.otherPresents',
+          presents: otherPresents,
+          viewMode: this.props.presentViewMode
+        })}
 
       </div>
     )
@@ -94,7 +117,9 @@ UserPresents = class UserPresents extends React.Component {
 }
 
 UserPresents.propTypes = {
-  user: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object,
+  users: React.PropTypes.array,
+  combine: React.PropTypes.bool,
   presents: React.PropTypes.array.isRequired,
   presentViewMode: React.PropTypes.string
 }

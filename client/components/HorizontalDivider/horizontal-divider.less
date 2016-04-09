@@ -1,0 +1,23 @@
+@import '/client/styles/partials/vars.import.less';
+
+.horizontal-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .horizontal-divider--content {
+    flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  .horizontal-divider--line {
+    //align-self: center;
+    height: 1px;
+    background-color: @grey-light;
+    margin: 0 10px;
+    width: 50%;
+  }
+}

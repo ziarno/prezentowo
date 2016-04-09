@@ -1,15 +1,26 @@
 import React from 'react'
 import {isMobile} from '../../../../lib/utilities'
 
-UserItem = ({onClick, user, presentsCount, isCreator, active}) => (
+UserItem = ({
+  onClick,
+  user,
+  presentsCount,
+  isCreator,
+  active,
+  disabled
+  }) => (
   <div
-    onClick={() => onClick(user)}
-    className={classNames('user-item', {active})}>
+    onClick={() => !disabled && onClick && onClick(user)}
+    className={classNames('user-item', {
+      active,
+      disabled})}>
     <User user={user} />
-    <CountLabel
-      icon="gift"
-      count={presentsCount}
-    />
+    {_.isNumber(presentsCount) ? (
+      <CountLabel
+        icon="gift"
+        count={presentsCount}
+      />
+    ) : null}
     {isCreator ? (
       <ParticipantPopup
         popupSettings={{

@@ -43,9 +43,10 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
   render() {
     var isParticipantsViewModeSingle =
       this.props.participantsViewMode === 'single'
+    var isManyToOne = this.props.event.type === 'many-to-one'
     var UserPresentsItems
 
-    if (!this.props.ready || !this.props.showUser) {
+    if (!this.props.ready) {
       let text = isParticipantsViewModeSingle && this.props.showUser ?
         this.props.showUser.profile.name.capitalizeFirstLetter()
         : null
@@ -59,7 +60,16 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
       )
     }
 
-    if (isParticipantsViewModeSingle) {
+    if (isManyToOne) {
+      UserPresentsItems = (
+        <UserPresents
+          combine
+          users={this.props.users}
+          presentViewMode={this.props.presentViewMode}
+          presents={this.props.presents}
+        />
+      )
+    } else if (isParticipantsViewModeSingle) {
       UserPresentsItems = (
         <UserPresents
           presentViewMode={this.props.presentViewMode}
@@ -100,16 +110,25 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
 }
 
 PresentsContainer.propTypes = {
-  ready: React.PropTypes.bool.isRequired,
   users: React.PropTypes.array.isRequired,
-  showUser: React.PropTypes.object.isRequired,
-  participantsViewMode: React.PropTypes.string.isRequired
+
+  ready: React.PropTypes.bool.isRequired,
+  presents: React.PropTypes.array.isRequired,
+  showUser: React.PropTypes.object,
+  scrollToEl: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.element,
+    React.PropTypes.object
+  ]),
+  participantsViewMode: React.PropTypes.string.isRequired,
+  event: React.PropTypes.object.isRequired
 }
 
 reactMixin(PresentsContainer.prototype, Autorun)
 
 PresentsContainer = createContainer(() => {
-  var eventId = Session.get('event')._id
+  var event = Session.get('event')
+  var eventId = event._id
   var currentUser = Session.get('currentUser')
   var user = Meteor.user()
   var participantsViewMode = user &&
@@ -135,6 +154,7 @@ PresentsContainer = createContainer(() => {
     showUser: currentUser,
     scrollToEl,
     participantsViewMode,
-    presentViewMode
+    presentViewMode,
+    event
   }
 }, PresentsContainer)

@@ -46,9 +46,13 @@ EventContainer = class EventContainer extends React.Component {
   }
 
   render() {
-    var eventTitle = Session.get('event').title
+    var eventTitle = this.props.event &&
+      this.props.event.title
+    var isManyToOne = this.props.event &&
+      this.props.event.type === 'many-to-one'
     var currentUserId = this.state.currentUser &&
       this.state.currentUser._id
+    var showUsers
 
     if (!this.props.ready) {
       return (
@@ -60,6 +64,13 @@ EventContainer = class EventContainer extends React.Component {
         />
       )
     }
+
+    showUsers = isManyToOne ? (
+      _.filter(
+        this.props.participants,
+        user => this.props.event.beneficiaryIds.indexOf(user._id) > -1
+      )
+    ) : this.props.participants
 
     return (
       <div
@@ -79,7 +90,7 @@ EventContainer = class EventContainer extends React.Component {
         </Sidebar>
 
         <PresentsContainer
-          users={this.props.participants} />
+          users={showUsers} />
 
         <PresentPopup
           buttonClassName="present-button--add circular primary"
@@ -90,7 +101,7 @@ EventContainer = class EventContainer extends React.Component {
               <i className="gift corner inverted icon"></i>
             </i>
           )}
-          users={this.props.participants}
+          users={isManyToOne ? [] : this.props.participants}
         />
 
       </div>
@@ -101,7 +112,13 @@ EventContainer = class EventContainer extends React.Component {
 
 EventContainer.propTypes = {
   eventId: React.PropTypes.string.isRequired,
-  userId: React.PropTypes.string
+
+  ready: React.PropTypes.bool,
+  participants: React.PropTypes.array,
+  event: React.PropTypes.object,
+  currentUser: React.PropTypes.object,
+  presents: React.PropTypes.array,
+  settings: React.PropTypes.object
 }
 
 reactMixin(EventContainer.prototype, Autorun)
@@ -125,9 +142,9 @@ EventContainer = createContainer(({eventId, userId}) => {
   var user = Meteor.user()
   var currentUser = getCurrentUser()
 
-  function getCorrectPath({participantsViewMode, eventId, userId}) {
+  function getCorrectPath({participantsViewMode, eventId, userId, isManyToOne}) {
     var path = `/event/id/${eventId}`
-    if (participantsViewMode === 'single' && userId) {
+    if (participantsViewMode === 'single' && userId && !isManyToOne) {
       path += `/user/${userId}`
     }
     return path
@@ -155,12 +172,12 @@ EventContainer = createContainer(({eventId, userId}) => {
         participantsViewMode: user.settings &&
           user.settings.viewMode.participantsMode,
         eventId,
-        userId: currentUser && currentUser._id
+        userId: currentUser && currentUser._id,
+        isManyToOne: event.type === 'many-to-one'
       }));
     });
   }
 
-  Session.set('participants', participants)
   Session.set('event', event || {})
 
   return {

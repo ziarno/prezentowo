@@ -12,6 +12,7 @@ db.loadServerScripts();
 resetDB();
 updatePresentCounts();
 setDefaultSettings();
+updateIsOwnPresent();
 ```
 
 1. `resetDB()` - remove all docs from collections
@@ -31,15 +32,16 @@ db.system.js.save({
 ```
 
 2. `updatePresentCounts()` - updates the values in ownPresentsCount and
-otherPresentsCount in the events.participants collection
+otherPresentsCount in the events.participants collection and
+events.ownPresentsCount / events.otherPresentsCount
 
 ```
 db.system.js.save({
     _id: 'updatePresentCounts',
     value: function () {
         db.events.find({}).forEach(function (event) {
-            event.participants.forEach(function (participant) {
 
+            event.participants.forEach(function (participant) {
                 var ownPresentsCount = db.presents.count({
                     eventId: event._id,
                     forUserId: participant.userId,
@@ -60,8 +62,26 @@ db.system.js.save({
                         'participants.$.otherPresentsCount': otherPresentsCount
                     }
                 });
-
             });
+
+            var eventOwnPresentsCount = db.presents.count({
+                eventId: event._id,
+                isOwn: true
+            });
+            var eventOtherPresentsCount = db.presents.count({
+                eventId: event._id,
+                isOwn: false
+            });
+
+            db.events.update({
+                _id: event._id
+            }, {
+                $set: {
+                    ownPresentsCount: eventOwnPresentsCount,
+                    otherPresentsCount: eventOtherPresentsCount
+                }
+            });
+
         });
     }
 });
@@ -103,10 +123,36 @@ db.system.js.save({
 });
 ```
 
+5. Set isOwn field of every present
+
+```
+db.system.js.save({
+    _id: 'updateIsOwnPresent',
+    value: function () {
+        db.presents.find({}).forEach(function (present) {
+            var event = db.events.find({_id: present.eventId});
+            var isManyToOneEvent = event && event.type === 'many-to-one'
+            var isOwn
+
+            if (isManyToOneEvent) {
+                isOwn = event.beneficiaries.indexOf(present.creatorId) > -1
+            } else {
+                isOwn = present.forUserId === present.creatorId
+            }
+
+            db.presents.update({_id: present._id}, {
+                $set: {isOwn: isOwn}
+            })
+
+        });
+    }
+});
+```
+
 Index for unique userId's in participants array
 Note: doesn't work :(
 
-```js
+```
 db.events.ensureIndex({_id: 1, 'participants.userId' : 1}, {unique:true, sparse:true});
 ```
 

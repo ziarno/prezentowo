@@ -1,7 +1,6 @@
 import React from 'react'
 
 Meteor.publishComposite('participants', function ({eventId}) {
-  //Meteor._sleepForMs(2000)
   return {
     find: function () {
       return Events.find({

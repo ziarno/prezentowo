@@ -14,8 +14,11 @@ Label = class Label extends React.Component {
       return
     }
 
+    var tooltip = _.isString(this.props.tooltip) ?
+      {content: this.props.tooltip} : this.props.tooltip
+
     return {
-      label: this.props.tooltip
+      label: tooltip
     }
   }
 
@@ -35,5 +38,8 @@ reactMixin(Label.prototype, Tooltips)
 
 Label.propTypes = {
   className: React.PropTypes.string,
-  tooltip: React.PropTypes.object
+  tooltip: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.string
+  ])
 }

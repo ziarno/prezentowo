@@ -20,14 +20,14 @@ Present = ({present, viewMode}) => {
             icon={(
               <i className="vertical ellipsis icon"></i>
             )}
-            users={[Participants.findOne(present.forUserId)]}
+            users={present.forUserId && [Participants.findOne(present.forUserId)]}
           />
         ) : null}
       </div>
       <Ribbon
         rightFlatEnding={isFullWidth}
         withEndings={!isFullWidth}
-        color={present.isOwn() ? 'green' : 'red'}
+        color={present.isOwn ? 'green' : 'red'}
         small={!isFullWidth}>
         {isFullWidth ? (
           <h1>

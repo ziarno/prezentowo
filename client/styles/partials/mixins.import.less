@@ -17,7 +17,8 @@
 }
 
 .hover-label() {
-  &:hover, &.active {
+  &:hover:not(.disabled),
+  &.active:not(.disabled) {
     .ui.label {
       background: none #fff;
       color: rgba(0, 0, 0, 0.87);
