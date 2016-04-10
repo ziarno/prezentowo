@@ -9,11 +9,13 @@ EventContainer = class EventContainer extends React.Component {
     super()
     this.state = {
       currentUser: Session.get('currentUser'),
-      isSidebarVisible: $(window).width() > 720
+      isSidebarVisible: !Session.get('isSidebarFixed')
     }
     this.showUser = this.showUser.bind(this)
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
     this.autorunSetCurrentUserState = this.autorunSetCurrentUserState.bind(this)
+    this.autorunSetSidebarMode = this.autorunSetSidebarMode.bind(this)
+    this.onSidebarVisibilityChange = this.onSidebarVisibilityChange.bind(this)
   }
 
   showUser(user) {
@@ -25,6 +27,8 @@ EventContainer = class EventContainer extends React.Component {
     } else {
       Session.set('currentUser', user)
     }
+
+    this.setState({isSidebarVisible: !Session.get('isSidebarFixed')})
   }
 
   autorunSetCurrentUserState() {
@@ -36,6 +40,10 @@ EventContainer = class EventContainer extends React.Component {
     this.setState({currentUser: Session.get('currentUser')})
   }
 
+  autorunSetSidebarMode() {
+    this.setState({isSidebarVisible: !Session.get('isSidebarFixed')})
+  }
+
   autorunSetCurrentUser() {
     var userId = FlowRouter.getParam('userId')
     var currentUser = Participants.findOne(userId)
@@ -43,6 +51,10 @@ EventContainer = class EventContainer extends React.Component {
     if (userId && currentUser) {
       Session.set('currentUser', currentUser)
     }
+  }
+
+  onSidebarVisibilityChange(isSidebarVisible) {
+    this.setState({isSidebarVisible})
   }
 
   render() {
@@ -81,9 +93,8 @@ EventContainer = class EventContainer extends React.Component {
 
         <Sidebar
           scrollToEl={`.user-list [data-id=${currentUserId}]`}
-          initiallyVisible={this.state.isSidebarVisible}
-          onVisibilityChange={isSidebarVisible =>
-            this.setState({isSidebarVisible})}>
+          isVisible={this.state.isSidebarVisible}
+          onVisibilityChange={this.onSidebarVisibilityChange}>
           <UserList
             onUserSelect={this.showUser}
             users={this.props.participants} />

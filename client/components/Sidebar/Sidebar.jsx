@@ -3,19 +3,16 @@ import {ScrollableComponent} from '../../../lib/Mixins'
 
 Sidebar = class Sidebar extends ScrollableComponent {
 
-  constructor({initiallyVisible}) {
+  constructor() {
     super()
-    this.state = {
-      visible: initiallyVisible
-    }
     this.toggleVisibility = this.toggleVisibility.bind(this)
   }
 
-  toggleVisibility() {
-    var visible = !this.state.visible
+  toggleVisibility(isVisible) {
+    var visible = _.isBoolean(isVisible) ?
+      isVisible :
+      !this.props.isVisible
 
-    this.isScrollable = visible
-    this.setState({visible})
     if (_.isFunction(this.props.onVisibilityChange)) {
       this.props.onVisibilityChange(visible)
     }
@@ -27,13 +24,23 @@ Sidebar = class Sidebar extends ScrollableComponent {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    super.componentWillReceiveProps(newProps)
+    this.isScrollable = newProps.isVisible
+  }
+
+  componentDidMount() {
+    super.componentDidMount()
+    this.isScrollable = this.props.isVisible
+  }
+
   render() {
 
     return (
       <div
         id="sidebar"
         className={classNames({
-          visible: this.state.visible
+          visible: this.props.isVisible
         })}>
         <div
           onClick={this.toggleVisibility}
@@ -52,6 +59,6 @@ Sidebar = class Sidebar extends ScrollableComponent {
 }
 
 Sidebar.propTypes = {
-  initiallyVisible: React.PropTypes.bool,
+  isVisible: React.PropTypes.bool,
   onVisibilityChange: React.PropTypes.func
 }
