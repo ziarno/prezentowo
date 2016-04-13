@@ -184,9 +184,11 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
               }}
             />
             <div className="form-popup--form-right" >
-              <Input
+              <SearchableInput
                 name="name"
                 placeholder="Fullname"
+                search={new SearchSource('usernames', ['profile.name'])}
+                onSearchSelect={(user) => this.refs.form.setFormData(this.mapToFormData(user)) }
               />
               <Input
                 name="email"

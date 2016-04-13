@@ -1,116 +1,94 @@
 import React from 'react'
-import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
-import reactMixin from 'react-mixin'
+import {createContainer} from 'meteor/react-meteor-data'
 
-SearchableInput = class SearchableInput extends ValidatedInput {
+SearchableInput = class SearchableInput extends Input {
 
   constructor(props) {
     super(props)
-    this.state = _.extend(this.state, {
-      showSearchResults: false
-    })
-    this.getValue = this.getValue.bind(this)
-    this.setValue = this.setValue.bind(this)
     this.search = this.search.bind(this)
-    this.reset = this.reset.bind(this)
-  }
-  
-  getMeteorData() {
-    return {
-      results: this.props.search && this.props.search.getData(),
-      status: this.props.search && this.props.search.getStatus()
-    }
-  }
-
-  getValue() {
-    return this.refs.input.value
-  }
-
-  setValue(value) {
-    this.refs.input = value
   }
 
   search() {
-    console.log('search')
-    this.setState({showSearchResults: true})
     this.props.search.search(this.getValue())
   }
 
-  reset() {
-    console.log('reset')
-    this.setState({
-      showSearchResults: false
-    })
+  componentWillReceiveProps(newProps) {
+    var previousStatus = this.props.status
+    var nextStatus = newProps.status
+
+    if (previousStatus.loading && nextStatus.loaded) {
+      $(this.refs.dropdown).dropdown('show')
+    }
   }
 
   componentDidMount() {
     super.componentDidMount()
-    $(this.refs.search).dropdown({
-      //on: 'custom event',
-      action: 'hide',
-      onHide: () => this.setState({showSearchResults: false})
+    $(this.refs.dropdown).dropdown({
+      action: 'hide'
     })
   }
 
   render() {
 
-    if (this.props.search) {
-      console.log('status: ', this.data.status)
-      if (this.state.showSearchResults) {
-        console.log('results: ', this.data.results)
-      }
-    }
-
     return (
       <div
-        className={classNames('ui field', this.props.className, {
+        className={classNames('ui field searchable-input', this.props.className, {
           error: this.shouldShowError()
         })}>
 
         {this.props.label ? (
-          <label>{this.props.label}</label>
+          <label>
+            <T>{this.props.label}</T>
+          </label>
         ) : null}
 
-        <div className={classNames('ui input', {
-          action: this.props.search
-        })}>
+        <div
+          ref="dropdown"
+          className="ui fluid scrolling dropdown">
+          <div className="menu">
+            {this.props.results.length ? this.props.results.map((user) => (
+              <div
+                key={user._id}
+                className="item"
+                onClick={() => this.props.onSearchSelect(user)}>
+                <User user={user} className="item" />
+              </div>
+            )) : (
+              <div className="message">
+                <T>No results</T>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div
+          className={classNames('ui action input', {
+            error: this.shouldShowError()
+          })}>
           <input
             ref="input"
             placeholder={_i18n.__(this.props.placeholder)}
             onFocus={this.hideError}
             onBlur={(e) => this.validate(e.currentTarget.value)}
-            onChange={(e) => this.onChange(e.currentTarget.value)}
-            type={this.props.type || 'text'}
+            onChange={(e) => this.onInputChange(e.currentTarget.value)}
+            type="text"
             name={this.props.name}
           />
-          {this.props.search ? (
-          <div
+
+          <button
             ref="search"
-            className={classNames('ui icon button dropdown', {
-                loading: this.data.isSearching
-              })}
+            type="button"
+            className={classNames('ui icon button', {
+              loading: this.props.status.loading
+            })}
             onClick={this.search}>
             <i className="small search icon"></i>
-            <div className="menu">
-              {this.data.results.map((user) => (
-                <User key={user._id} user={user} className="item"></User>
-              ))}
-            </div>
-          </div>
-            ) : null}
+          </button>
         </div>
 
         {this.props.hint ? (
-          <span className="hint">{_i18n.__(this.props.hint)}</span>
+          <T className="hint">{this.props.hint}</T>
         ) : null}
-
-        {this.state.showSearchResults && this.data.status === 'loaded' ? (
-          this.data.results.map((res) => (
-            <p key={res._id}>{res.profile.name}</p>
-          ))
-        ) : null}
-
-        {this.props.children}
 
       </div>
     )
@@ -120,9 +98,15 @@ SearchableInput = class SearchableInput extends ValidatedInput {
 SearchableInput.propTypes = {
   label: React.PropTypes.string,
   hint: React.PropTypes.string,
+  className: React.PropTypes.string,
   placeholder: React.PropTypes.string,
-  search: React.PropTypes.object
+  search: React.PropTypes.object.isRequired,
+  onSearchSelect: React.PropTypes.func.isRequired
 }
 
-reactMixin(SearchableInput.prototype, ReactMeteorData)
-reactMixin(SearchableInput.prototype, RefreshOnLocaleChange)
+SearchableInput = createContainer(({search}) => {
+  return {
+    results: search.getData(),
+    status: search.getStatus()
+  }
+}, SearchableInput)

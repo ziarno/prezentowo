@@ -86,11 +86,9 @@ SelectInput = class SelectInput extends ValidatedInput {
       var value = $dropdown.dropdown('get value')
       var $item = $dropdown.dropdown('get item', value)
 
-      if ($item) {
+      if ($item && _.isFunction($item[0].scrollIntoViewIfNeeded)) {
         setTimeout(() => {
-          if (_.isFunction($item[0].scrollIntoViewIfNeeded)) {
-            $item[0].scrollIntoViewIfNeeded(true)
-          }
+          $item[0].scrollIntoViewIfNeeded(true)
         }, 300)
       }
     }
