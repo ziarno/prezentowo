@@ -19,22 +19,15 @@ Presents.Schemas.NewPresent = new SimpleSchema({
     max: 70,
     label: () => _i18n.__('Title')
   },
-  pictureUrl: {
-    type: String,
-    label: () => _i18n.__('Picture')
-  },
+  pictureUrl: SchemaFields.PictureUrl,
   description: {
     type: String,
     label: () => _i18n.__('Description'),
     optional: true
   },
-  eventId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+  eventId: SchemaFields.Id,
   forUserId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
+    ...SchemaFields.Id,
     optional: true, //not needed for events many-to-one
     label: () => _i18n.__('User')
   }
@@ -59,24 +52,8 @@ Presents.Schemas.Main = new SimpleSchema([
       defaultValue: [],
       label: () => _i18n.__('Shared comments')
     },
-    creatorId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      autoValue() {
-        if (this.isInsert) {
-          return this.userId
-        }
-      }
-    },
-    createdAt: {
-      type: Date,
-      label: () => _i18n.__('Created'),
-      autoValue() {
-        if (this.isInsert) {
-          return new Date()
-        }
-      }
-    },
+    creatorId: SchemaFields.CreatorId,
+    creatorAt: SchemaFields.CreatedAt,
     isOwn: {
       type: Boolean,
       autoValue() {

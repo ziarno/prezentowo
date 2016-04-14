@@ -15,25 +15,13 @@ Comments.Schemas = {}
 
 Comments.Schemas.Main = new SimpleSchema({
   userId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
+    ...SchemaFields.Id,
     autoValue() {
       return this.userId
     }
   },
-  presentId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  createdAt: {
-    type: Date,
-    label: () => _i18n.__('Created'),
-    autoValue() {
-      if (this.isInsert) {
-        return new Date()
-      }
-    }
-  },
+  presentId: SchemaFields.Id,
+  createdAt: SchemaFields.CreatedAt,
   message: {
     type: String,
     label: () => _i18n.__('Message')

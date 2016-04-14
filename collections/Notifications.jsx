@@ -19,24 +19,13 @@ Notifications.Schemas.Main = new SimpleSchema({
     type: String,
     allowedValues: ['new', 'changed', 'edited']
   },
-  createdAt: {
-    type: String,
-    label: () => _i18n.__('Created'),
-    autoValue() {
-      if (!this.isSet) {
-        return new Date()
-      }
-    }
-  },
+  createdAt: SchemaFields.CreatedAt,
 
   //users to be notified
   seenByUsers: {
     type: [Object]
   },
-  'seenByUsers.id': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+  'seenByUsers.id': SchemaFields.Id,
   'seenByUsers.seen': {
     type: Boolean
   },
@@ -45,10 +34,7 @@ Notifications.Schemas.Main = new SimpleSchema({
   byUser: {
     type: Object
   },
-  'byUser.id': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+  'byUser.id': SchemaFields.Id,
   'byUser.name': {
     type: String
   },
@@ -61,10 +47,7 @@ Notifications.Schemas.Main = new SimpleSchema({
     type: Object,
     optional: true
   },
-  'forUser.id': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+  'forUser.id': SchemaFields.Id,
   'forUser.name': {
     type: String
   },
@@ -77,10 +60,7 @@ Notifications.Schemas.Main = new SimpleSchema({
     type: Object,
     optional: true
   },
-  'forPresent.id': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+  'forPresent.id': SchemaFields.Id,
   'forPresent.name': {
     type: String
   },
@@ -93,10 +73,7 @@ Notifications.Schemas.Main = new SimpleSchema({
     type: Object,
     optional: true
   },
-  'forEvent.id': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+  'forEvent.id': SchemaFields.Id,
   'forEvent.name': {
     type: String
   }

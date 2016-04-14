@@ -25,19 +25,9 @@ Users.Schemas.Email = new SimpleSchema({
 })
 
 Users.Schemas.Profile = new SimpleSchema({
-  name: {
-    type: String,
-    label: () => _i18n.__('Fullname')
-  },
-  pictureUrl: {
-    type: String,
-    label: () => _i18n.__('Picture')
-  },
-  gender: {
-    type: String,
-    allowedValues: ['male', 'female'],
-    label: () => _i18n.__('Gender')
-  }
+  name: SchemaFields.Name,
+  pictureUrl: SchemaFields.PictureUrl,
+  gender: SchemaFields.Gender
 })
 
 Users.Schemas.ViewMode = new SimpleSchema({

@@ -12,26 +12,12 @@ Invitations.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:s
 Invitations.Schemas = {}
 
 Invitations.Schemas.Main = new SimpleSchema({
-  forEventId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  forUserId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+  forEventId: SchemaFields.Id,
+  forUserId: SchemaFields.Id,
   isForTempUser: {
     type: Boolean
   },
-  createdAt: {
-    type: Date,
-    label: () => _i18n.__('Created'),
-    autoValue() {
-      if (this.isInsert) {
-        return new Date()
-      }
-    }
-  }
+  createdAt: SchemaFields.CreatedAt
 })
 
 Invitations.attachSchema(Invitations.Schemas.Main)
