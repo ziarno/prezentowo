@@ -35,6 +35,17 @@ Input = class Input extends ValidatedInput {
 
   render() {
 
+    var inputProps = {
+      ref: 'input',
+      placeholder: _i18n.__(this.props.placeholder),
+      onFocus: this.hideError,
+      onBlur: (e) => this.validate(e.currentTarget.value),
+      onChange: (e) => this.onInputChange(e.currentTarget.value),
+      name: this.props.name,
+      rows: this.props.rows || 8,
+      type: this.props.type || 'text'
+    }
+
     return (
       <div
         className={classNames('ui field', this.props.className, {
@@ -50,23 +61,11 @@ Input = class Input extends ValidatedInput {
         <div className="ui input">
           {this.props.type === 'textarea' ? (
             <textarea
-              ref="input"
-              placeholder={_i18n.__(this.props.placeholder)}
-              onFocus={this.hideError}
-              onBlur={(e) => this.validate(e.currentTarget.value)}
-              onChange={(e) => this.onInputChange(e.currentTarget.value)}
-              name={this.props.name}
-              rows={this.props.rows || 8}
+              {...inputProps}
             />
           ) : (
             <input
-              ref="input"
-              placeholder={_i18n.__(this.props.placeholder)}
-              onFocus={this.hideError}
-              onBlur={(e) => this.validate(e.currentTarget.value)}
-              onChange={(e) => this.onInputChange(e.currentTarget.value)}
-              type={this.props.type || 'text'}
-              name={this.props.name}
+              {...inputProps}
             />
           )}
         </div>

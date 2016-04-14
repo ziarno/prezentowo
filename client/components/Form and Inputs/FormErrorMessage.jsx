@@ -21,9 +21,12 @@ FormErrorMessage = class FormErrorMessage extends React.Component {
   }
 
   render() {
+    var shouldBeVisible = this.state.errors.length
+      && this.context.form.hasSubmitted
+
     return (
       <Message
-        hidden={!this.state.errors.length}
+        hidden={!shouldBeVisible}
         className="form-popup--error icon attached fluid error"
         icon="warning"
         messages={this.state.errors}
@@ -34,7 +37,8 @@ FormErrorMessage = class FormErrorMessage extends React.Component {
 }
 
 FormErrorMessage.contextTypes = {
-  schema: React.PropTypes.object
+  schema: React.PropTypes.object,
+  form: React.PropTypes.object
 }
 
 reactMixin(FormErrorMessage.prototype, Autorun)

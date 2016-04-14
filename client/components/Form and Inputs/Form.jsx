@@ -25,6 +25,7 @@ Form = class Form extends React.Component {
       components: [],
       hasError: false
     }
+    this.hasSubmitted = false
     this.autorunSetError = this.autorunSetError.bind(this)
     this.reset = this.reset.bind(this)
     this.setFormData = this.setFormData.bind(this)
@@ -34,7 +35,8 @@ Form = class Form extends React.Component {
   getChildContext() {
     return {
       register: (inputComponent) => {
-        if (!_.isFunction(inputComponent.getValue) || !_.isFunction(inputComponent.getValue)) {
+        if (!_.isFunction(inputComponent.getValue) ||
+            !_.isFunction(inputComponent.setValue)) {
           throw new Error(`${inputComponent.constructor.displayName} component must have a getValue() and reset() methods in order to be registered as an input in the Form component`)
         }
         this.state.components.push(inputComponent)
@@ -51,6 +53,7 @@ Form = class Form extends React.Component {
   }
 
   reset() {
+    this.hasSubmitted = false
     if (this.props.data) {
       this.setFormData(this.props.data)
     } else {
@@ -76,6 +79,7 @@ Form = class Form extends React.Component {
     var formValues
 
     event && event.preventDefault()
+    this.hasSubmitted = true
     this.state.components.forEach((component) => {
       flatFormValues[component.props.name] = component.getValue()
     })
@@ -122,7 +126,8 @@ Form.propTypes = {
 Form.childContextTypes = {
   register: React.PropTypes.func,
   schema: React.PropTypes.object,
-  form: React.PropTypes.object
+  form: React.PropTypes.object,
+  hasSubmitted: React.PropTypes.bool
 }
 
 reactMixin(Form.prototype, Autorun)

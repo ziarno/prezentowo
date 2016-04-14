@@ -14,7 +14,7 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showError: false,
+      showError: true,
       hasError: false
     }
     //fieldName is the last name part (if name is dot-separated)
@@ -65,7 +65,9 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   }
 
   shouldShowError() {
-    return this.state.showError && this.state.hasError
+    return this.state.showError &&
+      this.state.hasError &&
+      this.context.form.hasSubmitted
   }
 
   componentDidMount() {
@@ -76,7 +78,7 @@ var ValidatedInput = class ValidatedInput extends React.Component {
 
   validate(value, silent) {
     if (!silent) {
-      this.setState({showError: true})
+      this.showError()
     }
     if (this.context.schema) {
       this.context.schema.validateOne(unflattenObject({
@@ -104,7 +106,8 @@ ValidatedInput.propTypes = {
 
 ValidatedInput.contextTypes = {
   register: React.PropTypes.func,
-  schema: React.PropTypes.object
+  schema: React.PropTypes.object,
+  form: React.PropTypes.object
 }
 
 reactMixin(ValidatedInput.prototype, Autorun)
