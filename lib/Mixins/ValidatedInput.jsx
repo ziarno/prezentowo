@@ -15,7 +15,8 @@ var ValidatedInput = class ValidatedInput extends React.Component {
     super(props)
     this.state = {
       showError: true,
-      hasError: false
+      hasError: false,
+      disabled: false
     }
     //fieldName is the last name part (if name is dot-separated)
     //ex. name = a.b.c, then fieldName = c
@@ -26,6 +27,8 @@ var ValidatedInput = class ValidatedInput extends React.Component {
     this.onChange = this.onChange.bind(this)
     this.shouldShowError = this.shouldShowError.bind(this)
     this.validate = this.validate.bind(this)
+    this.setDisabled = this.setDisabled.bind(this)
+    this.isDisabled = this.isDisabled.bind(this)
   }
 
   autorunValidation() {
@@ -53,6 +56,14 @@ var ValidatedInput = class ValidatedInput extends React.Component {
 
   showError() {
     this.setState({showError: true})
+  }
+
+  setDisabled(val) {
+    this.setState({disabled: !!val})
+  }
+
+  isDisabled() {
+    return this.props.disabled || this.state.disabled
   }
 
   onChange(value) {

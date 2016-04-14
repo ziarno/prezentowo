@@ -64,6 +64,7 @@ RadioButtons = class RadioButtons extends ValidatedInput {
       <button
         key={button.value}
         type="button"
+        disabled={this.isDisabled()}
         onClick={() => this.setState({value: button.value})}
         className={classNames('ui icon button', button.className, {
           active: this.state.value === button.value

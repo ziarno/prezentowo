@@ -43,8 +43,9 @@ Input = class Input extends ValidatedInput {
       onChange: (e) => this.onInputChange(e.currentTarget.value),
       name: this.props.name,
       rows: this.props.rows || 8,
-      type: this.props.type || 'text'
-    }
+      type: this.props.type || 'text',
+      disabled: this.isDisabled()
+  }
 
     return (
       <div

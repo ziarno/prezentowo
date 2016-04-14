@@ -120,7 +120,8 @@ SelectInput = class SelectInput extends ValidatedInput {
         className={classNames('ui dropdown', this.props.className, {
           'fluid selection': !this.props.inline,
           inline: this.props.inline,
-          error: this.shouldShowError()
+          error: this.shouldShowError(),
+          disabled: this.isDisabled()
         })}>
 
         <div

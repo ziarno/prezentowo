@@ -13,6 +13,10 @@ ImagePicker = class ImagePicker extends ValidatedInput {
         _.random(0, props.images.length - 1) : 0,
       isLoading: false
     })
+
+    this.setNextImageIndex = this.changeImageIndex.bind(this, 1)
+    this.setPreviousImageIndex = this.changeImageIndex.bind(this, -1)
+
     this.changeImageIndex = this.changeImageIndex.bind(this)
     this.getImage = this.getImage.bind(this)
     this.getValue = this.getValue.bind(this)
@@ -95,26 +99,37 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   render() {
 
     return (
-      <div className="image-picker shadow">
-        <Loader visible={this.state.isLoading} />
-        <Img
-          src={this.getImage()}>
-          <div
-            className="arrow arrow--left"
-            onClick={this.changeImageIndex.bind(this, -1)}>
-            <i className="chevron left icon"></i>
-          </div>
-          <div
-            className="arrow arrow--right"
-            onClick={this.changeImageIndex.bind(this, 1)}>
-            <i className="chevron right icon"></i>
-          </div>
-        </Img>
+      <div className={classNames('image-picker shadow', {
+        disabled: this.isDisabled()
+      })}>
+        <Loader
+          text={_i18n.__('Uploading')}
+          visible={this.state.isLoading} />
+        {this.isDisabled() ? (
+          <Img src={this.getImage()} />
+        ) : (
+          <Img
+            src={this.getImage()}>
+            <div
+              className="arrow arrow--left"
+              onClick={this.setPreviousImageIndex}>
+              <i className="chevron left icon"></i>
+            </div>
+            <div
+              className="arrow arrow--right"
+              onClick={this.setNextImageIndex}>
+              <i className="chevron right icon"></i>
+            </div>
+          </Img>
+        )}
         <div className="ui compact small buttons image-picker--actions">
           <label
             htmlFor={this.inputId}
-            className="ui icon right labeled button
-              image-picker--upload waves-effect waves-button">
+            className={classNames(
+              'ui icon right labeled button',
+              'image-picker--upload waves-effect waves-button',
+              {disabled: this.isDisabled()}
+            )}>
             <T>Upload file</T>
             <i className="upload icon"></i>
           </label>

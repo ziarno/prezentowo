@@ -44,6 +44,7 @@ CheckboxInput = class CheckboxInput extends ValidatedInput {
         <input
           type="checkbox"
           tabIndex="0"
+          disabled={this.isDisabled()}
           defaultChecked={this.props.checked}
           className="hidden"
         />

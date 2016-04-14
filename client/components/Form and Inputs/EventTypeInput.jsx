@@ -42,10 +42,12 @@ EventTypeInput = class EventTypeInput extends ValidatedInput {
       return (
         <div
           id={type}
+          type="button"
           onClick={() => this.setType(type)}
           className={classNames('ui button', {
-              active: this.state.type === type
-            })}>
+            disabled: this.isDisabled(),
+            active: this.state.type === type
+          })}>
           <div>
             <i className="large users icon"></i>
             <i className={classNames('large', {

@@ -29,7 +29,6 @@ SearchableInput = class SearchableInput extends Input {
   }
 
   render() {
-
     return (
       <div
         className={classNames('ui field searchable-input', this.props.className, {
@@ -62,9 +61,7 @@ SearchableInput = class SearchableInput extends Input {
         </div>
 
         <div
-          className={classNames('ui action input', {
-            error: this.shouldShowError()
-          })}>
+          className="ui action input">
           <input
             ref="input"
             placeholder={_i18n.__(this.props.placeholder)}
@@ -73,14 +70,17 @@ SearchableInput = class SearchableInput extends Input {
             onChange={(e) => this.onInputChange(e.currentTarget.value)}
             type="text"
             name={this.props.name}
+            disabled={this.isDisabled()}
           />
 
           <button
             ref="search"
             type="button"
             className={classNames('ui icon button', {
-              loading: this.props.status.loading
+              loading: this.props.status.loading,
+              red: this.shouldShowError()
             })}
+            disabled={this.isDisabled()}
             onClick={this.search}>
             <i className="small search icon"></i>
           </button>
