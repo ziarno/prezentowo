@@ -91,6 +91,7 @@ NavEvents = class NavEvents extends React.Component {
             <i className="plus icon" />
           )}
           buttonClassName="popup-button"
+          popupClassName="non-pointing"
         />
 
         {isCreator ? (
@@ -99,6 +100,7 @@ NavEvents = class NavEvents extends React.Component {
               <i className="setting icon" />
             )}
             buttonClassName="popup-button"
+            popupClassName="non-pointing"
             event={event}
           />
         ) : null}
@@ -109,6 +111,7 @@ NavEvents = class NavEvents extends React.Component {
               <i className="add user icon" />
             )}
             buttonClassName="popup-button"
+            popupClassName="non-pointing"
           />
         ) : null}
 

@@ -76,7 +76,10 @@ EventPopup = class EventPopup extends PopupComponent {
     return (
       <div
         ref="popupTarget"
-        className="ui flowing popup form-popup event-popup">
+        className={classNames(
+          'ui flowing popup form-popup event-popup',
+          this.props.popupClassName
+        )}>
         <Form
           ref="form"
           data={this.props.event}
@@ -133,5 +136,6 @@ EventPopup = class EventPopup extends PopupComponent {
 EventPopup.propTypes = {
   event: React.PropTypes.object,
   buttonClassName: React.PropTypes.string,
+  popupClassName: React.PropTypes.string,
   icon: React.PropTypes.element
 }

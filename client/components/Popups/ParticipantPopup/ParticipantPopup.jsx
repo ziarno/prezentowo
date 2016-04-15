@@ -163,7 +163,10 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
     return (
       <div
         ref="popupTarget"
-        className="participant-popup form-popup ui flowing popup">
+        className={classNames(
+          'participant-popup form-popup ui flowing popup',
+          this.props.popupClassName
+        )}>
         <Form
           ref="form"
           disabled={this.props.user && !this.props.user.isTemp}
@@ -285,6 +288,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
 ParticipantPopup.propTypes = {
   user: React.PropTypes.object,
   buttonClassName: React.PropTypes.string,
+  popupClassName: React.PropTypes.string,
   icon: React.PropTypes.element,
   onRemove: React.PropTypes.func
 }

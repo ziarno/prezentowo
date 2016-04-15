@@ -125,7 +125,10 @@ PresentPopup = class PresentPopup extends PopupComponent {
     return (
       <div
         ref="popupTarget"
-        className="present-popup form-popup ui flowing popup">
+        className={classNames(
+          'present-popup form-popup ui flowing popup',
+          this.props.popupClassName
+        )}>
         <Form
           ref="form"
           data={this.props.present}
@@ -193,6 +196,7 @@ PresentPopup.propTypes = {
   defaultSelectedUser: React.PropTypes.object,
   users: React.PropTypes.array,
   buttonClassName: React.PropTypes.string,
+  popupClassName: React.PropTypes.string,
   icon: React.PropTypes.element
 }
 

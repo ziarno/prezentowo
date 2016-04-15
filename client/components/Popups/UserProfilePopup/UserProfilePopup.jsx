@@ -81,7 +81,10 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
     return (
       <div
         ref="popupTarget"
-        className="form-popup user-profile-popup ui flowing popup">
+        className={classNames(
+          'form-popup user-profile-popup ui flowing popup',
+          this.props.popupClassName
+        )}>
         <Form
           ref="form"
           data={this.mapDataToForm()}
@@ -210,7 +213,8 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
 }
 
 UserProfilePopup.propTypes = {
-  buttonClassName: React.PropTypes.string
+  buttonClassName: React.PropTypes.string,
+  popupClassName: React.PropTypes.string
 }
 
 UserProfilePopup = createContainer(() => {

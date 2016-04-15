@@ -34,6 +34,7 @@ NavProfile = class NavProfile extends React.Component {
         onClick={this.hideTooltips}>
         <UserProfilePopup
           buttonClassName="popup-button"
+          popupClassName="non-pointing"
         />
         <NotificationIcon
           buttonClassName="popup-button"
