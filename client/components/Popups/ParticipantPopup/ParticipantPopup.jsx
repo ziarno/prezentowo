@@ -28,6 +28,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
     this.submitParticipant = this.submitParticipant.bind(this)
     this.removeParticipant = this.removeParticipant.bind(this)
     this.redirectAfterParticipantRemove = this.redirectAfterParticipantRemove.bind(this)
+    this.onUserSearchSelect = this.onUserSearchSelect.bind(this)
   }
 
   getPopupSettings() {
@@ -43,37 +44,45 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
     }
   }
 
-  submitParticipant(formData) {
+  addParticipant(participantData) {
     var eventId = Session.get('event')._id
-    var participant = _.omit(formData, 'sendEmail')
-
-    if (this.isEdit()) {
-      participant._id = this.props.user._id
-      Events.methods.editParticipant.call({
-        eventId,
-        participant
-      })
+    var participant = _.omit(participantData, 'sendEmail')
+    var callback = () => {
       this.hideAndReset()
+      this.setState({isSaving: false})
+    }
+
+    this.setState({isSaving: true})
+    if (participantData.participantId) {
+      Events.methods.addParticipantById.call({
+        eventId,
+        participantId: participantData.participantId
+      }, callback)
     } else {
-      this.setState({isSaving: true})
       Events.methods.addParticipant.call({
         eventId,
-        sendEmail: formData.sendEmail,
+        sendEmail: participantData.sendEmail,
         participant
-      }, () => {
-        this.hideAndReset()
-        this.setState({isSaving: false})
-      })
+      }, callback)
     }
   }
 
-  redirectAfterParticipantRemove() {
-    var event = Session.get('event')
-    var user = Meteor.user()
+  editParticipant(participantData) {
+    var eventId = Session.get('event')._id
 
-    if (user.settings.viewMode.participantsMode === 'single' &&
-      Session.get('currentUser')._id === this.props.user._id) {
-      FlowRouter.go(`/event/id/${event._id}/user/${user._id}`)
+    participantData._id = this.props.user._id
+    Events.methods.editParticipant.call({
+      eventId,
+      participantData
+    })
+    this.hideAndReset()
+  }
+
+  submitParticipant(participantData) {
+    if (this.isEdit()) {
+      this.editParticipant(participantData)
+    } else {
+      this.addParticipant(participantData)
     }
   }
 
@@ -85,6 +94,16 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
         participantId: this.props.user._id
       })
     })
+  }
+
+  redirectAfterParticipantRemove() {
+    var event = Session.get('event')
+    var user = Meteor.user()
+
+    if (user.settings.viewMode.participantsMode === 'single' &&
+      Session.get('currentUser')._id === this.props.user._id) {
+      FlowRouter.go(`/event/id/${event._id}/user/${user._id}`)
+    }
   }
 
   setBeneficiary(action) {
@@ -104,6 +123,15 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
       ...user.profile,
       email: user.registered_emails && user.registered_emails[0].address
     }
+  }
+
+  onUserSearchSelect(user) {
+    this.refs.form
+      .setFormData(this.mapToFormData(user))
+      .setDisabled(true)
+      .setHiddenFields({
+        participantId: user._id
+      })
   }
 
   isEdit() {
@@ -138,6 +166,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
         className="participant-popup form-popup ui flowing popup">
         <Form
           ref="form"
+          disabled={this.props.user && !this.props.user.isTemp}
           data={this.mapToFormData(this.props.user)}
           onSubmit={this.submitParticipant}
           schema={this.schema}>
@@ -194,21 +223,28 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
                   name="name"
                   placeholder="Fullname"
                   search={new SearchSource('usernames', ['profile.name'])}
-                  onSearchSelect={(user) => this.refs.form.setFormData(this.mapToFormData(user)) }
+                  onSearchSelect={this.onUserSearchSelect}
                 />
               )}
-              <Input
-                name="email"
-                placeholder="hints.EmailOptional">
-                {!isEdit ? (
+              {isEdit ? (
+                <Input
+                  name="email"
+                  placeholder="hints.EmailOptional">
+                </Input>
+              ) : (
+                <SearchableInput
+                  name="email"
+                  placeholder="hints.EmailOptional"
+                  search={new SearchSource('email', ['registered_emails'])}
+                  onSearchSelect={this.onUserSearchSelect}>
                   <CheckboxInput
                     name="sendEmail"
                     className="invitation-email-checkbox"
                     label="Send invitation email"
                     checked
                   />
-                ) : null}
-              </Input>
+                </SearchableInput>
+              )}
               <SelectInput
                 placeholder="Gender"
                 name="gender"

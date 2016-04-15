@@ -63,7 +63,9 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   }
 
   isDisabled() {
-    return this.props.disabled || this.state.disabled
+    return this.props.disabled
+      || this.state.disabled
+      || this.context.form.isDisabled
   }
 
   onChange(value) {

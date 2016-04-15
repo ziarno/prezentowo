@@ -19,13 +19,15 @@ import reactMixin from 'react-mixin'
  */
 Form = class Form extends React.Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       components: [],
       hasError: false
     }
+    this.hiddenFields = {}
     this.hasSubmitted = false
+    this.isDisabled = props.disabled
     this.autorunSetError = this.autorunSetError.bind(this)
     this.reset = this.reset.bind(this)
     this.setFormData = this.setFormData.bind(this)
@@ -54,12 +56,21 @@ Form = class Form extends React.Component {
 
   reset() {
     this.hasSubmitted = false
+    this.hiddenFields = {}
     if (this.props.data) {
       this.setFormData(this.props.data)
     } else {
       this.state.components.forEach((component) => component.reset())
     }
     this.props.schema.resetValidation()
+    return this
+  }
+
+  setHiddenFields(fieldsObject) {
+    this.hiddenFields = {
+      ...this.hiddenFields,
+      ...fieldsObject
+    }
   }
 
   setFormData(data) {
@@ -72,6 +83,15 @@ Form = class Form extends React.Component {
     this.state.components.forEach((component) => {
       component.setValue(flatData[component.props.name])
     })
+    return this
+  }
+
+  setDisabled(isDisabled) {
+    this.isDisabled = isDisabled
+    this.state.components.forEach((component) => {
+      component.setDisabled(isDisabled)
+    })
+    return this
   }
 
   submitForm(event) {
@@ -84,12 +104,16 @@ Form = class Form extends React.Component {
       flatFormValues[component.props.name] = component.getValue()
     })
 
-    formValues = unflattenObject(flatFormValues)
+    formValues = {
+      ...unflattenObject(flatFormValues),
+      ...this.hiddenFields
+    }
 
     if (this.props.schema.validate(formValues) &&
         _.isFunction(this.props.onSubmit)) {
       this.props.onSubmit(formValues)
     }
+    return this
   }
 
   componentDidMount() {
@@ -108,8 +132,7 @@ Form = class Form extends React.Component {
         className={classNames('ui form', this.props.className, {
           error: this.state.hasError
         })}
-        onSubmit={this.submitForm}
-      >
+        onSubmit={this.submitForm}>
         {this.props.children}
       </form>
     )
@@ -126,8 +149,7 @@ Form.propTypes = {
 Form.childContextTypes = {
   register: React.PropTypes.func,
   schema: React.PropTypes.object,
-  form: React.PropTypes.object,
-  hasSubmitted: React.PropTypes.bool
+  form: React.PropTypes.object
 }
 
 reactMixin(Form.prototype, Autorun)

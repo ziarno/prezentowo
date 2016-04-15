@@ -33,6 +33,7 @@ Type: Type
 Many to Many: Many to Many
 Many to One: Many to One
 Cancel: Cancel
+Reset: Reset
 Create event: Create event
 Edit event: Edit event
 Event Type: Event type

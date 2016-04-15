@@ -90,6 +90,8 @@ SearchableInput = class SearchableInput extends Input {
           <T className="hint">{this.props.hint}</T>
         ) : null}
 
+        {this.props.children}
+
       </div>
     )
   }

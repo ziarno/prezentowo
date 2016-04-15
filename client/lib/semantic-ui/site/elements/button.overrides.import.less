@@ -3,6 +3,7 @@
 *******************************/
 
 @import '/client/styles/partials/vars.import.less';
+@import (multiple) '../../theme.config.import.less';
 
 .button {
   cursor: default !important;
@@ -24,4 +25,16 @@
 
 .ui.button > span {
   vertical-align: middle;
+}
+
+/*-------------------
+      Disabled
+--------------------*/
+
+.ui.buttons .disabled.button,
+.ui.disabled.button,
+.ui.button:disabled,
+.ui.disabled.button:hover,
+.ui.disabled.active.button {
+  box-shadow: @boxShadow !important;
 }

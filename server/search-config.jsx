@@ -1,15 +1,16 @@
 import React from 'react'
 
-SearchSource.defineSource('userEmail', function (searchText) {
+SearchSource.defineSource('email', function (searchText) {
   return Meteor.users.find({
     registered_emails: {
       $elemMatch: {
         address: searchText
       }
-    }
+    },
+    isTemp: {$ne: true}
   }, {
     sort: {'profile.name': 1},
-    limit: 10,
+    limit: 20,
     fields: {
       registered_emails: 1,
       profile: 1
@@ -19,10 +20,11 @@ SearchSource.defineSource('userEmail', function (searchText) {
 
 SearchSource.defineSource('usernames', function (searchText) {
   return Meteor.users.find({
-    'profile.name': buildRegExp(searchText)
+    'profile.name': buildRegExp(searchText),
+    isTemp: {$ne: true}
   }, {
     sort: {'profile.name': 1},
-    limit: 10,
+    limit: 20,
     fields: {
       profile: 1
     }
