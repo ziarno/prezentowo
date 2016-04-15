@@ -141,12 +141,12 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   renderTrigger() {
     return (
       <div
+        ref="popupTrigger"
         onClick={this.showPopup}
         className={classNames(
           'ui compact icon button',
           'waves-effect waves-button',
-          this.props.buttonClassName)}
-        ref="popupTrigger">
+          this.props.buttonClassName)}>
         {this.props.icon}
       </div>
     )

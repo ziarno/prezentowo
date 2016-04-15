@@ -1,3 +1,13 @@
 /*******************************
         User Overrides
 *******************************/
+
+.ui.popup {
+  &.non-pointing {
+    margin-top: 2px;
+    &:before {
+      width: 0;
+      height: 0;
+    }
+  }
+}
