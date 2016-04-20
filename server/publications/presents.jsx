@@ -22,7 +22,7 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
           var selector
           var isManyToOne = event.type === 'many-to-one'
           var isUserBeneficiary =
-            event.beneficiaryIds.indexOf(this.userId) > -1
+            _.contains(event.beneficiaryIds, this.userId)
 
           if (isManyToOne) {
             if (isUserBeneficiary) {

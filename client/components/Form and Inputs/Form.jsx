@@ -105,8 +105,8 @@ Form = class Form extends React.Component {
     })
 
     formValues = {
-      ...unflattenObject(flatFormValues),
-      ...this.hiddenFields
+      ...this.hiddenFields,
+      ...unflattenObject(flatFormValues)
     }
 
     if (this.props.schema.validate(formValues) &&
@@ -118,6 +118,7 @@ Form = class Form extends React.Component {
 
   componentDidMount() {
     this.setFormData(this.props.data)
+    this.setHiddenFields(this.props.hiddenFields)
   }
 
   componentWillReceiveProps({data}) {
@@ -143,7 +144,8 @@ Form.propTypes = {
   schema: React.PropTypes.object.isRequired,
   className: React.PropTypes.string,
   onSubmit: React.PropTypes.func,
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  hiddenFields: React.PropTypes.object
 }
 
 Form.childContextTypes = {

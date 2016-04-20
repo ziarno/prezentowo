@@ -53,27 +53,21 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
     }
 
     this.setState({isSaving: true})
-    if (participantData.participantId) {
-      Events.methods.addParticipantById.call({
-        eventId,
-        participantId: participantData.participantId
-      }, callback)
-    } else {
-      Events.methods.addParticipant.call({
-        eventId,
-        sendEmail: participantData.sendEmail,
-        participant
-      }, callback)
-    }
+    Events.methods.addParticipant.call({
+      eventId,
+      sendEmail: participantData.sendEmail,
+      participant
+    }, callback)
+
   }
 
   editParticipant(participantData) {
     var eventId = Session.get('event')._id
 
-    participantData._id = this.props.user._id
+    participantData.participantId = this.props.user._id
     Events.methods.editParticipant.call({
       eventId,
-      participantData
+      participant: participantData
     })
     this.hideAndReset()
   }
@@ -107,12 +101,12 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   setBeneficiary(action) {
-    var methodName = action ? 'addBeneficiary' : 'removeBeneficiary'
     this.hidePopup(() => {
       this.reset()
-      Events.methods[methodName].call({
+      Events.methods.setBeneficiary.call({
         eventId: Session.get('event')._id,
-        participantId: this.props.user._id
+        participantId: this.props.user._id,
+        action
       })
     })
   }

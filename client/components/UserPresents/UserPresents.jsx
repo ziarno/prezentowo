@@ -80,25 +80,29 @@ UserPresents = class UserPresents extends React.Component {
 
     return (
       <div
-        id={`user-presents-${this.props.user && this.props.user._id}`}
+        id={`user-presents-${this.props.users &&
+          this.props.users.length === 1 &&
+          this.props.users[0]._id}`}
         className="user-presents">
 
         <HorizontalDivider>
-          {this.props.combine ? (
-            this.props.users.map(user => (
-              <User
-                showAddPresentOnHover
-                key={user._id}
-                user={user}
-                large />
-            ))
-          ) : (
+          {this.props.users.map(user => (
             <User
-              user={this.props.user}
-              large
-              showAddPresentOnHover />
-          )}
+              showAddPresentOnHover={this.props.users.length === 1}
+              key={user._id}
+              user={user}
+              large />
+          ))}
         </HorizontalDivider>
+
+        {this.props.users.length > 1 ? (
+          <PresentPopup
+            icon={<i className="ui plus icon" />}
+            buttonClassName="right labeled compact"
+            buttonText={_i18n.__('Add present')}
+            users={[] /* must be a many-to-one event because many users */}
+          />
+        ) : null}
 
         {UserPresents.getPresents({
           title: 'hints.ownPresents',
@@ -117,9 +121,7 @@ UserPresents = class UserPresents extends React.Component {
 }
 
 UserPresents.propTypes = {
-  user: React.PropTypes.object,
   users: React.PropTypes.array,
-  combine: React.PropTypes.bool,
   presents: React.PropTypes.array.isRequired,
   presentViewMode: React.PropTypes.string
 }

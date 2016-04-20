@@ -30,7 +30,7 @@ EventItem = ({event, onClick, active}) => {
       tooltip={_i18n.__('Participants count')}
       className="basic"
       icon="user"
-      count={event.participants.length} />
+      count={event.participantsCount} />
   )
 
   var DateLabel = (

@@ -63,7 +63,6 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
     if (isManyToOne) {
       UserPresentsItems = (
         <UserPresents
-          combine
           users={this.props.users}
           presentViewMode={this.props.presentViewMode}
           presents={this.props.presents}
@@ -73,7 +72,7 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
       UserPresentsItems = (
         <UserPresents
           presentViewMode={this.props.presentViewMode}
-          user={this.props.showUser}
+          users={[this.props.showUser]}
           presents={this.props.presents}
         />
       )
@@ -82,7 +81,7 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
         <UserPresents
           key={user._id}
           presentViewMode={this.props.presentViewMode}
-          user={user}
+          users={[user]}
           presents={this.props.presents.filter((present) => (
             present.forUserId === user._id
           ))}

@@ -6,18 +6,29 @@ DB scripts
 
 To use functions saved in system.js collection, connect to `meteor mongo` and type:
 
-```
+```js
 db.loadServerScripts();
 //now you can use saved functions, example:
+1.
 resetDB();
+2.
 updatePresentCounts();
+4.
 setDefaultSettings();
+5.
 updateIsOwnPresent();
+6.
+convertForUserIdToArray();
+convertForUserIdArrayToSingle();
+7.
+setParticipantsCount();
+8.
+setTotalPresentsCount();
 ```
 
 1. `resetDB()` - remove all docs from collections
 
-```
+```js
 db.system.js.save({
     _id: 'resetDB',
     value: function () {
@@ -35,7 +46,7 @@ db.system.js.save({
 otherPresentsCount in the events.participants collection and
 events.ownPresentsCount / events.otherPresentsCount
 
-```
+```js
 db.system.js.save({
     _id: 'updatePresentCounts',
     value: function () {
@@ -89,7 +100,7 @@ db.system.js.save({
 
 3. Change pictureUrl object to string
 
-```
+```js
 db.users.find({}).forEach(function (user) {
     db.users.update({_id: user._id}, {$set: {'profile.pictureUrl': user.profile.pictureUrl.large}});
 });
@@ -98,7 +109,7 @@ db.users.find({}).forEach(function (user) {
 
 4. Set default settings
 
-```
+```js
 db.system.js.save({
     _id: 'setDefaultSettings',
     value: function () {
@@ -125,7 +136,7 @@ db.system.js.save({
 
 5. Set isOwn field of every present
 
-```
+```js
 db.system.js.save({
     _id: 'updateIsOwnPresent',
     value: function () {
@@ -147,6 +158,72 @@ db.system.js.save({
         });
     }
 });
+```
+
+6. Convert present.forUserId to an array and back
+
+```js
+
+db.system.js.save({
+    _id: 'convertForUserIdToArray',
+    value: function () {
+        db.presents.find({}).forEach(function (present) {
+            db.presents.update({_id: present._id}, {
+                $unset: {forUserId: 1},
+                $set: {forUserIds: [present.forUserId]}
+            })
+        });
+    }
+});
+
+db.system.js.save({
+    _id: 'convertForUserIdArrayToSingle',
+    value: function () {
+        db.presents.find({}).forEach(function (present) {
+            db.presents.update({_id: present._id}, {
+                $unset: {forUserIds: 1},
+                $set: {forUserId: [present.forUserIds[0]]}
+            })
+        });
+    }
+});
+
+```
+
+7. Set event.participantsCount
+
+```js
+db.system.js.save({
+    _id: 'setParticipantsCount',
+    value: function () {
+        db.events.find({}).forEach(function (event) {
+            db.events.update({_id: event._id}, {
+                $set: {participantsCount: event.participants.length}
+            })
+        });
+    }
+});
+
+```
+
+8. Set event.realTotalPresentsCount
+
+```js
+db.system.js.save({
+    _id: 'setTotalPresentsCount',
+    value: function () {
+        db.events.find({}).forEach(function (event) {
+          var presentsCount = db.presents
+            .find({eventId: event._id})
+            .count()
+
+            db.events.update({_id: event._id}, {
+                $set: {realTotalPresentsCount: presentsCount}
+            })
+        });
+    }
+});
+
 ```
 
 Index for unique userId's in participants array

@@ -102,7 +102,7 @@ var ValidatedInput = class ValidatedInput extends React.Component {
 
   //override
   render() {
-    return this.props.children
+    return this.props.children || null
   }
 
 }
@@ -113,7 +113,8 @@ ValidatedInput.propTypes = {
   staticValue: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number,
-    React.PropTypes.bool
+    React.PropTypes.bool,
+    React.PropTypes.array
   ])
 }
 

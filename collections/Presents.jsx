@@ -95,7 +95,7 @@ Presents.functions.updatePresentsCount = function (incrementValue, presentId) {
     }})
   } else {
     Events.update({
-      _id: presents.eventId
+      _id: present.eventId
     }, {$inc: {
       [countFieldName]: incrementValue
     }})
@@ -166,12 +166,11 @@ Presents.methods.removePresent = new ValidatedMethod({
         `${this.name}.notCreatedPresent`,
         _i18n.__('Presents deleted by creators'))
     }
-    var removedCount = Presents.remove({
+    Presents.functions.updatePresentsCount(-1, presentId)
+    return Presents.remove({
       _id: presentId,
       creatorId: this.userId
     })
-    Presents.functions.updatePresentsCount(-1, presentId)
-    return removedCount
   }
 })
 
@@ -200,38 +199,27 @@ Presents.methods.editPresent = new ValidatedMethod({
   }
 })
 
-Presents.methods.addBuyer = new ValidatedMethod({
-  name: 'Presents.methods.addBuyer',
+Presents.methods.setBuyer = new ValidatedMethod({
+  name: 'Presents.methods.setBuyer',
   mixins: [LoggedIn],
   validate: new SimpleSchema({
     presentId: {
       type: String
+    },
+    action: {
+      type: Boolean
     }
   }).validator(),
-  run({presentId}) {
-    if (!Meteor.user().isEventParticipant({presentId})) {
-      throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'))
-    }
-    return Presents.update(presentId, {$addToSet: {
-      buyers: this.userId
-    }})
-  }
-})
+  run({presentId, action}) {
+    var actionName = action ? '$addToSet' : '$pull'
 
-Presents.methods.removeBuyer = new ValidatedMethod({
-  name: 'Presents.methods.removeBuyer',
-  mixins: [LoggedIn],
-  validate: new SimpleSchema({
-    presentId: {
-      type: String
-    }
-  }).validator(),
-  run({presentId}) {
     if (!Meteor.user().isEventParticipant({presentId})) {
       throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'))
     }
-    return Presents.update(presentId, {$pull: {
-      buyers: this.userId
-    }})
+    return Presents.update(presentId, {
+      [actionName]: {
+        buyers: this.userId
+      }
+    })
   }
 })

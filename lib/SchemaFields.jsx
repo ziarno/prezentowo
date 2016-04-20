@@ -21,7 +21,7 @@ SchemaFields = {
     label: () => _i18n.__('Gender')
   },
   PictureUrl: {
-    type: SimpleSchema.RegEx.Url,
+    type: String,
     label: () => _i18n.__('Picture')
   },
   Name: {

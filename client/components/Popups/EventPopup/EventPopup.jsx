@@ -112,6 +112,7 @@ EventPopup = class EventPopup extends PopupComponent {
               <div className="form-popup--form-right">
                 <EventTypeInput
                   name="type"
+                  disabled={this.isEdit()}
                 />
               </div>
             </div>

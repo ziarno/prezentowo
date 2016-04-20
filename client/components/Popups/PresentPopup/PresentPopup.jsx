@@ -15,6 +15,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
     this.addPresent = this.addPresent.bind(this)
     this.editPresent = this.editPresent.bind(this)
     this.removePresent = this.removePresent.bind(this)
+    this.submitPresent = this.submitPresent.bind(this)
     this.getPopupSettings = this.getPopupSettings.bind(this)
   }
 
@@ -55,6 +56,14 @@ PresentPopup = class PresentPopup extends PopupComponent {
     })
   }
 
+  submitPresent(presentData) {
+    if (this.isEdit()) {
+      this.editPresent(presentData)
+    } else {
+      this.addPresent(presentData)
+    }
+  }
+
   isEdit() {
     return !!this.props.present
   }
@@ -74,22 +83,18 @@ PresentPopup = class PresentPopup extends PopupComponent {
           'ui icon button',
           'waves-effect waves-button')}>
         {this.props.icon}
+        {this.props.buttonText}
       </div>
     )
   }
 
   renderPopup() {
-    var defaultSelectedUserId
-    var title = `${this.isEdit() ? 'Edit' : 'New'} present`
+    var isEdit = this.isEdit()
+    var title = `${isEdit ? 'Edit' : 'New'} present`
+    var defaultSelectedUserId = !this.props.present &&
+      this.props.defaultSelectedUser ?
+      this.props.defaultSelectedUser._id : ''
     var ForUser
-
-    //set defaultSelectedUserId
-    if (!this.props.present &&
-      this.props.defaultSelectedUser) {
-      defaultSelectedUserId = this.props.defaultSelectedUser._id
-    } else {
-      defaultSelectedUserId = ''
-    }
 
     //set ForUser
     if (!this.props.users || this.props.users.length === 0) {
@@ -132,13 +137,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
         <Form
           ref="form"
           data={this.props.present}
-          onSubmit={(presentData) => {
-            if (this.isEdit()) {
-              this.editPresent(presentData)
-            } else {
-              this.addPresent(presentData)
-            }
-          }}
+          onSubmit={this.submitPresent}
           schema={this.schema}>
 
           <div className="ui attached message">
@@ -178,8 +177,8 @@ PresentPopup = class PresentPopup extends PopupComponent {
           <FormErrorMessage />
 
           <FormActionButtons
-            showRemove={this.isEdit()}
-            acceptButtonText={this.isEdit() ? 'Save' : 'Add present'}
+            showRemove={isEdit}
+            acceptButtonText={isEdit ? 'Save' : 'Add present'}
             onRemove={this.removePresent}
             onCancel={this.hideAndReset}
           />
@@ -196,6 +195,7 @@ PresentPopup.propTypes = {
   defaultSelectedUser: React.PropTypes.object,
   users: React.PropTypes.array,
   buttonClassName: React.PropTypes.string,
+  buttonText: React.PropTypes.string,
   popupClassName: React.PropTypes.string,
   icon: React.PropTypes.element
 }
