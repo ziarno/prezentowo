@@ -71,10 +71,14 @@ Ribbon = class Ribbon extends React.Component  {
 
     var ActualRibbon = (
       <div
+        onMouseEnter={this.props.onMouseEnter}
+        onMouseLeave={this.props.onMouseLeave}
         ref="ribbon"
-        className={classNames('ribbon', this.props.color, {
+        className={classNames(
+          'ribbon',
+          this.props.className, {
           small: this.props.small,
-          'white-stitches': this.props.whiteStiches,
+          'white-stitches': this.props.whiteStitches,
           'with-endings': this.props.withEndings
         })}>
         <div className="ribbon-stitches
@@ -90,7 +94,7 @@ Ribbon = class Ribbon extends React.Component  {
     return this.props.rightFlatEnding ? (
       <div
         ref="ribbonWrapper"
-        className={classNames('ribbon-wrapper', this.props.color)}>
+        className={classNames('ribbon-wrapper', this.props.className)}>
         {ActualRibbon}
         <div
           ref="rightEndingTop"
@@ -108,7 +112,7 @@ Ribbon = class Ribbon extends React.Component  {
 Ribbon.propTypes = {
   color: React.PropTypes.string,
   small: React.PropTypes.bool,
-  whiteStiches: React.PropTypes.bool,
+  whiteStitches: React.PropTypes.bool,
   withEndings: React.PropTypes.bool,
   rightFlatEnding: React.PropTypes.bool
 }

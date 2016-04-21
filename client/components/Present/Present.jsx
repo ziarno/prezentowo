@@ -1,40 +1,82 @@
 import React from 'react'
 
-Present = ({present, viewMode}) => {
-  var isFullWidth = viewMode === 'full-width'
+Present = class Present extends React.Component {
 
-  return (
-    <div className={classNames('present', {
-      'full-width': isFullWidth
-    })}>
-      <div className="ui card">
-        <Img
-          className="image"
-          src={present.pictureUrl}
-        />
+  constructor() {
+    super()
+    this.state = {
+      isActive: false
+    }
+    this.setActive = this.setActive.bind(this)
+    this.setInactive = this.setInactive.bind(this)
+  }
 
-        {present.isUserCreator() ? (
-          <PresentPopup
-            present={present}
-            buttonClassName="edit-present small-icon-button"
-            icon={(
-              <i className="vertical ellipsis icon"></i>
-            )}
-            users={present.forUserId && [Participants.findOne(present.forUserId)]}
+  setActive() {
+    this.setState({isActive: true})
+  }
+
+  setInactive() {
+    this.setState({isActive: false})
+  }
+
+  render() {
+    var isFullWidth = this.props.viewMode === 'full-width'
+    var {present} = this.props
+
+    return (
+      <div className={classNames('present', {
+        'full-width': isFullWidth
+      })}>
+        <div
+          onMouseEnter={this.setActive}
+          onMouseLeave={this.setInactive}
+          className={classNames('ui card', {
+            active: this.state.isActive
+          })}>
+          <Img
+            className="image"
+            src={present.pictureUrl}
           />
-        ) : null}
+
+          {present.isUserCreator() ? (
+            <PresentPopup
+              present={present}
+              buttonClassName="edit-present small-icon-button"
+              icon={(
+                <i className="vertical ellipsis icon"></i>
+              )}
+              users={present.forUserId && [Participants.findOne(present.forUserId)]}
+              popupSettings={{
+                onHide: () => {
+                  this.setInactive()
+                }
+              }}
+            />
+          ) : null}
+        </div>
+        <Ribbon
+          onMouseEnter={this.setActive}
+          onMouseLeave={this.setInactive}
+          rightFlatEnding={isFullWidth}
+          withEndings={!isFullWidth}
+          className={classNames({
+            green: present.isOwn,
+            red: !present.isOwn,
+            active: this.state.isActive
+          })}
+          small={!isFullWidth}>
+          {isFullWidth ? (
+            <h1>
+              <span>{present.title}</span>
+            </h1>
+          ) : present.title}
+        </Ribbon>
       </div>
-      <Ribbon
-        rightFlatEnding={isFullWidth}
-        withEndings={!isFullWidth}
-        color={present.isOwn ? 'green' : 'red'}
-        small={!isFullWidth}>
-        {isFullWidth ? (
-          <h1>
-            <span>{present.title}</span>
-          </h1>
-        ) : present.title}
-      </Ribbon>
-    </div>
-  )
+    )
+  }
+}
+
+Present.propTypes = {
+  present: React.PropTypes.object.isRequired,
+  viewMode: React.PropTypes.string
 }
