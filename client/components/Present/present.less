@@ -49,13 +49,15 @@
     }
   }
 
-  .ribbon {
+  &:not(.full-width) .ribbon {
+    pointer-events: none;
     position: absolute;
     bottom: 20px;
   }
 
   .image {
     height: @normal-image-size;
+    cursor: default;
   }
 
   .edit-present {

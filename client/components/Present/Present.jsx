@@ -34,7 +34,7 @@ Present = class Present extends React.Component {
             active: this.state.isActive
           })}>
           <Img
-            className="image"
+            className="image waves-effect"
             src={present.pictureUrl}
           />
 
@@ -60,9 +60,14 @@ Present = class Present extends React.Component {
           rightFlatEnding={isFullWidth}
           withEndings={!isFullWidth}
           className={classNames({
-            green: present.isOwn,
-            red: !present.isOwn,
+            'waves-effect': isFullWidth
+          })}
+          wrapperClassName={classNames({
             active: this.state.isActive
+          })}
+          color={classNames({
+            green: present.isOwn,
+            red: !present.isOwn
           })}
           small={!isFullWidth}>
           {isFullWidth ? (

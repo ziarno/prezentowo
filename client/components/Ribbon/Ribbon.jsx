@@ -76,6 +76,7 @@ Ribbon = class Ribbon extends React.Component  {
         ref="ribbon"
         className={classNames(
           'ribbon',
+          this.props.color,
           this.props.className, {
           small: this.props.small,
           'white-stitches': this.props.whiteStitches,
@@ -94,7 +95,11 @@ Ribbon = class Ribbon extends React.Component  {
     return this.props.rightFlatEnding ? (
       <div
         ref="ribbonWrapper"
-        className={classNames('ribbon-wrapper', this.props.className)}>
+        className={classNames(
+          'ribbon-wrapper',
+          this.props.wrapperClassName,
+          this.props.color
+          )}>
         {ActualRibbon}
         <div
           ref="rightEndingTop"
@@ -110,6 +115,8 @@ Ribbon = class Ribbon extends React.Component  {
 }
 
 Ribbon.propTypes = {
+  className: React.PropTypes.string,
+  wrapperClassName: React.PropTypes.string,
   color: React.PropTypes.string,
   small: React.PropTypes.bool,
   whiteStitches: React.PropTypes.bool,
