@@ -162,6 +162,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
             />
             <div className="form-popup--form-right" >
               <Input
+                ref="autofocus"
                 name="title"
                 placeholder="Title"
               />

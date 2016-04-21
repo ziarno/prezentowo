@@ -212,11 +212,13 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
             <div className="form-popup--form-right" >
               {isEdit ? (
                 <Input
+                  ref="autofocus"
                   name="name"
                   placeholder="Fullname"
                 />
               ) : (
                 <SearchableInput
+                  ref="autofocus"
                   name="name"
                   placeholder="Fullname"
                   search={new SearchSource('usernames', ['profile.name'])}

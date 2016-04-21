@@ -26,10 +26,16 @@ class PopupComponent extends React.Component {
   }
 
   setPopup() {
-    var popupSettings = _.isFunction(this.getPopupSettings) ?
-      this.getPopupSettings() : {}
-    var $popupTrigger = $(ReactDOM.findDOMNode(this.refs.popupTrigger))
-    var $popupTarget = $(ReactDOM.findDOMNode(this.refs.popupTarget))
+    var self = this
+    var popupSettings = {
+      ...(_.isFunction(this.getPopupSettings) &&
+        this.getPopupSettings()),
+      ...this.props.popupSettings
+    }
+    var $popupTrigger =
+      $(ReactDOM.findDOMNode(this.refs.popupTrigger))
+    var $popupTarget =
+      $(ReactDOM.findDOMNode(this.refs.popupTarget))
 
     $popupTrigger.popup({
       popup: $popupTarget,
@@ -39,7 +45,16 @@ class PopupComponent extends React.Component {
       lastResort: 'bottom left',
       movePopup: false,
       ...popupSettings,
-      ...this.props.popupSettings
+      onVisible() {
+        if (self.refs.autofocus) {
+          $(ReactDOM.findDOMNode(self.refs.autofocus))
+            .find('input')
+            .focus()
+        }
+        if (_.isFunction(popupSettings.onVisible)) {
+          popupSettings.onVisible.apply(this, arguments)
+        }
+      }
     })
   }
 

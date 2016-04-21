@@ -99,6 +99,7 @@ EventPopup = class EventPopup extends PopupComponent {
           <div
             className="form-popup--form ui form attached fluid segment">
             <Input
+              ref="autofocus"
               name="title"
               label="Title"
             />
