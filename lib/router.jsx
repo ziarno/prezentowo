@@ -15,6 +15,7 @@ FlowRouter.route('/', {
 
 FlowRouter.route('/event/id/:eventId', {
   action(params) {
+    ModalManager.close()
     mount(App, {
       content: <EventContainer {...params} />
     })
@@ -23,6 +24,7 @@ FlowRouter.route('/event/id/:eventId', {
 
 FlowRouter.route('/event/id/:eventId/user/:userId', {
   action(params) {
+    ModalManager.close()
     mount(App, {
       content: <EventContainer {...params} />
     })

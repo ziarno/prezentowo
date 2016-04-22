@@ -6,11 +6,6 @@
   position: relative;
   display: flex;
   transition: margin @transition-time * 2;
-  z-index: @z-index-event-container;
-
-  &.padded {
-    margin-left: @sidebar-width;
-  }
 
   .popup {
     z-index: @z-index-popup;
@@ -33,8 +28,12 @@
 
 }
 
+.sidebar-visible #event-container {
+  margin-left: @sidebar-width;
+}
+
 @media (max-width: @media-padded-max-width) {
-  #event-container.padded {
+  .sidebar-visible #event-container {
     margin-left: 0;
   }
 }

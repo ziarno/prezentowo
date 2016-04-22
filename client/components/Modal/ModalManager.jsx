@@ -5,19 +5,26 @@ ModalManager = function () {
 
   var $modal
   var modalContainer
+  var containerClassName = 'ui dimmer modals inverted'
 
   return {
 
-    init() {
+    createContainer() {
       modalContainer = document.createElement('div')
       modalContainer.id = 'modal-container'
-      //make modal render into the same container that it normally would without detachable:false
-      modalContainer.className =
-        'ui dimmer modals'
+      //trick: make modal render into the same container that it normally would without detachable:false
+      modalContainer.className = containerClassName
       document.body.appendChild(modalContainer)
     },
 
-    open(modalComponent) {
+    open(modalComponent, options = {}) {
+      var {className} = options
+
+      modalContainer.className = [
+        containerClassName,
+        className
+      ].join(' ')
+
       $modal = $(ReactDOM.findDOMNode(
         ReactDOM.render(modalComponent, modalContainer)
       ))

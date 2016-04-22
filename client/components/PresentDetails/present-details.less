@@ -1,0 +1,27 @@
+@import '/client/styles/partials/vars.import.less';
+
+@modal-width: 92%;
+
+.ui.dimmer.present-details {
+  top: @header-height !important;
+  z-index: @z-index-present-details-dimmer !important;
+  height: calc(~"100vh" - @header-height) !important;
+  left: auto !important;
+  right: 0 !important;
+  transition: width @transition-time * 2;
+
+  .modal {
+    width: @modal-width;
+    margin-left: -(@modal-width / 2);
+  }
+}
+
+body.sidebar-visible .ui.dimmer.present-details {
+  width: calc(~"100vw" - @sidebar-width);
+}
+
+@media (max-width: @media-padded-max-width) {
+  body.sidebar-visible .ui.dimmer.present-details {
+    width: 100%;
+  }
+}

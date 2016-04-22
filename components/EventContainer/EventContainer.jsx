@@ -29,6 +29,7 @@ EventContainer = class EventContainer extends React.Component {
     }
 
     this.setState({isSidebarVisible: !Session.get('isSidebarFixed')})
+    ModalManager.close()
   }
 
   autorunSetCurrentUserState() {
@@ -55,6 +56,22 @@ EventContainer = class EventContainer extends React.Component {
 
   onSidebarVisibilityChange(isSidebarVisible) {
     this.setState({isSidebarVisible})
+  }
+
+  componentWillMount() {
+    $(document.body).toggleClass(
+      'sidebar-visible',
+      this.state.isSidebarVisible
+    )
+  }
+
+  componentWillUpdate(newProps, newState) {
+    if (this.state.isSidebarVisible !== newState.isSidebarVisible) {
+      $(document.body).toggleClass(
+        'sidebar-visible',
+        newState.isSidebarVisible
+      )
+    }
   }
 
   render() {
@@ -86,10 +103,7 @@ EventContainer = class EventContainer extends React.Component {
 
     return (
       <div
-        id="event-container"
-        className={classNames({
-          padded: this.state.isSidebarVisible
-        })}>
+        id="event-container">
 
         <Sidebar
           scrollToEl={`.user-list [data-id=${currentUserId}]`}

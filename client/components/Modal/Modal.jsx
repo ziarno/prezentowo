@@ -7,7 +7,9 @@ Modal = class Modal extends React.Component {
       <div className="ui modal">
 
         {this.props.ribbon ? (
-        <Ribbon>
+        <Ribbon
+          color={this.props.ribbonColor}
+          withEndings>
           <h1>{this.props.title}</h1>
         </Ribbon>
           ) : (
@@ -26,5 +28,6 @@ Modal = class Modal extends React.Component {
 
 Modal.propTypes = {
   title: React.PropTypes.string.isRequired,
-  ribbon: React.PropTypes.bool
+  ribbon: React.PropTypes.bool,
+  ribbonColor: React.PropTypes.string
 }

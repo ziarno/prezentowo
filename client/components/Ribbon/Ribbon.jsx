@@ -73,6 +73,7 @@ Ribbon = class Ribbon extends React.Component  {
       <div
         onMouseEnter={this.props.onMouseEnter}
         onMouseLeave={this.props.onMouseLeave}
+        onClick={this.props.onClick}
         ref="ribbon"
         className={classNames(
           'ribbon',
@@ -121,5 +122,8 @@ Ribbon.propTypes = {
   small: React.PropTypes.bool,
   whiteStitches: React.PropTypes.bool,
   withEndings: React.PropTypes.bool,
-  rightFlatEnding: React.PropTypes.bool
+  rightFlatEnding: React.PropTypes.bool,
+  onMouseLeave: React.PropTypes.func,
+  onMouseEnter: React.PropTypes.func,
+  onClick: React.PropTypes.func
 }

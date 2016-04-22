@@ -9,6 +9,7 @@ Present = class Present extends React.Component {
     }
     this.setActive = this.setActive.bind(this)
     this.setInactive = this.setInactive.bind(this)
+    this.showPresent = this.showPresent.bind(this)
   }
 
   setActive() {
@@ -19,17 +20,30 @@ Present = class Present extends React.Component {
     this.setState({isActive: false})
   }
 
+  showPresent() {
+    var {present} = this.props
+
+    ModalManager.open(
+      <PresentDetails present={present} />,
+      {
+        className: 'present-details'
+      }
+    )
+  }
+
   render() {
     var isFullWidth = this.props.viewMode === 'full-width'
     var {present} = this.props
 
     return (
-      <div className={classNames('present', {
-        'full-width': isFullWidth
-      })}>
+      <div
+        className={classNames('present', {
+          'full-width': isFullWidth
+        })}>
         <div
           onMouseEnter={this.setActive}
           onMouseLeave={this.setInactive}
+          onClick={this.showPresent}
           className={classNames('ui card', {
             active: this.state.isActive
           })}>
@@ -57,6 +71,7 @@ Present = class Present extends React.Component {
         <Ribbon
           onMouseEnter={this.setActive}
           onMouseLeave={this.setInactive}
+          onClick={this.showPresent}
           rightFlatEnding={isFullWidth}
           withEndings={!isFullWidth}
           className={classNames({
@@ -83,5 +98,6 @@ Present = class Present extends React.Component {
 
 Present.propTypes = {
   present: React.PropTypes.object.isRequired,
-  viewMode: React.PropTypes.string
+  viewMode: React.PropTypes.string,
+  onClick: React.PropTypes.func
 }
