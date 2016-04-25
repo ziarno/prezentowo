@@ -10,15 +10,21 @@ Label = class Label extends React.Component {
   }
 
   getTooltips() {
-    if (!this.props.tooltip) {
+    var {tooltip} = this.props
+    var tooltipSettings
+
+    if (!tooltip) {
       return
     }
 
-    var tooltip = _.isString(this.props.tooltip) ?
-      {content: this.props.tooltip} : this.props.tooltip
+    tooltipSettings = _.isString(tooltip) ?
+      {content: tooltip} : tooltip
+
+    tooltipSettings.content =
+      _i18n.__(tooltipSettings.content)
 
     return {
-      label: tooltip
+      label: tooltipSettings
     }
   }
 

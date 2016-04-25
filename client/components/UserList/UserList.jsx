@@ -15,13 +15,13 @@ UserList = class UserList extends React.Component {
     var Counts = (
       <div className="counts">
         <CountLabel
-          tooltip={_i18n.__('Participants count')}
+          tooltip="Participants count"
           icon="user"
           className="basic"
           count={this.props.users.length}
         />
         <CountLabel
-          tooltip={_i18n.__('Presents count')}
+          tooltip="Presents count"
           icon="gift"
           className="basic"
           count={Events.functions.getPresentsCount(event)}

@@ -19,7 +19,7 @@ EventItem = ({event, onClick, active}) => {
 
   var PresentsLabel = (
     <CountLabel
-      tooltip={_i18n.__('Presents count')}
+      tooltip="Presents count"
       className="basic"
       icon="gift"
       count={Events.functions.getPresentsCount(event)} />
@@ -27,7 +27,7 @@ EventItem = ({event, onClick, active}) => {
 
   var ParticipantsLabel = (
     <CountLabel
-      tooltip={_i18n.__('Participants count')}
+      tooltip="Participants count"
       className="basic"
       icon="user"
       count={event.participantsCount} />
