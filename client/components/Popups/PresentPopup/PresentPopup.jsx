@@ -49,9 +49,15 @@ PresentPopup = class PresentPopup extends PopupComponent {
   }
 
   removePresent() {
+    var {onRemove} = this.props
+    var {_id: presentId} = this.props.present
+
+    if (_.isFunction(onRemove)) {
+      onRemove.call(this, presentId)
+    }
     this.hideAndReset(() => {
       Presents.methods.removePresent.call({
-        presentId: this.props.present._id
+        presentId
       })
     })
   }
@@ -83,31 +89,34 @@ PresentPopup = class PresentPopup extends PopupComponent {
           'ui icon button',
           'waves-effect waves-button')}>
         {this.props.icon}
-        {this.props.buttonText}
+        <T>{this.props.buttonText}</T>
       </div>
     )
   }
 
   renderPopup() {
+    var {defaultSelectedUser, users} = this.props
     var isEdit = this.isEdit()
     var title = `${isEdit ? 'Edit' : 'New'} present`
     var defaultSelectedUserId = !this.props.present &&
-      this.props.defaultSelectedUser ?
-      this.props.defaultSelectedUser._id : ''
+      defaultSelectedUser ? defaultSelectedUser._id : ''
+    var forUser = users &&
+      users.length > 0 &&
+      users[0]
     var ForUser
 
     //set ForUser
-    if (!this.props.users || this.props.users.length === 0) {
+    if (!forUser) {
       ForUser = null
-    } else if (this.props.users.length === 1) {
+    } else if (users.length === 1) {
       ForUser = (
         <ValidatedInput
           name="forUserId"
-          staticValue={this.props.users[0]._id}>
-          <User user={this.props.users[0]} />
+          staticValue={users[0]._id}>
+          <User user={users[0]} />
         </ValidatedInput>
       )
-    } else if (this.props.users.length > 1) {
+    } else if (users.length > 1) {
       ForUser = (
         <SelectInput
           inline
@@ -115,7 +124,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
           placeholder="choose user"
           selectDefault={defaultSelectedUserId}
           name="forUserId">
-          {this.props.users.map((user) => (
+          {users.map((user) => (
             <div
               className="item"
               key={user._id}
@@ -198,7 +207,8 @@ PresentPopup.propTypes = {
   buttonClassName: React.PropTypes.string,
   buttonText: React.PropTypes.string,
   popupClassName: React.PropTypes.string,
-  icon: React.PropTypes.element
+  icon: React.PropTypes.element,
+  onRemove: React.PropTypes.func
 }
 
 PresentPopup = createContainer(() => {

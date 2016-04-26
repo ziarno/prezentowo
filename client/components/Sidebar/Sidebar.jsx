@@ -1,11 +1,15 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import {ScrollableComponent} from '../../../lib/Mixins'
+import {whichTransitionEvent} from '../../../lib/utilities'
 
 Sidebar = class Sidebar extends ScrollableComponent {
 
   constructor() {
     super()
     this.toggleVisibility = this.toggleVisibility.bind(this)
+    this.afterVisibilityChange = this.afterVisibilityChange.bind(this)
+    this.transitionEndEventName = whichTransitionEvent()
   }
 
   toggleVisibility(isVisible) {
@@ -29,9 +33,30 @@ Sidebar = class Sidebar extends ScrollableComponent {
     this.isScrollable = newProps.isVisible
   }
 
+  afterVisibilityChange(event) {
+    if (event.propertyName === 'left') {
+      this.props.onAfterVisibilityChange.apply(this, arguments)
+    }
+  }
+
   componentDidMount() {
     super.componentDidMount()
     this.isScrollable = this.props.isVisible
+    if (_.isFunction(this.props.onAfterVisibilityChange)) {
+      ReactDOM.findDOMNode(this)
+        .addEventListener(
+          this.transitionEndEventName,
+          this.afterVisibilityChange
+        )
+    }
+  }
+
+  componentWillUnmount() {
+    ReactDOM.findDOMNode(this)
+      .removeEventListener(
+        this.transitionEndEventName,
+        this.afterVisibilityChange
+      )
   }
 
   render() {
@@ -60,5 +85,6 @@ Sidebar = class Sidebar extends ScrollableComponent {
 
 Sidebar.propTypes = {
   isVisible: React.PropTypes.bool,
-  onVisibilityChange: React.PropTypes.func
+  onVisibilityChange: React.PropTypes.func,
+  onAfterVisibilityChange: React.PropTypes.func
 }

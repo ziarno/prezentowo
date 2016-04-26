@@ -12,7 +12,7 @@ FormActionButtons = class FormActionButtons extends React.Component {
   render() {
     if (this.state.showDeleteConfirmation) {
       return (
-        <div className="ui bottom attached error message actions flex">
+        <div className="ui bottom attached error message bottom-modal-buttons">
           <T>hints.deleteConfirmation</T>
           <div className="ui buttons">
             <ButtonBack
@@ -28,7 +28,7 @@ FormActionButtons = class FormActionButtons extends React.Component {
     }
 
     return (
-      <div className="ui bottom attached message actions flex">
+      <div className="ui bottom attached message bottom-modal-buttons ">
         <div className="ui buttons">
           <ButtonCancel
             onClick={this.props.onCancel}

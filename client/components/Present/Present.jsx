@@ -24,7 +24,7 @@ Present = class Present extends React.Component {
     var {present} = this.props
 
     ModalManager.open(
-      <PresentDetails present={present} />,
+      <PresentDetails presentId={present._id} />,
       {
         className: 'present-details'
       }

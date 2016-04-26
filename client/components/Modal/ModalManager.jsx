@@ -33,6 +33,7 @@ ModalManager = function () {
         autofocus: false,
         onHidden() {
           ReactDOM.unmountComponentAtNode(modalContainer)
+          $modal = null
         }
       })
       $modal.modal('show')
@@ -40,6 +41,10 @@ ModalManager = function () {
 
     close() {
       $modal && $modal.modal('hide')
+    },
+
+    refresh() {
+      $modal && $modal.modal('refresh')
     }
   }
 

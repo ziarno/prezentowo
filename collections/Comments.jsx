@@ -14,14 +14,9 @@ Comments.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:secu
 Comments.Schemas = {}
 
 Comments.Schemas.Main = new SimpleSchema({
-  userId: {
-    ...SchemaFields.Id,
-    autoValue() {
-      return this.userId
-    }
-  },
-  presentId: SchemaFields.Id,
+  creatorId: SchemaFields.CreatorId,
   createdAt: SchemaFields.CreatedAt,
+  presentId: SchemaFields.Id,
   message: {
     type: String,
     label: () => _i18n.__('Message')
@@ -71,7 +66,7 @@ Comments.methods.removeComment = new ValidatedMethod({
     }
   }).validator(),
   run({commentId}) {
-    var comment = Comments.find(commentId)
+    var comment = Comments.findOne(commentId)
     var removedCount = Comments.remove({
       _id: commentId,
       userId: this.userId
@@ -101,7 +96,7 @@ Comments.methods.editComment = new ValidatedMethod({
   run({commentId, message}) {
     return Comments.update({
       _id: commentId,
-      userId: this.userId
+      creatorId: this.userId
     }, {
       $set: {message}
     })

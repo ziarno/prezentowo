@@ -41,10 +41,11 @@ Message = class Message extends React.Component {
         ) : null}
 
         {this.props.message ? (
-          <p>{this.props.message}</p>
-        ) : null}
-
-        {this.props.messages && this.props.messages.length ? (
+          <span>{this.props.message}</span>
+        ) : this.props.messageEl ? (
+          this.props.messageEl
+        ) : this.props.messages &&
+          this.props.messages.length ? (
           <ul className="list">
             {this.props.messages.map((message) => (
               <li key={key++}>{message}</li>
@@ -64,5 +65,6 @@ Message.propTypes = {
   closable: React.PropTypes.bool,
   hidden: React.PropTypes.bool,
   message: React.PropTypes.string,
+  messageEl: React.PropTypes.element,
   messages: React.PropTypes.array
 }

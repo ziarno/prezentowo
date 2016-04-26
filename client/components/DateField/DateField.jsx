@@ -11,10 +11,10 @@ DateField = class DateField extends React.Component {
     this.setTooltips = this.setTooltips.bind(this)
   }
 
-  getTooltips() {
-    var dateText = moment(this.props.date).from(new Date())
+  static getRalationalTime({date, roundToDays}) {
+    var dateText = moment(date).from(new Date())
     var startOfToday = moment().startOf('day')
-    var startOfDate = moment(this.props.date).startOf('day')
+    var startOfDate = moment(date).startOf('day')
     var daysDiff = startOfDate.diff(startOfToday, 'days')
     var days = {
       '0': _i18n.__('today'),
@@ -22,9 +22,21 @@ DateField = class DateField extends React.Component {
       '1': _i18n.__('tomorrow')
     }
 
-    if (this.props.roundToDays && Math.abs(daysDiff) <= 1) {
+    if (roundToDays && Math.abs(daysDiff) <= 1) {
       dateText = days[daysDiff]
     }
+
+    return dateText
+  }
+
+  static getFormattedDate({date, roundToDays}) {
+    return moment(date).format(roundToDays ? 'L' : 'L LT')
+  }
+
+  getTooltips() {
+    var dateText = this.props.mode === 'from' ?
+      DateField.getFormattedDate(this.props) :
+      DateField.getRalationalTime(this.props)
 
     return {
       dateField: {
@@ -34,6 +46,10 @@ DateField = class DateField extends React.Component {
   }
 
   render() {
+    var dateText = this.props.mode !== 'from' ?
+      DateField.getFormattedDate(this.props) :
+      DateField.getRalationalTime(this.props)
+
     return (
       <span
         className={this.props.className}
@@ -41,11 +57,20 @@ DateField = class DateField extends React.Component {
         onMouseEnter={this.setTooltips}
         ref="dateField">
 
-        {moment(this.props.date).format('L')}
+        {dateText}
       </span>
     )
   }
 
+}
+
+DateField.propTypes = {
+  date: React.PropTypes.instanceOf(Date).isRequired,
+  className: React.PropTypes.object,
+  roundToDays: React.PropTypes.bool,
+  mode: React.PropTypes.oneOf([
+    'date', 'from'
+  ])
 }
 
 reactMixin(DateField.prototype, Tooltips)

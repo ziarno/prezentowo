@@ -75,10 +75,11 @@ EventContainer = class EventContainer extends React.Component {
   }
 
   render() {
-    var eventTitle = this.props.event &&
-      this.props.event.title
-    var isManyToOne = this.props.event &&
-      this.props.event.type === 'many-to-one'
+    var {event, participants} = this.props
+    var eventTitle = event &&
+      event.title
+    var isManyToOne = event &&
+      event.type === 'many-to-one'
     var currentUserId = this.state.currentUser &&
       this.state.currentUser._id
     var showUsers
@@ -94,12 +95,13 @@ EventContainer = class EventContainer extends React.Component {
       )
     }
 
+    //show only beneficiaries or all participants
     showUsers = isManyToOne ? (
       _.filter(
-        this.props.participants,
-        user => this.props.event.beneficiaryIds.indexOf(user._id) > -1
+        participants,
+        user => event.beneficiaryIds.indexOf(user._id) > -1
       )
-    ) : this.props.participants
+    ) : participants
 
     return (
       <div
@@ -108,10 +110,12 @@ EventContainer = class EventContainer extends React.Component {
         <Sidebar
           scrollToEl={`.user-list [data-id=${currentUserId}]`}
           isVisible={this.state.isSidebarVisible}
-          onVisibilityChange={this.onSidebarVisibilityChange}>
+          onVisibilityChange=
+            {this.onSidebarVisibilityChange}
+          onAfterVisibilityChange={ModalManager.refresh}>
           <UserList
             onUserSelect={this.showUser}
-            users={this.props.participants} />
+            users={participants} />
         </Sidebar>
 
         <PresentsContainer
@@ -126,7 +130,7 @@ EventContainer = class EventContainer extends React.Component {
               <i className="gift corner inverted icon"></i>
             </i>
           )}
-          users={isManyToOne ? [] : this.props.participants}
+          users={isManyToOne ? [] : participants}
         />
 
       </div>

@@ -53,7 +53,7 @@ Presents.Schemas.Main = new SimpleSchema([
       label: () => _i18n.__('Shared comments')
     },
     creatorId: SchemaFields.CreatorId,
-    creatorAt: SchemaFields.CreatedAt,
+    createdAt: SchemaFields.CreatedAt,
     isOwn: {
       type: Boolean,
       autoValue() {
@@ -127,6 +127,9 @@ Presents.helpers({
   },
   isUserCreator() {
     return this.creatorId === Meteor.userId()
+  },
+  isUserBuyer() {
+    return _.contains(this.buyers, Meteor.userId())
   }
 })
 
