@@ -82,7 +82,8 @@ PresentDetails = class PresentDetails extends React.Component {
                     popupSettings={{
                       position: 'bottom center',
                       inline: true,
-                      target: '.modal .ribbon '
+                      target: '.modal .ribbon ',
+                      transition: 'slide down'
                     }}
                   />
                 ) : null}
@@ -139,10 +140,24 @@ PresentDetails.propTypes = {
 }
 
 PresentDetails = createContainer(({presentId}) => {
-  var present = Presents.findOne(presentId)
-  var forUser = present && Participants.findOne(present.forUserId)
-  var creator = present && Participants.findOne(present.creatorId)
-  var buyers = present &&
+  var query = Presents.find(presentId)
+  var present
+  var forUser
+  var creator
+  var buyers
+
+  query.observeChanges({
+    removed() {
+      //destroy, to immediately stop this component
+      //from rendering an unexisting present
+      ModalManager.close()
+      ModalManager.destroy()
+    }
+  })
+  present = query.fetch()[0]
+  forUser = present && Participants.findOne(present.forUserId)
+  creator = present && Participants.findOne(present.creatorId)
+  buyers = present &&
     present.buyers &&
     present.buyers.length !== 0 &&
     Participants.find({

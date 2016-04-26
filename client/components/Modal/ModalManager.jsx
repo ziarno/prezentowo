@@ -17,6 +17,11 @@ ModalManager = function () {
       document.body.appendChild(modalContainer)
     },
 
+    destroy() {
+      ReactDOM.unmountComponentAtNode(modalContainer)
+      $modal = null
+    },
+
     open(modalComponent, options = {}) {
       var {className} = options
 
@@ -32,8 +37,7 @@ ModalManager = function () {
         //note: don't use detachable:false - instead "detach" into the same container that we render it into
         autofocus: false,
         onHidden() {
-          ReactDOM.unmountComponentAtNode(modalContainer)
-          $modal = null
+          ModalManager.destroy()
         }
       })
       $modal.modal('show')
