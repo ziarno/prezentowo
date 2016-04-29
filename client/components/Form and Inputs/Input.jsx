@@ -34,7 +34,6 @@ Input = class Input extends ValidatedInput {
   }
 
   render() {
-
     var inputProps = {
       ref: 'input',
       placeholder: _i18n.__(this.props.placeholder),
@@ -45,7 +44,7 @@ Input = class Input extends ValidatedInput {
       rows: this.props.rows || 8,
       type: this.props.type || 'text',
       disabled: this.isDisabled()
-  }
+    }
 
     return (
       <div
@@ -59,16 +58,20 @@ Input = class Input extends ValidatedInput {
           </label>
         ) : null}
 
-        <div className="ui input">
+        <div className={classNames('ui input', this.props.size, {
+          action: this.props.button
+        })}>
           {this.props.type === 'textarea' ? (
             <textarea
               {...inputProps}
             />
           ) : (
             <input
+              autoComplete="off"
               {...inputProps}
             />
           )}
+          {this.props.button || null}
         </div>
 
         {this.props.hint ? (
@@ -88,7 +91,8 @@ Input.propTypes = {
   type: React.PropTypes.string,
   hint: React.PropTypes.string,
   rows: React.PropTypes.number,
-  placeholder: React.PropTypes.string
+  placeholder: React.PropTypes.string,
+  size: React.PropTypes.string
 }
 
 reactMixin(Input.prototype, RefreshOnLocaleChange)

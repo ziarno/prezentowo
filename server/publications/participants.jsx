@@ -2,7 +2,7 @@ import React from 'react'
 
 Meteor.publishComposite('participants', function ({eventId}) {
   return {
-    find: function () {
+    find() {
       return Events.find({
         _id: eventId,
         participants: {
@@ -16,7 +16,7 @@ Meteor.publishComposite('participants', function ({eventId}) {
       {
         //tempUsers - publish emails
         collectionName: 'participants',
-        find: function (event) {
+        find(event) {
           var participantIds = event.participants
             .map(participant => participant.userId)
 
@@ -37,7 +37,7 @@ Meteor.publishComposite('participants', function ({eventId}) {
       {
         //registeredUsers - don't publish emails
         collectionName: 'participants',
-        find: function (event) {
+        find(event) {
           var participantIds = event.participants
             .map(participant => participant.userId)
 

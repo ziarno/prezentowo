@@ -2,10 +2,6 @@ import React from 'react'
 
 Modal = class Modal extends React.Component {
 
-  componentDidUpdate() {
-    ModalManager.refresh()
-  }
-
   render() {
     return (
       <div className="ui modal">

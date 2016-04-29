@@ -164,12 +164,24 @@ Presents.methods.removePresent = new ValidatedMethod({
     }
   }).validator(),
   run({presentId}) {
+    var present = Presents.findOne(presentId)
+
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
         `${this.name}.notCreatedPresent`,
         _i18n.__('Presents deleted by creators'))
     }
+
     Presents.functions.updatePresentsCount(-1, presentId)
+
+    Comments.remove({
+      _id: {
+        $in: [
+          ...present.commentsShared,
+          ...present.commentsSecret
+        ]
+      }
+    })
     return Presents.remove({
       _id: presentId,
       creatorId: this.userId

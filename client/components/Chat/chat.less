@@ -1,0 +1,28 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  h3 {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+  div.comments {
+    position: relative;
+    padding-top: 10px;
+    flex-grow: 1;
+    overflow-y: scroll;
+  }
+  .comment {
+    margin-left: 32px;
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+  }
+  i.empty-icon {
+    cursor: default;
+    font-size: 5em;
+    color: rgba(0,0,0,0.1);
+    transform: translateY(-50%) translateX(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+}

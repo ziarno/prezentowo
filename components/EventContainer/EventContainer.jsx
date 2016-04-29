@@ -16,6 +16,7 @@ EventContainer = class EventContainer extends React.Component {
     this.autorunSetCurrentUserState = this.autorunSetCurrentUserState.bind(this)
     this.autorunSetSidebarMode = this.autorunSetSidebarMode.bind(this)
     this.onSidebarVisibilityChange = this.onSidebarVisibilityChange.bind(this)
+    this.onAfterSidebarVisibilityChange = this.onAfterSidebarVisibilityChange.bind(this)
   }
 
   showUser(user) {
@@ -74,6 +75,12 @@ EventContainer = class EventContainer extends React.Component {
     }
   }
 
+  onAfterSidebarVisibilityChange() {
+    if (!Session.get('isSidebarFixed')) {
+      ModalManager.refresh()
+    }
+  }
+
   render() {
     var {event, participants} = this.props
     var eventTitle = event &&
@@ -112,7 +119,7 @@ EventContainer = class EventContainer extends React.Component {
           isVisible={this.state.isSidebarVisible}
           onVisibilityChange=
             {this.onSidebarVisibilityChange}
-          onAfterVisibilityChange={ModalManager.refresh}>
+          onAfterVisibilityChange={this.onAfterSidebarVisibilityChange}>
           <UserList
             onUserSelect={this.showUser}
             users={participants} />

@@ -3,7 +3,7 @@ import React from 'react'
 User = ({user, className, large, showAddPresentOnHover}) => {
   var Avatar = (
     <Img
-      className="user--avatar ui avatar image"
+      className="ui avatar image"
       src={user.profile.pictureUrl}
       hideLoader
     />

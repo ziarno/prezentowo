@@ -32,11 +32,11 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   }
 
   autorunValidation() {
+    var {schema} = this.context
     var name = this.fieldName
 
     this.setState({
-      hasError: this.context.schema &&
-        this.context.schema.keyIsInvalid(name)
+      hasError: schema && schema.keyIsInvalid(name)
     })
   }
 
@@ -63,41 +63,49 @@ var ValidatedInput = class ValidatedInput extends React.Component {
   }
 
   isDisabled() {
+    var {form} = this.context
+
     return this.props.disabled
       || this.state.disabled
-      || this.context.form.isDisabled
+      || (form && form.isDisabled)
   }
 
   onChange(value) {
+    var {onChange} = this.props
     var name = this.fieldName
     var valueObject = {[name]: value}
 
-    if (_.isFunction(this.props.onChange)) {
-      this.props.onChange(valueObject)
+    if (_.isFunction(onChange)) {
+      onChange(valueObject)
     }
   }
 
   shouldShowError() {
-    return this.state.showError &&
-      this.state.hasError &&
-      this.context.form.hasSubmitted
+    var {form} = this.context
+    var {showError, hasError} = this.state
+
+    return showError && hasError &&
+      form && form.hasSubmitted
   }
 
   componentDidMount() {
-    if (this.context.register) {
-      this.context.register(this)
+    var {register} = this.context
+
+    if (register) {
+      register(this)
     }
   }
 
   validate(value, silent) {
+    var {schema} = this.context
+    var {name} = this.props
+
     if (!silent) {
       this.showError()
     }
-    if (this.context.schema) {
-      this.context.schema.validateOne(unflattenObject({
-        [this.props.name]: value
-      }), this.props.name)
-    }
+    schema && schema.validateOne(unflattenObject({
+      [name]: value
+    }), name)
   }
 
   //override

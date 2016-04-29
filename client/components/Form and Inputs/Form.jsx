@@ -49,12 +49,16 @@ Form = class Form extends React.Component {
   }
 
   autorunSetError() {
+    var {schema} = this.props
+
     this.setState({
-      hasError: !this.props.schema.isValid()
+      hasError: schema && !schema.isValid()
     })
   }
 
   reset() {
+    var {schema} = this.props
+
     this.hasSubmitted = false
     this.hiddenFields = {}
     if (this.props.data) {
@@ -62,7 +66,7 @@ Form = class Form extends React.Component {
     } else {
       this.state.components.forEach((component) => component.reset())
     }
-    this.props.schema.resetValidation()
+    schema && schema.resetValidation()
     return this
   }
 
@@ -95,6 +99,7 @@ Form = class Form extends React.Component {
   }
 
   submitForm(event) {
+    var {schema, onSubmit} = this.props
     var flatFormValues = {}
     var formValues
 
@@ -109,9 +114,9 @@ Form = class Form extends React.Component {
       ...unflattenObject(flatFormValues)
     }
 
-    if (this.props.schema.validate(formValues) &&
-        _.isFunction(this.props.onSubmit)) {
-      this.props.onSubmit(formValues)
+    if (!schema || schema.validate(formValues) &&
+        _.isFunction(onSubmit)) {
+      onSubmit(formValues)
     }
     return this
   }
@@ -141,7 +146,7 @@ Form = class Form extends React.Component {
 }
 
 Form.propTypes = {
-  schema: React.PropTypes.object.isRequired,
+  schema: React.PropTypes.object,
   className: React.PropTypes.string,
   onSubmit: React.PropTypes.func,
   data: React.PropTypes.object,

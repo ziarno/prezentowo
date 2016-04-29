@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import {Tooltips} from '../../../lib/Mixins'
+import {Tooltips, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
 DateField = class DateField extends React.Component {
@@ -66,7 +66,7 @@ DateField = class DateField extends React.Component {
 
 DateField.propTypes = {
   date: React.PropTypes.instanceOf(Date).isRequired,
-  className: React.PropTypes.object,
+  className: React.PropTypes.string,
   roundToDays: React.PropTypes.bool,
   mode: React.PropTypes.oneOf([
     'date', 'from'
@@ -74,3 +74,4 @@ DateField.propTypes = {
 }
 
 reactMixin(DateField.prototype, Tooltips)
+reactMixin(DateField.prototype, RefreshOnLocaleChange)

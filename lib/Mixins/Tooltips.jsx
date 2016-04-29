@@ -12,7 +12,7 @@ import React from 'react'
  *  [refName]: {tooltipConfig},
  *  ...
  * }
- * Note: Add refNames to components
+ * Note: Add refNames to components!
  */
 var Tooltips = {
 
