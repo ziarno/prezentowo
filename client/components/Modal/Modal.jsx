@@ -11,7 +11,14 @@ Modal = class Modal extends React.Component {
             <Ribbon
               color={this.props.ribbonColor}
               withEndings>
-              <h1>{this.props.title}</h1>
+              <div>
+                <h1>{this.props.title}</h1>
+                <div
+                  onClick={ModalManager.close}
+                  className="close-modal ui button small-icon-button">
+                  <i className="remove icon" />
+                </div>
+              </div>
             </Ribbon>
               ) : (
             <div className="header">

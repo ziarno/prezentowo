@@ -31,6 +31,7 @@ EventContainer = class EventContainer extends React.Component {
 
     this.setState({isSidebarVisible: !Session.get('isSidebarFixed')})
     ModalManager.close()
+    ModalManager.destroy()
   }
 
   autorunSetCurrentUserState() {

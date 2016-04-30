@@ -189,7 +189,7 @@ PresentDetails = class PresentDetails extends React.Component {
                     <h3 className="ui dividing header">
                       <i className="comments outline icon" />
                       <div className="content">
-                        <T>Secret chat</T>
+                        <T>Chat</T>
                         {forUsers ? (
                           <div className="sub header">
                             <T>Without</T>
