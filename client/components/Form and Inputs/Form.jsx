@@ -15,7 +15,10 @@ import reactMixin from 'react-mixin'
  *
  * Note: keys defined in the provided schema must match
  * name attributes in inputs inside the form
+ *
  * Name attributes of objects can be dot-separated, ex: a.b.c
+ * if flattenData prop is set to true - name your inputs
+ * this way also, ex. <Input name="profile.name" />
  */
 Form = class Form extends React.Component {
 
@@ -82,7 +85,8 @@ Form = class Form extends React.Component {
       return
     }
 
-    var flatData = flattenObject(data)
+    var flatData = this.props.flattenData ?
+      flattenObject(data) : data
 
     this.state.components.forEach((component) => {
       component.setValue(flatData[component.props.name])
@@ -99,7 +103,7 @@ Form = class Form extends React.Component {
   }
 
   submitForm(event) {
-    var {schema, onSubmit} = this.props
+    var {schema, onSubmit, flattenData} = this.props
     var flatFormValues = {}
     var formValues
 
@@ -111,7 +115,8 @@ Form = class Form extends React.Component {
 
     formValues = {
       ...this.hiddenFields,
-      ...unflattenObject(flatFormValues)
+      ...(flattenData ?
+        unflattenObject(flatFormValues) : flatFormValues)
     }
 
     if (!schema || schema.validate(formValues) &&
@@ -150,6 +155,7 @@ Form.propTypes = {
   className: React.PropTypes.string,
   onSubmit: React.PropTypes.func,
   data: React.PropTypes.object,
+  flattenData: React.PropTypes.bool,
   hiddenFields: React.PropTypes.object
 }
 

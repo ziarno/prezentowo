@@ -226,6 +226,20 @@ db.system.js.save({
 
 ```
 
+iteration over a collection (just edit this and use)
+
+```js
+db.presents.find({}).forEach(function (present) {
+    db.presents.update({_id: present._id}, {
+        $unset: {pictureUrl: 1},
+        $set: {picture: {
+          small: present.pictureUrl,
+          large: present.pictureUrl,
+        }}
+    })
+});
+```
+
 Index for unique userId's in participants array
 Note: doesn't work :(
 

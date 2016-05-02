@@ -88,6 +88,7 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
         <Form
           ref="form"
           data={this.mapDataToForm()}
+          flattenData
           onSubmit={this.saveUser}
           schema={this.schema}>
 

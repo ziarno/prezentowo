@@ -118,7 +118,7 @@ PresentDetails = class PresentDetails extends React.Component {
           <div className="present-details--image">
             <Img
               className="waves-effect"
-              src={present.pictureUrl} />
+              src={present.picture.small} />
               <div className="present-details--buttons">
                 {present.isUserCreator() ? (
                   <PresentPopup
@@ -127,8 +127,8 @@ PresentDetails = class PresentDetails extends React.Component {
                     wrapperClassName="edit-present"
                     buttonClassName="left labeled compact"
                     buttonText="Edit present"
-                    users={!forUsers || forUsers.length > 1 ?
-                      [] : [forUsers[0]]}
+                    users={forUsers && forUsers.length === 1 ?
+                      [forUsers[0]] : []}
                     onRemove={ModalManager.close}
                     popupSettings={{
                       position: 'bottom center',

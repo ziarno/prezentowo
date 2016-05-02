@@ -19,7 +19,12 @@ Presents.Schemas.NewPresent = new SimpleSchema({
     max: 70,
     label: () => _i18n.__('Title')
   },
-  pictureUrl: SchemaFields.PictureUrl,
+  picture: {
+    type: Object,
+    label: () => _i18n.__('Picture')
+  },
+  'picture.small': SchemaFields.PictureUrl,
+  'picture.large': SchemaFields.PictureUrl,
   description: {
     type: String,
     label: () => _i18n.__('Description'),
@@ -165,6 +170,10 @@ Presents.methods.removePresent = new ValidatedMethod({
   }).validator(),
   run({presentId}) {
     var present = Presents.findOne(presentId)
+    var commentsToRemove = [
+      ...present.commentsShared,
+      ...present.commentsSecret
+    ]
 
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
@@ -174,14 +183,14 @@ Presents.methods.removePresent = new ValidatedMethod({
 
     Presents.functions.updatePresentsCount(-1, presentId)
 
-    Comments.remove({
-      _id: {
-        $in: [
-          ...present.commentsShared,
-          ...present.commentsSecret
-        ]
-      }
-    })
+    if (commentsToRemove.length) {
+      Comments.remove({
+        _id: {
+          $in: commentsToRemove
+        }
+      })
+    }
+
     return Presents.remove({
       _id: presentId,
       creatorId: this.userId
@@ -200,7 +209,12 @@ Presents.methods.editPresent = new ValidatedMethod({
       }
     },
     Presents.Schemas.NewPresent.pick([
-      'title', 'description', 'forUserId', 'pictureUrl'
+      'title',
+      'description',
+      'forUserId',
+      'picture',
+      'picture.small',
+      'picture.large'
     ])
   ]).validator(),
   run(present) {

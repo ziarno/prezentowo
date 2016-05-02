@@ -1,6 +1,7 @@
 import React from 'react'
 import {ValidatedInput} from '../../../../lib/Mixins'
 import reactMixin from 'react-mixin'
+import _ from 'underscore'
 
 ImagePicker = class ImagePicker extends ValidatedInput {
 
@@ -36,26 +37,29 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   }
 
   getImage(index = this.state.currentIndex) {
-    return [...this.state.uploadedImages, ...this.props.images][index]
-  }
-
-  getIndexOfPicture(pictureUrl) {
     return [
       ...this.state.uploadedImages,
-      ...this.props.images]
-      .indexOf(pictureUrl)
+      ...this.props.images
+    ][index]
+  }
+
+  getIndexOfPicture(picture) {
+    return _.findIndex([
+      ...this.state.uploadedImages,
+      ...this.props.images
+    ], pic => _.isEqual(pic, picture))
   }
 
   getValue() {
     return this.getImage()
   }
 
-  setValue(pictureUrl) {
-    var index = this.getIndexOfPicture(pictureUrl)
+  setValue(picture) {
+    var index = this.getIndexOfPicture(picture)
     if (index > -1) {
       this.setImageIndex(index)
     } else {
-      this.addImage(pictureUrl)
+      this.addImage(picture)
     }
   }
 
@@ -65,24 +69,45 @@ ImagePicker = class ImagePicker extends ValidatedInput {
     this.validate(this.getImage(index))
   }
 
-  addImage(pictureUrl) {
+  addImage(picture) {
     this.setState({
-      uploadedImages: [pictureUrl, ...this.state.uploadedImages]
+      uploadedImages: [picture, ...this.state.uploadedImages]
     })
     this.setImageIndex(0)
   }
 
   uploadImage(event) {
     var files = event.currentTarget.files
+    var {
+      uploadOptions,
+      responseTransformations} = this.props
+
+    function makeObject(url) {
+      var imageObject = {}
+
+      responseTransformations.forEach(transformation => {
+        imageObject[transformation] =
+          url.replace('upload', `upload/t_${transformation}`)
+      })
+
+      if (uploadOptions.transformation) {
+        imageObject[uploadOptions.transformation] = url
+      }
+
+      return imageObject
+    }
 
     this.setState({isLoading: true})
 
-    Cloudinary.upload(files, this.props.uploadOptions, (err, res) => {
+    Cloudinary.upload(files, uploadOptions, (err, res) => {
       this.setState({
         isLoading: false
       })
+
       if (!err && res) {
-        this.addImage(res.secure_url)
+        let image = responseTransformations ?
+          makeObject(res.secure_url) : res.secure_url
+        this.addImage(image)
       }
     })
   }
@@ -97,6 +122,9 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   }
 
   render() {
+    var image = this.getImage()
+    var imageToDisplay = _.isString(image) ? image :
+      (image.small || image.large)
 
     return (
       <div className={classNames('image-picker shadow', {
@@ -106,10 +134,10 @@ ImagePicker = class ImagePicker extends ValidatedInput {
           text={_i18n.__('Uploading')}
           visible={this.state.isLoading} />
         {this.isDisabled() ? (
-          <Img src={this.getImage()} />
+          <Img src={imageToDisplay} />
         ) : (
           <Img
-            src={this.getImage()}>
+            src={imageToDisplay}>
             <div
               className="arrow arrow--left"
               onClick={this.setPreviousImageIndex}>
@@ -153,7 +181,17 @@ ImagePicker = class ImagePicker extends ValidatedInput {
 }
 
 ImagePicker.propTypes = {
-  images: React.PropTypes.array,
+  images: React.PropTypes.oneOfType([
+    React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        small: React.PropTypes.string,
+        large: React.PropTypes.string
+      })
+    ),
+    React.PropTypes.arrayOf(
+      React.PropTypes.string
+    )
+  ]),
   uploadOptions: React.PropTypes.object,
   randomizeInitialImage: React.PropTypes.bool,
   enableSearch: React.PropTypes.bool

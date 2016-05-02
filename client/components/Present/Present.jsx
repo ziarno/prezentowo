@@ -49,7 +49,7 @@ Present = class Present extends React.Component {
           })}>
           <Img
             className="image waves-effect"
-            src={present.pictureUrl}
+            src={present.picture.small}
           />
 
           {present.isUserCreator() ? (

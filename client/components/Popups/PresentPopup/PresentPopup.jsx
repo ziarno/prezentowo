@@ -8,7 +8,14 @@ PresentPopup = class PresentPopup extends PopupComponent {
   constructor(props) {
     super(props)
     this.schema = Presents.Schemas.NewPresent
-        .pick(['title', 'pictureUrl', 'description', 'forUserId'])
+        .pick([
+          'title',
+          'picture',
+          'picture.small',
+          'picture.large',
+          'description',
+          'forUserId'
+        ])
         .namedContext('newPresent')
     this.hideAndReset = this.hideAndReset.bind(this)
     this.reset = this.reset.bind(this)
@@ -162,12 +169,14 @@ PresentPopup = class PresentPopup extends PopupComponent {
           <div
             className="form-popup--form flex ui form attached fluid segment">
             <ImagePicker
-              name="pictureUrl"
+              name="picture"
               images={getPresentImages()}
               randomizeInitialImage
               uploadOptions={{
-                folder: 'presents'
+                folder: 'presents',
+                transformation: 'large'
               }}
+              responseTransformations={['small', 'large']}
             />
             <div className="form-popup--form-right" >
               <Input

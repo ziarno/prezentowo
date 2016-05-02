@@ -20,7 +20,6 @@ export function isMobile() {
 /**
  * Flatten javascript objects into a single-depth object
  * source: https://gist.github.com/fantactuka/4989737
- * (old: https://gist.github.com/penguinboy/762197)
  *
  * ex.
  *  {x: {a: 5, b: {y: 7}} c: 3} =>
@@ -74,9 +73,12 @@ export function getAvatarImages(gender) {
 }
 
 export function getPresentImages() {
-  return _.range(20).map((index) => (
-    `/images/presents/p${index + 1}-150px.png`
-  ))
+  return _.range(20).map((index) => {
+    return {
+      small: `/images/presents/p${index + 1}-150px.png`,
+      large: `/images/presents/p${index + 1}-600px.png`
+    }
+  })
 }
 
 /**
