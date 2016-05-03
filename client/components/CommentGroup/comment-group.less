@@ -2,6 +2,7 @@
   position: relative;
   .user--name {
     font-weight: bold;
+    white-space: normal;
   }
   .hint {
     position: absolute;
@@ -11,12 +12,8 @@
     top: 5px;
     right: 0;
   }
-  &:hover {
-    .hint {
-      z-index: -1;
-    }
-    .user {
-      background-color: #fff;
-    }
+  .user:hover {
+    z-index: 1;
+    background-color: #fff;
   }
 }

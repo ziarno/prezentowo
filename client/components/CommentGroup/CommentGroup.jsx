@@ -9,11 +9,11 @@ CommentGroup = ({user, comments}) => {
         mode="from"
         date={comments[0].createdAt} />
       {comments.map(comment => (
-        <p
+        <ParsedText
+          text={comment.message}
           key={comment._id}
-          className="comment">
-          {comment.message}
-        </p>
+          className="comment"
+        />
       ))}
     </div>
   )

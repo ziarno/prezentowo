@@ -73,24 +73,6 @@ PresentDetails = class PresentDetails extends React.Component {
       Comments.find({
         _id: {$in: present.commentsSecret}
       }, {sort: {createdAt: 1}}).fetch()
-    var IWillBuyButton = (
-      <div
-        onClick={this.toggleBuyer}
-        className="ui primary left labeled compact
-          icon button waves-effect waves-button">
-        <i className="ui dollar icon" />
-        <T>I will buy this</T>
-      </div>
-    )
-    var IWillNotBuyButton = (
-      <div
-        onClick={this.toggleBuyer}
-        className="ui left labeled compact
-          icon button waves-effect waves-button">
-        <i className="ui dollar icon" />
-        <T>I will not buy this</T>
-      </div>
-    )
     var BuyersMessage = (
       <span>
         <T>Buyers</T>
@@ -139,7 +121,20 @@ PresentDetails = class PresentDetails extends React.Component {
                   />
                 ) : null}
                 {canUserBuy ? (
-                  isUserBuyer ? IWillNotBuyButton : IWillBuyButton
+                  <div
+                    onClick={this.toggleBuyer}
+                    className={classNames(
+                      'ui left labeled compact icon button',
+                      'waves-effect waves-button', {
+                      primary: !isUserBuyer
+                    })}>
+                    <i className="ui dollar icon" />
+                    {isUserBuyer ? (
+                      <T>I will not buy this</T>
+                    ) : (
+                      <T>I will buy this</T>
+                    )}
+                  </div>
                 ) : null}
               </div>
           </div>
@@ -176,7 +171,10 @@ PresentDetails = class PresentDetails extends React.Component {
               <span>)</span>
             </div>
 
-            <p>{present.description}</p>
+            <ParsedText
+              text={present.description}
+              className="description"
+            />
 
             <div className="chats">
 
