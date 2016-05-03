@@ -26,7 +26,8 @@ Present = class Present extends React.Component {
     ModalManager.open(
       <PresentDetails presentId={present._id} />,
       {
-        className: 'present-details'
+        id: 'present-details',
+        className: 'inverted',
       }
     )
   }

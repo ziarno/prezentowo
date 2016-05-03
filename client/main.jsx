@@ -13,7 +13,6 @@ $.cloudinary.config({
 Session.setDefault('event', {})
 
 Meteor.startup(() => {
-  ModalManager.createContainer()
   setSidebarMode()
   $(window).resize(_.throttle(setSidebarMode, 1000))
 })

@@ -170,10 +170,15 @@ Presents.methods.removePresent = new ValidatedMethod({
   }).validator(),
   run({presentId}) {
     var present = Presents.findOne(presentId)
-    var commentsToRemove = [
-      ...present.commentsShared,
-      ...present.commentsSecret
-    ]
+    var {commentsSecret, commentsShared} = present
+    var commentsToRemove = []
+
+    if (commentsSecret) {
+      commentsToRemove.concat(commentsSecret)
+    }
+    if (commentsShared) {
+      commentsToRemove.concat(commentsShared)
+    }
 
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(

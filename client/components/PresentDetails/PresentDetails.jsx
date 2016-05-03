@@ -3,8 +3,26 @@ import {createContainer} from 'meteor/react-meteor-data'
 
 PresentDetails = class PresentDetails extends React.Component {
 
-  constructor() {
-    super()
+  constructor({presentId}) {
+    super({presentId})
+
+    //note: don't put this in `createContainer` - situation:
+    //when other user removes a present we are currently viewing,
+    //then createContainer wants to run first
+    // -> doesn't find the removed present
+    // -> query listener gets overridden by listener for
+    // an empty present
+    this.observeHandle = Presents
+      .find({_id: presentId})
+      .observeChanges({
+        removed() {
+          //destroy, to immediately stop this component
+          //from rendering an unexisting present
+          ModalManager.close()
+          ModalManager.destroy()
+        }
+      })
+
     this.toggleBuyer = this.toggleBuyer.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.sendSecretMessage = this.sendSecretMessage.bind(this)
@@ -48,6 +66,10 @@ PresentDetails = class PresentDetails extends React.Component {
     if (!_.isEqual(oldPresent, newPresent)) {
       ModalManager.refresh()
     }
+  }
+
+  componentWillUnmount() {
+    this.observeHandle.stop()
   }
 
   render() {
@@ -252,26 +274,14 @@ PresentDetails.propTypes = {
 PresentDetails = createContainer(({presentId}) => {
   var event = Session.get('event')
   var isManyToOne = event.type === 'many-to-one'
-  var query = Presents.find(presentId)
+  var present = Presents.findOne(presentId)
   var commentsReady = Meteor
     .subscribe('comments', {presentId})
     .ready()
-  var present
   var forUsers
   var creator
   var buyers
 
-  //note: this listener stops itself when
-  //the reactive context stops existing
-  query.observeChanges({
-    removed() {
-      //destroy, to immediately stop this component
-      //from rendering an unexisting present
-      ModalManager.close()
-      ModalManager.destroy()
-    }
-  })
-  present = query.fetch()[0]
   if (isManyToOne) {
     forUsers = Participants.find({
       _id: {$in: event.beneficiaryIds}

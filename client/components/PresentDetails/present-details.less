@@ -5,7 +5,7 @@
 
 //mixins
 @vertical-items-align: {
-  .ui.dimmer.present-details {
+  #present-details {
     .present-details--content {
       flex-direction: column;
     }
@@ -28,7 +28,7 @@
 };
 
 @horizontal-items-align: {
-  .ui.dimmer.present-details {
+  #present-details {
     .present-details--content {
       display: flex;
       flex-direction: row;
@@ -53,7 +53,7 @@
 };
 
 //styles
-.ui.dimmer.present-details {
+#present-details {
   top: @header-height !important;
   z-index: @z-index-present-details-dimmer !important;
   height: calc(~"100vh" - @header-height) !important;
@@ -153,13 +153,13 @@
 //modal width media queries
 // < 924px
 @media (max-width: (@media-padded-max-width - 1px)) {
-  body.sidebar-visible .ui.dimmer.present-details {
+  body.sidebar-visible #present-details {
     width: 100%;
   }
 }
 // > 925px
 @media (min-width: @media-padded-max-width) {
-  body.sidebar-visible .ui.dimmer.present-details {
+  body.sidebar-visible #present-details {
     width: calc(~"100vw" - @sidebar-width);
   }
 }

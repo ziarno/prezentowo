@@ -3,52 +3,75 @@ import ReactDOM from 'react-dom'
 
 ModalManager = function () {
 
-  var $modal
-  var modalContainer
-  var containerClassName = 'ui dimmer modals inverted'
+  var modals = {}
+
+  function invokeModalById(id, func) {
+    if (_.isString(id) && modals[id]) {
+      func(modals[id], id)
+    } else {
+      _.forEach(modals, function (modal, key) {
+        func(modal, key)
+      })
+    }
+  }
 
   return {
 
-    createContainer() {
-      modalContainer = document.createElement('div')
-      modalContainer.id = 'modal-container'
-      //trick: make modal render into the same container that it normally would without detachable:false
-      modalContainer.className = containerClassName
-      document.body.appendChild(modalContainer)
-    },
+    createModal({id = 'modal-container', className, modalComponent}) {
+      //trick: make modal render into the same container
+      //that it normally would without detachable:false
+      var container = document.getElementById(id) ||
+        document.createElement('div')
+      var modal
 
-    destroy() {
-      ReactDOM.unmountComponentAtNode(modalContainer)
-      $modal = null
+      container.id = id
+      container.className = `${className} ui dimmer modals`
+      document.body.appendChild(container)
+
+      modal = ReactDOM.findDOMNode(
+        ReactDOM.render(modalComponent, container)
+      )
+
+      return modals[id] = {modal, container}
     },
 
     open(modalComponent, options = {}) {
-      var {className} = options
+      var {id} = options
+      var {modal} =
+        ModalManager.createModal({
+          ...options,
+          modalComponent
+        })
+      var $modal = $(modal)
 
-      modalContainer.className = [
-        containerClassName,
-        className
-      ].join(' ')
-
-      $modal = $(ReactDOM.findDOMNode(
-        ReactDOM.render(modalComponent, modalContainer)
-      ))
       $modal.modal({
         //note: don't use detachable:false - instead "detach" into the same container that we render it into
+        context: `#${id}`,
         autofocus: false,
         onHidden() {
-          ModalManager.destroy()
+          ModalManager.destroy(id)
         }
       })
       $modal.modal('show')
     },
 
-    close() {
-      $modal && $modal.modal('hide')
+    destroy(id) {
+      invokeModalById(id, ({container}, modalId) => {
+        ReactDOM.unmountComponentAtNode(container)
+        delete modals[modalId]
+      })
     },
 
-    refresh() {
-      $modal && $modal.modal('refresh')
+    close(id) {
+      invokeModalById(id, ({modal}) => {
+        $(modal).modal('hide')
+      })
+    },
+
+    refresh(id) {
+      invokeModalById(id, ({modal}) => {
+        $(modal).modal('refresh')
+      })
     }
   }
 
