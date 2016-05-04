@@ -57,11 +57,11 @@ PresentDetails = class PresentDetails extends React.Component {
     this.sendMessage({type: 'shared', message})
   }
 
-  componentWillReceiveProps({present}) {
+  componentDidUpdate({present}) {
     //refresh modal only if the change
     //didn't happen in comments
-    var oldPresent = _.omit(this.props.present, ['commentsShared', 'commentsSecret'])
-    var newPresent = _.omit(present, ['commentsShared', 'commentsSecret'])
+    var newPresent = _.omit(this.props.present, ['commentsShared', 'commentsSecret'])
+    var oldPresent = _.omit(present, ['commentsShared', 'commentsSecret'])
 
     if (!_.isEqual(oldPresent, newPresent)) {
       ModalManager.refresh()

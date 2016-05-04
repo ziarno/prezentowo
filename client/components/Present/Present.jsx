@@ -1,4 +1,6 @@
 import React from 'react'
+import {Tooltips} from '../../../lib/Mixins'
+import reactMixin from 'react-mixin'
 
 Present = class Present extends React.Component {
 
@@ -10,6 +12,25 @@ Present = class Present extends React.Component {
     this.setActive = this.setActive.bind(this)
     this.setInactive = this.setInactive.bind(this)
     this.showPresent = this.showPresent.bind(this)
+  }
+
+  getTooltips() {
+    var {buyers} = this.props.present
+    var hasBuyers = buyers && buyers.length
+    var users = hasBuyers && Participants.find({_id: {$in: buyers}}).fetch()
+    var usersMessage = users && `${_i18n.__('Buyers')}:
+      ${users.map(u => u.profile.name).join(', ')}`
+
+    if (!hasBuyers) {
+      return {}
+    }
+
+    return {
+      buyers: {
+        position: 'top left',
+        content: usersMessage
+      }
+    }
   }
 
   setActive() {
@@ -35,6 +56,7 @@ Present = class Present extends React.Component {
   render() {
     var isFullWidth = this.props.viewMode === 'full-width'
     var {present} = this.props
+    var hasBuyers = present.buyers && present.buyers.length
 
     return (
       <div
@@ -52,6 +74,13 @@ Present = class Present extends React.Component {
             className="image waves-effect"
             src={present.picture.small}
           />
+          <div
+            ref="buyers"
+            className={classNames('ui left corner olive tiny label', {
+              hidden: !hasBuyers
+            })}>
+            <i className="dollar icon" />
+          </div>
 
           {present.isUserCreator() ? (
             <PresentPopup
@@ -102,3 +131,5 @@ Present.propTypes = {
   viewMode: React.PropTypes.string,
   onClick: React.PropTypes.func
 }
+
+reactMixin(Present.prototype, Tooltips)
