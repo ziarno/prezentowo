@@ -20,11 +20,11 @@ Modal = class Modal extends React.Component {
                 </div>
               </div>
             </Ribbon>
-              ) : (
+          ) : this.props.title ? (
             <div className="header">
               {this.props.title}
             </div>
-          )}
+          ) : null}
 
           {this.props.children}
 
@@ -35,7 +35,7 @@ Modal = class Modal extends React.Component {
 }
 
 Modal.propTypes = {
-  title: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string,
   ribbon: React.PropTypes.bool,
   ribbonColor: React.PropTypes.string
 }

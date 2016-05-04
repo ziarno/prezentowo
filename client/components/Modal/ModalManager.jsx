@@ -17,9 +17,11 @@ ModalManager = function () {
 
   return {
 
-    createModal({id = 'modal-container', className, modalComponent}) {
-      //trick: make modal render into the same container
-      //that it normally would without detachable:false
+    createModal({
+        id = 'modal-container',
+        className = '',
+        modalComponent
+      }) {
       var container = document.getElementById(id) ||
         document.createElement('div')
       var modal
@@ -44,9 +46,16 @@ ModalManager = function () {
         })
       var $modal = $(modal)
 
+      //hack: for multiple modals to work, we must manually
+      //toggle the 'dimmed' class on the body, because semantic-ui
+      //checks it to display another dimmer
+      $(document.body).removeClass('dimmed')
+
       $modal.modal({
-        //note: don't use detachable:false - instead "detach" into the same container that we render it into
+        //note: don't use detachable:false - instead "detach"
+        //into the same container that we render it into
         context: `#${id}`,
+        allowMultiple: true,
         autofocus: false,
         onHidden() {
           ModalManager.destroy(id)
@@ -58,8 +67,15 @@ ModalManager = function () {
     destroy(id) {
       invokeModalById(id, ({container}, modalId) => {
         ReactDOM.unmountComponentAtNode(container)
+        document.body.removeChild(container)
         delete modals[modalId]
       })
+      if (!_.isEmpty(modals)) {
+        //if we close a modal the 'dimmed' class is removed,
+        //so we must bring it back if there are more modals
+        //opened
+        $(document.body).addClass('dimmed')
+      }
     },
 
     close(id) {

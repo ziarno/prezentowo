@@ -121,6 +121,12 @@ PresentDetails = class PresentDetails extends React.Component {
         <div className="present-details--content">
           <div className="present-details--image">
             <Img
+              onClick={() => {
+                ModalManager.open(
+                  <Lightbox picture={present.picture.large} />,
+                  {id: 'lightbox'}
+                )
+              }}
               className="waves-effect"
               src={present.picture.small} />
               <div className="present-details--buttons">
