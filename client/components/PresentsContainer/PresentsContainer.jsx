@@ -7,16 +7,24 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
   
   constructor() {
     super()
+    this.id = 'presents-container'
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
     this.getScrollToOptions = this.getScrollToOptions.bind(this)
+  }
+
+  isScrollable() {
+    var isMouseOver = !!$(`#${this.id}:hover`).length
+
+    return !isMouseOver
   }
 
   autorunSetCurrentUser() {
     var visibleUserIds = Session.get('visibleUserIds')
     var currentUser = _.find(this.props.users,
       user => _.contains(visibleUserIds, user._id))
+    var isMouseOver = !!$(`#${this.id}:hover`).length
 
-    if (currentUser && this.canSetCurrentUser) {
+    if (currentUser && isMouseOver) {
       //note: current user from scrolling this component
       // will only be set is mouse is over it
       Session.set('currentUser', currentUser)
@@ -51,7 +59,7 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
         this.props.showUser.profile.name.capitalizeFirstLetter()
         : null
       return (
-        <div id="presents-container">
+        <div id={this.id}>
           <Loader
             size="large"
             text={text}
@@ -91,18 +99,8 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
 
     return (
       <div
-        id="presents-container"
-        onMouseEnter={() => {
-          this.canSetCurrentUser = true
-          this.isScrollable = false
-        }}
-        onMouseLeave={() => {
-          this.canSetCurrentUser = false
-          this.isScrollable = true
-        }}>
-
+        id={this.id}>
         {UserPresentsItems}
-
       </div>
     )
   }

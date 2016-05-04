@@ -28,9 +28,12 @@ Sidebar = class Sidebar extends ScrollableComponent {
     }
   }
 
+  isScrollable() {
+    return this.props.isVisible
+  }
+
   componentWillReceiveProps(newProps) {
     super.componentWillReceiveProps(newProps)
-    this.isScrollable = newProps.isVisible
   }
 
   afterVisibilityChange(event) {
@@ -41,7 +44,6 @@ Sidebar = class Sidebar extends ScrollableComponent {
 
   componentDidMount() {
     super.componentDidMount()
-    this.isScrollable = this.props.isVisible
     if (_.isFunction(this.props.onAfterVisibilityChange)) {
       ReactDOM.findDOMNode(this)
         .addEventListener(

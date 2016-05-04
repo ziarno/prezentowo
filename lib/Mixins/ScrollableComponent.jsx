@@ -9,7 +9,7 @@ import React from 'react'
 export default class ScrollableComponent extends React.Component {
 
   scrollTo(scrollToEl) {
-    if (!this.isScrollable) {
+    if (!this.isScrollable()) {
       return
     }
 
@@ -26,6 +26,10 @@ export default class ScrollableComponent extends React.Component {
     }
   }
 
+  isScrollable() {
+    return true
+  }
+
   componentWillReceiveProps({scrollToEl}) {
     this.scrollTo(scrollToEl)
   }
@@ -37,8 +41,6 @@ export default class ScrollableComponent extends React.Component {
   }
 
 }
-
-ScrollableComponent.prototype.isScrollable = true
 
 ScrollableComponent.propTypes = {
   scrollToEl: React.PropTypes.element
