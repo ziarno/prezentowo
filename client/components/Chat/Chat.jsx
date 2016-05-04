@@ -86,7 +86,7 @@ Chat = class Chat extends React.Component {
               {...commentGroup}
             />
           ))}
-          <Loader visible={!!loading} />
+          <Loader inverted visible={!!loading} />
           {isEmpty ? (
             <i className="empty-icon comments icon" />
           ) : null}

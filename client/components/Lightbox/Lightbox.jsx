@@ -8,6 +8,9 @@ Lightbox = class Lightbox extends React.Component {
     return (
       <Modal>
         <Img
+          loaderOptions={{
+            inverted: false
+          }}
           autosize
           onLoad={ModalManager.refresh}
           src={picture} />

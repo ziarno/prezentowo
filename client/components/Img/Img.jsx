@@ -64,7 +64,10 @@ Img = class Img extends React.Component {
         style={style}>
 
         {this.state.isLoading && !this.props.hideLoader ? (
-          <Loader />
+          <Loader
+            inverted
+            {...this.props.loaderOptions}
+          />
         ) : null}
 
         {this.props.children}
@@ -80,5 +83,6 @@ Img.propTypes = {
   autosize: React.PropTypes.bool,
   hideLoader: React.PropTypes.bool,
   onClick: React.PropTypes.func,
-  onLoad: React.PropTypes.func
+  onLoad: React.PropTypes.func,
+  loaderOptions: React.PropTypes.object
 }

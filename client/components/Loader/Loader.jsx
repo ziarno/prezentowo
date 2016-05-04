@@ -1,8 +1,9 @@
 import React from 'react'
 
-Loader = ({visible, size, text}) => (
+Loader = ({visible, size, text, inverted}) => (
   <div
-    className={classNames('ui inverted dimmer', {
+    className={classNames('ui dimmer', {
+      inverted,
       active: _.isBoolean(visible) ? visible : true
     })}>
     <div className={classNames('ui loader', size, {

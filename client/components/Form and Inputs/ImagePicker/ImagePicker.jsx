@@ -131,6 +131,7 @@ ImagePicker = class ImagePicker extends ValidatedInput {
         disabled: this.isDisabled()
       })}>
         <Loader
+          inverted
           text={_i18n.__('Uploading')}
           visible={this.state.isLoading} />
         {this.isDisabled() ? (

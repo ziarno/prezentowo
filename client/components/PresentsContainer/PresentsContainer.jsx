@@ -61,6 +61,7 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
       return (
         <div id={this.id}>
           <Loader
+            inverted
             size="large"
             text={text}
           />

@@ -95,6 +95,7 @@ EventContainer = class EventContainer extends React.Component {
     if (!this.props.ready) {
       return (
         <Loader
+          inverted
           size="large"
           text={eventTitle ?
             _i18n.__('Loading event', {title: eventTitle}) :
