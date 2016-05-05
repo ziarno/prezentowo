@@ -202,6 +202,7 @@ EventContainer = createContainer(({eventId, userId}) => {
       _.extend(participant, _.find(event.participants,
         p => p.userId === participant._id))
     })
+    Session.set('participantIds', participants.map(p => p._id))
 
     //path should be correct (depending on view mode)
     //no matter how the user got onto the page

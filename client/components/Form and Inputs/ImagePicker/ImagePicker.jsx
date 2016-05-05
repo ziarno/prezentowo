@@ -139,16 +139,14 @@ ImagePicker = class ImagePicker extends ValidatedInput {
         ) : (
           <Img
             src={imageToDisplay}>
-            <div
-              className="arrow arrow--left"
+            <ArrowField
+              left
               onClick={this.setPreviousImageIndex}>
-              <i className="chevron left icon"></i>
-            </div>
-            <div
-              className="arrow arrow--right"
+            </ArrowField>
+            <ArrowField
+              right
               onClick={this.setNextImageIndex}>
-              <i className="chevron right icon"></i>
-            </div>
+            </ArrowField>
           </Img>
         )}
         <div className="ui compact small buttons image-picker--actions">

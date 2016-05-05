@@ -43,20 +43,17 @@
     margin: 0;
     flex-shrink: 0;
     .shadow-hover();
+    & > .image {
+      height: @normal-image-size;
+      cursor: default;
+      border-radius: 0.28571429rem !important;
+    }
   }
 
   &:not(.full-width) .ribbon {
     pointer-events: none;
     position: absolute;
     bottom: 20px;
-  }
-
-  .image {
-    height: @normal-image-size;
-    cursor: default;
-    &.img {
-      border-radius: 0.28571429rem !important;
-    }
   }
 
   .edit-present {

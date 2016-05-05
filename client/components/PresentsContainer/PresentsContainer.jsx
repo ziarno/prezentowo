@@ -13,9 +13,9 @@ PresentsContainer = class PresentsContainer extends ScrollableComponent {
   }
 
   isScrollable() {
-    var isMouseOver = !!$(`#${this.id}:hover`).length
+    var isMouseOver = $(`#${this.id}:hover`).length
 
-    return !isMouseOver
+    return !isMouseOver && !ModalManager.isOpen()
   }
 
   autorunSetCurrentUser() {

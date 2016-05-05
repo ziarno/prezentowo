@@ -5,6 +5,10 @@ function getFieldsProjection({buyers}) {
     fields: {
       commentsShared: 0,
       commentsSecret: 0,
+    },
+    sort: {
+      isOwn: -1,
+      createdAt: 1
     }
   }
 

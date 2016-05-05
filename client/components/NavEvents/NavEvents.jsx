@@ -3,6 +3,8 @@ import React from 'react'
 NavEvents = class NavEvents extends React.Component {
 
   showEvent(event) {
+    ModalManager.close()
+    ModalManager.destroy()
     FlowRouter.go(`/event/id/${event._id}`)
   }
 

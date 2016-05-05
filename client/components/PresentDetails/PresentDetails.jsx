@@ -1,7 +1,8 @@
 import React from 'react'
 import {createContainer} from 'meteor/react-meteor-data'
+import _ from 'underscore'
 
-PresentDetails = class PresentDetails extends React.Component {
+PresentDetailsModal = class PresentDetailsModal extends React.Component {
 
   constructor({presentId}) {
     super({presentId})
@@ -27,6 +28,7 @@ PresentDetails = class PresentDetails extends React.Component {
     this.sendMessage = this.sendMessage.bind(this)
     this.sendSecretMessage = this.sendSecretMessage.bind(this)
     this.sendSharedMessage = this.sendSharedMessage.bind(this)
+    this.handleKeyUp = this.handleKeyUp.bind(this)
   }
 
   toggleBuyer() {
@@ -57,11 +59,36 @@ PresentDetails = class PresentDetails extends React.Component {
     this.sendMessage({type: 'shared', message})
   }
 
+  showPresent(presentId) {
+    presentId && ModalManager.render(
+      <PresentDetails presentId={presentId} />,
+      'present-details'
+    )
+  }
+
+  handleKeyUp(e) {
+    var KEYCODE_LEFT = 37
+    var KEYCODE_RIGHT = 39
+    var srcElName = e.target &&
+      e.target.localName || e.srcElement.localName
+    if (srcElName === 'input' ||
+      srcElName === 'textarea') {
+      return
+    }
+    if (e.keyCode === KEYCODE_LEFT) {
+      this.showPresent(this.props.previousPresentId)
+    } else if (e.keyCode === KEYCODE_RIGHT) {
+      this.showPresent(this.props.nextPresentId)
+    }
+  }
+
   componentDidUpdate({present}) {
     //refresh modal only if the change
     //didn't happen in comments
-    var newPresent = _.omit(this.props.present, ['commentsShared', 'commentsSecret'])
-    var oldPresent = _.omit(present, ['commentsShared', 'commentsSecret'])
+    var newPresent = _.omit(this.props.present,
+      ['commentsShared', 'commentsSecret'])
+    var oldPresent = _.omit(present,
+      ['commentsShared', 'commentsSecret'])
 
     if (!_.isEqual(oldPresent, newPresent)) {
       ModalManager.refresh()
@@ -70,6 +97,11 @@ PresentDetails = class PresentDetails extends React.Component {
 
   componentWillUnmount() {
     this.observeHandle.stop()
+    document.body.removeEventListener('keyup', this.handleKeyUp)
+  }
+
+  componentDidMount() {
+    document.body.addEventListener('keyup', this.handleKeyUp)
   }
 
   render() {
@@ -79,7 +111,9 @@ PresentDetails = class PresentDetails extends React.Component {
       forUsers,
       creator,
       buyers,
-      commentsReady
+      commentsReady,
+      previousPresentId,
+      nextPresentId
       } = this.props
     var isUserBuyer = present.isUserBuyer()
     var isUserBeneficiary =
@@ -118,7 +152,21 @@ PresentDetails = class PresentDetails extends React.Component {
           icon="dollar"
           messageEl={BuyersMessage}
         />
-        <div className="present-details--content">
+
+        {previousPresentId ? (
+          <ArrowField
+            onClick={() => this.showPresent(previousPresentId)}
+            left rounded />
+        ) : null}
+        {nextPresentId ? (
+          <ArrowField
+            onClick={() => this.showPresent(nextPresentId)}
+            right rounded />
+        ) : null}
+
+        <div
+          onKeyUp={(e) => console.log(e)}
+          className="present-details--content">
           <div className="present-details--image">
             <Img
               onClick={() => {
@@ -222,7 +270,8 @@ PresentDetails = class PresentDetails extends React.Component {
                             <span>:&nbsp;</span>
                             <span>
                               {forUsers.map(user => (
-                                user.profile.name.capitalizeFirstLetter()
+                                user.profile.name
+                                  .capitalizeFirstLetter()
                               )).join(', ')}
                             </span>
                           </div>
@@ -249,7 +298,8 @@ PresentDetails = class PresentDetails extends React.Component {
                             <T>Questions for</T>
                             <span>&nbsp;</span>
                             <span>
-                              {forUsers[0].profile.name.capitalizeFirstLetter()}
+                              {forUsers[0].profile.name
+                                .capitalizeFirstLetter()}
                             </span>
                           </span>
                         )}
@@ -270,15 +320,17 @@ PresentDetails = class PresentDetails extends React.Component {
 
 }
 
-PresentDetails.propTypes = {
-  //note: cannot pass a present object directly, because modals are outside of the react root, and changes to props don't get propagated
+PresentDetailsModal.propTypes = {
+  //note: cannot pass a present object directly,
+  // because modals are outside of the react root,
+  // and changes to props don't get propagated
   presentId: React.PropTypes.string.isRequired,
-
   present: React.PropTypes.object.isRequired
 }
 
 PresentDetails = createContainer(({presentId}) => {
   var event = Session.get('event')
+  var participantIds = Session.get('participantIds')
   var isManyToOne = event.type === 'many-to-one'
   var present = Presents.findOne(presentId)
   var commentsReady = Meteor
@@ -287,6 +339,25 @@ PresentDetails = createContainer(({presentId}) => {
   var forUsers
   var creator
   var buyers
+  var presentIds = isManyToOne ?
+    getPresentIds() : _.flatten(participantIds.map(getPresentIds))
+  var currentPresentIndex =
+    presentIds.indexOf(presentId)
+  var previousPresentId = presentIds[currentPresentIndex - 1]
+  var nextPresentId = presentIds[currentPresentIndex + 1]
+
+  function getPresentIds(forUserId) {
+    var selector = forUserId ? {forUserId} : {}
+    return Presents.find(selector, {
+      sort: {
+        isOwn: -1,
+        createdAt: 1
+      },
+      fields: {
+        _id: 1
+      }
+    }).map(p => p._id)
+  }
 
   if (isManyToOne) {
     forUsers = Participants.find({
@@ -303,12 +374,16 @@ PresentDetails = createContainer(({presentId}) => {
       _id: {$in: present.buyers}
     }).fetch()
 
+  Session.set('currentUser', Participants.findOne(forUsers[0]))
+
   return {
     event,
     commentsReady,
     present,
     forUsers,
     creator,
-    buyers
+    buyers,
+    previousPresentId,
+    nextPresentId
   }
-}, PresentDetails)
+}, PresentDetailsModal)

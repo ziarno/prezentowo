@@ -7,10 +7,10 @@ ModalManager = function () {
 
   function invokeModalById(id, func) {
     if (_.isString(id) && modals[id]) {
-      func(modals[id], id)
+      return func(modals[id], id)
     } else {
-      _.forEach(modals, function (modal, key) {
-        func(modal, key)
+      return _.map(modals, function (modal, key) {
+        return func(modal, key)
       })
     }
   }
@@ -35,6 +35,11 @@ ModalManager = function () {
       )
 
       return modals[id] = {modal, container}
+    },
+
+    render(modalComponent, containerId) {
+      ReactDOM.render(modalComponent,
+        document.getElementById(containerId))
     },
 
     open(modalComponent, options = {}) {
@@ -64,18 +69,21 @@ ModalManager = function () {
       $modal.modal('show')
     },
 
+    isOpen(id) {
+      return id ? !!modals[id] : !_.isEmpty(modals)
+    },
+
     destroy(id) {
       invokeModalById(id, ({container}, modalId) => {
         ReactDOM.unmountComponentAtNode(container)
         document.body.removeChild(container)
         delete modals[modalId]
       })
-      if (!_.isEmpty(modals)) {
-        //if we close a modal the 'dimmed' class is removed,
-        //so we must bring it back if there are more modals
-        //opened
-        $(document.body).addClass('dimmed')
-      }
+      //if we close a modal the 'dimmed' class is removed,
+      //so we must bring it back if there are more modals
+      //opened
+      $(document.body)
+        .toggleClass('dimmed', !_.isEmpty(modals))
     },
 
     close(id) {
