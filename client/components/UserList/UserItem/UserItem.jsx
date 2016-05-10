@@ -5,7 +5,7 @@ UserItem = ({
   onClick,
   user,
   presentsCount,
-  isCreator,
+  showEditButton,
   active,
   disabled
   }) => (
@@ -21,7 +21,7 @@ UserItem = ({
         count={presentsCount}
       />
     ) : null}
-    {isCreator ? (
+    {showEditButton ? (
       <ParticipantPopup
         buttonClassName="user-item--edit small-icon-button"
         icon={(

@@ -34,8 +34,8 @@ Accounts.onCreateUser(function(options = {profile: {}}, user) {
   //set default settings
   user.settings = {
     viewMode: {
-      participantsMode: 'single',
-      presentMode: 'full-width'
+      participantsMode: Users.defaults.participantsMode,
+      presentMode: Users.defaults.presentMode
     }
   }
 

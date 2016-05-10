@@ -15,15 +15,15 @@ NavEvents = class NavEvents extends React.Component {
   }
 
   render() {
-    var event = this.props.event
-    var eventId = event._id
+    var {event, events, ready} = this.props
+    var eventId = event && event._id
     var now = new Date()
     var activeEvents = []
     var pastEvents = []
     var activeEventsHeader
-    var isCreator = event.creatorId === Meteor.userId()
+    var isCreator = event && event.creatorId === Meteor.userId()
 
-    this.props.events.forEach((event) => {
+    events.forEach((event) => {
       if (now < event.date) {
         activeEvents.unshift(event)
       } else {
@@ -43,7 +43,7 @@ NavEvents = class NavEvents extends React.Component {
         <div className={classNames('events-dropdown popup-button ' +
               'ui compact icon right labeled top right ' +
               'pointing scrolling dropdown button', {
-              loading: !this.props.ready
+              loading: !ready
              })}
              ref="dropdown">
           <T>Events</T>
@@ -56,7 +56,7 @@ NavEvents = class NavEvents extends React.Component {
               })}>
               {activeEventsHeader}
             </div>
-            {this.props.events.length === 0 ? ( //dummy div - semantic only shows dropdown if there is at least 1 .item
+            {events.length === 0 ? ( //dummy div - semantic only shows dropdown if there is at least 1 .item
               <div className="item" style={{display: 'none'}}></div>
             ) : null}
 

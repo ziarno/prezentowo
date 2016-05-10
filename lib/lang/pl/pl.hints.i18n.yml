@@ -6,3 +6,5 @@ hints:
   ownPresents: Własne
   otherPresents: Od uczestników
   deleteConfirmation: Na pewno usunąć?
+  joinRequestSent: Prośba o dołączenie została wysłana
+  awaitCreatorConfirmation: Czekaj na potwierdzenie od twórcy wydarzenia

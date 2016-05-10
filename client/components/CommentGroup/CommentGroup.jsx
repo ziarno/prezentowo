@@ -11,7 +11,7 @@ CommentGroup = ({user, comments}) => {
       <DateField
         className="hint"
         mode="from"
-        date={comments[0].createdAt} />
+        date={comments[comments.length - 1].createdAt} />
       <ParsedText
         text={messages}
         className="comment"

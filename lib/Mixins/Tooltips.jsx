@@ -34,6 +34,7 @@ var Tooltips = {
 
   componentDidMount() {
     this.setTooltips()
+    _i18n.onChangeLocale(this.setTooltips)
   },
 
   componentDidUpdate() {
@@ -42,6 +43,7 @@ var Tooltips = {
 
   componentWillUnmount() {
     this.invokeTooltipsWith('destroy')
+    _i18n.offChangeLocale(this.setTooltips)
   },
 
   setTooltips() {

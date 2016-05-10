@@ -229,11 +229,16 @@ db.system.js.save({
 iteration over a collection (just edit this and use)
 
 ```js
-db.presents.find({creatorAt: {$exists: true}}).forEach(function (present) {
-    db.presents.update({_id: present._id}, {
-        $unset: {creatorAt: 1},
+
+db.events.find().forEach(function (event) {
+    var participants = event.participants
+
+    participants.forEach(function (p) {
+       p.status = 'isAccepted'
+    });
+    db.events.update({_id: event._id}, {
         $set: {
-          createdAt: present.creatorAt
+          participants: participants
         }
     })
 });

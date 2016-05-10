@@ -6,3 +6,5 @@ hints:
   ownPresents: Own presents
   otherPresents: From participants
   deleteConfirmation: Are you sure?
+  joinRequestSent: Join request has been sent
+  awaitCreatorConfirmation: Please await confirmation from the event creator

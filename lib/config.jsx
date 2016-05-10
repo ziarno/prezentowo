@@ -53,7 +53,11 @@ ConfigureAccountsTemplates = function () {
     redirectTimeout: 4000,
 
     // Hooks
-    //onLogoutHook: function(){},
+    onLogoutHook: function () {
+      if (Meteor.isClient && ModalManager) {
+        ModalManager.close()
+      }
+    }
     //onSubmitHook: function(){},
     //preSignUpHook: function(){},
     //postSignUpHook: function(){},

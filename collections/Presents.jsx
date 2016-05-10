@@ -123,6 +123,40 @@ Presents.functions.isOwn = function ({
     return forUserId === creatorId
 }
 
+Presents.functions.removePresents = function (selector) {
+  var presents = Presents.find(selector, {
+      fields: {
+        commentsSecret: 1,
+        commentsShared: 1
+      }
+    }).fetch()
+  var commentsToRemove = []
+  var removedCount
+
+  presents.forEach(present => {
+    var {commentsSecret, commentsShared} = present
+    if (commentsSecret) {
+      commentsToRemove.concat(commentsSecret)
+    }
+    if (commentsShared) {
+      commentsToRemove.concat(commentsShared)
+    }
+  })
+
+  removedCount = Presents.remove(selector)
+
+  if (commentsToRemove.length) {
+    Comments.remove({
+      _id: {
+        $in: commentsToRemove
+      }
+    })
+  }
+
+  return removedCount
+
+}
+
 /**
  * Collection helpers
  */
@@ -169,17 +203,6 @@ Presents.methods.removePresent = new ValidatedMethod({
     }
   }).validator(),
   run({presentId}) {
-    var present = Presents.findOne(presentId)
-    var {commentsSecret, commentsShared} = present
-    var commentsToRemove = []
-
-    if (commentsSecret) {
-      commentsToRemove.concat(commentsSecret)
-    }
-    if (commentsShared) {
-      commentsToRemove.concat(commentsShared)
-    }
-
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
         `${this.name}.notCreatedPresent`,
@@ -188,15 +211,7 @@ Presents.methods.removePresent = new ValidatedMethod({
 
     Presents.functions.updatePresentsCount(-1, presentId)
 
-    if (commentsToRemove.length) {
-      Comments.remove({
-        _id: {
-          $in: commentsToRemove
-        }
-      })
-    }
-
-    return Presents.remove({
+    return Presents.functions.removePresents({
       _id: presentId,
       creatorId: this.userId
     })

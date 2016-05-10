@@ -165,7 +165,6 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
         ) : null}
 
         <div
-          onKeyUp={(e) => console.log(e)}
           className="present-details--content">
           <div className="present-details--image">
             <Img

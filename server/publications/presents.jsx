@@ -88,6 +88,10 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
       //functions:
       {
         find(event) {
+          if (!this.userId || !eventId) {
+            return this.ready()
+          }
+
           var isManyToMany = event.type === 'many-to-many'
 
           if (isManyToMany && !forUserId) {
@@ -105,6 +109,10 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
       },
       {
         find(event) {
+          if (!this.userId || !eventId) {
+            return this.ready()
+          }
+
           var isManyToMany = event.type === 'many-to-many'
 
           if (isManyToMany && !forUserId) {

@@ -1,15 +1,10 @@
 import React from 'react'
 
-Meteor.publishComposite('participants', function ({eventId}) {
+Meteor.publishComposite('eventDetails', function ({eventId}) {
   return {
     find() {
       return Events.find({
-        _id: eventId,
-        participants: {
-          $elemMatch: {
-            userId: this.userId
-          }
-        }
+        _id: eventId
       })
     },
     children: [

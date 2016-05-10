@@ -9,7 +9,8 @@ EventContainer = class EventContainer extends React.Component {
     super()
     this.state = {
       currentUser: Session.get('currentUser'),
-      isSidebarVisible: !Session.get('isSidebarFixed')
+      isSidebarVisible: !Session.get('isSidebarFixed'),
+      isRequestJoinProcessing: false
     }
     this.showUser = this.showUser.bind(this)
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
@@ -17,11 +18,13 @@ EventContainer = class EventContainer extends React.Component {
     this.autorunSetSidebarMode = this.autorunSetSidebarMode.bind(this)
     this.onSidebarVisibilityChange = this.onSidebarVisibilityChange.bind(this)
     this.onAfterSidebarVisibilityChange = this.onAfterSidebarVisibilityChange.bind(this)
+    this.requestJoin = this.requestJoin.bind(this)
   }
 
   showUser(user) {
-    var participantsViewMode =
-      this.props.settings.viewMode.participantsMode
+    var participantsViewMode = this.props.settings ?
+      this.props.settings.viewMode.participantsMode :
+      Users.defaults.participantsMode
 
     if (participantsViewMode === 'single') {
       FlowRouter.setParams({userId: user._id})
@@ -82,17 +85,34 @@ EventContainer = class EventContainer extends React.Component {
     }
   }
 
+  requestJoin() {
+    this.setState({isRequestJoinProcessing: true})
+    Events.methods.requestJoin.call({
+      eventId: this.props.eventId
+    }, () => {
+      this.setState({isRequestJoinProcessing: false})
+    })
+  }
+
   render() {
-    var {event, participants} = this.props
-    var eventTitle = event &&
-      event.title
+    var {event, participants, ready} = this.props
+    var eventTitle = event && event.title
     var isManyToOne = event &&
       event.type === 'many-to-one'
     var currentUserId = this.state.currentUser &&
       this.state.currentUser._id
     var showUsers
+    var isUserParticipant = Events.functions.isUserParticipant({
+      eventId: event && event._id,
+      participantId: Meteor.userId()
+    })
+    var creator = event && _.find(participants,
+      p => p._id === event.creatorId)
+    var joinRequestSent = participants.length &&
+      !!_.find(participants, p =>
+        p._id === Meteor.userId() && p.status === 'requestingJoin')
 
-    if (!this.props.ready) {
+    if (!ready) {
       return (
         <Loader
           inverted
@@ -104,17 +124,22 @@ EventContainer = class EventContainer extends React.Component {
       )
     }
 
-    //show only beneficiaries or all participants
-    showUsers = isManyToOne ? (
-      _.filter(
-        participants,
-        user => event.beneficiaryIds.indexOf(user._id) > -1
+    showUsers = (isManyToOne ? (
+        participants.filter(user =>
+          event.beneficiaryIds.indexOf(user._id) > -1
+        )
+      ) : participants)
+      .filter(user =>
+        user.status === 'isInvited' ||
+        user.status === 'isAccepted'
       )
-    ) : participants
 
     return (
       <div
-        id="event-container">
+        id="event-container"
+        className={classNames({
+          empty: !isUserParticipant
+        })}>
 
         <Sidebar
           scrollToEl={`.user-list [data-id=${currentUserId}]`}
@@ -127,20 +152,74 @@ EventContainer = class EventContainer extends React.Component {
             users={participants} />
         </Sidebar>
 
-        <PresentsContainer
-          users={showUsers} />
+        {isUserParticipant ? (
+          <PresentsContainer
+            users={showUsers} />
+        ) : null}
 
-        <PresentPopup
-          buttonClassName="present-button--add circular primary"
-          wrapperClassName="add-present-button"
-          icon={(
-            <i className="large icons">
-              <i className="plus icon"></i>
-              <i className="gift corner inverted icon"></i>
-            </i>
-          )}
-          users={isManyToOne ? [] : participants}
-        />
+        {isUserParticipant ? (
+          <PresentPopup
+            buttonClassName="present-button--add circular primary"
+            wrapperClassName="add-present-button"
+            icon={(
+              <i className="large icons">
+                <i className="plus icon"></i>
+                <i className="gift corner inverted icon"></i>
+              </i>
+            )}
+            users={isManyToOne ? [] : participants}
+            popupSettings={{
+              position: 'top right',
+              lastResort: 'top right'
+            }}
+          />
+        ) : null}
+
+        {!isUserParticipant ? (
+          <div className="event-message">
+            <p>
+              <T>Welcome to event</T>
+            </p>
+            <p className="event-message--styled-title">
+              {event && event.title}
+            </p>
+            <div className="event-message--created-by">
+              <T>created by</T>
+              <span>:&nbsp;</span>
+              <User user={creator}></User>
+            </div>
+            <div className="ui message">
+              {joinRequestSent ? (
+                <div>
+                  <p><T>hints.joinRequestSent</T></p>
+                  <p><T>hints.awaitCreatorConfirmation</T></p>
+                </div>
+              ) : Meteor.user() ? (
+                <button
+                  onClick={this.requestJoin}
+                  className={classNames(
+                    'ui left labeled icon button',
+                    'waves-effect waves-button', {
+                    loading: this.state.isRequestJoinProcessing
+                    })}>
+                  <i className="add user icon" />
+                  <T>Join event</T>
+                </button>
+              ) : (
+                <p className="translations">
+                  <a href="/sign-in">
+                    <T>Login</T>
+                  </a>
+                  <T>or</T>
+                  <a href="/sign-up">
+                    <T>Register</T>
+                  </a>
+                  <T>to join this event</T>
+                </p>
+              )}
+            </div>
+          </div>
+        ) : null}
 
       </div>
     )
@@ -164,7 +243,7 @@ reactMixin(EventContainer.prototype, Autorun)
 EventContainer = createContainer(({eventId, userId}) => {
   var event = Events.findOne(eventId)
   var subsReady = Meteor
-    .subscribe('participants', {eventId}, () => {
+    .subscribe('eventDetails', {eventId}, () => {
       Session.set('currentUser', getCurrentUser())
     })
     .ready()
@@ -180,20 +259,28 @@ EventContainer = createContainer(({eventId, userId}) => {
   var user = Meteor.user()
   var currentUser = getCurrentUser()
 
-  function getCorrectPath({participantsViewMode, eventId, userId, isManyToOne}) {
+  function getCorrectPath({
+      participantsViewMode, eventId, userId, isManyToOne
+    }) {
     var path = `/event/id/${eventId}`
-    if (participantsViewMode === 'single' && userId && !isManyToOne) {
+    if (participantsViewMode === 'single' &&
+        userId &&
+        !isManyToOne &&
+        Events.functions.isUserParticipant({
+          eventId, participantId: userId
+        })
+      ) {
       path += `/user/${userId}`
     }
     return path
   }
 
   function getCurrentUser() {
-    return userId ? Participants.findOne(userId) : Meteor.user()
+    return userId && Participants.findOne(userId) || Meteor.user()
   }
 
   if (subsReady) {
-    //move current user to the top
+    //move yourself to the top
     participants.moveToTop((participant) => (
       participant._id === Meteor.userId()
     ))
@@ -208,11 +295,11 @@ EventContainer = createContainer(({eventId, userId}) => {
     //no matter how the user got onto the page
     FlowRouter.withReplaceState(function() {
       FlowRouter.go(getCorrectPath({
-        participantsViewMode: user.settings &&
+        participantsViewMode: user && user.settings &&
           user.settings.viewMode.participantsMode,
         eventId,
         userId: currentUser && currentUser._id,
-        isManyToOne: event.type === 'many-to-one'
+        isManyToOne: event && event.type === 'many-to-one'
       }));
     });
   }
@@ -220,12 +307,11 @@ EventContainer = createContainer(({eventId, userId}) => {
   Session.set('event', event || {})
 
   return {
-    ready: subsReady &&
-      !_.isEmpty(currentUser),
+    ready: subsReady,
     participants,
     event,
     currentUser,
     presents: Presents.find().fetch(),
-    settings: Meteor.user().settings
+    settings: user && user.settings
   }
 }, EventContainer)

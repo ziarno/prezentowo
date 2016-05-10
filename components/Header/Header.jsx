@@ -47,11 +47,15 @@ Header = class Header extends React.Component {
 }
 
 Header = createContainer(({}) => {
-  var event = Session.get('event')
+  var eventId = FlowRouter.getParam('eventId')
+  var event = Events.findOne(eventId)
+  var user = Meteor.user()
+  var title = event && user && event.title || 'Prezentowo'
+
   return {
     events: Events.find().fetch(),
-    user: Meteor.user(),
-    title: event.title || 'Prezentowo',
+    user,
+    title,
     event
   }
 }, Header)

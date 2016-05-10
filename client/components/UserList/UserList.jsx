@@ -6,8 +6,13 @@ import {createContainer} from 'meteor/react-meteor-data'
 UserList = class UserList extends React.Component {
 
   render() {
-    var event = this.props.event
+    var {event} = this.props
     var isManyToOne = event.type === 'many-to-one'
+    var isUserParticipant = Events.functions
+        .isUserParticipant({
+          eventId: event._id,
+          participantId: Meteor.userId()
+        })
     var beneficiariesTitle
     var activeUserId = this.props.activeUser &&
       this.props.activeUser._id
@@ -29,23 +34,32 @@ UserList = class UserList extends React.Component {
       </div>
     )
 
-    var [BeneficiariesUserItems, ParticipantsUserItems] = _(this.props.users)
+    var [BeneficiariesUserItems, ParticipantsUserItems] =
+      _(this.props.users)
       .partition(
-        user => isManyToOne && event.beneficiaryIds.indexOf(user._id) > -1
+        user => isManyToOne &&
+          event.beneficiaryIds.indexOf(user._id) > -1
       )
-      .map((userGroup) => (
-        userGroup.map((user) => (
-          <UserItem
-            active={activeUserId === user._id}
-            disabled={isManyToOne}
-            presentsCount={
-              !isManyToOne &&
-              Users.functions.getPresentsCount(user)}
-            isCreator={this.props.isCreator}
-            onClick={this.props.onUserSelect}
-            key={user._id}
-            user={user} />
-        ))
+      .map(userGroup => (
+        userGroup
+          .filter(user => (
+            (this.props.isCreator &&
+             user.status !== 'isRemoved') ||
+            user.status === 'isAccepted' ||
+            user.status === 'isInvited'
+          ))
+          .map(user => (
+            <UserItem
+              active={activeUserId === user._id}
+              disabled={isManyToOne || !isUserParticipant}
+              presentsCount={
+                !isManyToOne &&
+                Users.functions.getPresentsCount(user)}
+              showEditButton={this.props.isCreator}
+              onClick={this.props.onUserSelect}
+              key={user._id}
+              user={user} />
+          ))
       ))
 
     beneficiariesTitle = BeneficiariesUserItems &&

@@ -8,6 +8,10 @@ import {flattenObject} from '../lib/utilities'
 Users = Meteor.users
 Users.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
 
+Users.defaults = {
+  participantsMode: 'single',
+  presentMode: 'full-width'
+}
 
 /**
  * SCHEMAS
@@ -34,14 +38,14 @@ Users.Schemas.ViewMode = new SimpleSchema({
   participantsMode: {
     type: String,
     allowedValues: ['single', 'multi'],
-    defaultValue: 'single',
+    defaultValue: Users.defaults.participantsMode,
     optional: true,
     label: () => _i18n.__('Participants mode')
   },
   presentMode: {
     type: String,
     allowedValues: ['card', 'full-width'],
-    defaultValue: 'full-width',
+    defaultValue: Users.defaults.presentMode,
     optional: true,
     label: () => _i18n.__('Present mode')
   }
