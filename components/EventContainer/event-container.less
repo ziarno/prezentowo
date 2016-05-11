@@ -2,9 +2,11 @@
 
 #event-container {
   width: 100%;
-  min-height: calc(~"100vh" - @header-height);
+  height: calc(~"100vh" - @header-height);
   position: relative;
-  transition: margin @transition-time * 2;
+  transition: padding @transition-time * 2;
+  overflow-y: scroll;
+  overflow-x: visible;
 
   .popup {
     z-index: @z-index-popup;
@@ -61,7 +63,7 @@
 }
 
 .sidebar-visible #event-container {
-  margin-left: @sidebar-width;
+  padding-left: @sidebar-width;
 }
 
 @media (max-width: @media-padded-max-width) {
