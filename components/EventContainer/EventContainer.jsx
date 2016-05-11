@@ -1,9 +1,10 @@
 import React from 'react'
-import {Autorun} from '../../lib/Mixins'
+import ReactDOM from 'react-dom'
+import {Autorun, ScrollableComponent} from '../../lib/Mixins'
 import reactMixin from 'react-mixin'
 import {createContainer} from 'meteor/react-meteor-data'
 
-EventContainer = class EventContainer extends React.Component {
+EventContainer = class EventContainer extends ScrollableComponent {
   
   constructor() {
     super()
@@ -19,6 +20,8 @@ EventContainer = class EventContainer extends React.Component {
     this.onSidebarVisibilityChange = this.onSidebarVisibilityChange.bind(this)
     this.onAfterSidebarVisibilityChange = this.onAfterSidebarVisibilityChange.bind(this)
     this.requestJoin = this.requestJoin.bind(this)
+    this.setScrollSpy = this.setScrollSpy.bind(this)
+    this.getScrollToOptions = this.getScrollToOptions.bind(this)
   }
 
   showUser(user) {
@@ -43,7 +46,11 @@ EventContainer = class EventContainer extends React.Component {
     //and props can't do that, because they SET currentUser -
     //if we SET and GET current user in the same reactive function
     // => infinite call stack
-    this.setState({currentUser: Session.get('currentUser')})
+    var currentUser = Session.get('currentUser')
+    this.setState({currentUser})
+    if (currentUser) {
+      this.scrollTo(`#user-presents-${currentUser._id}`)
+    }
   }
 
   autorunSetSidebarMode() {
@@ -56,6 +63,23 @@ EventContainer = class EventContainer extends React.Component {
 
     if (userId && currentUser) {
       Session.set('currentUser', currentUser)
+    }
+  }
+
+  getScrollToOptions() {
+    return {
+      offset: -75,
+      onAfter: ($scrollToEl) => {
+        var userEl = $scrollToEl
+          .find('.user')
+          .addClass('waves-effect waves-button')
+
+        Waves.ripple(userEl)
+        setTimeout(() => {
+          userEl.removeClass('waves-effect waves-button')
+          Waves.calm(userEl)
+        }, 1500)
+      }
     }
   }
 
@@ -79,10 +103,43 @@ EventContainer = class EventContainer extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setScrollSpy()
+  }
+
+  componentDidUpdate() {
+    this.setScrollSpy()
+  }
+
+  componentWillUnmount() {
+    $(ReactDOM.findDOMNode(this))
+      .visibilitySpy({
+        action: 'stop'
+      })
+  }
+
   onAfterSidebarVisibilityChange() {
     if (!Session.get('isSidebarFixed')) {
       ModalManager.refresh()
     }
+  }
+
+  setScrollSpy() {
+    $(ReactDOM.findDOMNode(this))
+      .visibilitySpy({
+        spyOn: '.user.large',
+        offsetTop: 10,
+        onChange(visibleUsers) {
+          Session.set('visibleUserIds', _.map(visibleUsers, user => (
+            $(user).attr('data-id')
+          )))
+        }
+      })
+  }
+
+  isScrollable() {
+    var isMouseOver = $('#presents-container:hover').length
+    return !isMouseOver && !ModalManager.isOpen()
   }
 
   requestJoin() {
@@ -112,19 +169,7 @@ EventContainer = class EventContainer extends React.Component {
       !!_.find(participants, p =>
         p._id === Meteor.userId() && p.status === 'requestingJoin')
 
-    if (!ready) {
-      return (
-        <Loader
-          inverted
-          size="large"
-          text={eventTitle ?
-            _i18n.__('Loading event', {title: eventTitle}) :
-          null}
-        />
-      )
-    }
-
-    showUsers = (isManyToOne ? (
+    showUsers = ready && (isManyToOne ? (
         participants.filter(user =>
           event.beneficiaryIds.indexOf(user._id) > -1
         )
@@ -136,28 +181,42 @@ EventContainer = class EventContainer extends React.Component {
 
     return (
       <div
+        ref="scrollContainer"
         id="event-container"
         className={classNames({
-          empty: !isUserParticipant
+          empty: !isUserParticipant,
+          loading: !ready
         })}>
 
-        <Sidebar
-          scrollToEl={`.user-list [data-id=${currentUserId}]`}
-          isVisible={this.state.isSidebarVisible}
-          onVisibilityChange=
-            {this.onSidebarVisibilityChange}
-          onAfterVisibilityChange={this.onAfterSidebarVisibilityChange}>
-          <UserList
-            onUserSelect={this.showUser}
-            users={participants} />
-        </Sidebar>
+        {!ready ? (
+          <Loader
+            inverted
+            size="large"
+            text={eventTitle ?
+                _i18n.__('Loading event', {title: eventTitle}) :
+              null}
+          />
+        ) : null}
 
-        {isUserParticipant ? (
+        {ready ? (
+          <Sidebar
+            scrollToEl={`.user-list [data-id=${currentUserId}]`}
+            isVisible={this.state.isSidebarVisible}
+            onVisibilityChange=
+              {this.onSidebarVisibilityChange}
+            onAfterVisibilityChange={this.onAfterSidebarVisibilityChange}>
+            <UserList
+              onUserSelect={this.showUser}
+              users={participants} />
+          </Sidebar>
+        ) : null}
+
+        {ready && isUserParticipant ? (
           <PresentsContainer
             users={showUsers} />
         ) : null}
 
-        {isUserParticipant ? (
+        {ready && isUserParticipant ? (
           <PresentPopup
             buttonClassName="present-button--add circular primary"
             wrapperClassName="add-present-button"
@@ -175,7 +234,7 @@ EventContainer = class EventContainer extends React.Component {
           />
         ) : null}
 
-        {!isUserParticipant ? (
+        {ready && !isUserParticipant ? (
           <div className="event-message">
             <p>
               <T>Welcome to event</T>

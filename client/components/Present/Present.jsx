@@ -54,8 +54,8 @@ Present = class Present extends React.Component {
   }
 
   render() {
-    var isFullWidth = this.props.viewMode === 'full-width'
     var {present} = this.props
+    var isFullWidth = this.props.viewMode === 'full-width'
     var hasBuyers = present.buyers && present.buyers.length
 
     return (

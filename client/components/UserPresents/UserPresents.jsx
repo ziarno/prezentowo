@@ -3,12 +3,6 @@ import ReactDOM from 'react-dom'
 
 UserPresents = class UserPresents extends React.Component {
 
-  constructor() {
-    super()
-    this.setVisibleUsers = this.setVisibleUsers.bind(this)
-    this.setScrollSpy = this.setScrollSpy.bind(this)
-  }
-
   static getPresents({title, presents, viewMode}) {
     if (!presents.length) {
       return null
@@ -33,37 +27,6 @@ UserPresents = class UserPresents extends React.Component {
 
   shouldComponentUpdate(newProps) {
     return !_.isEqual(newProps, this.props)
-  }
-
-  setVisibleUsers(event, ...visibleUsers) {
-    var visibleUserIds = _.map(visibleUsers, user => (
-      $(user).attr('data-id')
-    ))
-
-    Session.set('visibleUserIds', visibleUserIds)
-  }
-
-  setScrollSpy() {
-    $(ReactDOM.findDOMNode(this))
-      .find('.user')
-      .scrollSpy({
-        offsetTop: 100,
-        offsetBottom: -100,
-        throttle: 1000
-      })
-  }
-
-  componentDidMount() {
-    this.setScrollSpy()
-    $(ReactDOM.findDOMNode(this))
-      .find('.user')
-      .on('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers)
-  }
-
-  componentWillUnmount() {
-    $(ReactDOM.findDOMNode(this))
-      .find('.user')
-      .off('scrollSpy:enter scrollSpy:exit', this.setVisibleUsers)
   }
 
   render() {
