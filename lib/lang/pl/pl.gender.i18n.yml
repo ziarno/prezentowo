@@ -1,0 +1,5 @@
+_locale: pl
+female:
+  invited: zaprosiła
+male:
+  invited: zaprosił

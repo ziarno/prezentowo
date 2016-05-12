@@ -10,8 +10,7 @@ EventContainer = class EventContainer extends ScrollableComponent {
     super()
     this.state = {
       currentUser: Session.get('currentUser'),
-      isSidebarVisible: !Session.get('isSidebarFixed'),
-      isRequestJoinProcessing: false
+      isSidebarVisible: !Session.get('isSidebarFixed')
     }
     this.showUser = this.showUser.bind(this)
     this.autorunSetCurrentUser = this.autorunSetCurrentUser.bind(this)
@@ -19,7 +18,6 @@ EventContainer = class EventContainer extends ScrollableComponent {
     this.autorunSetSidebarMode = this.autorunSetSidebarMode.bind(this)
     this.onSidebarVisibilityChange = this.onSidebarVisibilityChange.bind(this)
     this.onAfterSidebarVisibilityChange = this.onAfterSidebarVisibilityChange.bind(this)
-    this.requestJoin = this.requestJoin.bind(this)
     this.setScrollSpy = this.setScrollSpy.bind(this)
     this.getScrollToOptions = this.getScrollToOptions.bind(this)
   }
@@ -47,10 +45,12 @@ EventContainer = class EventContainer extends ScrollableComponent {
     //if we SET and GET current user in the same reactive function
     // => infinite call stack
     var currentUser = Session.get('currentUser')
-    this.setState({currentUser})
-    if (currentUser) {
+    if (currentUser &&
+        (!this.state.currentUser ||
+        currentUser._id !== this.state.currentUser._id)) {
       this.scrollTo(`#user-presents-${currentUser._id}`)
     }
+    this.setState({currentUser})
   }
 
   autorunSetSidebarMode() {
@@ -142,15 +142,6 @@ EventContainer = class EventContainer extends ScrollableComponent {
     return !isMouseOver && !ModalManager.isOpen()
   }
 
-  requestJoin() {
-    this.setState({isRequestJoinProcessing: true})
-    Events.methods.requestJoin.call({
-      eventId: this.props.eventId
-    }, () => {
-      this.setState({isRequestJoinProcessing: false})
-    })
-  }
-
   render() {
     var {event, participants, ready} = this.props
     var eventTitle = event && event.title
@@ -163,11 +154,6 @@ EventContainer = class EventContainer extends ScrollableComponent {
       eventId: event && event._id,
       participantId: Meteor.userId()
     })
-    var creator = event && _.find(participants,
-      p => p._id === event.creatorId)
-    var joinRequestSent = participants.length &&
-      !!_.find(participants, p =>
-        p._id === Meteor.userId() && p.status === 'requestingJoin')
 
     showUsers = ready && (isManyToOne ? (
         participants.filter(user =>
@@ -235,49 +221,9 @@ EventContainer = class EventContainer extends ScrollableComponent {
         ) : null}
 
         {ready && !isUserParticipant ? (
-          <div className="event-message">
-            <p>
-              <T>Welcome to event</T>
-            </p>
-            <p className="event-message--styled-title">
-              {event && event.title}
-            </p>
-            <div className="event-message--created-by">
-              <T>created by</T>
-              <span>:&nbsp;</span>
-              <User user={creator}></User>
-            </div>
-            <div className="ui message">
-              {joinRequestSent ? (
-                <div>
-                  <p><T>hints.joinRequestSent</T></p>
-                  <p><T>hints.awaitCreatorConfirmation</T></p>
-                </div>
-              ) : Meteor.user() ? (
-                <button
-                  onClick={this.requestJoin}
-                  className={classNames(
-                    'ui left labeled icon button',
-                    'waves-effect waves-button', {
-                    loading: this.state.isRequestJoinProcessing
-                    })}>
-                  <i className="add user icon" />
-                  <T>Join event</T>
-                </button>
-              ) : (
-                <p className="translations">
-                  <a href="/sign-in">
-                    <T>Login</T>
-                  </a>
-                  <T>or</T>
-                  <a href="/sign-up">
-                    <T>Register</T>
-                  </a>
-                  <T>to join this event</T>
-                </p>
-              )}
-            </div>
-          </div>
+          <EventMessage
+            event={event}
+          />
         ) : null}
 
       </div>

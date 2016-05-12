@@ -16,9 +16,11 @@ FormActionButtons = class FormActionButtons extends React.Component {
           <T>hints.deleteConfirmation</T>
           <div className="ui buttons">
             <ButtonBack
-              onClick={() => this.setState({showDeleteConfirmation: false})}
+              onClick={() =>
+                this.setState({showDeleteConfirmation: false})}
             />
             <ButtonRemove
+              text={this.props.removeText}
               icon={this.props.removeIcon}
               onClick={this.props.onRemove}
             />
@@ -35,6 +37,7 @@ FormActionButtons = class FormActionButtons extends React.Component {
           />
           {this.props.showRemove ? (
             <ButtonRemove
+              text={this.props.removeText}
               icon={this.props.removeIcon}
               onClick={() => this.setState({showDeleteConfirmation: true})}
             />
@@ -56,6 +59,7 @@ FormActionButtons.propTypes = {
   isSaving: React.PropTypes.bool,
   acceptButtonText: React.PropTypes.string,
   removeIcon: React.PropTypes.string,
+  removeText: React.PropTypes.string,
   onRemove: React.PropTypes.func,
   onAccept: React.PropTypes.func,
   onCancel: React.PropTypes.func

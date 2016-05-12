@@ -5,6 +5,6 @@ hints:
   EmailOptional: Email (opcjonalnie)
   ownPresents: Własne
   otherPresents: Od uczestników
-  deleteConfirmation: Na pewno usunąć?
+  deleteConfirmation: Na pewno?
   joinRequestSent: Prośba o dołączenie została wysłana
   awaitCreatorConfirmation: Czekaj na potwierdzenie od twórcy wydarzenia

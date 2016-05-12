@@ -6,11 +6,13 @@ UserItem = ({
   presentsCount,
   showEditButton,
   active,
-  disabled
+  disabled,
+  children,
+  className
   }) => (
   <div
     onClick={() => !disabled && onClick && onClick(user)}
-    className={classNames('user-item', {
+    className={classNames('user-item', className, {
       active,
       disabled})}>
     <User user={user} />
@@ -29,5 +31,6 @@ UserItem = ({
         user={user}
       />
     ) : null}
+    {children}
   </div>
 )

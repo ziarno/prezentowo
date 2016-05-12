@@ -49,16 +49,23 @@ UserList = class UserList extends React.Component {
             user.status === 'isInvited'
           ))
           .map(user => (
-            <UserItem
-              active={activeUserId === user._id}
-              disabled={isManyToOne || !isUserParticipant}
-              presentsCount={
-                !isManyToOne &&
-                Users.functions.getPresentsCount(user)}
-              showEditButton={this.props.isCreator}
-              onClick={this.props.onUserSelect}
-              key={user._id}
-              user={user} />
+            user.status === 'requestingJoin' ? (
+              <UserItemAcceptPopup
+                key={user._id}
+                user={user}
+              />
+            ) : (
+              <UserItem
+                active={activeUserId === user._id}
+                disabled={isManyToOne || !isUserParticipant}
+                presentsCount={
+                  !isManyToOne &&
+                  Users.functions.getPresentsCount(user)}
+                showEditButton={this.props.isCreator}
+                onClick={this.props.onUserSelect}
+                key={user._id}
+                user={user} />
+            )
           ))
       ))
 

@@ -2,12 +2,13 @@
 @import '/client/styles/partials/mixins.import.less';
 
 .user-item {
+  @padding: 9px 5px 9px 15px;
   .hover-label();
   width: 100%;
   display: flex;
   transition: background-color @transition-time;
   background-color: #fff;
-  padding: 9px 5px 9px 15px;
+  padding: @padding;
   align-items: center;
   cursor: default !important;
 
@@ -25,6 +26,16 @@
 
   .user-item--edit {
     margin: 0 -4px !important;
+  }
+
+  &.ui.message {
+    padding: @padding;
+    border-radius: 0;
+    box-shadow: none;
+    i {
+      flex-grow: 0;
+      margin-right: 1em;
+    }
   }
 
 }
