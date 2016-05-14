@@ -48,13 +48,15 @@ SelectInput = class SelectInput extends ValidatedInput {
   selectDefault(value) {
     if (value &&
       !this.state.isSelectedByUser &&
-      value !== this.getValue()) {
+      !this.getValue()) {
       this.setValue(value)
     }
   }
 
   getValue() {
-    return $(this.refs.dropdown).dropdown('get value')
+    var value = $(this.refs.dropdown).dropdown('get value')
+
+    return _.isString(value) && value
   }
 
   reset() {
