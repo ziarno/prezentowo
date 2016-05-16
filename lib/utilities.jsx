@@ -8,9 +8,10 @@ String.prototype.capitalizeFirstLetter = function () {
 Array.prototype.moveToTop = function (findFunction) {
   var index = _.findIndex(this, findFunction)
 
-  return index > -1 && this.unshift(
+  index > -1 && this.unshift(
     this.splice(index, 1)[0]
   )
+  return this
 }
 
 export function isMobile() {

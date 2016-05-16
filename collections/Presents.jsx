@@ -190,6 +190,15 @@ Presents.methods.createPresent = new ValidatedMethod({
 
     var presentId = Presents.insert(present) //auto clean ok - no sub schemas
     Presents.functions.updatePresentsCount(1, presentId)
+    Notifications.functions.createNotification({
+      type: 'present',
+      action: 'added',
+      byUserId: this.userId,
+      eventId: present.eventId,
+      forUserId: present.forUserId,
+      presentId
+    })
+
     return presentId
   }
 })
@@ -203,6 +212,8 @@ Presents.methods.removePresent = new ValidatedMethod({
     }
   }).validator(),
   run({presentId}) {
+    var present = Presents.findOne(presentId)
+
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
         `${this.name}.notCreatedPresent`,
@@ -211,9 +222,17 @@ Presents.methods.removePresent = new ValidatedMethod({
 
     Presents.functions.updatePresentsCount(-1, presentId)
 
-    return Presents.functions.removePresents({
+    Presents.functions.removePresents({
       _id: presentId,
       creatorId: this.userId
+    })
+
+    Notifications.functions.createNotification({
+      type: 'present',
+      action: 'removed',
+      byUserId: this.userId,
+      forUserId: present.forUserId,
+      present
     })
   }
 })
@@ -223,10 +242,7 @@ Presents.methods.editPresent = new ValidatedMethod({
   mixins: [LoggedIn],
   validate: new SimpleSchema([
     {
-      _id: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id
-      }
+      _id: SchemaFields.Id
     },
     Presents.Schemas.NewPresent.pick([
       'title',
@@ -237,14 +253,25 @@ Presents.methods.editPresent = new ValidatedMethod({
       'picture.large'
     ])
   ]).validator(),
-  run(present) {
-    if (!Meteor.user().hasCreatedPresent(present._id)) {
+  run({_id: presentId, title, description, forUserId, picture}) {
+    if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
         `${this.name}.notCreatedPresent`,
         _i18n.__('Presents edited by creators'))
     }
 
-    return Presents.update(present._id, {$set: present})
+    Presents.update(presentId, {$set: {
+      title, description, forUserId, picture
+    }})
+
+    Notifications.functions.createNotification({
+      type: 'present',
+      action: 'changed',
+      byUserId: this.userId,
+      forUserId: forUserId,
+      presentId: presentId
+    })
+
   }
 })
 
@@ -261,14 +288,25 @@ Presents.methods.setBuyer = new ValidatedMethod({
   }).validator(),
   run({presentId, action}) {
     var actionName = action ? '$addToSet' : '$pull'
+    var present = Presents.findOne(presentId)
 
     if (!Meteor.user().isEventParticipant({presentId})) {
       throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'))
     }
-    return Presents.update(presentId, {
+
+    Presents.update(presentId, {
       [actionName]: {
         buyers: this.userId
       }
     })
+
+    Notifications.functions.createNotification({
+      type: 'present.buyer',
+      action: action ? 'added' : 'removed',
+      byUserId: this.userId,
+      forUserId: present.forUserId,
+      present: present
+    })
+
   }
 })

@@ -150,10 +150,10 @@ EventContainer = class EventContainer extends ScrollableComponent {
     var currentUserId = this.state.currentUser &&
       this.state.currentUser._id
     var showUsers
-    var isUserParticipant = Events.functions.isUserParticipant({
-      eventId: event && event._id,
+    var isUserAcceptedParticipant = Events.functions.participant({
+      event,
       participantId: Meteor.userId()
-    })
+    }).isAccepted()
 
     showUsers = ready && (isManyToOne ? (
         participants.filter(user =>
@@ -162,7 +162,8 @@ EventContainer = class EventContainer extends ScrollableComponent {
       ) : participants)
       .filter(user =>
         user.status === 'isInvited' ||
-        user.status === 'isAccepted'
+        user.status === 'isAccepted' ||
+        user.status === 'isTemp'
       )
 
     return (
@@ -170,7 +171,7 @@ EventContainer = class EventContainer extends ScrollableComponent {
         ref="scrollContainer"
         id="event-container"
         className={classNames({
-          empty: !isUserParticipant,
+          empty: !isUserAcceptedParticipant,
           loading: !ready
         })}>
 
@@ -197,12 +198,12 @@ EventContainer = class EventContainer extends ScrollableComponent {
           </Sidebar>
         ) : null}
 
-        {ready && isUserParticipant ? (
+        {ready && isUserAcceptedParticipant ? (
           <PresentsContainer
             users={showUsers} />
         ) : null}
 
-        {ready && isUserParticipant ? (
+        {ready && isUserAcceptedParticipant ? (
           <PresentPopup
             buttonClassName="present-button--add circular primary"
             wrapperClassName="add-present-button"
@@ -220,7 +221,7 @@ EventContainer = class EventContainer extends ScrollableComponent {
           />
         ) : null}
 
-        {ready && !isUserParticipant ? (
+        {ready && !isUserAcceptedParticipant ? (
           <EventMessage
             event={event}
           />
@@ -271,9 +272,9 @@ EventContainer = createContainer(({eventId, userId}) => {
     if (participantsViewMode === 'single' &&
         userId &&
         !isManyToOne &&
-        Events.functions.isUserParticipant({
+        Events.functions.participant({
           eventId, participantId: userId
-        })
+        }).isParticipant()
       ) {
       path += `/user/${userId}`
     }
@@ -285,15 +286,14 @@ EventContainer = createContainer(({eventId, userId}) => {
   }
 
   if (subsReady) {
-    //move yourself to the top
-    participants.moveToTop((participant) => (
-      participant._id === Meteor.userId()
-    ))
-    //mix with event participant data
-    participants.forEach((participant) => {
-      _.extend(participant, _.find(event.participants,
-        p => p.userId === participant._id))
-    })
+    participants
+      //move yourself to the top
+      .moveToTop(p => p._id === Meteor.userId())
+      //mix with event participant data
+      .forEach(participant => {
+        _.extend(participant, _.find(event.participants,
+          p => p.userId === participant._id))
+      })
     Session.set('participantIds', participants.map(p => p._id))
 
     //path should be correct (depending on view mode)

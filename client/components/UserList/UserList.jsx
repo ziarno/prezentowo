@@ -8,11 +8,11 @@ UserList = class UserList extends React.Component {
   render() {
     var {event} = this.props
     var isManyToOne = event.type === 'many-to-one'
-    var isUserParticipant = Events.functions
-        .isUserParticipant({
-          eventId: event._id,
+    var isUserAcceptedParticipant = Events.functions
+        .participant({
+          event,
           participantId: Meteor.userId()
-        })
+        }).isAccepted()
     var beneficiariesTitle
     var activeUserId = this.props.activeUser &&
       this.props.activeUser._id
@@ -23,7 +23,7 @@ UserList = class UserList extends React.Component {
           tooltip="Participants count"
           icon="user"
           className="basic"
-          count={this.props.users.length}
+          count={event.participantsCount}
         />
         <CountLabel
           tooltip="Presents count"
@@ -46,7 +46,8 @@ UserList = class UserList extends React.Component {
             (this.props.isCreator &&
              user.status !== 'isRemoved') ||
             user.status === 'isAccepted' ||
-            user.status === 'isInvited'
+            user.status === 'isInvited' ||
+            user.status === 'isTemp'
           ))
           .map(user => (
             user.status === 'requestingJoin' ? (
@@ -57,7 +58,7 @@ UserList = class UserList extends React.Component {
             ) : (
               <UserItem
                 active={activeUserId === user._id}
-                disabled={isManyToOne || !isUserParticipant}
+                disabled={isManyToOne || !isUserAcceptedParticipant}
                 presentsCount={
                   !isManyToOne &&
                   Users.functions.getPresentsCount(user)}

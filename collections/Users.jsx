@@ -167,10 +167,10 @@ Users.helpers({
       eventId = present && present.eventId
     }
 
-    return Events.functions.isUserParticipant({
+    return Events.functions.participant({
       eventId,
       participantId: this._id
-    })
+    }).isAccepted()
   },
   hasCreatedPresent(presentId) {
     return !!Presents.findOne({

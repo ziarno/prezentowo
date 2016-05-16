@@ -20,7 +20,7 @@ react-meteor-data
 dburles:collection-helpers
 reywood:publish-composite
 mdg:validated-method
-digilord:faker
+# digilord:faker
 ongoworks:security
 aldeed:simple-schema
 aldeed:collection2
@@ -32,7 +32,7 @@ kadira:react-layout
 kadira:blaze-layout
 kadira:flow-router
 msavin:mongol
-meteorhacks:fast-render
+# meteorhacks:fast-render #something was wrong on --production. bring back in the future
 # meteorhacks:subs-manager
 seba:minifiers-autoprefixer
 accounts-password

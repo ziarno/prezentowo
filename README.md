@@ -234,7 +234,10 @@ db.events.find().forEach(function (event) {
     var participants = event.participants
 
     participants.forEach(function (p) {
-       p.status = 'isAccepted'
+       var participant = db.users.findOne({_id: p.userId})
+       if (participant.isTemp) {
+         p.status = 'isTemp'
+       }
     });
     db.events.update({_id: event._id}, {
         $set: {
