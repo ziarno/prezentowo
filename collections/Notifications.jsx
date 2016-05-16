@@ -20,7 +20,8 @@ Notifications.Schemas.Main = new SimpleSchema({
       'event.joinRequest',
       'event.beneficiary',
       'present',
-      'present.comment',
+      'present.comment.secret',
+      'present.comment.shared',
       'present.buyer'
     ]
   },
@@ -108,7 +109,7 @@ Notifications.attachSchema(Notifications.Schemas.Main)
 Notifications.functions = {}
 
 /**
- * Creates notification.
+ * Creates a notification.
  * Can send data:
  * {
  *   type,
@@ -129,10 +130,7 @@ Notifications.functions.createNotification = function (data) {
     presentId
     } = data
   var seenByUsers
-  var byUser
-  var forUser
-  var forPresent
-  var forEvent
+  var notificationData
 
   function transformUser(user) {
     if (!user || !user.profile) {
@@ -193,20 +191,30 @@ Notifications.functions.createNotification = function (data) {
   if (!seenByUsers.length) {
     return
   }
-  byUser = transformUser(data.byUser)
-  forUser = transformUser(data.forUser)
-  forPresent = getForPresent()
-  forEvent = getForEvent()
-
-  Notifications.insert({
+  notificationData = {
     type,
     action,
     seenByUsers,
-    byUser,
-    forUser,
-    forPresent,
-    forEvent
-  })
+    byUser: transformUser(data.byUser),
+    forUser: transformUser(data.forUser),
+    forPresent: getForPresent(),
+    forEvent: getForEvent()
+  }
+
+  if (type.indexOf('present.comment') !== -1) {
+    Notifications.upsert({
+      type,
+      action,
+      'forPresent.id': notificationData.forPresent.id
+    }, {
+      $set: {
+        ...notificationData,
+        createdAt: new Date()
+      }
+    })
+  } else {
+    Notifications.insert(notificationData)
+  }
 }
 
 Notifications.functions.getUserIdsToSeeNotification = function (data) {
@@ -279,19 +287,27 @@ Notifications.functions.getUserIdsToSeeNotification = function (data) {
       },
       //changed, removed = added
       comment: {
-        added: function (data) {
-          var {event, commentType} = data
-          var isManyToOne = event.type === 'many-to-one'
-          var isCommentSecret = commentType === 'secret'
+        secret: {
+          added: function (data) {
+            var {event} = data
+            var isManyToOne = event.type === 'many-to-one'
 
-          return _.difference(
-            getEventParticipants(data),
-            getByUser(data),
-            isManyToOne && isCommentSecret &&
-              getEventBeneficiaries(data),
-            isCommentSecret &&
+            return _.difference(
+              getEventParticipants(data),
+              getByUser(data),
+              isManyToOne &&
+                getEventBeneficiaries(data),
               getForUser(data)
-          )
+            )
+          }
+        },
+        shared: {
+          added: function (data) {
+            return _.difference(
+              getEventParticipants(data),
+              getByUser(data)
+            )
+          }
         }
       },
       buyer: {

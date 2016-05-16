@@ -46,13 +46,24 @@ Comments.methods.createComment = new ValidatedMethod({
     }
   }).validator(),
   run({presentId, type, message}) {
+    var present = Presents.findOne(presentId)
     var commentId
-    var presentModifier = {$addToSet: {}}
-    var commentsCollectionName = type === 'secret' ? 'commentsSecret' : 'commentsShared'
+    var commentsCollectionName =
+      type === 'secret' ? 'commentsSecret' : 'commentsShared'
 
     commentId = Comments.insert({message, presentId})
-    presentModifier.$addToSet[commentsCollectionName] = commentId
-    Presents.update(presentId, presentModifier)
+    Presents.update(presentId, {
+      $addToSet: {
+        [commentsCollectionName]: commentId
+      }
+    })
+    Notifications.functions.createNotification({
+      type: `present.comment.${type}`,
+      action: 'added',
+      byUserId: this.userId,
+      forUserId: present.forUserId,
+      present
+    })
     return commentId
   }
 })

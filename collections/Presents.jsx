@@ -241,9 +241,7 @@ Presents.methods.editPresent = new ValidatedMethod({
   name: 'Presents.methods.editPresent',
   mixins: [LoggedIn],
   validate: new SimpleSchema([
-    {
-      _id: SchemaFields.Id
-    },
+    {_id: SchemaFields.Id},
     Presents.Schemas.NewPresent.pick([
       'title',
       'description',
@@ -291,7 +289,8 @@ Presents.methods.setBuyer = new ValidatedMethod({
     var present = Presents.findOne(presentId)
 
     if (!Meteor.user().isEventParticipant({presentId})) {
-      throw new Meteor.Error(`${this.name}.notParticipant`, _i18n.__('Not participant'))
+      throw new Meteor.Error(`${this.name}.notParticipant`,
+        _i18n.__('Not participant'))
     }
 
     Presents.update(presentId, {
