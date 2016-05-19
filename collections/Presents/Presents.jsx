@@ -7,14 +7,15 @@ import PresentsMethods from './PresentsMethods'
  * Presents Collection
  */
 Presents = new Mongo.Collection('presents')
-Presents.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
+Presents
+  .permit(['insert', 'update', 'remove'])
+  .never()
+  .apply() //ongoworks:security
 
 
 Presents.Schemas = PresentsSchemas
 Presents.attachSchema(Presents.Schemas.Main)
-
 Presents.functions = PresentsFunctions
-
 Presents.methods = PresentsMethods
 
 /**

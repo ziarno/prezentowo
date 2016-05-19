@@ -13,5 +13,4 @@ Notifications
 
 Notifications.Schemas = NotificationsSchemas
 Notifications.attachSchema(Notifications.Schemas.Main)
-
 Notifications.functions = NotificationsFunctions

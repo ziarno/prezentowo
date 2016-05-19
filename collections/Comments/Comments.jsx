@@ -13,5 +13,4 @@ Comments
 
 Comments.Schemas = CommentsSchemas
 Comments.attachSchema(Comments.Schemas.Main)
-
 Comments.methods = CommentsMethods
