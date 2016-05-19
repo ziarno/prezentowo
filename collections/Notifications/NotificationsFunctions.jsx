@@ -1,112 +1,6 @@
 import React from 'react'
 
-/**
- * Notifications Collection
- */
-Notifications = new Mongo.Collection('notifications')
-Notifications.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
-
-/**
- * SCHEMAS
- */
-Notifications.Schemas = {}
-Notifications.Schemas.Main = new SimpleSchema({
-  type: {
-    type: String,
-    allowedValues: [
-      'event',
-      'event.participant',
-      'event.invitation',
-      'event.joinRequest',
-      'event.beneficiary',
-      'present',
-      'present.comment.secret',
-      'present.comment.shared',
-      'present.buyer'
-    ]
-  },
-  action: {
-    type: String,
-    allowedValues: [
-      'added',
-      'changed',
-      'removed',
-      'accepted',
-      'rejected'
-    ]
-  },
-  createdAt: SchemaFields.CreatedAt,
-
-  //users to be notified
-  seenByUsers: {
-    type: [Object]
-  },
-  'seenByUsers.$.id': SchemaFields.Id,
-  'seenByUsers.$.seen': {
-    type: Boolean
-  },
-
-  //user who initiated the notification
-  byUser: {
-    type: Object
-  },
-  'byUser.id': SchemaFields.Id,
-  'byUser.name': {
-    type: String
-  },
-  'byUser.picture': {
-    type: String
-  },
-  'byUser.gender': {
-    type: String
-  },
-
-  //user who the notification is about (ex. present -> for user)
-  forUser: {
-    type: Object,
-    optional: true
-  },
-  'forUser.id': SchemaFields.Id,
-  'forUser.name': {
-    type: String
-  },
-  'forUser.picture': {
-    type: String
-  },
-  'forUser.gender': {
-    type: String
-  },
-
-  //present that the notification is about
-  forPresent: {
-    type: Object,
-    optional: true
-  },
-  'forPresent.id': SchemaFields.Id,
-  'forPresent.title': {
-    type: String
-  },
-  'forPresent.picture': {
-    type: String
-  },
-
-  //event that the notification is about
-  forEvent: {
-    type: Object
-  },
-  'forEvent.id': SchemaFields.Id,
-  'forEvent.title': {
-    type: String
-  }
-})
-
-Notifications.attachSchema(Notifications.Schemas.Main)
-
-
-/**
- * FUNCTIONS
- */
-Notifications.functions = {}
+var NotificationsFunctions = {}
 
 /**
  * Creates a notification.
@@ -120,7 +14,7 @@ Notifications.functions = {}
  *   present, presentId
  * }
  */
-Notifications.functions.createNotification = function (data) {
+NotificationsFunctions.createNotification = function (data) {
   var {
     type,
     action,
@@ -217,7 +111,7 @@ Notifications.functions.createNotification = function (data) {
   }
 }
 
-Notifications.functions.getUserIdsToSeeNotification = function (data) {
+NotificationsFunctions.getUserIdsToSeeNotification = function (data) {
   var {type, action} = data
   var filterFunctionsMap = {
     event: {
@@ -280,9 +174,9 @@ Notifications.functions.getUserIdsToSeeNotification = function (data) {
           getEventParticipants(data),
           getByUser(data),
           isManyToOne && !isOwn &&
-            getEventBeneficiaries(data),
+          getEventBeneficiaries(data),
           !isOwn &&
-            getForUser(data)
+          getForUser(data)
         )
       },
       //changed, removed = added
@@ -296,7 +190,7 @@ Notifications.functions.getUserIdsToSeeNotification = function (data) {
               getEventParticipants(data),
               getByUser(data),
               isManyToOne &&
-                getEventBeneficiaries(data),
+              getEventBeneficiaries(data),
               getForUser(data)
             )
           }
@@ -367,3 +261,5 @@ Notifications.functions.getUserIdsToSeeNotification = function (data) {
     filterFunctionsMap
   )(data)
 }
+
+export default NotificationsFunctions

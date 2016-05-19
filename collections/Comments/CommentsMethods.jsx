@@ -1,36 +1,9 @@
 import React from 'react'
-import {LoggedIn} from '../lib/Mixins'
+import {LoggedIn} from '../../lib/Mixins'
 
-/**
- * Comments Collection
- */
-Comments = new Mongo.Collection('comments')
-Comments.permit(['insert', 'update', 'remove']).never().apply() //ongoworks:security
+var CommentsMethods = {}
 
-
-/**
- * SCHEMAS
- */
-Comments.Schemas = {}
-
-Comments.Schemas.Main = new SimpleSchema({
-  creatorId: SchemaFields.CreatorId,
-  createdAt: SchemaFields.CreatedAt,
-  presentId: SchemaFields.Id,
-  message: {
-    type: String,
-    label: () => _i18n.__('Message')
-  }
-})
-
-Comments.attachSchema(Comments.Schemas.Main)
-
-/**
- * METHODS
- */
-Comments.methods = {}
-
-Comments.methods.createComment = new ValidatedMethod({
+CommentsMethods.createComment = new ValidatedMethod({
   name: 'Comments.methods.createComment',
   mixins: [LoggedIn],
   validate: new SimpleSchema({
@@ -68,7 +41,7 @@ Comments.methods.createComment = new ValidatedMethod({
   }
 })
 
-Comments.methods.removeComment = new ValidatedMethod({
+CommentsMethods.removeComment = new ValidatedMethod({
   name: 'Comments.methods.removeComment',
   mixins: [LoggedIn],
   validate: new SimpleSchema({
@@ -93,7 +66,7 @@ Comments.methods.removeComment = new ValidatedMethod({
   }
 })
 
-Comments.methods.editComment = new ValidatedMethod({
+CommentsMethods.editComment = new ValidatedMethod({
   name: 'Comments.methods.editComment',
   mixins: [LoggedIn],
   validate: new SimpleSchema({
@@ -113,3 +86,5 @@ Comments.methods.editComment = new ValidatedMethod({
     })
   }
 })
+
+export default CommentsMethods
