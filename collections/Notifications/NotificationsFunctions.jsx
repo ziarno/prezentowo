@@ -1,10 +1,44 @@
 import React from 'react'
+import NotificationsMap from './NotificationsMap'
 
 var NotificationsFunctions = {}
 
+function transformUser(user) {
+  if (!user || !user.profile) {
+    return
+  }
+  return {
+    id: user._id,
+    name: user.profile.name,
+    picture: user.profile.pictureUrl,
+    gender: user.profile.gender
+  }
+}
+
+function getForPresent({present}) {
+  if (!present) {
+    return
+  }
+  return {
+    id: present._id,
+    title: present.title,
+    picture: present.picture.small
+  }
+}
+
+function getForEvent({event}) {
+  if (!event) {
+    return
+  }
+  return {
+    id: event._id,
+    title: event.title
+  }
+}
+
 /**
  * Creates a notification.
- * Can send data:
+ * data param:
  * {
  *   type,
  *   action,
@@ -14,7 +48,7 @@ var NotificationsFunctions = {}
  *   present, presentId
  * }
  */
-NotificationsFunctions.createNotification = function (data) {
+NotificationsFunctions.createNotification = function (notificationData) {
   var {
     type,
     action,
@@ -22,244 +56,62 @@ NotificationsFunctions.createNotification = function (data) {
     forUserId,
     eventId,
     presentId
-    } = data
+    } = notificationData
   var seenByUsers
-  var notificationData
-
-  function transformUser(user) {
-    if (!user || !user.profile) {
-      return
-    }
-    return {
-      id: user._id,
-      name: user.profile.name,
-      picture: user.profile.pictureUrl,
-      gender: user.profile.gender
-    }
-  }
-
-  function getForPresent() {
-    var {present} = data
-    if (!present) {
-      return
-    }
-    return {
-      id: present._id,
-      title: present.title,
-      picture: present.picture.small
-    }
-  }
-
-  function getForEvent() {
-    var {event} = data
-    if (!event) {
-      return
-    }
-    return {
-      id: event._id,
-      title: event.title
-    }
-  }
+  var notification
 
   if (Meteor.isClient) {
     return
   }
 
-  data.present = data.present || Presents.findOne(presentId)
-  data.eventId = eventId ||
-    !data.event && data.present && data.present.eventId
-  data.event = data.event || Events.findOne(data.eventId)
-  data.byUser = data.byUser ||
+  notificationData.present = notificationData.present ||
+    Presents.findOne(presentId)
+  notificationData.eventId = eventId ||
+    !notificationData.event &&
+    notificationData.present &&
+    notificationData.present.eventId
+  notificationData.event = notificationData.event ||
+    Events.findOne(notificationData.eventId)
+  notificationData.byUser = notificationData.byUser ||
     byUserId && Users.findOne(byUserId, {
       fields: {profile: 1}
     })
-  data.forUser = data.forUser ||
+  notificationData.forUser = notificationData.forUser ||
     forUserId && Users.findOne(forUserId, {
       fields: {profile: 1}
     })
 
   seenByUsers =
-    _.map(Notifications.functions.getUserIdsToSeeNotification(data),
+    _.map(NotificationsMap.usersFilter(notificationData),
       userId => ({id: userId, seen: false}))
 
   if (!seenByUsers.length) {
     return
   }
-  notificationData = {
+  notification = {
     type,
     action,
+    createdAt: new Date(),
     seenByUsers,
-    byUser: transformUser(data.byUser),
-    forUser: transformUser(data.forUser),
-    forPresent: getForPresent(),
-    forEvent: getForEvent()
+    byUser: transformUser(notificationData.byUser),
+    forUser: transformUser(notificationData.forUser),
+    forPresent: getForPresent(notificationData),
+    forEvent: getForEvent(notificationData)
   }
 
   if (type.indexOf('present.comment') !== -1) {
+    //comments notifications per present get updated
+    // - there would be too many of them otherwise
     Notifications.upsert({
       type,
       action,
-      'forPresent.id': notificationData.forPresent.id
+      'forPresent.id': notification.forPresent.id
     }, {
-      $set: {
-        ...notificationData,
-        createdAt: new Date()
-      }
+      $set: notification
     })
   } else {
-    Notifications.insert(notificationData)
+    Notifications.insert(notification)
   }
-}
-
-NotificationsFunctions.getUserIdsToSeeNotification = function (data) {
-  var {type, action} = data
-  var filterFunctionsMap = {
-    event: {
-      added: function (data) {
-        return _.difference(
-          getEventParticipants(data),
-          getByUser(data)
-        )
-      },
-      //changed, removed = added
-      participant: {
-        added: function (data) {
-          return _.difference(
-            getEventParticipants(data),
-            getByUser(data),
-            getForUser(data)
-          )
-        },
-        //changed = added
-        removed: function (data) {
-          return _.difference(
-            getEventParticipants(data),
-            getByUser(data)
-          )
-        }
-      },
-      invitation: {
-        accepted: function (data) {
-          return _.difference(
-            getEventParticipants(data),
-            getByUser(data)
-          )
-        },
-        //rejected = accepted
-        added: getForUser
-      },
-      joinRequest: {
-        accepted: getForUser,
-        rejected: getForUser,
-        added: getEventCreator
-      },
-      beneficiary: {
-        added: function (data) {
-          return _.difference(
-            getEventParticipants(data),
-            getByUser(data)
-          )
-        }
-        //removed = added
-      }
-    },
-
-    present: {
-      added: function (data) {
-        var {event, present} = data
-        var isManyToOne = event.type === 'many-to-one'
-        var isOwn = present.isOwn
-
-        return _.difference(
-          getEventParticipants(data),
-          getByUser(data),
-          isManyToOne && !isOwn &&
-          getEventBeneficiaries(data),
-          !isOwn &&
-          getForUser(data)
-        )
-      },
-      //changed, removed = added
-      comment: {
-        secret: {
-          added: function (data) {
-            var {event} = data
-            var isManyToOne = event.type === 'many-to-one'
-
-            return _.difference(
-              getEventParticipants(data),
-              getByUser(data),
-              isManyToOne &&
-              getEventBeneficiaries(data),
-              getForUser(data)
-            )
-          }
-        },
-        shared: {
-          added: function (data) {
-            return _.difference(
-              getEventParticipants(data),
-              getByUser(data)
-            )
-          }
-        }
-      },
-      buyer: {
-        added: function (data) {
-          return _.difference(
-            getEventParticipants(data),
-            getByUser(data),
-            getForUser(data),
-            getEventBeneficiaries(data)
-          )
-        }
-        //removed = added
-      }
-    }
-  }
-
-  filterFunctionsMap.event.changed =
-    filterFunctionsMap.event.removed =
-      filterFunctionsMap.event.added
-  filterFunctionsMap.event.participant.changed =
-    filterFunctionsMap.event.participant.added
-  filterFunctionsMap.event.invitation.rejected =
-    filterFunctionsMap.event.invitation.accepted
-  filterFunctionsMap.event.beneficiary.removed =
-    filterFunctionsMap.event.beneficiary.added
-  filterFunctionsMap.present.changed =
-    filterFunctionsMap.present.removed =
-      filterFunctionsMap.present.added
-  filterFunctionsMap.present.buyer.removed =
-    filterFunctionsMap.present.buyer.added
-
-  function getByUser({byUser}) {
-    return [byUser._id]
-  }
-
-  function getEventParticipants({event}) {
-    var acceptedParticipants =
-      Events.functions.getAcceptedParticipants({event})
-    return _.map(acceptedParticipants, p => p.userId)
-  }
-
-  function getEventBeneficiaries({event}) {
-    return event.beneficiaryIds
-  }
-
-  function getForUser({forUser}) {
-    return forUser && [forUser._id]
-  }
-
-  function getEventCreator({event}) {
-    return [event.creatorId]
-  }
-
-  return _.reduce(
-    [type, action].join('.').split('.'),
-    (memo, value) => memo[value],
-    filterFunctionsMap
-  )(data)
 }
 
 export default NotificationsFunctions
