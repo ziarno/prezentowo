@@ -65,17 +65,18 @@ UsersFunctions.updateEmail = function (selector, email) {
 }
 
 UsersFunctions.removeTempUsers = function (selector) {
-  //TODO: check if each temp user is not a part of another event
   var selector = _.extend(selector, {isTemp: true})
   Users.remove(selector)
 }
 
-UsersFunctions.getPresentsCount = function (user) {
-  return user && user._id === Meteor.userId() ? (
-    parseInt(user.ownPresentsCount)
+UsersFunctions.getPresentsCount = function (participant) {
+  return participant &&
+    participant._id === Meteor.userId() ||
+    !Meteor.userId() ? (
+    parseInt(participant.ownPresentsCount)
   ) : (
-    parseInt(user.ownPresentsCount) +
-    parseInt(user.otherPresentsCount)
+    parseInt(participant.ownPresentsCount) +
+    parseInt(participant.otherPresentsCount)
   ) || 0
 }
 

@@ -199,7 +199,8 @@ EventsFunctions.getPresentsCount = function (event) {
   return event && event.participants &&
     _.reduce(event.participants, (memo, participant) => {
       return (
-        participant.userId === Meteor.userId() ? (
+        participant.userId === Meteor.userId() ||
+          !Meteor.userId() ? (
           memo +
           participant.ownPresentsCount
         ) : (
