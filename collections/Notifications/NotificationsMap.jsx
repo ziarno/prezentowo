@@ -8,8 +8,21 @@ import present from './NotificationsMap/present'
 import presentComment from './NotificationsMap/present.comment'
 import presentBuyer from './NotificationsMap/present.buyer'
 
+
+/**
+ * an object containing information about every type of notification
+ * notification objects fields:
+ *  - usersFilter(): Function (obligatory) - finds users that
+ *    will see the notification
+ *  - getMessageEl(): Function (obligatory)
+ *  - icon: String || Array - when array, the first icon is main,
+ *    second is corner
+ *  - requiresAction: Boolean
+ *  - hasPicture: Boolean
+ *  - getPicture(): Function
+ */
 var NotificationsMap = {
-  findField: function (notificationData) {
+  findField(notificationData) {
     var {type, action} = notificationData
     return _.reduce(
       [type, action].join('.').split('.'),
@@ -17,10 +30,16 @@ var NotificationsMap = {
       NotificationsMap
     )
   },
-  usersFilter: function (notificationData) {
+  //shortcut functions
+  usersFilter(notificationData) {
     return NotificationsMap
       .findField(notificationData)
       .usersFilter(notificationData)
+  },
+  getMessageEl(notification) {
+    return NotificationsMap
+      .findField(notification)
+      .getMessageEl(notification)
   }
 }
 

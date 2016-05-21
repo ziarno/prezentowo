@@ -7,21 +7,48 @@ import {
 
 var eventInvitation = {}
 
+function getMessageEl(actionText, notification) {
+  var {forUser, forEvent} = notification
+  return (
+    <div className="translations text-with-user">
+      <User {...forUser} />
+      <T>{`${forUser.gender}.${actionText}`}</T>
+      <T>invitation to event</T>
+      <span>{forEvent.title}</span>
+    </div>
+  )
+}
+
 eventInvitation.accepted = {
   usersFilter: function (notificationData) {
     return _.difference(
       getEventParticipants(notificationData),
       getByUser(notificationData)
     )
-  }
+  },
+  icon: ['mail outline', 'checkmark'],
+  getMessageEl: getMessageEl.bind(eventInvitation, 'hasAccepted')
 }
 
 eventInvitation.rejected = {
-  usersFilter: eventInvitation.accepted.usersFilter
+  usersFilter: eventInvitation.accepted.usersFilter,
+  icon: ['mail outline', 'remove'],
+  getMessageEl: getMessageEl.bind(eventInvitation, 'hasRejected')
 }
 
 eventInvitation.added = {
-  usersFilter: getForUser
+  usersFilter: getForUser,
+  icon: 'mail outline',
+  getMessageEl(notification) {
+    var {byUser, forEvent} = notification
+    return (
+      <div className="translations text-with-user">
+        <User {...byUser} />
+        <T>is inviting you to the event</T>
+        <span>{forEvent.title}</span>
+      </div>
+    )
+  }
 }
 
 export default eventInvitation

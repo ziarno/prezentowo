@@ -6,17 +6,33 @@ import {
 
 var eventBeneficiary = {}
 
+function getMessageEl(actionText, notification) {
+  var {forUser} = notification
+  return (
+    <div className="translations text-with-user">
+      <User {...forUser} />
+      <T>{`${forUser.gender}.hasBeen`}</T>
+      <T>{actionText}</T>
+      <T>hints.asBeneficiary</T>
+    </div>
+  )
+}
+
 eventBeneficiary.added = {
-  usersFilter: function (notificationData) {
+  usersFilter(notificationData) {
     return _.difference(
       getEventParticipants(notificationData),
       getByUser(notificationData)
     )
-  }
+  },
+  icon: 'add user',
+  getMessageEl: getMessageEl.bind(eventBeneficiary, 'added')
 }
 
 eventBeneficiary.removed = {
-  usersFilter: eventBeneficiary.added.usersFilter
+  usersFilter: eventBeneficiary.added.usersFilter,
+  icon: 'remove user',
+  getMessageEl: getMessageEl.bind(eventBeneficiary, 'removed')
 }
 
 export default eventBeneficiary

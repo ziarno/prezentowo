@@ -8,3 +8,7 @@ hints:
   deleteConfirmation: Are you sure?
   joinRequestSent: Join request has been sent
   awaitCreatorConfirmation: Please await confirmation from the event creator
+  asBeneficiary: as beneficiary
+  event:
+    removed: has been removed by
+    edited: has been edited by

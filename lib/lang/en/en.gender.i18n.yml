@@ -1,5 +1,21 @@
 _locale: en
 female:
   invited: invited
+  hasBeen: has been
+  hasAccepted: has accepted
+  hasRejected: has rejected
+  hasAdded: added
+  hasRemoved: removed
+  hasEdited: edited
+  added: added
+  removed: removed
 male:
   invited: invited
+  hasBeen: has been
+  hasAccepted: has accepted
+  hasRejected: has rejected
+  hasAdded: added
+  hasRemoved: removed
+  hasEdited: edited
+  added: added
+  removed: removed

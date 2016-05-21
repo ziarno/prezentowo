@@ -1,10 +1,18 @@
 import React from 'react'
 
-User = ({user, className, large, showAddPresentOnHover}) => {
+User = ({
+  user,
+  id = user && user._id,
+  picture = user && user.profile.pictureUrl,
+  name = user && user.profile.name,
+  className,
+  large,
+  showAddPresentOnHover
+  }) => {
   var Avatar = (
     <Img
       className="ui avatar image"
-      src={user.profile.pictureUrl}
+      src={picture}
       hideLoader
     />
   )
@@ -12,7 +20,7 @@ User = ({user, className, large, showAddPresentOnHover}) => {
   return (
     <div
       className={classNames('user', className, {large})}
-      data-id={user._id}>
+      data-id={id}>
       {showAddPresentOnHover ? (
         <div className="user--picture-wrapper">
           {Avatar}
@@ -29,7 +37,7 @@ User = ({user, className, large, showAddPresentOnHover}) => {
         </div>
       ) : Avatar}
       <span className="user--name">
-        {user.profile.name}
+        {name}
       </span>
     </div>
   )

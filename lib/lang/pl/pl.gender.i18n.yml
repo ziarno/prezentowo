@@ -1,5 +1,21 @@
 _locale: pl
 female:
   invited: zaprosiła
+  hasBeen: została
+  hasAccepted: zaakceptowała
+  hasRejected: odrzuciła
+  hasAdded: dodała
+  hasRemoved: usunęła
+  hasEdited: edytowała
+  added: dodana
+  removed: usunięta
 male:
   invited: zaprosił
+  hasBeen: został
+  hasAccepted: zaakceptował
+  hasRejected: odrzucił
+  hasAdded: dodał
+  hasRemoved: usunął
+  hasEdited: edytował
+  added: dodany
+  removed: usunięty

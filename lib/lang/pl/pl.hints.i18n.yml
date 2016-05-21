@@ -8,3 +8,7 @@ hints:
   deleteConfirmation: Na pewno?
   joinRequestSent: Prośba o dołączenie została wysłana
   awaitCreatorConfirmation: Czekaj na potwierdzenie od twórcy wydarzenia
+  asBeneficiary: jako beneficjent
+  event:
+    removed: zostało usunięte przez
+    edited: zostało edytowane przez
