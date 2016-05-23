@@ -20,19 +20,19 @@ function getMessageEl(actionText, notification) {
 
 eventJoinRequest.accepted = {
   usersFilter: getForUser,
-  icon: 'add user',
+  icon: {main: 'add user'},
   getMessageEl: getMessageEl.bind(eventJoinRequest, 'hasAccepted')
 }
 
 eventJoinRequest.rejected = {
   usersFilter: getForUser,
-  icon: 'remove user',
+  icon: {main: 'remove user'},
   getMessageEl: getMessageEl.bind(eventJoinRequest, 'hasRejected')
 }
 
 eventJoinRequest.added = {
   usersFilter: getEventCreator,
-  icon: 'add user',
+  icon: {main: 'add user'},
   getMessageEl(notification) {
     var {byUser, forEvent} = notification
     return (

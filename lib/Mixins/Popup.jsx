@@ -117,6 +117,10 @@ class PopupComponent extends React.Component {
     return <div ref="popupTarget"></div>
   }
 
+  renderAdditionalContent() {
+    return null
+  }
+
   componentDidUpdate(prevProps, {showPopup}) {
     if (this.state.showPopup &&
         this.state.showPopup !== showPopup) {
@@ -139,6 +143,7 @@ class PopupComponent extends React.Component {
         {this.state.showPopup ? (
           this.renderPopup()
         ) : null}
+        {this.renderAdditionalContent()}
       </div>
     )
   }

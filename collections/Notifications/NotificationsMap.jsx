@@ -15,11 +15,13 @@ import presentBuyer from './NotificationsMap/present.buyer'
  *  - usersFilter(): Function (obligatory) - finds users that
  *    will see the notification
  *  - getMessageEl(): Function (obligatory)
- *  - icon: String || Array - when array, the first icon is main,
- *    second is corner
+ *  - getPicture(): Function
+ *  - icon: Object {
+ *      main: String,
+ *      corner: String
+ *    }
  *  - requiresAction: Boolean
  *  - hasPicture: Boolean
- *  - getPicture(): Function
  */
 var NotificationsMap = {
   findField(notificationData) {
@@ -29,17 +31,6 @@ var NotificationsMap = {
       (memo, value) => memo[value],
       NotificationsMap
     )
-  },
-  //shortcut functions
-  usersFilter(notificationData) {
-    return NotificationsMap
-      .findField(notificationData)
-      .usersFilter(notificationData)
-  },
-  getMessageEl(notification) {
-    return NotificationsMap
-      .findField(notification)
-      .getMessageEl(notification)
   }
 }
 
@@ -51,5 +42,16 @@ NotificationsMap.event.beneficiary = eventBeneficiary
 NotificationsMap.present = present
 NotificationsMap.present.comment = presentComment
 NotificationsMap.present.buyer = presentBuyer
+
+//shortcut functions
+;['usersFilter',
+  'getMessageEl',
+  'getPicture'].forEach(function (funcName) {
+  NotificationsMap[funcName] = function (notification) {
+    return NotificationsMap
+      .findField(notification)
+      [funcName](notification)
+  }
+})
 
 export default NotificationsMap

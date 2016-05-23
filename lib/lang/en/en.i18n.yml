@@ -1,6 +1,7 @@
 _locale: en
 Events: Events
 Event: Event
+event: event
 Past events: Past events
 Profile: Profile
 Change password: Change password
@@ -97,3 +98,8 @@ is requesting to join event: is requesting to join event
 from event: from event
 Participant edited: Participant edited
 a new present: a new present
+will buy: will buy
+will not buy: will not buy
+a message: a message
+in: in
+your request to join event: your request to join event

@@ -114,7 +114,7 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
               images={this.state.images}
               uploadOptions={{
                 folder: 'users',
-                transformation: 'avatar-large'
+                transformation: 'avatar'
               }}
             />
             <div className="form-popup--form-right" >

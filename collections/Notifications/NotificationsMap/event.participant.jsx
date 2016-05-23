@@ -15,14 +15,14 @@ eventParticipant.added = {
       getForUser(notificationData)
     )
   },
-  icon: 'add user',
+  icon: {main: 'add user'},
   getMessageEl(notification) {
     var {forUser} = notification
     return (
       <div className="translations text-with-user">
-        <T>New participant</T>
-        <span>-</span>
         <User {...forUser} />
+        <span>-</span>
+        <T>New participant</T>
       </div>
     )
   }
@@ -30,14 +30,14 @@ eventParticipant.added = {
 
 eventParticipant.changed = {
   usersFilter: eventParticipant.added.usersFilter,
-  icon: ['user', 'edit'],
+  icon: {main: 'user', corner: 'edit'},
   getMessageEl(notification) {
     var {forUser} = notification
     return (
       <div className="translations text-with-user">
-        <T>Participant edited</T>
-        <span>-</span>
         <User {...forUser} />
+        <span>-</span>
+        <T>Participant edited</T>
       </div>
     )
   }
@@ -50,7 +50,7 @@ eventParticipant.removed = {
       getByUser(notificationData)
     )
   },
-  icon: 'remove user',
+  icon: {main: 'remove user'},
   getMessageEl(notification) {
     var {forUser, forEvent} = notification
     return (

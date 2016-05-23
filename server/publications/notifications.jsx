@@ -9,7 +9,7 @@ Meteor.publish('notifications', function () {
     'seenByUsers.id': this.userId
   }, {
     sort: {
-      createdAt: 1
+      createdAt: -1
     },
     limit: 30
   })

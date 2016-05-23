@@ -114,4 +114,15 @@ NotificationsFunctions.createNotification = function (notificationData) {
   }
 }
 
+NotificationsFunctions.getUnseenCount = function () {
+  return Notifications.find({
+    seenByUsers: {
+      $elemMatch: {
+        id: Meteor.userId(),
+        seen: false
+      }
+    }
+  }).count()
+}
+
 export default NotificationsFunctions

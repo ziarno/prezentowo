@@ -27,6 +27,9 @@ EventContainer = class EventContainer extends ScrollableComponent {
       this.props.settings.viewMode.participantsMode :
       Users.defaults.participantsMode
 
+    ModalManager.close()
+    ModalManager.destroy()
+
     if (participantsViewMode === 'single') {
       FlowRouter.setParams({userId: user._id})
     } else {
@@ -34,8 +37,6 @@ EventContainer = class EventContainer extends ScrollableComponent {
     }
 
     this.setState({isSidebarVisible: !Session.get('isSidebarFixed')})
-    ModalManager.close()
-    ModalManager.destroy()
   }
 
   autorunSetCurrentUserState() {

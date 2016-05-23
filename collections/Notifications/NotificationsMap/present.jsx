@@ -23,28 +23,28 @@ present.added = {
         getForUser(notificationData)
     )
   },
-  icon: ['present', 'add'],
+  icon: {main: 'gift', corner: 'add'},
   hasPicture: true,
   getPicture(notification) {
     var {forPresent} = notification
     return forPresent && forPresent.picture
   },
   getMessageEl(notification) {
-    var {byUser, forUser, forPresent} = notification
-    var isOwn = byUser && forUser && byUser.id === forUser.id
+    var {forUser, forPresent} = notification
     return (
       <div className="translations text-with-user">
-        <User {...byUser} />
-        <T>{`${byUser.gender}.hasAdded`}</T>
+        <User
+          picture={forPresent.picture}
+          name={forPresent.title}
+        />
+        <span>-</span>
         <T>a new present</T>
-        {!isOwn && forUser? (
-        <T>for</T>
-          ) : null}
-        {!isOwn && forUser ? (
-        <User {...forUser} />
-          ) : null}
-        :
-        <span>{forPresent.title}</span>
+        {forUser? (
+          <T>for</T>
+        ) : null}
+        {forUser ? (
+          <User {...forUser} />
+        ) : null}
       </div>
     )
   }
@@ -52,7 +52,7 @@ present.added = {
 
 present.changed = {
   usersFilter: present.added.usersFilter,
-  icon: ['present', 'edit'],
+  icon: {main: 'gift', corner: 'edit'},
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl(notification) {
@@ -61,8 +61,10 @@ present.changed = {
       <div className="translations text-with-user">
         <User {...byUser} />
         <T>{`${byUser.gender}.hasEdited`}</T>
-        <T>present</T>
-        <span>{forPresent.title}</span>
+        <User
+          picture={forPresent.picture}
+          name={forPresent.title}
+        />
       </div>
     )
   }
@@ -70,7 +72,7 @@ present.changed = {
 
 present.removed = {
   usersFilter: present.added.usersFilter,
-  icon: ['present', 'remove'],
+  icon: {main: 'gift', corner: 'remove'},
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl(notification) {
@@ -79,8 +81,10 @@ present.removed = {
       <div className="translations text-with-user">
         <User {...byUser} />
         <T>{`${byUser.gender}.hasRemoved`}</T>
-        <T>present</T>
-        <span>{forPresent.title}</span>
+        <User
+          picture={forPresent.picture}
+          name={forPresent.title}
+        />
       </div>
     )
   }

@@ -104,6 +104,10 @@ ImagePicker = class ImagePicker extends ValidatedInput {
         isLoading: false
       })
 
+      if (err) {
+        console.error('Image upload error: ', err.message)
+      }
+
       if (!err && res) {
         let image = responseTransformations ?
           makeObject(res.secure_url) : res.secure_url

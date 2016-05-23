@@ -19,8 +19,11 @@ function getMessageEl(notification) {
       <User {...byUser} />
       <T>{`${byUser.gender}.hasAdded`}</T>
       <T>a message</T>
-      <T>in present</T>
-      <span>{forPresent.title}</span>
+      <T>in</T>
+      <User
+        picture={forPresent.picture}
+        name={forPresent.title}
+      />
     </div>
   )
 }
@@ -38,7 +41,7 @@ presentComment.secret.added = {
       getForUser(notificationData)
     )
   },
-  icon: 'comment outline',
+  icon: {main: 'comment outline'},
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl
@@ -51,7 +54,7 @@ presentComment.shared.added = {
       getByUser(notificationData)
     )
   },
-  icon: 'comment outline',
+  icon: {main: 'comment outline'},
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl

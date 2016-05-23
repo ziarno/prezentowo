@@ -7,23 +7,12 @@ NavProfile = class NavProfile extends React.Component {
   constructor() {
     super()
     this.getTooltips = this.getTooltips.bind(this)
-    this.logout = this.logout.bind(this)
-    this.openProfile = this.openProfile.bind(this)
   }
 
   getTooltips() {
     return {
       //profile: {content: _i18n.__('Profile')}
     }
-  }
-
-  logout() {
-    AccountsTemplates.logout()
-    //this.hideTooltips()
-  }
-
-  openProfile() {
-    //this.hideTooltips()
   }
 
   render() {
@@ -36,8 +25,9 @@ NavProfile = class NavProfile extends React.Component {
           buttonClassName="popup-button"
           popupClassName="non-pointing"
         />
-        <NotificationIcon
+        <NotificationsPopup
           buttonClassName="popup-button"
+          popupClassName="non-pointing"
         />
       </div>
     )

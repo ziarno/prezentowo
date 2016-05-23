@@ -8,11 +8,11 @@ import {
 var eventInvitation = {}
 
 function getMessageEl(actionText, notification) {
-  var {forUser, forEvent} = notification
+  var {byUser, forEvent} = notification
   return (
     <div className="translations text-with-user">
-      <User {...forUser} />
-      <T>{`${forUser.gender}.${actionText}`}</T>
+      <User {...byUser} />
+      <T>{`${byUser.gender}.${actionText}`}</T>
       <T>invitation to event</T>
       <span>{forEvent.title}</span>
     </div>
@@ -26,19 +26,19 @@ eventInvitation.accepted = {
       getByUser(notificationData)
     )
   },
-  icon: ['mail outline', 'checkmark'],
+  icon: {main: 'mail outline', corner: 'checkmark'},
   getMessageEl: getMessageEl.bind(eventInvitation, 'hasAccepted')
 }
 
 eventInvitation.rejected = {
   usersFilter: eventInvitation.accepted.usersFilter,
-  icon: ['mail outline', 'remove'],
+  icon: {main: 'mail outline', corner: 'remove'},
   getMessageEl: getMessageEl.bind(eventInvitation, 'hasRejected')
 }
 
 eventInvitation.added = {
   usersFilter: getForUser,
-  icon: 'mail outline',
+  icon: {main: 'mail outline'},
   getMessageEl(notification) {
     var {byUser, forEvent} = notification
     return (

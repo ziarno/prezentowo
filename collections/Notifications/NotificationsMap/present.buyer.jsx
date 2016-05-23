@@ -15,7 +15,10 @@ function getMessageEl(willBuy, notification) {
     <div className="translations text-with-user">
       <User {...byUser} />
       {willBuy ? <T>will buy</T> : <T>will not buy</T>}
-      <span>{forPresent.title}</span>
+      <User
+        picture={forPresent.picture}
+        name={forPresent.title}
+      />
     </div>
   )
 }
@@ -29,7 +32,7 @@ presentBuyer.added = {
       getEventBeneficiaries(notificationData)
     )
   },
-  icon: ['dollar', 'plus'],
+  icon: {main: 'dollar', corner: 'plus'},
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl: getMessageEl.bind(presentBuyer, true)
@@ -37,7 +40,7 @@ presentBuyer.added = {
 
 presentBuyer.removed = {
   usersFilter: presentBuyer.added.usersFilter,
-  icon: ['dollar', 'minus'],
+  icon: {main: 'dollar', corner: 'minus'},
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl: getMessageEl.bind(presentBuyer, false)

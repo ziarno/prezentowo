@@ -1,6 +1,7 @@
 _locale: pl
 Events: Wydarzenia
 Event: Wydarzenie
+event: wydarzenie
 Past events: Przeszłe wydarzenia
 Profile: Profil
 Change password: Zmień hasło
@@ -97,3 +98,8 @@ is requesting to join event: prosi o dołączenie do wydarzenia
 from event: z wydarzenia
 Participant edited: Uczestnik edytowany
 a new present: nowy prezent
+will buy: kupi
+will not buy: nie kupi
+a message: wiadomość
+in: w
+your request to join event: twoją prośbę o dołączenie do wydarzenia

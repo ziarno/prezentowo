@@ -10,10 +10,10 @@ function getMessageEl(actionText, notification) {
   var {byUser, forEvent} = notification
   return (
     <div className="translations text-with-user">
-      <T>Event</T>
-      <span>{forEvent.title}</span>
-      <T>{actionText}</T>
       <User {...byUser} />
+      <T>{`${byUser.gender}.${actionText}`}</T>
+      <T>event</T>
+      <span>{forEvent.title}</span>
     </div>
   )
 }
@@ -28,7 +28,7 @@ event.added = {
       getByUser(notificationData)
     )
   },
-  icon: 'plus',
+  icon: {main: 'plus'},
   getMessageEl() {
     return ''
   }
@@ -36,16 +36,16 @@ event.added = {
 
 event.removed = {
   usersFilter: event.added.usersFilter,
-  icon: 'remove',
+  icon: {main: 'remove'},
   getMessageEl: getMessageEl.bind(event,
-    'hints.event.removed')
+    'hasRemoved')
 }
 
 event.changed = {
   usersFilter: event.added.usersFilter,
-  icon: 'edit',
+  icon: {main: 'edit'},
   getMessageEl: getMessageEl.bind(event,
-    'hints.event.edited')
+    'hasEdited')
 }
 
 export default event

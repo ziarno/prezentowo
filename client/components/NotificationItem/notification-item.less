@@ -1,0 +1,23 @@
+@import '/client/styles/partials/vars.import.less';
+
+.notification-item {
+  padding: 5px;
+  border-bottom: 1px solid @grey-transparent;
+  display: flex;
+  .notification-item--icon {
+    width: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .notification-item--message {
+    display: flex;
+  }
+  .notification-item--content {
+    width: 100%;
+  }
+  .notification-item--hints {
+    display: flex;
+    justify-content: space-between;
+  }
+}

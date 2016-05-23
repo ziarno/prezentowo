@@ -25,13 +25,13 @@ eventBeneficiary.added = {
       getByUser(notificationData)
     )
   },
-  icon: 'add user',
+  icon: {main: 'add user'},
   getMessageEl: getMessageEl.bind(eventBeneficiary, 'added')
 }
 
 eventBeneficiary.removed = {
   usersFilter: eventBeneficiary.added.usersFilter,
-  icon: 'remove user',
+  icon: {main: 'remove user'},
   getMessageEl: getMessageEl.bind(eventBeneficiary, 'removed')
 }
 
