@@ -1,5 +1,6 @@
 import React from 'react'
 
+//user filters
 export function getByUser({byUser}) {
   return [byUser._id]
 }
@@ -16,4 +17,20 @@ export function getForUser({forUser}) {
 }
 export function getEventCreator({event}) {
   return [event.creatorId]
+}
+
+export function showPresent({forPresent}) {
+  ModalManager.open(
+    <PresentDetails presentId={forPresent.id} />,
+    {
+      id: 'present-details',
+      className: 'inverted'
+    }
+  )
+}
+export function showEvent({forEvent}) {
+  FlowRouter.go(`/event/id/${forEvent.id}`)
+}
+export function showEventParticipant({forEvent, forUser}) {
+  FlowRouter.go(`/event/id/${forEvent.id}/user/${forUser.id}`)
 }

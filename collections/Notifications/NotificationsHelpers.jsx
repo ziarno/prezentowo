@@ -8,10 +8,6 @@ NotificationsHelpers.getPicture = function () {
   return NotificationsMap.getPicture(this)
 }
 
-NotificationsHelpers.getMessage = function () {
-
-}
-
 NotificationsHelpers.getMessageEl = function () {
   return NotificationsMap.getMessageEl(this)
 }
@@ -24,12 +20,13 @@ NotificationsHelpers.hasPicture = function () {
   return NotificationsMap.findField(this).hasPicture
 }
 
-NotificationsHelpers.requiresAction = function () {
-  return NotificationsMap.findField(this).requiresAction
+NotificationsHelpers.isShowable = function () {
+  return !!NotificationsMap.findField(this).show
 }
 
-NotificationsHelpers.getActions = function () {
-
+NotificationsHelpers.show = function () {
+  var field = NotificationsMap.findField(this)
+  return field && field.show && field.show(this)
 }
 
 export default NotificationsHelpers

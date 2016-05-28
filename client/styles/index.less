@@ -1,4 +1,5 @@
 @import 'partials/vars.import.less';
+@import 'partials/mixins.import.less';
 
 @font-face {
   font-family: 'FoglihtenNo07';
@@ -47,4 +48,12 @@ body {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.is-selectable {
+  .selectable()
+}
+
+.no-shadow {
+  box-shadow: none !important;
 }

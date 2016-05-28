@@ -4,8 +4,9 @@ import {
   getByUser,
   getEventParticipants,
   getEventBeneficiaries,
-  getForUser
-} from './userFilters'
+  getForUser,
+  showPresent
+} from './commonFunctions'
 
 var presentComment = {
   secret: {},
@@ -44,7 +45,8 @@ presentComment.secret.added = {
   icon: {main: 'comment outline'},
   hasPicture: true,
   getPicture: present.added.getPicture,
-  getMessageEl
+  getMessageEl,
+  show: showPresent
 }
 
 presentComment.shared.added = {
@@ -57,7 +59,8 @@ presentComment.shared.added = {
   icon: {main: 'comment outline'},
   hasPicture: true,
   getPicture: present.added.getPicture,
-  getMessageEl
+  getMessageEl,
+  show: showPresent
 }
 
 

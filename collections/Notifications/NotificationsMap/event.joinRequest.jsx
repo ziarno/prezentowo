@@ -1,8 +1,9 @@
 import React from 'react'
 import {
   getForUser,
-  getEventCreator
-} from './userFilters'
+  getEventCreator,
+  showEvent
+} from './commonFunctions'
 
 var eventJoinRequest = {}
 
@@ -21,13 +22,15 @@ function getMessageEl(actionText, notification) {
 eventJoinRequest.accepted = {
   usersFilter: getForUser,
   icon: {main: 'add user'},
-  getMessageEl: getMessageEl.bind(eventJoinRequest, 'hasAccepted')
+  getMessageEl: getMessageEl.bind(eventJoinRequest, 'hasAccepted'),
+  show: showEvent
 }
 
 eventJoinRequest.rejected = {
   usersFilter: getForUser,
   icon: {main: 'remove user'},
-  getMessageEl: getMessageEl.bind(eventJoinRequest, 'hasRejected')
+  getMessageEl: getMessageEl.bind(eventJoinRequest, 'hasRejected'),
+  show: showEvent
 }
 
 eventJoinRequest.added = {
@@ -43,7 +46,7 @@ eventJoinRequest.added = {
       </div>
     )
   },
-  requiresAction: true
+  show: showEvent
 }
 
 export default eventJoinRequest

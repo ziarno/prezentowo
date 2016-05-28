@@ -1,8 +1,9 @@
 import React from 'react'
 import {
   getByUser,
-  getEventParticipants
-} from './userFilters'
+  getEventParticipants,
+  showEvent
+} from './commonFunctions'
 
 var eventBeneficiary = {}
 
@@ -12,7 +13,7 @@ function getMessageEl(actionText, notification) {
     <div className="translations text-with-user">
       <User {...forUser} />
       <T>{`${forUser.gender}.hasBeen`}</T>
-      <T>{actionText}</T>
+      <T>{`${forUser.gender}.${actionText}`}</T>
       <T>hints.asBeneficiary</T>
     </div>
   )
@@ -26,13 +27,15 @@ eventBeneficiary.added = {
     )
   },
   icon: {main: 'add user'},
-  getMessageEl: getMessageEl.bind(eventBeneficiary, 'added')
+  getMessageEl: getMessageEl.bind(eventBeneficiary, 'hasBeenAdded'),
+  show: showEvent
 }
 
 eventBeneficiary.removed = {
   usersFilter: eventBeneficiary.added.usersFilter,
   icon: {main: 'remove user'},
-  getMessageEl: getMessageEl.bind(eventBeneficiary, 'removed')
+  getMessageEl: getMessageEl.bind(eventBeneficiary, 'hasBeenRemoved'),
+  show: showEvent
 }
 
 export default eventBeneficiary

@@ -2,8 +2,10 @@ import React from 'react'
 import {
   getByUser,
   getEventParticipants,
-  getForUser
-} from './userFilters'
+  getForUser,
+  showEvent,
+  showEventParticipant
+} from './commonFunctions'
 
 var eventInvitation = {}
 
@@ -27,13 +29,15 @@ eventInvitation.accepted = {
     )
   },
   icon: {main: 'mail outline', corner: 'checkmark'},
-  getMessageEl: getMessageEl.bind(eventInvitation, 'hasAccepted')
+  getMessageEl: getMessageEl.bind(eventInvitation, 'hasAccepted'),
+  show: showEventParticipant
 }
 
 eventInvitation.rejected = {
   usersFilter: eventInvitation.accepted.usersFilter,
   icon: {main: 'mail outline', corner: 'remove'},
-  getMessageEl: getMessageEl.bind(eventInvitation, 'hasRejected')
+  getMessageEl: getMessageEl.bind(eventInvitation, 'hasRejected'),
+  show: showEvent
 }
 
 eventInvitation.added = {
@@ -48,7 +52,8 @@ eventInvitation.added = {
         <span>{forEvent.title}</span>
       </div>
     )
-  }
+  },
+  show: showEvent
 }
 
 export default eventInvitation

@@ -4,7 +4,7 @@ function getFieldsProjection({buyers}) {
   var projection = {
     fields: {
       commentsShared: 0,
-      commentsSecret: 0,
+      commentsSecret: 0
     },
     sort: {
       isOwn: -1,
@@ -35,7 +35,7 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
       {
         find(event) {
           if (!this.userId || !eventId) {
-            return this.ready()
+            return void this.ready()
           }
 
           var isManyToOne = event.type === 'many-to-one'
@@ -78,7 +78,7 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
             }, getFieldsProjection({buyers: 1}))
           }
 
-          return this.ready()
+          return void this.ready()
 
         }
       },
@@ -89,7 +89,7 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
       {
         find(event) {
           if (!this.userId || !eventId) {
-            return this.ready()
+            return void this.ready()
           }
 
           var isManyToMany = event.type === 'many-to-many'
@@ -104,13 +104,13 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
             }, getFieldsProjection({buyers: 1}))
           }
 
-          return this.ready()
+          return void this.ready()
         }
       },
       {
         find(event) {
           if (!this.userId || !eventId) {
-            return this.ready()
+            return void this.ready()
           }
 
           var isManyToMany = event.type === 'many-to-many'
@@ -124,7 +124,7 @@ Meteor.publishComposite('presents', function ({eventId, forUserId}) {
             }, getFieldsProjection({buyers: 0}))
           }
 
-          return this.ready()
+          return void this.ready()
         }
       }
     ]

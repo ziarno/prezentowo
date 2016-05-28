@@ -1,6 +1,13 @@
 import React from 'react'
 import {mount} from 'react-mounter'
 
+function showEvent(params) {
+  ModalManager.destroy()
+  mount(App, {
+    content: <EventContainer {...params} />
+  })
+}
+
 FlowRouter.notFound = {
   action() {
     console.warn('404 :(')
@@ -14,19 +21,9 @@ FlowRouter.route('/', {
 })
 
 FlowRouter.route('/event/id/:eventId', {
-  action(params) {
-    ModalManager.close()
-    mount(App, {
-      content: <EventContainer {...params} />
-    })
-  }
+  action: showEvent
 })
 
 FlowRouter.route('/event/id/:eventId/user/:userId', {
-  action(params) {
-    ModalManager.close()
-    mount(App, {
-      content: <EventContainer {...params} />
-    })
-  }
+  action: showEvent
 })

@@ -22,7 +22,6 @@ caching-compiler@1.0.2
 caching-html-compiler@1.0.4
 callback-hook@1.0.6
 check@1.1.2
-chuangbo:cookie@1.1.0
 coffeescript@1.0.15
 cosmos:browserify@0.8.4
 dburles:collection-helpers@1.0.4
@@ -34,7 +33,6 @@ ddp-rate-limiter@1.0.2
 ddp-server@1.2.4
 deps@1.0.10
 diff-sequence@1.0.3
-digilord:faker@1.0.7
 ecmascript@0.4.1
 ecmascript-runtime@0.2.8
 ejson@1.0.9
@@ -71,9 +69,6 @@ mdg:validated-method@1.0.2
 mdg:validation-error@0.5.1
 meteor@1.1.12
 meteor-base@1.0.2
-meteorhacks:fast-render@2.13.0
-meteorhacks:inject-data@2.0.0
-meteorhacks:meteorx@1.4.1
 meteorhacks:picker@1.0.3
 meteorhacks:search-source@1.4.2
 meteortoys:toykit@2.2.1

@@ -20,7 +20,6 @@ import presentBuyer from './NotificationsMap/present.buyer'
  *      main: String,
  *      corner: String
  *    }
- *  - requiresAction: Boolean
  *  - hasPicture: Boolean
  */
 var NotificationsMap = {
@@ -46,7 +45,8 @@ NotificationsMap.present.buyer = presentBuyer
 //shortcut functions
 ;['usersFilter',
   'getMessageEl',
-  'getPicture'].forEach(function (funcName) {
+  'getPicture',
+  'show'].forEach(function (funcName) {
   NotificationsMap[funcName] = function (notification) {
     return NotificationsMap
       .findField(notification)

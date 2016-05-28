@@ -254,15 +254,7 @@ EventContainer = createContainer(({eventId, userId}) => {
       Session.set('currentUser', getCurrentUser())
     })
     .ready()
-  var participants = Participants
-    .find()
-    .fetch()
-    .sort((participant1, participant2) => {
-      var name1 = participant1.profile.name.capitalizeFirstLetter()
-      var name2 = participant2.profile.name.capitalizeFirstLetter()
-
-      return name1 > name2 ? 1 : -1
-    })
+  var participants = []
   var user = Meteor.user()
   var currentUser = getCurrentUser()
 
@@ -287,14 +279,19 @@ EventContainer = createContainer(({eventId, userId}) => {
   }
 
   if (subsReady) {
-    participants
+    participants = event.participants
+      //mix with event participant data
+      .map(p => _.extend(p, Participants.findOne(p.userId)))
+      //in case a participant is not yet in Participants, omit him
+      .filter(p => p.profile)
+      .sort((participant1, participant2) => {
+        var name1 = participant1.profile.name.capitalizeFirstLetter()
+        var name2 = participant2.profile.name.capitalizeFirstLetter()
+
+        return name1 > name2 ? 1 : -1
+      })
       //move yourself to the top
       .moveToTop(p => p._id === Meteor.userId())
-      //mix with event participant data
-      .forEach(participant => {
-        _.extend(participant, _.find(event.participants,
-          p => p.userId === participant._id))
-      })
     Session.set('participantIds', participants.map(p => p._id))
 
     //path should be correct (depending on view mode)
@@ -316,7 +313,6 @@ EventContainer = createContainer(({eventId, userId}) => {
     ready: subsReady,
     participants,
     event,
-    currentUser,
     presents: Presents.find().fetch(),
     settings: user && user.settings
   }

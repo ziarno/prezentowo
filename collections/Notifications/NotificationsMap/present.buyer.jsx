@@ -4,8 +4,9 @@ import {
   getByUser,
   getEventParticipants,
   getEventBeneficiaries,
-  getForUser
-} from './userFilters'
+  getForUser,
+  showPresent
+} from './commonFunctions'
 
 var presentBuyer = {}
 
@@ -35,7 +36,8 @@ presentBuyer.added = {
   icon: {main: 'dollar', corner: 'plus'},
   hasPicture: true,
   getPicture: present.added.getPicture,
-  getMessageEl: getMessageEl.bind(presentBuyer, true)
+  getMessageEl: getMessageEl.bind(presentBuyer, true),
+  show: showPresent
 }
 
 presentBuyer.removed = {
@@ -43,7 +45,8 @@ presentBuyer.removed = {
   icon: {main: 'dollar', corner: 'minus'},
   hasPicture: true,
   getPicture: present.added.getPicture,
-  getMessageEl: getMessageEl.bind(presentBuyer, false)
+  getMessageEl: getMessageEl.bind(presentBuyer, false),
+  show: showPresent
 }
 
 export default presentBuyer

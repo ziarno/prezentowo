@@ -1,11 +1,12 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import {createContainer} from 'meteor/react-meteor-data'
 import _ from 'underscore'
 
 PresentDetailsModal = class PresentDetailsModal extends React.Component {
 
   constructor({presentId}) {
-    super({presentId})
+    super()
 
     //note: don't put this in `createContainer` - situation:
     //when other user removes a present we are currently viewing,
@@ -82,17 +83,28 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
     }
   }
 
-  componentDidUpdate({present}) {
-    //refresh modal only if the change
-    //didn't happen in comments
+  setModalShadow() {
+    //note: needs to be toggled manually, because semantic adds its
+    //own classes to the modal, and react overrides them all
+    //if we wanna change at least 1
+    $(ReactDOM.findDOMNode(this))
+      .toggleClass(
+        'no-shadow',
+        !this.props.presentReadyToShow
+      )
+  }
+
+  componentDidUpdate({present, presentReadyToShow}) {
     var newPresent = _.omit(this.props.present,
       ['commentsShared', 'commentsSecret'])
     var oldPresent = _.omit(present,
       ['commentsShared', 'commentsSecret'])
 
-    if (!_.isEqual(oldPresent, newPresent)) {
+    if (!_.isEqual(oldPresent, newPresent) ||
+      presentReadyToShow !== this.props.presentReadyToShow) {
       ModalManager.refresh()
     }
+    this.setModalShadow()
   }
 
   componentWillUnmount() {
@@ -102,6 +114,7 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
 
   componentDidMount() {
     document.body.addEventListener('keyup', this.handleKeyUp)
+    this.setModalShadow()
   }
 
   render() {
@@ -112,9 +125,19 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
       creator,
       buyers,
       commentsReady,
+      presentReadyToShow,
       previousPresentId,
       nextPresentId
       } = this.props
+
+    if (!presentReadyToShow) {
+      return (
+        <Modal>
+          <Loader />
+        </Modal>
+      )
+    }
+
     var isUserBuyer = present.isUserBuyer()
     var isUserBeneficiary =
       _.contains(event.beneficiaryIds, Meteor.userId())
@@ -320,30 +343,47 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
 }
 
 PresentDetailsModal.propTypes = {
-  //note: cannot pass a present object directly,
-  // because modals are outside of the react root,
-  // and changes to props don't get propagated
   presentId: React.PropTypes.string.isRequired,
-  present: React.PropTypes.object.isRequired
+
+  present: React.PropTypes.object,
+  event: React.PropTypes.object,
+  commentsReady: React.PropTypes.bool,
+  presentReadyToShow: React.PropTypes.bool,
+  forUsers: React.PropTypes.array,
+  creator: React.PropTypes.object,
+  buyers: React.PropTypes.array,
+  previousPresentId: React.PropTypes.string,
+  nextPresentId: React.PropTypes.string,
 }
 
 PresentDetails = createContainer(({presentId}) => {
-  var event = Session.get('event')
+  var currentEvent = Session.get('event')
+  var currentUser = Session.get('currentUser')
   var participantIds = Session.get('participantIds')
-  var isManyToOne = event.type === 'many-to-one'
+  var user = Meteor.user()
   var present = Presents.findOne(presentId)
+  var isParticipantsModeMulti =
+    user && user.settings.viewMode.participantsMode === 'multi'
+  var isPresentFromThisEvent = present &&
+    currentEvent._id === present.eventId
+  var presentEvent = present &&
+    Events.findOne(present.eventId)
+  var presentReadyToShow = present && (
+      isPresentFromThisEvent ||
+      Meteor
+        .subscribe('eventDetails', {eventId: present.eventId})
+        .ready()
+    )
+  var isManyToOne = presentEvent &&
+    presentEvent.type === 'many-to-one'
   var commentsReady = Meteor
-    .subscribe('comments', {presentId})
+    .subscribe('presentDetails', {presentId})
     .ready()
-  var forUsers
-  var creator
-  var buyers
+  var forUsers = []
   var presentIds = isManyToOne ?
     getPresentIds() : _.flatten(participantIds.map(getPresentIds))
   var currentPresentIndex =
     presentIds.indexOf(presentId)
-  var previousPresentId = presentIds[currentPresentIndex - 1]
-  var nextPresentId = presentIds[currentPresentIndex + 1]
 
   function getPresentIds(forUserId) {
     var selector = forUserId ? {forUserId} : {}
@@ -358,31 +398,48 @@ PresentDetails = createContainer(({presentId}) => {
     }).map(p => p._id)
   }
 
+  function showArrows() {
+    //basically, don't show arrows if present that we want to show
+    //is not already in presents container.
+    var isCurrentlyViewingForUser = present && currentUser &&
+      currentUser._id === present.forUserId
+    return isPresentFromThisEvent &&
+      (isManyToOne || isParticipantsModeMulti || isCurrentlyViewingForUser)
+  }
+
   if (isManyToOne) {
     forUsers = Participants.find({
-      _id: {$in: event.beneficiaryIds}
+      _id: {$in: presentEvent.beneficiaryIds}
     }).fetch()
-  } else {
-    forUsers = present && [Participants.findOne(present.forUserId)]
+  } else if (presentReadyToShow) {
+    let forUser = Participants.findOne(present.forUserId)
+    forUsers = present && forUser && [forUser]
   }
-  creator = present && Participants.findOne(present.creatorId)
-  buyers = present &&
-    present.buyers &&
-    present.buyers.length !== 0 &&
-    Participants.find({
-      _id: {$in: present.buyers}
-    }).fetch()
 
-  Session.set('currentUser', Participants.findOne(forUsers[0]))
+  if (!isManyToOne &&
+      isPresentFromThisEvent &&
+      isParticipantsModeMulti &&
+      forUsers && forUsers.length > 0) {
+    Session.set('currentUser', forUsers[0])
+  }
 
   return {
-    event,
-    commentsReady,
     present,
+    event: presentEvent,
+    commentsReady,
+    presentReadyToShow,
     forUsers,
-    creator,
-    buyers,
-    previousPresentId,
-    nextPresentId
+    creator: present &&
+      Participants.findOne(present.creatorId),
+    buyers: present &&
+      present.buyers &&
+      present.buyers.length !== 0 &&
+      Participants.find({
+        _id: {$in: present.buyers}
+      }).fetch(),
+    previousPresentId: showArrows() &&
+      presentIds[currentPresentIndex - 1],
+    nextPresentId: showArrows() &&
+      presentIds[currentPresentIndex + 1]
   }
 }, PresentDetailsModal)

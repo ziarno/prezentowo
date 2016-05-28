@@ -5,7 +5,9 @@ female:
   hasAccepted: zaakceptowała
   hasRejected: odrzuciła
   hasAdded: dodała
+  hasBeenAdded: dodana
   hasRemoved: usunęła
+  hasBeenRemoved: usunięta
   hasEdited: edytowała
   added: dodana
   removed: usunięta
@@ -15,7 +17,9 @@ male:
   hasAccepted: zaakceptował
   hasRejected: odrzucił
   hasAdded: dodał
+  hasBeenAdded: dodany
   hasRemoved: usunął
+  hasBeenRemoved: usunięty
   hasEdited: edytował
   added: dodany
   removed: usunięty

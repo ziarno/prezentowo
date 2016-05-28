@@ -1,8 +1,13 @@
 import React from 'react'
 
-NotificationItem = ({notification}) => {
+NotificationItem = ({notification, onClick, clickable}) => {
   return (
-    <div className="notification-item">
+    <div
+      onClick={onClick}
+      className={classNames('notification-item', {
+        'is-selectable': clickable,
+        'waves-effect': clickable
+      })}>
       <div className="notification-item--icon">
         <Icon {...notification.getIcon()} size="large" />
       </div>

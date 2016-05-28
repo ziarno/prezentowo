@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-ModalManager = function () {
+ModalManager = (function () {
 
   var modals = {}
 
@@ -43,6 +43,9 @@ ModalManager = function () {
     },
 
     open(modalComponent, options = {}) {
+      if (ModalManager.isOpen(options.id)) {
+        ModalManager.destroy(options.id)
+      }
       var {id} = options
       var {modal} =
         ModalManager.createModal({
@@ -99,4 +102,4 @@ ModalManager = function () {
     }
   }
 
-}()
+})()

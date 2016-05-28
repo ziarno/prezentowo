@@ -67,7 +67,10 @@ PresentsContainer = class PresentsContainer extends React.Component {
         <UserPresents
           presentViewMode={presentViewMode}
           users={[showUser]}
-          presents={presents}
+          presents={_.filter(
+            presents,
+            p => p.forUserId === showUser._id
+          )}
         />
       )
     } else {
@@ -126,7 +129,9 @@ PresentsContainer = createContainer(() => {
 
   return {
     ready: subscriptionReady,
-    presents: Presents.find().fetch(),
+    presents: Presents.find({
+      eventId
+    }).fetch(),
     showUser: currentUser,
     participantsViewMode,
     presentViewMode,

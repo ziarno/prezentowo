@@ -13,7 +13,7 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
         collectionName: 'participants',
         find(event) {
           var participantIds = event.participants
-            .map(participant => participant.userId)
+            .map(p => p.userId)
 
           return Meteor.users.find({
             _id: {
@@ -34,7 +34,7 @@ Meteor.publishComposite('eventDetails', function ({eventId}) {
         collectionName: 'participants',
         find(event) {
           var participantIds = event.participants
-            .map(participant => participant.userId)
+            .map(p => p.userId)
 
           return Meteor.users.find({
             _id: {

@@ -63,6 +63,13 @@ NotificationsPopup = class NotificationsPopup extends PopupComponent {
           <NotificationItem
             key={notification._id}
             notification={notification}
+            clickable={notification.isShowable()}
+            onClick={() => {
+              if (notification.isShowable()) {
+                this.hidePopup()
+                notification.show()
+              }
+            }}
           />
         ))}
 

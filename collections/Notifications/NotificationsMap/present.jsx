@@ -3,8 +3,9 @@ import {
   getByUser,
   getEventParticipants,
   getEventBeneficiaries,
-  getForUser
-} from './userFilters'
+  getForUser,
+  showPresent
+} from './commonFunctions'
 
 var present = {}
 
@@ -47,7 +48,8 @@ present.added = {
         ) : null}
       </div>
     )
-  }
+  },
+  show: showPresent
 }
 
 present.changed = {
@@ -67,7 +69,8 @@ present.changed = {
         />
       </div>
     )
-  }
+  },
+  show: showPresent
 }
 
 present.removed = {

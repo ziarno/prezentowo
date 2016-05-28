@@ -2,7 +2,8 @@ import React from 'react'
 import {
   getByUser,
   getEventParticipants,
-} from './userFilters'
+  showEvent
+} from './commonFunctions'
 
 var event = {}
 
@@ -38,14 +39,16 @@ event.removed = {
   usersFilter: event.added.usersFilter,
   icon: {main: 'remove'},
   getMessageEl: getMessageEl.bind(event,
-    'hasRemoved')
+    'hasRemoved'),
+  show: showEvent
 }
 
 event.changed = {
   usersFilter: event.added.usersFilter,
   icon: {main: 'edit'},
   getMessageEl: getMessageEl.bind(event,
-    'hasEdited')
+    'hasEdited'),
+  show: showEvent
 }
 
 export default event

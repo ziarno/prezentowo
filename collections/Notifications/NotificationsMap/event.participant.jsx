@@ -2,8 +2,10 @@ import React from 'react'
 import {
   getByUser,
   getEventParticipants,
-  getForUser
-} from './userFilters'
+  getForUser,
+  showEventParticipant,
+  showEvent
+} from './commonFunctions'
 
 var eventParticipant = {}
 
@@ -25,7 +27,8 @@ eventParticipant.added = {
         <T>New participant</T>
       </div>
     )
-  }
+  },
+  show: showEventParticipant
 }
 
 eventParticipant.changed = {
@@ -40,7 +43,8 @@ eventParticipant.changed = {
         <T>Participant edited</T>
       </div>
     )
-  }
+  },
+  show: showEventParticipant
 }
 
 eventParticipant.removed = {
