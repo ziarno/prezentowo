@@ -66,7 +66,8 @@ eventParticipant.removed = {
         <span>{forEvent.title}</span>
       </div>
     )
-  }
+  },
+  show: showEvent
 }
 
 export default eventParticipant

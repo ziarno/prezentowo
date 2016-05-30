@@ -343,17 +343,7 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
 }
 
 PresentDetailsModal.propTypes = {
-  presentId: React.PropTypes.string.isRequired,
-
-  present: React.PropTypes.object,
-  event: React.PropTypes.object,
-  commentsReady: React.PropTypes.bool,
-  presentReadyToShow: React.PropTypes.bool,
-  forUsers: React.PropTypes.array,
-  creator: React.PropTypes.object,
-  buyers: React.PropTypes.array,
-  previousPresentId: React.PropTypes.string,
-  nextPresentId: React.PropTypes.string,
+  presentId: React.PropTypes.string.isRequired
 }
 
 PresentDetails = createContainer(({presentId}) => {
