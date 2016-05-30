@@ -1,3 +1,5 @@
+@import '/client/styles/partials/vars.import.less';
+
 .notifications-popup.ui.popup {
   max-width: 500px !important;
   max-height: 300px;
@@ -11,4 +13,11 @@
   right: 2px;
   font-size: 0.6rem;
   z-index: 1;
+}
+
+.inactive-header {
+  padding: 0.75rem 1rem;
+  text-transform: uppercase;
+  color: @grey-inactive-header;
+  font-size: 0.78571429rem;
 }

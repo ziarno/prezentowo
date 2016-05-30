@@ -59,7 +59,7 @@ NotificationsPopup = class NotificationsPopup extends PopupComponent {
         'notifications-popup ui popup',
         this.props.popupClassName)}>
 
-        {notifications.map(notification => (
+        {notifications.length ? notifications.map(notification => (
           <NotificationItem
             key={notification._id}
             notification={notification}
@@ -71,7 +71,11 @@ NotificationsPopup = class NotificationsPopup extends PopupComponent {
               }
             }}
           />
-        ))}
+        )) : (
+          <div className="inactive-header">
+            <T>No notifications</T>
+          </div>
+        )}
 
       </div>
     )
