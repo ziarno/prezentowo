@@ -191,14 +191,9 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
           className="present-details--content">
           <div className="present-details--image">
             <Img
-              onClick={() => {
-                ModalManager.open(
-                  <Lightbox picture={present.picture.large} />,
-                  {id: 'lightbox'}
-                )
-              }}
-              className="waves-effect"
-              src={present.picture.small} />
+              src={present.picture.small}
+              modalSrc={present.picture.large}
+              className="waves-effect" />
               <div className="present-details--buttons">
                 {present.isUserCreator() ? (
                   <PresentPopup
@@ -354,7 +349,7 @@ PresentDetails = createContainer(({presentId}) => {
   var present = Presents.findOne(presentId)
   var isParticipantsModeMulti =
     user && user.settings.viewMode.participantsMode === 'multi'
-  var isPresentFromThisEvent = present &&
+  var isPresentFromThisEvent = present && currentEvent &&
     currentEvent._id === present.eventId
   var presentEvent = present &&
     Events.findOne(present.eventId)
@@ -370,9 +365,10 @@ PresentDetails = createContainer(({presentId}) => {
     .subscribe('presentDetails', {presentId})
     .ready()
   var forUsers = []
-  var presentIds = isManyToOne ?
-    getPresentIds() : _.flatten(participantIds.map(getPresentIds))
-  var currentPresentIndex =
+  var presentIds = isManyToOne  ?
+    getPresentIds() :
+    (participantIds && _.flatten(participantIds.map(getPresentIds)))
+  var currentPresentIndex = presentIds &&
     presentIds.indexOf(presentId)
 
   function getPresentIds(forUserId) {
@@ -388,7 +384,7 @@ PresentDetails = createContainer(({presentId}) => {
     }).map(p => p._id)
   }
 
-  function showArrows() {
+  function shouldShowArrows() {
     //basically, don't show arrows if present that we want to show
     //is not already in presents container.
     var isCurrentlyViewingForUser = present && currentUser &&
@@ -427,9 +423,9 @@ PresentDetails = createContainer(({presentId}) => {
       Participants.find({
         _id: {$in: present.buyers}
       }).fetch(),
-    previousPresentId: showArrows() &&
+    previousPresentId: shouldShowArrows() &&
       presentIds[currentPresentIndex - 1],
-    nextPresentId: showArrows() &&
+    nextPresentId: shouldShowArrows() &&
       presentIds[currentPresentIndex + 1]
   }
 }, PresentDetailsModal)

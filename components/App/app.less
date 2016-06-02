@@ -3,8 +3,9 @@
 .app-content {
   padding-top: @header-height;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  height: 100vh;
 
   & > .ui.dimmer {
     z-index: @z-index-app-content-dimmer;
@@ -12,3 +13,8 @@
 
 }
 
+#app:not(.event-view) > .app-content {
+  background-image: url('images/prezenty-footer-100.png');
+  background-position: bottom;
+  background-repeat-y: no-repeat;
+}

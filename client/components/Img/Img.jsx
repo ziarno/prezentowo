@@ -9,6 +9,7 @@ Img = class Img extends React.Component {
     }
     this.image = null
     this.loadTimeout = null
+    this.showModalWithPicture = this.showModalWithPicture.bind(this)
   }
 
   componentWillReceiveProps(newProps) {
@@ -45,13 +46,31 @@ Img = class Img extends React.Component {
     this.image.src = src
   }
 
+  showModalWithPicture() {
+    ModalManager.open(
+      <Lightbox picture={this.props.modalSrc} />,
+      {id: 'lightbox'}
+    )
+  }
+
   render() {
+    var {
+      autosize,
+      className,
+      hideLoader,
+      loaderOptions,
+      children,
+      modalSrc
+    } = this.props
     var style = {
       backgroundImage: `url(${this.props.src})`
     }
+    var onClick = modalSrc ?
+      this.showModalWithPicture :
+      this.props.onClick
 
     if (this.image &&
-        this.props.autosize &&
+        autosize &&
         !this.state.isLoading) {
       style.width = this.image.width
       style.height = this.image.height
@@ -59,18 +78,20 @@ Img = class Img extends React.Component {
 
     return (
       <div
-        onClick={this.props.onClick}
-        className={classNames('img', this.props.className)}
+        onClick={onClick}
+        className={classNames('img', className, {
+          enlarge: !!modalSrc
+        })}
         style={style}>
 
-        {this.state.isLoading && !this.props.hideLoader ? (
+        {this.state.isLoading && !hideLoader ? (
           <Loader
             inverted
-            {...this.props.loaderOptions}
+            {...loaderOptions}
           />
         ) : null}
 
-        {this.props.children}
+        {children}
 
       </div>
     )
@@ -80,6 +101,7 @@ Img = class Img extends React.Component {
 
 Img.propTypes = {
   src: React.PropTypes.string.isRequired,
+  modalSrc: React.PropTypes.string,
   autosize: React.PropTypes.bool,
   hideLoader: React.PropTypes.bool,
   onClick: React.PropTypes.func,

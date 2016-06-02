@@ -41,12 +41,14 @@ Edit event: Edit event
 Event Type: Event type
 New participant: New participant
 Add participant: Add participant
+Add participants: Add participants
 Edit participant: Edit participant
 Send invitation email: Send invitation email
 Upload file: Upload file
 No presents: No presents
 New present: New present
 Add present: Add present
+Add presents: Add presents
 Edit present: Edit present
 Loading event: Loading event: [title]
 for: for
@@ -104,3 +106,4 @@ a message: a message
 in: in
 your request to join event: your request to join event
 No notifications: No notifications
+Create an account: Create an account

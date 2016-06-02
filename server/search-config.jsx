@@ -20,6 +20,7 @@ SearchSource.defineSource('email', function (searchText) {
 
 SearchSource.defineSource('usernames', function (searchText) {
   return Meteor.users.find({
+    _id: {$ne: this.userId},
     'profile.name': buildRegExp(searchText),
     isTemp: {$ne: true}
   }, {

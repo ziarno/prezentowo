@@ -117,6 +117,11 @@ EventContainer = class EventContainer extends ScrollableComponent {
       .visibilitySpy({
         action: 'stop'
       })
+    $(document.body)
+      .removeClass('sidebar-visible')
+    Session.set('event', {})
+    Session.set('participantIds', null)
+    Session.set('currentUser', {})
   }
 
   onAfterSidebarVisibilityChange() {
