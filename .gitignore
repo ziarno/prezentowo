@@ -1,7 +1,7 @@
 .idea/
 node_modules/
-client/lib/semantic-ui/*
-!client/lib/semantic-ui/site/
-!client/lib/semantic-ui/custom.semantic.json
-!client/lib/semantic-ui/theme.config.import.less
+#client/lib/semantic-ui/*
+#!client/lib/semantic-ui/site/
+#!client/lib/semantic-ui/custom.semantic.json
+#!client/lib/semantic-ui/theme.config.import.less
 .DS_Store
