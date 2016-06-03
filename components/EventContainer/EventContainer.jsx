@@ -178,6 +178,7 @@ EventContainer = class EventContainer extends ScrollableComponent {
         id="event-container"
         className={classNames({
           empty: !isUserAcceptedParticipant,
+          'presents-footer': ready && !isUserAcceptedParticipant,
           loading: !ready
         })}>
 

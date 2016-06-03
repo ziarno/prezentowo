@@ -1,4 +1,5 @@
 @import '/client/styles/partials/vars.import.less';
+@import '/client/styles/partials/mixins.import.less';
 
 .app-content {
   padding-top: @header-height;
@@ -6,6 +7,7 @@
   align-items: flex-start;
   justify-content: center;
   height: 100vh;
+  overflow-y: auto;
 
   & > .ui.dimmer {
     z-index: @z-index-app-content-dimmer;
@@ -14,7 +16,5 @@
 }
 
 #app:not(.event-view) > .app-content {
-  background-image: url('images/prezenty-footer-100.png');
-  background-position: bottom;
-  background-repeat-y: no-repeat;
+  .presents-footer()
 }
