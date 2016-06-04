@@ -99,7 +99,11 @@ ImagePicker = class ImagePicker extends ValidatedInput {
 
     this.setState({isLoading: true})
 
-    Cloudinary.upload(files, uploadOptions, (err, res) => {
+    Cloudinary.upload(files, {
+      ...uploadOptions,
+      //note: fix for lepozepo:cloudinary:
+      fields: {}
+    }, (err, res) => {
       this.setState({
         isLoading: false
       })
