@@ -12,7 +12,6 @@ Header = class Header extends React.Component {
   getLoggedInNavigation() {
     return (
       <div id="navigation-container">
-        <BlazeTemplate template="loginButtons" />
         <NavEvents
           event={this.props.event}
           events={this.props.events}
@@ -26,7 +25,6 @@ Header = class Header extends React.Component {
   getLoggedOutNavigation() {
     return (
       <div id="navigation-container">
-        <BlazeTemplate template="loginButtons" />
         <LoginOrRegisterButton />
       </div>
     )
