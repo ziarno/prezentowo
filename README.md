@@ -36,7 +36,6 @@ db.system.js.save({
       db.presents.remove({}, {multi: true});
       db.comments.remove({}, {multi: true});
       db.users.remove({}, {multi: true});
-      db.invitations.remove({}, {multi: true});
       db.notifications.remove({}, {multi: true});
     }
 });

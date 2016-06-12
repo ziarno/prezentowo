@@ -1,4 +1,5 @@
 import React from 'react'
+import {participantStatuses} from '../../lib/constants'
 
 var EventsSchemas = {}
 
@@ -28,13 +29,8 @@ EventsSchemas.Participant = new SimpleSchema({
   },
   status: {
     type: String,
-    allowedValues: [
-      'isInvited',
-      'isAccepted',
-      'requestingJoin',
-      'isRemoved',
-      'isTemp'
-    ]
+    allowedValues: participantStatuses
+      .map(s => s.name)
   }
 })
 

@@ -1,4 +1,6 @@
 import React from 'react'
+import _ from 'underscore'
+import {isStatusActive} from '../../lib/constants'
 
 var EventsFunctions = {}
 
@@ -10,8 +12,8 @@ EventsFunctions.addParticipant = function ({eventId, participant}) {
   // so basically convert from NewParticipant to Participant
   Events.Schemas.Participant.clean(participant)
 
-  //in case participant was removed by setting the 'isRemoved'
-  //status - just update the existing user
+  //in case participant is already on the list (but 'inactive')
+  // - just update the existing user
   var updatedCount = Events.update({
     _id: eventId,
     participants: {
@@ -24,24 +26,21 @@ EventsFunctions.addParticipant = function ({eventId, participant}) {
       'participants.$': participant
     }
   })
+  var modifier = {
+    $inc: {
+      participantsCount: isStatusActive(
+        participant.status) ? 1 : 0
+    }
+  }
 
   if (updatedCount === 0) {
     //participant wasn't on the list already - add new one
-    Events.update(eventId, {
-      $inc: {
-        participantsCount: 1
-      },
-      $push: {
-        participants: participant
-      }
-    })
-  } else {
-    Events.update(eventId, {
-      $inc: {
-        participantsCount: 1
-      }
-    })
+    modifier.$push = {
+      participants: participant
+    }
   }
+
+  Events.update(eventId, modifier)
 }
 
 EventsFunctions.removeParticipant = function ({
@@ -49,9 +48,12 @@ EventsFunctions.removeParticipant = function ({
   participantId,
   event = Events.findOne(eventId)
   }) {
+  var participant = _.find(event.participants,
+    p => p.userId === participantId)
+  var incrementCount = isStatusActive(participant.status) ? -1 : 0
   var modifier = {
     $inc: {
-      participantsCount: -1
+      participantsCount: incrementCount
     },
     $pull: {
       beneficiaryIds: participantId
@@ -83,7 +85,7 @@ EventsFunctions.removeParticipant = function ({
   Presents.functions.removePresents({
     forUserId: participantId
   })
-  Events.functions.updateEventPresentCounts(event)
+  Events.functions.updateEventPresentCounts({event})
 }
 
 EventsFunctions.participant = function ({
@@ -108,10 +110,13 @@ EventsFunctions.participant = function ({
 
   return {
     isAccepted() {
-      return participant && participant.status === 'isAccepted'
+      return participant &&
+        participant.status === 'isAccepted'
     },
     isParticipant() {
-      return participant && participant.status !== 'isRemoved'
+      return participant &&
+        participant.status &&
+        participant.status !== 'isRemoved'
     }
   }
 
@@ -170,7 +175,7 @@ EventsFunctions.check = function ({
     },
     isParticipant(userId) {
       if (!isParticipant(userId)) {
-        throw new Meteor.Error(`unauthorized`)
+        throw new Meteor.Error(`notParticipant`)
       }
       return this
     },
@@ -193,14 +198,14 @@ EventsFunctions.getPresentsCount = function (event) {
       (event.ownPresentsCount + event.otherPresentsCount)
   }
 
-  //in the case of 'single' participants mode, we can't just count the presents
-  //because only those for a particular user are being published - that's why we must keep
+  //in the case of 'single' participants mode, we can't just
+  //count the presents because only those for a particular
+  //user are being published - that's why we must keep
   //track of their count in the event
   return event && event.participants &&
     _.reduce(event.participants, (memo, participant) => {
       return (
-        participant.userId === Meteor.userId() ||
-          !Meteor.userId() ? (
+        participant.userId === Meteor.userId() || !Meteor.userId() ? (
           memo +
           participant.ownPresentsCount
         ) : (
@@ -212,7 +217,10 @@ EventsFunctions.getPresentsCount = function (event) {
     }, 0)
 }
 
-EventsFunctions.updatePresentsIsOwnState = function (event) {
+EventsFunctions.updatePresentsIsOwnState = function ({
+  eventId,
+  event = Events.findOne(eventId)
+  }) {
   //note: only relevant for many-to-one events
   Presents.find({eventId: event._id}).forEach((present) => {
     Presents.update(present._id, {
@@ -223,24 +231,54 @@ EventsFunctions.updatePresentsIsOwnState = function (event) {
   })
 }
 
-EventsFunctions.updateEventPresentCounts = function (event) {
-  var eventOwnPresentsCount = Presents.find({
-    eventId: event._id,
-    isOwn: true
-  }).count();
-  var eventOtherPresentsCount = Presents.find({
-    eventId: event._id,
-    isOwn: false
-  }).count();
+EventsFunctions.updateEventPresentCounts = function ({
+  eventId,
+  event = Events.findOne(eventId)
+  }) {
+  var presents = Presents.find({
+    eventId: event._id
+  }).fetch();
+  var isManyToMany = event.type === 'many-to-many'
 
-  Events.update({
-    _id: event._id
-  }, {
-    $set: {
-      ownPresentsCount: eventOwnPresentsCount,
-      otherPresentsCount: eventOtherPresentsCount
-    }
-  });
+  if (isManyToMany) {
+
+    event.participants.forEach(participant => {
+      var [ownPresents, otherPresents] = _.chain(presents)
+        .filter(p => p.forUserId === participant.userId)
+        .partition(p => p.isOwn)
+        .value()
+
+      Events.update({
+        _id: event._id,
+        participants: {
+          $elemMatch: {
+            userId: participant.userId
+          }
+        }
+      }, {
+        $set: {
+          'participants.$.ownPresentsCount': ownPresents.length,
+          'participants.$.otherPresentsCount': otherPresents.length
+        }
+      })
+    })
+
+  } else {
+
+    let eventPresentCountsModifier = _.defaults({
+      ownPresentsCount: 0,
+      otherPresentsCount: 0
+    }, _.countBy(presents, p => (
+      p.isOwn ? 'ownPresentsCount' : 'otherPresentsCount'
+    )))
+
+    Events.update({
+      _id: event._id
+    }, {
+      $set: eventPresentCountsModifier
+    })
+  }
+
 }
 
 export default EventsFunctions

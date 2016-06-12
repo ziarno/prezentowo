@@ -1,3 +1,5 @@
+@import '/client/styles/partials/vars.import.less';
+
 .user-item-accept-popup {
   white-space: nowrap;
   padding: 0 !important;
@@ -6,8 +8,18 @@
     justify-content: center;
     padding: 1em 1.5em;
     flex-wrap: nowrap;
+    border-bottom: 1px solid @grey-light;
   }
   .bottom-modal-buttons:not(.error) {
     padding-left: 0 !important;
   }
+  .replace-button {
+    text-transform: capitalize;
+  }
+  .replace-user-field {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+  }
+
 }

@@ -1,6 +1,12 @@
 import React from 'react'
 
-ButtonAccept = ({onClick, text, className, isSaving}) => (
+ButtonAccept = ({
+  onClick,
+  text,
+  className,
+  isSaving,
+  icon = 'checkmark'
+  }) => (
   <button
     type="submit"
     className={classNames(
@@ -11,7 +17,7 @@ ButtonAccept = ({onClick, text, className, isSaving}) => (
       }
     )}
     onClick={onClick}>
-    <i className="checkmark icon"></i>
+    <i className={`${icon} icon`}></i>
     <T>{text}</T>
   </button>
 )

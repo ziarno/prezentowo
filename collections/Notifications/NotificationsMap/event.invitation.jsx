@@ -4,7 +4,7 @@ import {
   getEventParticipants,
   getForUser,
   showEvent,
-  showEventParticipant
+  showEventByUser
 } from './commonFunctions'
 
 var eventInvitation = {}
@@ -30,7 +30,7 @@ eventInvitation.accepted = {
   },
   icon: {main: 'mail outline', corner: 'checkmark'},
   getMessageEl: getMessageEl.bind(eventInvitation, 'hasAccepted'),
-  show: showEventParticipant
+  show: showEventByUser
 }
 
 eventInvitation.rejected = {

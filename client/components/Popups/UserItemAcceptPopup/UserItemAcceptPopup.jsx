@@ -10,6 +10,7 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
     this.answerJoinRequest = this.answerJoinRequest.bind(this)
     this.acceptJoinRequest = this.acceptJoinRequest.bind(this)
     this.denyJoinRequest = this.denyJoinRequest.bind(this)
+    this.replaceUser = this.replaceUser.bind(this)
   }
 
   getPopupSettings() {
@@ -35,14 +36,15 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
     )
   }
 
-  answerJoinRequest(accept) {
+  answerJoinRequest(accept, mergeWithUserId) {
     var event = Session.get('event')
     var {user} = this.props
 
     Events.methods.answerJoinRequest.call({
       eventId: event._id,
       participantId: user._id,
-      acceptRequest: accept
+      acceptRequest: accept,
+      mergeWithUserId
     })
   }
 
@@ -54,8 +56,13 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
     this.answerJoinRequest(false)
   }
 
+  replaceUser({mergeWithUserId}) {
+    this.answerJoinRequest(true, mergeWithUserId)
+  }
+
   renderPopup() {
-    var {user} = this.props
+    var {user, tempParticipants} = this.props
+    var existTempParticipants = tempParticipants.length > 0
 
     return (
       <div
@@ -67,15 +74,48 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
           <T>is requesting to join this event</T>
         </div>
 
+        {existTempParticipants ? (
+          <Form
+            onSubmit={this.replaceUser}
+            className="replace-user-field text-with-user">
+            <span className="translations">
+              <T>Add</T>
+              <T>and</T>
+              <T>replace</T>
+            </span>
+            <SelectInput
+              inline
+              selectDefault={tempParticipants[0]._id}
+              name="mergeWithUserId">
+              {tempParticipants.map(user => (
+                <div
+                  className="item"
+                  key={user._id}
+                  data-value={user._id}>
+                  <User user={user} />
+                </div>
+              ))}
+            </SelectInput>
+            <button
+              type="submit"
+              className="replace-button ui primary icon left labeled button">
+              <i className="exchange icon" />
+              <T>replace</T>
+            </button>
+          </Form>
+        ) : null}
+
         <FormActionButtons
           showRemove
-          acceptButtonText="Add new participant"
+          acceptButtonText="Add"
           removeIcon="remove user"
+          acceptIcon="plus"
           removeText="Decline"
           onRemove={this.denyJoinRequest}
           onAccept={this.acceptJoinRequest}
           onCancel={this.hideAndReset}
         />
+
       </div>
     )
   }
@@ -85,3 +125,11 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
 UserItemAcceptPopup.propTypes = {
   user: React.PropTypes.object.isRequired
 }
+
+UserItemAcceptPopup = createContainer(() => {
+  return {
+    tempParticipants: Participants
+      .find({isTemp: true})
+      .fetch()
+  }
+}, UserItemAcceptPopup)

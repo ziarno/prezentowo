@@ -3,7 +3,7 @@ import {
   getByUser,
   getEventParticipants,
   getForUser,
-  showEventParticipant,
+  showEventForUser,
   showEvent
 } from './commonFunctions'
 
@@ -28,7 +28,7 @@ eventParticipant.added = {
       </div>
     )
   },
-  show: showEventParticipant
+  show: showEventForUser
 }
 
 eventParticipant.changed = {
@@ -44,7 +44,7 @@ eventParticipant.changed = {
       </div>
     )
   },
-  show: showEventParticipant
+  show: showEventForUser
 }
 
 eventParticipant.removed = {

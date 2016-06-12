@@ -53,7 +53,7 @@ EventsMethods.editEvent = new ValidatedMethod({
       }
     })
 
-    Events.functions.updatePresentsIsOwnState(Events.findOne(eventId))
+    Events.functions.updatePresentsIsOwnState({eventId})
 
     Notifications.functions.createNotification({
       type: 'event',
@@ -266,8 +266,8 @@ EventsMethods.setBeneficiary = new ValidatedMethod({
     //note: need to find the event again, because we need
     //the data after the update (not before)
     event = Events.findOne(eventId)
-    Events.functions.updatePresentsIsOwnState(event)
-    Events.functions.updateEventPresentCounts(event)
+    Events.functions.updatePresentsIsOwnState({event})
+    Events.functions.updateEventPresentCounts({event})
 
     Notifications.functions.createNotification({
       type: 'event.beneficiary',
@@ -317,13 +317,19 @@ EventsMethods.answerJoinRequest = new ValidatedMethod({
     participantId: SchemaFields.Id,
     acceptRequest: {
       type: Boolean
+    },
+    mergeWithUserId: {
+      ...SchemaFields.Id,
+      optional: true
     }
   }).validator(),
-  run({eventId, participantId, acceptRequest}) {
+  run({eventId, participantId, acceptRequest, mergeWithUserId}) {
     var {event} = Events.functions
       .check({eventId})
       .isEventCreator(this.userId)
       .isParticipant(participantId)
+    var participant = _.find(event.participants,
+      p => p.userId === participantId)
 
     if (!acceptRequest) {
       Events.functions.removeParticipant.call(this, {
@@ -339,14 +345,18 @@ EventsMethods.answerJoinRequest = new ValidatedMethod({
         forUserId: participantId,
         event
       })
-      Events.update({
-        _id: eventId,
-        'participants.userId': participantId
-      }, {
-        $set: {
-          'participants.$.status': 'isAccepted'
-        }
-      })
+      participant.status = 'isAccepted'
+      Events.functions.addParticipant({eventId, participant})
+
+      if (mergeWithUserId && !this.isSimulation) {
+        Users.functions.mergeUsers({
+          userIdToBeRemoved: mergeWithUserId,
+          userIdToStay: participantId,
+          eventId
+        })
+        Events.functions.updateEventPresentCounts({event})
+      }
+
     }
 
     Notifications.functions.createNotification({

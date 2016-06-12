@@ -65,8 +65,10 @@ UsersFunctions.updateEmail = function (selector, email) {
 }
 
 UsersFunctions.removeTempUsers = function (selector) {
-  var selector = _.extend(selector, {isTemp: true})
-  Users.remove(selector)
+  Users.remove({
+    ...selector,
+    isTemp: true
+  })
 }
 
 UsersFunctions.getPresentsCount = function (participant) {
@@ -82,6 +84,34 @@ UsersFunctions.getPresentsCount = function (participant) {
 
 UsersFunctions.isBeneficiary = function (event, userId) {
   return event.beneficiaryIds.indexOf(userId) > -1
+}
+
+UsersFunctions.mergeUsers = function ({
+  userIdToBeRemoved,
+  userIdToStay,
+  eventId
+  }) {
+  //note: allow only merging of temp users
+  var user = Users.findOne(userIdToBeRemoved)
+
+  if (!user.isTemp) {
+    throw new Meteor.Error('Can only merge temp users')
+  }
+
+  Presents.update({
+    forUserId: userIdToBeRemoved
+  }, {
+    $set: {
+      forUserId: userIdToStay
+    }
+  }, {
+    multi: true
+  })
+
+  Events.functions.removeParticipant({
+    eventId,
+    participantId: userIdToBeRemoved
+  })
 }
 
 export default UsersFunctions

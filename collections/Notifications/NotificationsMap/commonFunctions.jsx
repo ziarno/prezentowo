@@ -31,6 +31,9 @@ export function showPresent({forPresent}) {
 export function showEvent({forEvent}) {
   FlowRouter.go(`/event/id/${forEvent.id}`)
 }
-export function showEventParticipant({forEvent, forUser}) {
+export function showEventByUser({forEvent, byUser}) {
+  FlowRouter.go(`/event/id/${forEvent.id}/user/${byUser.id}`)
+}
+export function showEventForUser({forEvent, forUser}) {
   FlowRouter.go(`/event/id/${forEvent.id}/user/${forUser.id}`)
 }
