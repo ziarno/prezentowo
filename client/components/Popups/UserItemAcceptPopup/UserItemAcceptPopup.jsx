@@ -85,6 +85,7 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
             </span>
             <SelectInput
               inline
+              className="scrolling"
               selectDefault={tempParticipants[0]._id}
               name="mergeWithUserId">
               {tempParticipants.map(user => (
