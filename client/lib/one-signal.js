@@ -8,6 +8,6 @@ OneSignal.push(["init", {
     enable: true
   },
   notifyButton: {
-    enable: true
+    enable: false
   }
 }])
