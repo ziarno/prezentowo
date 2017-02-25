@@ -59,6 +59,7 @@ NotificationsFunctions.createNotification = function (notificationData) {
     } = notificationData
   var seenByUsers
   var notification
+  var notificationPureTextMessage
 
   if (Meteor.isClient) {
     return
@@ -82,12 +83,15 @@ NotificationsFunctions.createNotification = function (notificationData) {
     })
 
   seenByUsers =
-    _.map(NotificationsMap.usersFilter(notificationData),
-      userId => ({id: userId, seen: false}))
+    _.map(
+      NotificationsMap.usersFilter(notificationData),
+      userId => ({id: userId, seen: false})
+    )
 
   if (!seenByUsers.length) {
     return
   }
+
   notification = {
     type,
     action,
@@ -98,6 +102,8 @@ NotificationsFunctions.createNotification = function (notificationData) {
     forPresent: getForPresent(notificationData),
     forEvent: getForEvent(notificationData)
   }
+
+  notificationPureTextMessage = textContent(NotificationsMap.getMessageEl(notification))
 
   if (type.indexOf('present.comment') !== -1) {
     //comments notifications per present get updated
@@ -112,6 +118,16 @@ NotificationsFunctions.createNotification = function (notificationData) {
   } else {
     Notifications.insert(notification)
   }
+
+  console.log('notification: ', notificationPureTextMessage)
+
+  //PushNotifications.send({
+  //  userIds: seenByUsers,
+  //  eventId,
+  //  contents: {
+  //    en: notificationPureTextMessage
+  //  }
+  //})
 }
 
 NotificationsFunctions.getUnseenCount = function () {

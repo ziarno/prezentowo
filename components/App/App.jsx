@@ -8,6 +8,7 @@ App = class App extends React.Component {
   constructor() {
     super()
     this.autorunSetTitle = this.autorunSetTitle.bind(this)
+    this.autorunSetOneSignalId = this.autorunSetOneSignalId.bind(this)
   }
 
   autorunSetTitle() {
@@ -23,6 +24,15 @@ App = class App extends React.Component {
         `${participantName} - ${eventTitle}` :
       eventTitle ||
       'Prezentowo'
+  }
+
+  autorunSetOneSignalId() {
+    var userId = Meteor.userId()
+
+    OneSignal.push([
+      'sendTags',
+      {userId}
+    ])
   }
 
   render() {

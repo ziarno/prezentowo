@@ -1,11 +1,18 @@
 import React from 'react'
 import moment from 'moment'
+import _ from 'underscore'
 
 Language = {
+
+  supportedLanguages: ['pl', 'en'],
 
   currentLanguage: 'pl',
 
   set(lang) {
+    if (!_.contains(this.supportedLanguages, lang)) {
+      lang = this.supportedLanguages[0]
+    }
+
     //universe:i18n
     var promise = _i18n.setLocale(lang)
 

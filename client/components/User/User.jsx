@@ -8,7 +8,8 @@ User = ({
   className,
   large,
   showAddPresentOnHover
-  }) => {
+}) => {
+
   var Avatar = (
     <Img
       className="ui avatar image"

@@ -19,6 +19,17 @@ function getMessageEl(actionText, notification) {
   )
 }
 
+function getMessage(actionText, notification, lang = Language.get()) {
+  var {forUser} = notification
+  var t = _i18n.createTranslator('', lang)
+  var parts = [
+    t(`${forUser.gender}.hasBeen`),
+    t(`${forUser.gender}.${actionText}`),
+    t(hints.asBeneficiary)
+  ]
+  return parts.join(' ')
+}
+
 eventBeneficiary.added = {
   usersFilter(notificationData) {
     return _.difference(
