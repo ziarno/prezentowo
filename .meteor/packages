@@ -4,16 +4,16 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base             # Packages every Meteor app needs to have
-mobile-experience       # Packages for a great mobile UX
-mongo                   # The database Meteor supports right now
+meteor-base@1.0.4             # Packages every Meteor app needs to have
+mobile-experience@1.0.4       # Packages for a great mobile UX
+mongo@1.1.16                   # The database Meteor supports right now
 blaze-html-templates    # Compile .html files into Meteor Blaze views
-session                 # Client-side reactive dictionary for your app
-jquery                  # Helpful client-side library
-tracker                 # Meteor's client-side reactive programming library
+session@1.1.7                 # Client-side reactive dictionary for your app
+jquery@1.11.10                  # Helpful client-side library
+tracker@1.1.2                 # Meteor's client-side reactive programming library
 
-es5-shim                # ECMAScript 5 compatibility for older browsers.
-ecmascript              # Enable ECMAScript2015+ syntax in app code
+es5-shim@4.6.15                # ECMAScript 5 compatibility for older browsers.
+ecmascript@0.6.3              # Enable ECMAScript2015+ syntax in app code
 react-meteor-data
 
 ### server ###
@@ -27,7 +27,7 @@ aldeed:collection2
 # kadira:debug
 
 ### client ###
-less
+less@2.7.9
 kadira:react-layout #depends on react 14
 kadira:blaze-layout
 kadira:flow-router
@@ -35,8 +35,8 @@ msavin:mongol
 # meteorhacks:fast-render #something was wrong on --production. bring back in the future
 # meteorhacks:subs-manager
 seba:minifiers-autoprefixer
-accounts-password
-accounts-facebook
+accounts-password@1.3.4
+accounts-facebook@1.1.1
 komorebi:waves
 useraccounts:semantic-ui
 ziarno:useraccounts-flow-routing
@@ -52,3 +52,7 @@ maxharris9:classnames
 lepozepo:cloudinary
 meteorhacks:search-source
 ziarno:refresh-sound
+accounts-ui@1.1.9
+service-configuration@1.0.11
+shell-server
+facebook-config-ui
