@@ -2,6 +2,7 @@ Prezentowo
 ==========
 
 Hobby app, lets you create present lists for yourself and others.
+Available at: http://www.prezentowo.net
 
 Used technologies
 -----------------
