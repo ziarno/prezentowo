@@ -1,8 +1,21 @@
 Prezentowo
 ==========
 
+Hobby app, lets you create present lists for yourself and others.
+
+Used technologies
+-----------------
+
+- Meteor
+- MongoDB
+- React
+- Less
+- SemanticUI
+
+Developer notes:
+----------------
+
 DB scripts
-----------
 
 To use functions saved in system.js collection, connect to `meteor mongo` and type:
 
