@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 import {
   getByUser,
   getEventParticipants,
@@ -7,13 +8,13 @@ import {
   showPresent
 } from './commonFunctions'
 
-var present = {}
+const present = {}
 
 present.added = {
   usersFilter: function (notificationData) {
-    var {event, present} = notificationData
-    var isManyToOne = event.type === 'many-to-one'
-    var {isOwn} = present
+    const {event, present} = notificationData
+    const isManyToOne = event.type === 'many-to-one'
+    const {isOwn} = present
 
     return _.difference(
       getEventParticipants(notificationData),
@@ -27,11 +28,11 @@ present.added = {
   icon: {main: 'gift', corner: 'add'},
   hasPicture: true,
   getPicture(notification) {
-    var {forPresent} = notification
+    const {forPresent} = notification
     return forPresent && forPresent.picture
   },
   getMessageEl(notification) {
-    var {forUser, forPresent} = notification
+    const {forUser, forPresent} = notification
     return (
       <div className="translations text-with-user">
         <User
@@ -58,7 +59,7 @@ present.changed = {
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl(notification) {
-    var {byUser, forPresent} = notification
+    const {byUser, forPresent} = notification
     return (
       <div className="translations text-with-user">
         <User {...byUser} />
@@ -79,7 +80,7 @@ present.removed = {
   hasPicture: true,
   getPicture: present.added.getPicture,
   getMessageEl(notification) {
-    var {byUser, forPresent} = notification
+    const {byUser, forPresent} = notification
     return (
       <div className="translations text-with-user">
         <User {...byUser} />

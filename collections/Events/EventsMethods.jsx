@@ -1,8 +1,9 @@
 import React from 'react'
-import {LoggedIn} from '../../lib/Mixins'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { LoggedIn } from '../../lib/Mixins'
 import EventsSchemas from './EventsSchemas'
 
-var EventsMethods = {}
+const EventsMethods = {}
 
 EventsMethods.createEvent = new ValidatedMethod({
   name: 'Events.methods.createEvent',
@@ -11,7 +12,7 @@ EventsMethods.createEvent = new ValidatedMethod({
     .pick(['title', 'type', 'date'])
     .validator(),
   run(eventData) {
-    var eventId
+    let eventId
 
     if (eventData.type === 'many-to-one') {
       eventData.beneficiaryIds = [this.userId]
@@ -42,7 +43,7 @@ EventsMethods.editEvent = new ValidatedMethod({
     EventsSchemas.Main.pick(['title', 'type', 'date'])
   ]).validator(),
   run({eventId, title, type, date}) {
-    var updatedCount = Events.update({
+    const updatedCount = Events.update({
       _id: eventId,
       creatorId: this.userId
     }, {
@@ -76,10 +77,10 @@ EventsMethods.removeEvent = new ValidatedMethod({
     }
   }).validator(),
   run({eventId}) {
-    var participantIds
+    let participantIds
 
     //security checks
-    var {event} = Events.functions
+    const {event} = Events.functions
       .check({eventId})
       .isEventCreator(this.userId)
 
@@ -120,7 +121,7 @@ EventsMethods.addParticipant = new ValidatedMethod({
       return
     }
 
-    var user = participant.participantId ? Users.findOne(participant.participantId) :
+    const user = participant.participantId ? Users.findOne(participant.participantId) :
       Users.functions.findByEmail(participant.email)
 
     //security checks
@@ -176,7 +177,7 @@ EventsMethods.editParticipant = new ValidatedMethod({
   }).validator(),
   run({eventId, participant}) {
     //security checks
-    var {event} = Events.functions
+    const {event} = Events.functions
       .check({eventId})
       .isEventCreator(this.userId)
       .isParticipant(participant.participantId)
@@ -209,7 +210,7 @@ EventsMethods.removeParticipant = new ValidatedMethod({
   }).validator(),
   run({eventId, participantId}) {
     //security checks
-    var {event} = Events.functions
+    const {event} = Events.functions
       .check({eventId})
       .isEventCreator(this.userId)
       .isNotEventCreator(participantId)
@@ -243,9 +244,7 @@ EventsMethods.setBeneficiary = new ValidatedMethod({
     }
   }).validator(),
   run({eventId, participantId, action}) {
-    var modificator = action ? '$addToSet' : '$pull'
-    var updatedCount
-    var event
+    const modificator = action ? '$addToSet' : '$pull'
 
     //security checks
     Events.functions
@@ -254,7 +253,7 @@ EventsMethods.setBeneficiary = new ValidatedMethod({
       .isParticipant(participantId)
       .isManyToOne()
 
-    updatedCount = Events.update({
+    const updatedCount = Events.update({
       _id: eventId,
       creatorId: this.userId
     }, {
@@ -265,7 +264,7 @@ EventsMethods.setBeneficiary = new ValidatedMethod({
 
     //note: need to find the event again, because we need
     //the data after the update (not before)
-    event = Events.findOne(eventId)
+    const event = Events.findOne(eventId)
     Events.functions.updatePresentsIsOwnState({event})
     Events.functions.updateEventPresentCounts({event})
 
@@ -288,12 +287,12 @@ EventsMethods.requestJoin = new ValidatedMethod({
     eventId: SchemaFields.Id
   }).validator(),
   run({eventId}) {
-    var userId = this.userId
-    var participant = {
+    const userId = this.userId
+    const participant = {
       userId,
       status: 'requestingJoin'
     }
-    var {event} = Events.functions
+    const {event} = Events.functions
       .check({eventId})
       .isNotParticipant(userId)
 
@@ -324,11 +323,11 @@ EventsMethods.answerJoinRequest = new ValidatedMethod({
     }
   }).validator(),
   run({eventId, participantId, acceptRequest, mergeWithUserId}) {
-    var {event} = Events.functions
+    const {event} = Events.functions
       .check({eventId})
       .isEventCreator(this.userId)
       .isParticipant(participantId)
-    var participant = _.find(event.participants,
+    const participant = _.find(event.participants,
       p => p.userId === participantId)
 
     if (!acceptRequest) {
@@ -380,7 +379,7 @@ EventsMethods.answerInvitation = new ValidatedMethod({
     }
   }).validator(),
   run({eventId, acceptInvitation}) {
-    var {event} = Events.functions
+    const {event} = Events.functions
       .check({eventId})
       .isNotEventCreator(this.userId)
       .isParticipant(this.userId)

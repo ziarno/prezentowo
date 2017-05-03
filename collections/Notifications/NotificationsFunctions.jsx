@@ -1,7 +1,8 @@
 import React from 'react'
+import _ from 'underscore'
 import NotificationsMap from './NotificationsMap'
 
-var NotificationsFunctions = {}
+const NotificationsFunctions = {}
 
 function transformUser(user) {
   if (!user || !user.profile) {
@@ -49,7 +50,7 @@ function getForEvent({event}) {
  * }
  */
 NotificationsFunctions.createNotification = function (notificationData) {
-  var {
+  const {
     type,
     action,
     byUserId,
@@ -57,8 +58,8 @@ NotificationsFunctions.createNotification = function (notificationData) {
     eventId,
     presentId
     } = notificationData
-  var seenByUsers
-  var notification
+  let seenByUsers
+  let notification
 
   if (Meteor.isClient) {
     return

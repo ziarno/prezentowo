@@ -1,9 +1,10 @@
 import React from 'react'
-import {flattenObject} from '../../lib/utilities'
-import {LoggedIn} from '../../lib/Mixins'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { flattenObject } from '../../lib/utilities'
+import { LoggedIn } from '../../lib/Mixins'
 import UsersSchemas from './UsersSchemas'
 
-var UsersMethods = {}
+const UsersMethods = {}
 
 UsersMethods.setViewMode = new ValidatedMethod({
   name: 'Users.methods.setViewMode',

@@ -1,6 +1,6 @@
 import React from 'react'
 
-var UsersFunctions = {}
+const UsersFunctions = {}
 
 UsersFunctions.findByEmail = function (email) {
   return email && Users.findOne({
@@ -24,7 +24,7 @@ UsersFunctions.findByVerifiedEmail = function (email) {
 }
 
 UsersFunctions.createTemp = function ({name, gender, pictureUrl, email}) {
-  var user = {profile: {name, gender, pictureUrl}}
+  const user = {profile: {name, gender, pictureUrl}}
 
   if (email) {
     user.registered_emails = [{
@@ -36,7 +36,10 @@ UsersFunctions.createTemp = function ({name, gender, pictureUrl, email}) {
   return Users.insert(user)
 }
 
-UsersFunctions.update = function (selector, {name, gender, pictureUrl, email}) {
+UsersFunctions.update = function (
+  selector,
+  {name, gender, pictureUrl, email}
+) {
   if (email) {
     UsersFunctions.updateEmail(selector, email)
   }
@@ -51,7 +54,7 @@ UsersFunctions.update = function (selector, {name, gender, pictureUrl, email}) {
 }
 
 UsersFunctions.updateEmail = function (selector, email) {
-  var emailObject = {
+  const emailObject = {
     address: email,
     verified: false
   }
@@ -72,14 +75,16 @@ UsersFunctions.removeTempUsers = function (selector) {
 }
 
 UsersFunctions.getPresentsCount = function (participant) {
-  return participant &&
+  let presentsCount = parseInt(participant.ownPresentsCount)
+  const shouldShowOtherPresentsCount = participant &&
     participant._id === Meteor.userId() ||
-    !Meteor.userId() ? (
-    parseInt(participant.ownPresentsCount)
-  ) : (
-    parseInt(participant.ownPresentsCount) +
-    parseInt(participant.otherPresentsCount)
-  ) || 0
+    !Meteor.userId()
+
+  if (shouldShowOtherPresentsCount) {
+    presentsCount += parseInt(participant.otherPresentsCount)
+  }
+
+  return presentsCount || 0
 }
 
 UsersFunctions.isBeneficiary = function (event, userId) {
@@ -90,9 +95,9 @@ UsersFunctions.mergeUsers = function ({
   userIdToBeRemoved,
   userIdToStay,
   eventId
-  }) {
+}) {
   //note: allow only merging of temp users
-  var user = Users.findOne(userIdToBeRemoved)
+  const user = Users.findOne(userIdToBeRemoved)
 
   if (!user.isTemp) {
     throw new Meteor.Error('Can only merge temp users')

@@ -1,8 +1,9 @@
 import React from 'react'
 import _ from 'underscore'
-import {isStatusActive} from '../../lib/constants'
+import { _i18n } from 'meteor/universe:i18n'
+import { isStatusActive } from '../../lib/constants'
 
-var EventsFunctions = {}
+const EventsFunctions = {}
 
 EventsFunctions.addParticipant = function ({eventId, participant}) {
   //clean explicitly, because bug in collection2 for autoValue
@@ -14,7 +15,7 @@ EventsFunctions.addParticipant = function ({eventId, participant}) {
 
   //in case participant is already on the list (but 'inactive')
   // - just update the existing user
-  var updatedCount = Events.update({
+  const updatedCount = Events.update({
     _id: eventId,
     participants: {
       $elemMatch: {
@@ -26,10 +27,10 @@ EventsFunctions.addParticipant = function ({eventId, participant}) {
       'participants.$': participant
     }
   })
-  var modifier = {
+  const incrementCount = isStatusActive(participant.status) ? 1 : 0
+  const modifier = {
     $inc: {
-      participantsCount: isStatusActive(
-        participant.status) ? 1 : 0
+      participantsCount: incrementCount
     }
   }
 
@@ -47,11 +48,13 @@ EventsFunctions.removeParticipant = function ({
   eventId,
   participantId,
   event = Events.findOne(eventId)
-  }) {
-  var participant = _.find(event.participants,
-    p => p.userId === participantId)
-  var incrementCount = isStatusActive(participant.status) ? -1 : 0
-  var modifier = {
+}) {
+  const participant = _.find(
+    event.participants,
+    p => p.userId === participantId
+  )
+  const incrementCount = isStatusActive(participant.status) ? -1 : 0
+  const modifier = {
     $inc: {
       participantsCount: incrementCount
     },
@@ -59,7 +62,7 @@ EventsFunctions.removeParticipant = function ({
       beneficiaryIds: participantId
     }
   }
-  var user = Users.findOne(participantId)
+  const user = Users.findOne(participantId)
 
   if (user && user.isTemp) {
     modifier.$pull.participants = {
@@ -103,10 +106,11 @@ EventsFunctions.participant = function ({
       participants: 1
     }
   }),
-  }) {
-
-  var participant = event && _.find(event.participants,
-      p => p.userId === participantId)
+}) {
+  const participant = event && _.find(
+    event.participants,
+    p => p.userId === participantId
+  )
 
   return {
     isAccepted() {
@@ -129,15 +133,17 @@ EventsFunctions.getAcceptedParticipants = function({
       participants: 1
     }
   })
-  }) {
-  return _.filter(event.participants,
-    p => p.status === 'isAccepted')
+}) {
+  return _.filter(
+    event.participants,
+    p => p.status === 'isAccepted'
+  )
 }
 
 EventsFunctions.check = function ({
   eventId,
   event = Events.findOne(eventId)
-  }) {
+}) {
 
   if (!event) {
     throw new Meteor.Error('eventNotFound',
@@ -146,7 +152,8 @@ EventsFunctions.check = function ({
 
   function isParticipant(userId) {
     return Events.functions.participant({
-      event, participantId: userId
+      event,
+      participantId: userId
     }).isParticipant()
   }
 
@@ -190,7 +197,7 @@ EventsFunctions.check = function ({
 }
 
 EventsFunctions.getPresentsCount = function (event) {
-  var isManyToOne = event && event.type === 'many-to-one'
+  const isManyToOne = event && event.type === 'many-to-one'
 
   if (isManyToOne) {
     return Users.functions.isBeneficiary(event, Meteor.userId()) ?
@@ -220,7 +227,7 @@ EventsFunctions.getPresentsCount = function (event) {
 EventsFunctions.updatePresentsIsOwnState = function ({
   eventId,
   event = Events.findOne(eventId)
-  }) {
+}) {
   //note: only relevant for many-to-one events
   Presents.find({eventId: event._id}).forEach((present) => {
     Presents.update(present._id, {
@@ -234,16 +241,15 @@ EventsFunctions.updatePresentsIsOwnState = function ({
 EventsFunctions.updateEventPresentCounts = function ({
   eventId,
   event = Events.findOne(eventId)
-  }) {
-  var presents = Presents.find({
+}) {
+  const presents = Presents.find({
     eventId: event._id
-  }).fetch();
-  var isManyToMany = event.type === 'many-to-many'
+  }).fetch()
+  const isManyToMany = event.type === 'many-to-many'
 
   if (isManyToMany) {
-
     event.participants.forEach(participant => {
-      var [ownPresents, otherPresents] = _.chain(presents)
+      const [ownPresents, otherPresents] = _.chain(presents)
         .filter(p => p.forUserId === participant.userId)
         .partition(p => p.isOwn)
         .value()
@@ -262,9 +268,7 @@ EventsFunctions.updateEventPresentCounts = function ({
         }
       })
     })
-
   } else {
-
     let eventPresentCountsModifier = _.defaults({
       ownPresentsCount: 0,
       otherPresentsCount: 0

@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 import present from './present'
 import {
   getByUser,
@@ -8,10 +9,10 @@ import {
   showPresent
 } from './commonFunctions'
 
-var presentBuyer = {}
+const presentBuyer = {}
 
 function getMessageEl(willBuy, notification) {
-  var {byUser, forPresent} = notification
+  const {byUser, forPresent} = notification
   return (
     <div className="translations text-with-user">
       <User {...byUser} />

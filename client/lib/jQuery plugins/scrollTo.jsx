@@ -1,13 +1,15 @@
 import React from 'react'
+import { $ } from 'meteor/jquery'
+import _ from 'underscore'
 
 $.fn.scrollTo = function (targetSelector, settings = {}) {
   return this.each(function () {
-    var $this = $(this)
-    var $target = $this.find(targetSelector)
-    var target = $target[0]
-    var offset = 0
-    var scrollTop
-    var offsetParentEl
+    const $this = $(this)
+    const $target = $this.find(targetSelector)
+    const target = $target[0]
+    let offset = 0
+    let scrollTop
+    let offsetParentEl
 
     if (!target) {
       return
@@ -21,7 +23,7 @@ $.fn.scrollTo = function (targetSelector, settings = {}) {
     }
 
     if (_.isNumber(settings.offset)) {
-      offset +=parseInt(settings.offset, 10)
+      offset += parseInt(settings.offset, 10)
     }
     if (settings.offset === 'middle') {
       offset -= (this.offsetHeight - target.offsetHeight) / 2

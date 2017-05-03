@@ -1,7 +1,9 @@
 import React from 'react'
-import {participantStatuses} from '../../lib/constants'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { _i18n } from 'meteor/universe:i18n'
+import { participantStatuses } from '../../lib/constants'
 
-var EventsSchemas = {}
+const EventsSchemas = {}
 
 EventsSchemas.NewParticipant = new SimpleSchema({
   participantId: {

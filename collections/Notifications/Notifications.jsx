@@ -1,4 +1,5 @@
 import React from 'react'
+import { Mongo } from 'meteor/mongo'
 import NotificationsSchemas from './NotificationsSchemas'
 import NotificationsFunctions from './NotificationsFunctions'
 import NotificationsMethods from './NotificationsMethods'
@@ -15,7 +16,7 @@ Notifications
   .apply() //ongoworks:security
 
 Notifications.Schemas = NotificationsSchemas
-Notifications.attachSchema(Notifications.Schemas.Main)
+Notifications.attachSchema(NotificationsSchemas.Main)
 Notifications.functions = NotificationsFunctions
 Notifications.methods = NotificationsMethods
 Notifications.helpers(NotificationsHelpers)

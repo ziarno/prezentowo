@@ -22,9 +22,9 @@ import presentBuyer from './NotificationsMap/present.buyer'
  *    }
  *  - hasPicture: Boolean
  */
-var NotificationsMap = {
+const NotificationsMap = {
   findField(notificationData) {
-    var {type, action} = notificationData
+    const {type, action} = notificationData
     return _.reduce(
       [type, action].join('.').split('.'),
       (memo, value) => memo[value],
@@ -43,10 +43,12 @@ NotificationsMap.present.comment = presentComment
 NotificationsMap.present.buyer = presentBuyer
 
 //shortcut functions
+
 ;['usersFilter',
   'getMessageEl',
   'getPicture',
-  'show'].forEach(function (funcName) {
+  'show'
+].forEach(function (funcName) {
   NotificationsMap[funcName] = function (notification) {
     return NotificationsMap
       .findField(notification)

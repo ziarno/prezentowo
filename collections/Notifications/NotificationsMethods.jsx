@@ -1,5 +1,6 @@
 import React from 'react'
-import {LoggedIn} from '../../lib/Mixins'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { LoggedIn } from '../../lib/Mixins'
 
 var NotificationsMethods = {}
 

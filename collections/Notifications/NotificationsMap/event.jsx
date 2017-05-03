@@ -1,14 +1,15 @@
 import React from 'react'
+import _ from 'underscore'
 import {
   getByUser,
   getEventParticipants,
   showEvent
 } from './commonFunctions'
 
-var event = {}
+const event = {}
 
 function getMessageEl(actionText, notification) {
-  var {byUser, forEvent} = notification
+  const {byUser, forEvent} = notification
   return (
     <div className="translations text-with-user">
       <User {...byUser} />
@@ -38,16 +39,14 @@ event.added = {
 event.removed = {
   usersFilter: event.added.usersFilter,
   icon: {main: 'remove'},
-  getMessageEl: getMessageEl.bind(event,
-    'hasRemoved'),
+  getMessageEl: getMessageEl.bind(event, 'hasRemoved'),
   show: showEvent
 }
 
 event.changed = {
   usersFilter: event.added.usersFilter,
   icon: {main: 'edit'},
-  getMessageEl: getMessageEl.bind(event,
-    'hasEdited'),
+  getMessageEl: getMessageEl.bind(event, 'hasEdited'),
   show: showEvent
 }
 

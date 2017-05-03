@@ -1,7 +1,8 @@
 import React from 'react'
-import {LoggedIn} from '../../lib/Mixins'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { LoggedIn } from '../../lib/Mixins'
 
-var CommentsMethods = {}
+const CommentsMethods = {}
 
 CommentsMethods.createComment = new ValidatedMethod({
   name: 'Comments.methods.createComment',
@@ -19,9 +20,9 @@ CommentsMethods.createComment = new ValidatedMethod({
     }
   }).validator(),
   run({presentId, type, message}) {
-    var present = Presents.findOne(presentId)
-    var commentId
-    var commentsCollectionName =
+    const present = Presents.findOne(presentId)
+    let commentId
+    const commentsCollectionName =
       type === 'secret' ? 'commentsSecret' : 'commentsShared'
 
     commentId = Comments.insert({message, presentId})
@@ -50,8 +51,8 @@ CommentsMethods.removeComment = new ValidatedMethod({
     }
   }).validator(),
   run({commentId}) {
-    var comment = Comments.findOne(commentId)
-    var removedCount = Comments.remove({
+    const comment = Comments.findOne(commentId)
+    const removedCount = Comments.remove({
       _id: commentId,
       userId: this.userId
     })

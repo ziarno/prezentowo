@@ -1,6 +1,8 @@
 import React from 'react'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 
-var NotificationsSchemas = {}
+const NotificationsSchemas = {}
+
 NotificationsSchemas.Main = new SimpleSchema({
   type: {
     type: String,

@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 import {
   getByUser,
   getEventParticipants,
@@ -7,10 +8,10 @@ import {
   showEventByUser
 } from './commonFunctions'
 
-var eventInvitation = {}
+const eventInvitation = {}
 
 function getMessageEl(actionText, notification) {
-  var {byUser, forEvent} = notification
+  const {byUser, forEvent} = notification
   return (
     <div className="translations text-with-user">
       <User {...byUser} />
@@ -44,7 +45,7 @@ eventInvitation.added = {
   usersFilter: getForUser,
   icon: {main: 'mail outline'},
   getMessageEl(notification) {
-    var {byUser, forEvent} = notification
+    const {byUser, forEvent} = notification
     return (
       <div className="translations text-with-user">
         <User {...byUser} />

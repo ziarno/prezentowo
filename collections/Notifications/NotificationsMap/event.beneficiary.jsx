@@ -1,14 +1,15 @@
 import React from 'react'
+import _ from 'underscore'
 import {
   getByUser,
   getEventParticipants,
   showEvent
 } from './commonFunctions'
 
-var eventBeneficiary = {}
+const eventBeneficiary = {}
 
 function getMessageEl(actionText, notification) {
-  var {forUser} = notification
+  const {forUser} = notification
   return (
     <div className="translations text-with-user">
       <User {...forUser} />

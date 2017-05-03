@@ -1,7 +1,9 @@
 import React from 'react'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { _i18n } from 'meteor/universe:i18n'
 import UsersDefaults from './UsersDefaults'
 
-var UsersSchemas = {}
+const UsersSchemas = {}
 
 UsersSchemas.Email = new SimpleSchema({
   address: {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Mongo } from 'meteor/mongo'
 import CommentsSchemas from './CommentsSchemas'
 import CommentsMethods from './CommentsMethods'
 
@@ -12,5 +13,5 @@ Comments
   .apply() //ongoworks:security
 
 Comments.Schemas = CommentsSchemas
-Comments.attachSchema(Comments.Schemas.Main)
+Comments.attachSchema(CommentsSchemas.Main)
 Comments.methods = CommentsMethods

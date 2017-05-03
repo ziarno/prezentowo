@@ -1,4 +1,6 @@
 import React from 'react'
+import { Mongo } from 'meteor/mongo'
+import { Meteor } from 'meteor/meteor'
 import UsersDefaults from './UsersDefaults'
 import UsersSchemas from './UsersSchemas'
 import UsersFunctions from './UsersFunctions'
@@ -20,7 +22,7 @@ Users.methods = UsersMethods
  */
 Users.helpers({
   isEventParticipant({eventId, presentId}) {
-    var present
+    let present
 
     if (!eventId && presentId) {
       present = Presents.findOne(presentId)

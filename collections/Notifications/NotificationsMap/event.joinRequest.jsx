@@ -5,10 +5,10 @@ import {
   showEvent
 } from './commonFunctions'
 
-var eventJoinRequest = {}
+const eventJoinRequest = {}
 
 function getMessageEl(actionText, notification) {
-  var {byUser, forEvent} = notification
+  const {byUser, forEvent} = notification
   return (
     <div className="translations text-with-user">
       <User {...byUser} />
@@ -37,7 +37,7 @@ eventJoinRequest.added = {
   usersFilter: getEventCreator,
   icon: {main: 'add user'},
   getMessageEl(notification) {
-    var {byUser, forEvent} = notification
+    const {byUser, forEvent} = notification
     return (
       <div className="translations text-with-user">
         <User {...byUser} />

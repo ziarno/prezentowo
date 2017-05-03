@@ -1,11 +1,13 @@
 import React from 'react'
+import { Template } from 'meteor/templating'
+import { AccountsTemplates } from 'meteor/useraccounts:core'
 
 /**
  * Accounts Templates - templates
  * overrides settings
  */
 
-var genderIconNames = {
+const genderIconNames = {
   male: 'man',
   female: 'woman'
 }
@@ -16,10 +18,14 @@ function retriggerDropdownEvents() {
   this.$('.ui.dropdown')
     .dropdown({
       onChange() {
-        $(this).find('input').trigger('focusout')
+        $(this)
+          .find('input')
+          .trigger('focusout')
       },
       onShow() {
-        $(this).find('input').trigger('focusin')
+        $(this)
+          .find('input')
+          .trigger('focusin')
       }
     })
 }
@@ -29,6 +35,6 @@ Template.customFullPageAtForm.replaces('fullPageAtForm')
 Template.atSelectInput.onRendered(retriggerDropdownEvents)
 Template.genderInput.onRendered(retriggerDropdownEvents)
 Template.genderInput.helpers({
-  getIconName: (gender) => genderIconNames[gender],
+  getIconName: gender => genderIconNames[gender],
   ...AccountsTemplates.atInputHelpers
 })

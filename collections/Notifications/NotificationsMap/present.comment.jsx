@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 import present from './present'
 import {
   getByUser,
@@ -8,13 +9,13 @@ import {
   showPresent
 } from './commonFunctions'
 
-var presentComment = {
+const presentComment = {
   secret: {},
   shared: {}
 }
 
 function getMessageEl(notification) {
-  var {byUser, forPresent} = notification
+  const {byUser, forPresent} = notification
   return (
     <div className="translations text-with-user">
       <User {...byUser} />
@@ -31,8 +32,8 @@ function getMessageEl(notification) {
 
 presentComment.secret.added = {
   usersFilter: function (notificationData) {
-    var {event} = notificationData
-    var isManyToOne = event.type === 'many-to-one'
+    const {event} = notificationData
+    const isManyToOne = event.type === 'many-to-one'
 
     return _.difference(
       getEventParticipants(notificationData),

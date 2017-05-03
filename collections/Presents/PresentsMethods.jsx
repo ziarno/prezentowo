@@ -1,21 +1,28 @@
 import React from 'react'
-import {LoggedIn} from '../../lib/Mixins'
+import { Meteor } from 'meteor/meteor'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { _i18n } from 'meteor/universe:i18n'
+import { LoggedIn } from '../../lib/Mixins'
 import PresentsSchemas from './PresentsSchemas'
 
-var PresentsMethods = {}
+const PresentsMethods = {}
 
 PresentsMethods.createPresent = new ValidatedMethod({
   name: 'Presents.methods.createPresent',
   mixins: [LoggedIn],
   validate: PresentsSchemas.NewPresent.validator(),
   run(present) {
-    if (!Meteor.user().isEventParticipant({eventId: present.eventId})) {
+    const isUserEventParticipant =
+      Meteor.user().isEventParticipant({eventId: present.eventId})
+    if (!isUserEventParticipant) {
       throw new Meteor.Error(
         `${this.name}.notParticipant`,
-        _i18n.__('Not participant'))
+        _i18n.__('Not participant')
+      )
     }
 
-    var presentId = Presents.insert(present) //auto clean ok - no sub schemas
+    const presentId = Presents.insert(present) //auto clean ok - no sub schemas
     Presents.functions.updatePresentsCount(1, presentId)
     Notifications.functions.createNotification({
       type: 'present',
@@ -39,7 +46,7 @@ PresentsMethods.removePresent = new ValidatedMethod({
     }
   }).validator(),
   run({presentId}) {
-    var present = Presents.findOne(presentId)
+    const present = Presents.findOne(presentId)
 
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
@@ -82,12 +89,16 @@ PresentsMethods.editPresent = new ValidatedMethod({
     if (!Meteor.user().hasCreatedPresent(presentId)) {
       throw new Meteor.Error(
         `${this.name}.notCreatedPresent`,
-        _i18n.__('Presents edited by creators'))
+        _i18n.__('Presents edited by creators')
+      )
     }
 
-    Presents.update(presentId, {$set: {
-      title, description, forUserId, picture
-    }})
+    Presents.update(
+      presentId,
+      {
+        $set: {title, description, forUserId, picture}
+      }
+    )
 
     Notifications.functions.createNotification({
       type: 'present',
@@ -96,7 +107,6 @@ PresentsMethods.editPresent = new ValidatedMethod({
       forUserId: forUserId,
       presentId: presentId
     })
-
   }
 })
 
@@ -112,8 +122,8 @@ PresentsMethods.setBuyer = new ValidatedMethod({
     }
   }).validator(),
   run({presentId, action}) {
-    var actionName = action ? '$addToSet' : '$pull'
-    var present = Presents.findOne(presentId)
+    const actionName = action ? '$addToSet' : '$pull'
+    const present = Presents.findOne(presentId)
 
     if (!Meteor.user().isEventParticipant({presentId})) {
       throw new Meteor.Error(`${this.name}.notParticipant`,

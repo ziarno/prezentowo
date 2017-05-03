@@ -1,7 +1,7 @@
 import React from 'react'
 import NotificationsMap from './NotificationsMap'
 
-var NotificationsHelpers = {}
+const NotificationsHelpers = {}
 
 NotificationsHelpers.getPicture = function () {
   //note: currently only presents have pictures
@@ -25,7 +25,7 @@ NotificationsHelpers.isShowable = function () {
 }
 
 NotificationsHelpers.show = function () {
-  var field = NotificationsMap.findField(this)
+  const field = NotificationsMap.findField(this)
   return field && field.show && field.show(this)
 }
 

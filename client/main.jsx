@@ -1,8 +1,11 @@
 import React from 'react'
+import { Session } from 'meteor/session'
+import { Meteor } from 'meteor/meteor'
+import { $ } from 'meteor/jquery'
 
 function setSidebarMode() {
-  var sidebarFixedLimit = 925
-  var currentWidth = $(window).width()
+  const sidebarFixedLimit = 925
+  const currentWidth = $(window).width()
   Session.set('isSidebarFixed', currentWidth < sidebarFixedLimit)
 }
 
@@ -23,7 +26,7 @@ $.cloudinary.config({
 Session.setDefault('event', {})
 
 Meteor.startup(() => {
-  var lang = getClientLang()
+  const lang = getClientLang()
 
   setSidebarMode()
   $(window).resize(_.throttle(setSidebarMode, 1000))

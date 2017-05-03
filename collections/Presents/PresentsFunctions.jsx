@@ -1,10 +1,10 @@
 import React from 'react'
 
-var PresentsFunctions = {}
+const PresentsFunctions = {}
 
 PresentsFunctions.updatePresentsCount = function (incrementValue, presentId) {
-  var present = Presents.findOne(presentId)
-  var countFieldName = present.isOwn ? 'ownPresentsCount' : 'otherPresentsCount'
+  const present = Presents.findOne(presentId)
+  const countFieldName = present.isOwn ? 'ownPresentsCount' : 'otherPresentsCount'
 
   if (present.forUserId) {
     Events.update({
@@ -30,7 +30,7 @@ PresentsFunctions.isOwn = function ({
   forUserId = present && present.forUserId,
   creatorId = present && present.creatorId
   }) {
-  var isManyToOneEvent = event && event.type === 'many-to-one'
+  const isManyToOneEvent = event && event.type === 'many-to-one'
   if (isManyToOneEvent) {
     //present isOwn if its creator is one of the beneficiaries
     return Users.functions.isBeneficiary(event, creatorId)
@@ -40,17 +40,17 @@ PresentsFunctions.isOwn = function ({
 }
 
 PresentsFunctions.removePresents = function (selector) {
-  var presents = Presents.find(selector, {
+  const presents = Presents.find(selector, {
     fields: {
       commentsSecret: 1,
       commentsShared: 1
     }
   }).fetch()
-  var commentsToRemove = []
-  var removedCount
+  const commentsToRemove = []
+  let removedCount
 
   presents.forEach(present => {
-    var {commentsSecret, commentsShared} = present
+    const {commentsSecret, commentsShared} = present
     if (commentsSecret) {
       commentsToRemove.concat(commentsSecret)
     }
@@ -70,7 +70,6 @@ PresentsFunctions.removePresents = function (selector) {
   }
 
   return removedCount
-
 }
 
 export default PresentsFunctions

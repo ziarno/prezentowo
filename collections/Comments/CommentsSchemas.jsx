@@ -1,6 +1,8 @@
 import React from 'react'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { _i18n } from 'meteor/universe:i18n'
 
-var CommentsSchemas = {}
+const CommentsSchemas = {}
 
 CommentsSchemas.Main = new SimpleSchema({
   creatorId: SchemaFields.CreatorId,

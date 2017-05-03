@@ -5,7 +5,7 @@ export function getByUser({byUser}) {
   return [byUser._id]
 }
 export function getEventParticipants({event}) {
-  var acceptedParticipants =
+  const acceptedParticipants =
     Events.functions.getAcceptedParticipants({event})
   return _.map(acceptedParticipants, p => p.userId)
 }

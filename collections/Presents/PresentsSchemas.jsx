@@ -1,6 +1,8 @@
 import React from 'react'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { _i18n } from 'meteor/universe:i18n'
 
-var PresentsSchemas = {}
+const PresentsSchemas = {}
 
 PresentsSchemas.NewPresent = new SimpleSchema({
   title: {
@@ -55,8 +57,8 @@ PresentsSchemas.Main = new SimpleSchema([
           return
         }
 
-        var eventId = this.field('eventId').value
-        var event = Events.findOne(eventId)
+        const eventId = this.field('eventId').value
+        const event = Events.findOne(eventId)
 
         return Presents.functions.isOwn({
           event,

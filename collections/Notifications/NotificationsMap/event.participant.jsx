@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 import {
   getByUser,
   getEventParticipants,
@@ -7,7 +8,7 @@ import {
   showEvent
 } from './commonFunctions'
 
-var eventParticipant = {}
+const eventParticipant = {}
 
 eventParticipant.added = {
   usersFilter: function (notificationData) {
@@ -19,7 +20,7 @@ eventParticipant.added = {
   },
   icon: {main: 'add user'},
   getMessageEl(notification) {
-    var {forUser} = notification
+    const {forUser} = notification
     return (
       <div className="translations text-with-user">
         <User {...forUser} />
@@ -35,7 +36,7 @@ eventParticipant.changed = {
   usersFilter: eventParticipant.added.usersFilter,
   icon: {main: 'user', corner: 'edit'},
   getMessageEl(notification) {
-    var {forUser} = notification
+    const {forUser} = notification
     return (
       <div className="translations text-with-user">
         <User {...forUser} />
@@ -56,7 +57,7 @@ eventParticipant.removed = {
   },
   icon: {main: 'remove user'},
   getMessageEl(notification) {
-    var {forUser, forEvent} = notification
+    const {forUser, forEvent} = notification
     return (
       <div className="translations text-with-user">
         <User {...forUser} />

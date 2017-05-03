@@ -1,4 +1,7 @@
 import React from 'react'
+import { Mongo } from 'meteor/mongo'
+import _ from 'underscore'
+import { Meteor } from 'meteor/meteor'
 import PresentsSchemas from './PresentsSchemas'
 import PresentsFunctions from './PresentsFunctions'
 import PresentsMethods from './PresentsMethods'
@@ -14,7 +17,7 @@ Presents
 
 
 Presents.Schemas = PresentsSchemas
-Presents.attachSchema(Presents.Schemas.Main)
+Presents.attachSchema(PresentsSchemas.Main)
 Presents.functions = PresentsFunctions
 Presents.methods = PresentsMethods
 
