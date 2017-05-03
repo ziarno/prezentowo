@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import _ from 'underscore'
+import { classNames } from 'meteor/maxharris9:classnames'
 
-VerticalSlideToggle = class VerticalSlideToggle extends React.Component {
+VerticalSlideToggle = class VerticalSlideToggle extends Component {
 
   constructor() {
     super()
@@ -20,13 +22,16 @@ VerticalSlideToggle = class VerticalSlideToggle extends React.Component {
   }
 
   toggle() {
+    const {
+      onToggle
+    } = this.props
     this.setHeight(!this.state.visible)
-    if (_.isFunction(this.props.onToggle)) {
-      this.props.onToggle(!this.state.visible)
+    if (_.isFunction(onToggle)) {
+      onToggle(!this.state.visible)
     }
   }
 
-  componentDidUpdate(prevProps, {maxHeight}) {
+  componentDidUpdate(prevProps, { maxHeight }) {
     if (maxHeight !== 0 &&
       maxHeight !== this.refs.slideToggle.scrollHeight) {
       this.setHeight()
@@ -38,28 +43,38 @@ VerticalSlideToggle = class VerticalSlideToggle extends React.Component {
   }
 
   render() {
-    var style = {
-      opacity: this.state.visible ? 1 : 0.4
+    const {
+      id,
+      className,
+      children
+    } = this.props
+    const {
+      visible,
+      maxHeight
+    } = this.state
+    const style = {
+      opacity: visible ? 1 : 0.4
     }
 
-    if (this.state.maxHeight !== false) {
-      style.maxHeight = this.state.maxHeight
+    if (maxHeight !== false) {
+      style.maxHeight = maxHeight
     }
 
     return (
       <div
-        id={this.props.id}
+        id={id}
         ref="slideToggle"
         style={style}
-        className={classNames('vertical-slide-toggle', this.props.className)}>
-        {this.props.children}
+        className={classNames('vertical-slide-toggle', className)}
+      >
+        {children}
       </div>
     )
   }
 }
 
 VerticalSlideToggle.propTypes = {
-  onToggle: React.PropTypes.func,
-  className: React.PropTypes.string,
-  id: React.PropTypes.string
+  onToggle: PropTypes.func,
+  className: PropTypes.string,
+  id: PropTypes.string
 }

@@ -1,8 +1,8 @@
-import React from 'react'
-import {Autorun} from '../../../lib/Mixins'
+import React, { Component, PropTypes } from 'react'
+import { Autorun } from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
 
-FormErrorMessage = class FormErrorMessage extends React.Component {
+FormErrorMessage = class FormErrorMessage extends Component {
 
   constructor() {
     super()
@@ -13,15 +13,18 @@ FormErrorMessage = class FormErrorMessage extends React.Component {
   }
   
   autorunGetErrorMessages() {
+    const {
+      schema
+    } = this.context
     this.setState({
-      errors: this.context.schema.invalidKeys().map((key) => (
-        this.context.schema.keyErrorMessage(key.name)
+      errors: schema.invalidKeys().map((key) => (
+        schema.keyErrorMessage(key.name)
       ))
     })
   }
 
   render() {
-    var shouldBeVisible = this.state.errors.length
+    const shouldBeVisible = this.state.errors.length
       && this.context.form.hasSubmitted
 
     return (
@@ -37,8 +40,8 @@ FormErrorMessage = class FormErrorMessage extends React.Component {
 }
 
 FormErrorMessage.contextTypes = {
-  schema: React.PropTypes.object,
-  form: React.PropTypes.object
+  schema: PropTypes.object,
+  form: PropTypes.object
 }
 
 reactMixin(FormErrorMessage.prototype, Autorun)

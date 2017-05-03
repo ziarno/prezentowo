@@ -1,8 +1,19 @@
-import React from 'react'
+/* global Waves */
+import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import {Autorun, ScrollableComponent} from '../../lib/Mixins'
+import _ from 'underscore'
+import { Meteor } from 'meteor/meteor'
+import { $ } from 'meteor/jquery'
+import { Session } from 'meteor/session'
+import { FlowRouter } from 'meteor/kadira:flow-router'
 import reactMixin from 'react-mixin'
-import {createContainer} from 'meteor/react-meteor-data'
+import { createContainer } from 'meteor/react-meteor-data'
+import { _i18n } from 'meteor/universe:i18n'
+import { classNames } from 'meteor/maxharris9:classnames'
+import {
+  Autorun,
+  ScrollableComponent
+} from '../../lib/Mixins'
 
 EventContainer = class EventContainer extends ScrollableComponent {
   
@@ -23,20 +34,25 @@ EventContainer = class EventContainer extends ScrollableComponent {
   }
 
   showUser(user) {
-    var participantsViewMode = this.props.settings ?
-      this.props.settings.viewMode.participantsMode :
+    const {
+      settings
+    } = this.props
+    const participantsViewMode = settings ?
+      settings.viewMode.participantsMode :
       Users.defaults.participantsMode
 
     ModalManager.close()
     ModalManager.destroy()
 
     if (participantsViewMode === 'single') {
-      FlowRouter.setParams({userId: user._id})
+      FlowRouter.setParams({ userId: user._id })
     } else {
       Session.set('currentUser', user)
     }
 
-    this.setState({isSidebarVisible: !Session.get('isSidebarFixed')})
+    this.setState({
+      isSidebarVisible: !Session.get('isSidebarFixed')
+    })
   }
 
   autorunSetCurrentUserState() {
@@ -45,22 +61,24 @@ EventContainer = class EventContainer extends ScrollableComponent {
     //and props can't do that, because they SET currentUser -
     //if we SET and GET current user in the same reactive function
     // => infinite call stack
-    var currentUser = Session.get('currentUser')
+    const currentUser = Session.get('currentUser')
     if (currentUser &&
         (!this.state.currentUser ||
         currentUser._id !== this.state.currentUser._id)) {
       this.scrollTo(`#user-presents-${currentUser._id}`)
     }
-    this.setState({currentUser})
+    this.setState({ currentUser })
   }
 
   autorunSetSidebarMode() {
-    this.setState({isSidebarVisible: !Session.get('isSidebarFixed')})
+    this.setState({
+      isSidebarVisible: !Session.get('isSidebarFixed')
+    })
   }
 
   autorunSetCurrentUser() {
-    var userId = FlowRouter.getParam('userId')
-    var currentUser = Participants.findOne(userId)
+    const userId = FlowRouter.getParam('userId')
+    const currentUser = Participants.findOne(userId)
 
     if (userId && currentUser) {
       Session.set('currentUser', currentUser)
@@ -71,7 +89,7 @@ EventContainer = class EventContainer extends ScrollableComponent {
     return {
       offset: -75,
       onAfter: ($scrollToEl) => {
-        var userEl = $scrollToEl
+        const userEl = $scrollToEl
           .find('.user')
           .addClass('waves-effect waves-button')
 
@@ -144,19 +162,23 @@ EventContainer = class EventContainer extends ScrollableComponent {
   }
 
   isScrollable() {
-    var isMouseOver = $('#presents-container:hover').length
+    const isMouseOver = $('#presents-container:hover').length
     return !isMouseOver && !ModalManager.isOpen()
   }
 
   render() {
-    var {event, participants, ready} = this.props
-    var eventTitle = event && event.title
-    var isManyToOne = event &&
+    const {
+      event,
+      participants,
+      ready
+    } = this.props
+    const eventTitle = event && event.title
+    const isManyToOne = event &&
       event.type === 'many-to-one'
-    var currentUserId = this.state.currentUser &&
+    const currentUserId = this.state.currentUser &&
       this.state.currentUser._id
-    var showUsers
-    var isUserAcceptedParticipant = Events.functions.participant({
+    let showUsers
+    const isUserAcceptedParticipant = Events.functions.participant({
       event,
       participantId: Meteor.userId()
     }).isAccepted()
@@ -180,15 +202,17 @@ EventContainer = class EventContainer extends ScrollableComponent {
           empty: !isUserAcceptedParticipant,
           'presents-footer': ready && !isUserAcceptedParticipant,
           loading: !ready
-        })}>
+        })}
+      >
 
         {!ready ? (
           <Loader
             inverted
             size="large"
             text={eventTitle ?
-                _i18n.__('Loading event', {title: eventTitle}) :
-              null}
+              _i18n.__('Loading event', {title: eventTitle}) :
+              null
+            }
           />
         ) : null}
 
@@ -196,18 +220,18 @@ EventContainer = class EventContainer extends ScrollableComponent {
           <Sidebar
             scrollToEl={`.user-list [data-id=${currentUserId}]`}
             isVisible={this.state.isSidebarVisible}
-            onVisibilityChange=
-              {this.onSidebarVisibilityChange}
-            onAfterVisibilityChange={this.onAfterSidebarVisibilityChange}>
+            onVisibilityChange={this.onSidebarVisibilityChange}
+            onAfterVisibilityChange={this.onAfterSidebarVisibilityChange}
+          >
             <UserList
               onUserSelect={this.showUser}
-              users={participants} />
+              users={participants}
+            />
           </Sidebar>
         ) : null}
 
         {ready && isUserAcceptedParticipant ? (
-          <PresentsContainer
-            users={showUsers} />
+          <PresentsContainer users={showUsers} />
         ) : null}
 
         {ready && isUserAcceptedParticipant ? (
@@ -216,8 +240,8 @@ EventContainer = class EventContainer extends ScrollableComponent {
             wrapperClassName="add-present-button"
             icon={(
               <i className="large icons">
-                <i className="plus icon"></i>
-                <i className="gift corner inverted icon"></i>
+                <i className="plus icon" />
+                <i className="gift corner inverted icon" />
               </i>
             )}
             users={isManyToOne ? [] : participants}
@@ -241,33 +265,36 @@ EventContainer = class EventContainer extends ScrollableComponent {
 }
 
 EventContainer.propTypes = {
-  eventId: React.PropTypes.string.isRequired,
+  eventId: PropTypes.string.isRequired,
 
-  ready: React.PropTypes.bool,
-  participants: React.PropTypes.array,
-  event: React.PropTypes.object,
-  currentUser: React.PropTypes.object,
-  presents: React.PropTypes.array,
-  settings: React.PropTypes.object
+  ready: PropTypes.bool,
+  participants: PropTypes.array,
+  event: PropTypes.object,
+  currentUser: PropTypes.object,
+  presents: PropTypes.array,
+  settings: PropTypes.object
 }
 
 reactMixin(EventContainer.prototype, Autorun)
 
-EventContainer = createContainer(({eventId, userId}) => {
-  var event = Events.findOne(eventId)
-  var subsReady = Meteor
-    .subscribe('eventDetails', {eventId}, () => {
+EventContainer = createContainer(({ eventId, userId }) => {
+  const event = Events.findOne(eventId)
+  const subsReady = Meteor
+    .subscribe('eventDetails', { eventId }, () => {
       Session.set('currentUser', getCurrentUser())
     })
     .ready()
-  var participants = []
-  var user = Meteor.user()
-  var currentUser = getCurrentUser()
+  let participants = []
+  const user = Meteor.user()
+  const currentUser = getCurrentUser()
 
   function getCorrectPath({
-      participantsViewMode, eventId, userId, isManyToOne
-    }) {
-    var path = `/event/id/${eventId}`
+    participantsViewMode,
+    eventId,
+    userId,
+    isManyToOne
+  }) {
+    let path = `/event/id/${eventId}`
     if (participantsViewMode === 'single' &&
         userId &&
         !isManyToOne &&
@@ -291,8 +318,8 @@ EventContainer = createContainer(({eventId, userId}) => {
       //in case a participant is not yet in Participants, omit him
       .filter(p => p.profile)
       .sort((participant1, participant2) => {
-        var name1 = participant1.profile.name.capitalizeFirstLetter()
-        var name2 = participant2.profile.name.capitalizeFirstLetter()
+        const name1 = participant1.profile.name.capitalizeFirstLetter()
+        const name2 = participant2.profile.name.capitalizeFirstLetter()
 
         return name1 > name2 ? 1 : -1
       })
@@ -309,8 +336,8 @@ EventContainer = createContainer(({eventId, userId}) => {
         eventId,
         userId: currentUser && currentUser._id,
         isManyToOne: event && event.type === 'many-to-one'
-      }));
-    });
+      }))
+    })
   }
 
   Session.set('event', event || {})

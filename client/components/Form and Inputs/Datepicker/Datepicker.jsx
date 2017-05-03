@@ -1,6 +1,9 @@
 import React from 'react'
-import {ValidatedInput} from '../../../../lib/Mixins'
+import { _i18n } from 'meteor/universe:i18n'
 import moment from 'moment'
+import { $ } from 'meteor/jquery'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { ValidatedInput } from '../../../../lib/Mixins'
 
 Datepicker = class Datepicker extends ValidatedInput {
 
@@ -43,7 +46,7 @@ Datepicker = class Datepicker extends ValidatedInput {
         ...options
       })
       .on('changeDate', () => {
-        var value = this.getValue()
+        const value = this.getValue()
         this.validate(value)
         this.onChange(value)
       })
@@ -69,7 +72,8 @@ Datepicker = class Datepicker extends ValidatedInput {
         className={classNames({
           'with-title': this.props.label
         })}
-        ref="datepicker">
+        ref="datepicker"
+      >
       </div>
     )
   }

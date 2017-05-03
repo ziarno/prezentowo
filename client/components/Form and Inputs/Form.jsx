@@ -1,7 +1,12 @@
-import React from 'react'
-import {Autorun} from '../../../lib/Mixins'
-import {flattenObject, unflattenObject} from '../../../lib/utilities'
+import React, { Component, PropTypes } from 'react'
 import reactMixin from 'react-mixin'
+import _ from 'underscore'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { Autorun } from '../../../lib/Mixins'
+import { 
+  flattenObject,
+  unflattenObject
+} from '../../../lib/utilities'
 
 /**
  * Form
@@ -20,7 +25,7 @@ import reactMixin from 'react-mixin'
  * if flattenData prop is set to true - name your inputs
  * this way also, ex. <Input name="profile.name" />
  */
-Form = class Form extends React.Component {
+Form = class Form extends Component {
 
   constructor(props) {
     super(props)
@@ -52,20 +57,22 @@ Form = class Form extends React.Component {
   }
 
   autorunSetError() {
-    var {schema} = this.props
-
+    const { schema } = this.props
     this.setState({
       hasError: schema && !schema.isValid()
     })
   }
 
   reset() {
-    var {schema} = this.props
+    const {
+      schema,
+      data
+    } = this.props
 
     this.hasSubmitted = false
     this.hiddenFields = {}
-    if (this.props.data) {
-      this.setFormData(this.props.data)
+    if (data) {
+      this.setFormData(data)
     } else {
       this.state.components.forEach((component) => component.reset())
     }
@@ -85,7 +92,7 @@ Form = class Form extends React.Component {
       return
     }
 
-    var flatData = this.props.flattenData ?
+    const flatData = this.props.flattenData ?
       flattenObject(data) : data
 
     this.state.components.forEach((component) => {
@@ -103,9 +110,13 @@ Form = class Form extends React.Component {
   }
 
   submitForm(event) {
-    var {schema, onSubmit, flattenData} = this.props
-    var flatFormValues = {}
-    var formValues
+    const {
+      schema,
+      onSubmit,
+      flattenData
+    } = this.props
+    const flatFormValues = {}
+    let formValues
 
     event && event.preventDefault()
     this.hasSubmitted = true
@@ -151,18 +162,18 @@ Form = class Form extends React.Component {
 }
 
 Form.propTypes = {
-  schema: React.PropTypes.object,
-  className: React.PropTypes.string,
-  onSubmit: React.PropTypes.func,
-  data: React.PropTypes.object,
-  flattenData: React.PropTypes.bool,
-  hiddenFields: React.PropTypes.object
+  schema: PropTypes.object,
+  className: PropTypes.string,
+  onSubmit: PropTypes.func,
+  data: PropTypes.object,
+  flattenData: PropTypes.bool,
+  hiddenFields: PropTypes.object
 }
 
 Form.childContextTypes = {
-  register: React.PropTypes.func,
-  schema: React.PropTypes.object,
-  form: React.PropTypes.object
+  register: PropTypes.func,
+  schema: PropTypes.object,
+  form: PropTypes.object
 }
 
 reactMixin(Form.prototype, Autorun)

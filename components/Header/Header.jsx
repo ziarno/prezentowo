@@ -1,7 +1,9 @@
-import React from 'react'
-import {createContainer} from 'meteor/react-meteor-data'
+import React, { Component, PropTypes } from 'react'
+import { createContainer } from 'meteor/react-meteor-data'
+import { Meteor } from 'meteor/meteor'
+import { FlowRouter } from 'meteor/kadira:flow-router'
 
-Header = class Header extends React.Component {
+Header = class Header extends Component {
   
   constructor() {
     super()
@@ -10,14 +12,20 @@ Header = class Header extends React.Component {
   }
 
   getLoggedInNavigation() {
+    const {
+      event,
+      events,
+      ready,
+      user
+    } = this.props
     return (
       <div id="navigation-container">
         <NavEvents
-          event={this.props.event}
-          events={this.props.events}
-          ready={this.props.ready} />
-        <NavProfile
-          {...this.props.user.profile} />
+          event={event}
+          events={events}
+          ready={ready} 
+        />
+        <NavProfile {...user.profile} />
       </div>
     )
   }
@@ -31,15 +39,20 @@ Header = class Header extends React.Component {
   }
 
   render() {
+    const {
+      title,
+      user
+    } = this.props
     return (
       <div className="app-header shadow">
         <div className="app-header--container">
           <h1 className="title">
-            {this.props.title}
+            {title}
           </h1>
-          {this.props.user ?
+          {user ?
             this.getLoggedInNavigation() :
-            this.getLoggedOutNavigation()}
+            this.getLoggedOutNavigation()
+          }
         </div>
       </div>
     )
@@ -47,10 +60,10 @@ Header = class Header extends React.Component {
 }
 
 Header = createContainer(({}) => {
-  var eventId = FlowRouter.getParam('eventId')
-  var event = Events.findOne(eventId)
-  var user = Meteor.user()
-  var title = event && user && event.title || 'Prezentowo'
+  const eventId = FlowRouter.getParam('eventId')
+  const event = Events.findOne(eventId)
+  const user = Meteor.user()
+  const title = event && user && event.title || 'Prezentowo'
 
   return {
     events: Events.find().fetch(),

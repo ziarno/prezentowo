@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import _ from 'underscore'
+import { $ } from 'meteor/jquery'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { ValidatedInput } from '../../../lib/Mixins'
 
 RadioButtons = class RadioButtons extends ValidatedInput {
 
@@ -22,7 +25,7 @@ RadioButtons = class RadioButtons extends ValidatedInput {
   }
 
   setActive(value) {
-    var $this = $(ReactDOM.findDOMNode(this))
+    const $this = $(ReactDOM.findDOMNode(this))
 
     $this
       .find('[data-value]')
@@ -33,9 +36,9 @@ RadioButtons = class RadioButtons extends ValidatedInput {
   }
 
   onClick({target}) {
-    var $target = $(target)
-    var $this = $(ReactDOM.findDOMNode(this))
-    var value = $target.attr('data-value')
+    let $target = $(target)
+    const $this = $(ReactDOM.findDOMNode(this))
+    let value = $target.attr('data-value')
 
     while (!value && !$target.is($this)) {
       $target = $target.parent()
@@ -59,36 +62,29 @@ RadioButtons = class RadioButtons extends ValidatedInput {
   }
 
   render() {
-
-    var Buttons = this.props.buttons && this.props.buttons.map((button) => (
-      <button
-        key={button.value}
-        type="button"
-        disabled={this.isDisabled()}
-        onClick={() => this.setState({value: button.value})}
-        className={classNames('ui icon button', button.className, {
-          active: this.state.value === button.value
-        })}>
-        <T>{button.text}</T>
-        <i className={`${button.icon} icon`}></i>
-      </button>
-    ))
+    const {
+      label,
+      className,
+      vertical,
+      children
+    } = this.props
 
     return (
       <div
-        className={classNames('ui compact buttons', this.props.className, {
-          vertical: this.props.vertical,
+        className={classNames('ui compact buttons', className, {
+          vertical,
           error: this.shouldShowError()
         })}
-        onClick={this.onClick}>
+        onClick={this.onClick}
+      >
 
-        {this.props.label ? (
+        {label ? (
           <label>
-            <T>{this.props.label}</T>
+            <T>{label}</T>
           </label>
         ) : null}
 
-        {this.props.children}
+        {children}
 
       </div>
     )
@@ -97,7 +93,11 @@ RadioButtons = class RadioButtons extends ValidatedInput {
 }
 
 RadioButtons.propTypes = {
-  label: React.PropTypes.string,
-  className: React.PropTypes.string,
-  vertical: React.PropTypes.string
+  label: PropTypes.string,
+  className: PropTypes.string,
+  vertical: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ])
 }

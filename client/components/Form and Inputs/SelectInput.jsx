@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import {ValidatedInput} from '../../../lib/Mixins'
-import reactMixin from 'react-mixin'
+import _ from 'underscore'
+import { $ } from 'meteor/jquery'
+import { _i18n } from 'meteor/universe:i18n'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { ValidatedInput } from '../../../lib/Mixins'
 
 SelectInput = class SelectInput extends ValidatedInput {
 
@@ -18,9 +21,9 @@ SelectInput = class SelectInput extends ValidatedInput {
 
   setValue(value) {
     //note: item selection must be done manually with react, because semantic does DOM manipulation on its own otherwise and it ends up cloning elements with the same reactid
-    var $dropdown = $(this.refs.dropdown)
-    var $node = $dropdown.dropdown('get item', value)
-    var $nodeCloned
+    const $dropdown = $(this.refs.dropdown)
+    const $node = $dropdown.dropdown('get item', value)
+    let $nodeCloned
 
     if (!value || !($node instanceof jQuery)) {
       return
@@ -54,8 +57,7 @@ SelectInput = class SelectInput extends ValidatedInput {
   }
 
   getValue() {
-    var value = $(this.refs.dropdown).dropdown('get value')
-
+    const value = $(this.refs.dropdown).dropdown('get value')
     return _.isString(value) && value
   }
 
@@ -82,11 +84,11 @@ SelectInput = class SelectInput extends ValidatedInput {
 
   componentDidMount() {
     super.componentDidMount()
-    var $dropdown = $(this.refs.dropdown)
+    const $dropdown = $(this.refs.dropdown)
 
     function scrollCurrentIntoView() {
-      var value = $dropdown.dropdown('get value')
-      var $item = $dropdown.dropdown('get item', value)
+      const value = $dropdown.dropdown('get value')
+      const $item = $dropdown.dropdown('get item', value)
 
       if ($item && _.isFunction($item[0].scrollIntoViewIfNeeded)) {
         setTimeout(() => {
@@ -98,7 +100,7 @@ SelectInput = class SelectInput extends ValidatedInput {
     $dropdown.dropdown({
       action: (nodeString, value) => {
         $dropdown.dropdown('hide')
-        this.setState({isSelectedByUser: true}) //note: setState before setValue, because causes am update after setting a value -> which causes the value to be set as default
+        this.setState({isSelectedByUser: true}) // note: setState before setValue, because causes am update after setting a value -> which causes the value to be set as default
         this.setValue(value)
       },
       onChange: (value) => {
@@ -116,26 +118,33 @@ SelectInput = class SelectInput extends ValidatedInput {
   }
 
   render() {
+    const {
+      className,
+      inline,
+      placeholder,
+      children
+    } = this.props
     return (
       <div
         ref="dropdown"
-        className={classNames('ui dropdown', this.props.className, {
-          'fluid selection': !this.props.inline,
-          inline: this.props.inline,
+        className={classNames('ui dropdown', className, {
+          'fluid selection': !inline,
+          inline,
           error: this.shouldShowError(),
           disabled: this.isDisabled()
-        })}>
+        })}
+      >
 
         <div
           ref="placeholder"
           className="default text">
-          {_i18n.__(this.props.placeholder)}
+          {_i18n.__(placeholder)}
         </div>
 
-        <i className="dropdown icon"></i>
+        <i className="dropdown icon" />
 
         <div className="menu">
-          {this.props.children}
+          {children}
         </div>
 
       </div>
@@ -144,7 +153,12 @@ SelectInput = class SelectInput extends ValidatedInput {
 }
 
 SelectInput.propTypes = {
-  placeholder: React.PropTypes.string,
-  className: React.PropTypes.string,
-  selectDefault: React.PropTypes.string
+  inline: PropTypes.bool,
+  placeholder: PropTypes.string,
+  className: PropTypes.string,
+  selectDefault: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ])
 }

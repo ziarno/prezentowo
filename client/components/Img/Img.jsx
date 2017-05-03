@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { PropTypes, Component } from 'react'
+import _ from 'underscore'
+import { classNames } from 'meteor/maxharris9:classnames'
 
-Img = class Img extends React.Component {
+Img = class Img extends Component {
 
   constructor() {
     super()
@@ -28,33 +30,34 @@ Img = class Img extends React.Component {
   }
 
   loadImage(src = this.props.src) {
-    var {onLoad} = this.props
+    const { onLoad } = this.props
 
     this.image = new Image()
     clearTimeout(this.loadTimeout)
     this.loadTimeout = setTimeout(() => {
-      this.setState({isLoading: true})
+      this.setState({ isLoading: true })
     }, 300)
 
-    this.image.onload = this.image.onerror = () => {
+    this.image.onload = () => {
       clearTimeout(this.loadTimeout)
-      this.setState({isLoading: false})
+      this.setState({ isLoading: false })
       if (_.isFunction(onLoad)) {
         onLoad(this.image)
       }
     }
+    this.image.onerror = this.image.onload
     this.image.src = src
   }
 
   showModalWithPicture() {
     ModalManager.open(
       <Lightbox picture={this.props.modalSrc} />,
-      {id: 'lightbox'}
+      { id: 'lightbox' }
     )
   }
 
   render() {
-    var {
+    const {
       autosize,
       className,
       hideLoader,
@@ -62,16 +65,17 @@ Img = class Img extends React.Component {
       children,
       modalSrc
     } = this.props
-    var style = {
+    const style = {
       backgroundImage: `url(${this.props.src})`
     }
-    var onClick = modalSrc ?
+    const onClick = modalSrc ?
       this.showModalWithPicture :
       this.props.onClick
 
     if (this.image &&
         autosize &&
-        !this.state.isLoading) {
+        !this.state.isLoading
+    ) {
       style.width = this.image.width
       style.height = this.image.height
     }
@@ -82,7 +86,8 @@ Img = class Img extends React.Component {
         className={classNames('img', className, {
           enlarge: !!modalSrc
         })}
-        style={style}>
+        style={style}
+      >
 
         {this.state.isLoading && !hideLoader ? (
           <Loader
@@ -92,7 +97,6 @@ Img = class Img extends React.Component {
         ) : null}
 
         {children}
-
       </div>
     )
   }
@@ -100,11 +104,11 @@ Img = class Img extends React.Component {
 }
 
 Img.propTypes = {
-  src: React.PropTypes.string.isRequired,
-  modalSrc: React.PropTypes.string,
-  autosize: React.PropTypes.bool,
-  hideLoader: React.PropTypes.bool,
-  onClick: React.PropTypes.func,
-  onLoad: React.PropTypes.func,
-  loaderOptions: React.PropTypes.object
+  src: PropTypes.string.isRequired,
+  modalSrc: PropTypes.string,
+  autosize: PropTypes.bool,
+  hideLoader: PropTypes.bool,
+  onClick: PropTypes.func,
+  onLoad: PropTypes.func,
+  loaderOptions: PropTypes.object
 }

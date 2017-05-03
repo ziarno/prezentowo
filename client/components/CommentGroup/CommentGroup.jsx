@@ -1,7 +1,8 @@
 import React from 'react'
+import _ from 'underscore'
 
-CommentGroup = ({user, comments}) => {
-  var messages = _.reduce(comments, (memo, comment) => (
+CommentGroup = ({ user, comments }) => {
+  const messages = _.reduce(comments, (memo, comment) => (
     `${memo}\n${comment.message}`
   ), '')
 
@@ -11,7 +12,8 @@ CommentGroup = ({user, comments}) => {
       <DateField
         className="hint"
         mode="from"
-        date={comments[comments.length - 1].createdAt} />
+        date={comments[comments.length - 1].createdAt}
+      />
       <ParsedText
         text={messages}
         className="comment"

@@ -1,9 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import _ from 'underscore'
+import { $ } from 'meteor/jquery'
 
 ModalManager = (function () {
 
-  var modals = {}
+  const modals = {}
 
   function invokeModalById(id, func) {
     if (_.isString(id) && modals[id]) {
@@ -22,9 +24,9 @@ ModalManager = (function () {
         className = '',
         modalComponent
       }) {
-      var container = document.getElementById(id) ||
+      const container = document.getElementById(id) ||
         document.createElement('div')
-      var modal
+      let modal
 
       container.id = id
       container.className = `${className} ui dimmer modals`
@@ -34,25 +36,28 @@ ModalManager = (function () {
         ReactDOM.render(modalComponent, container)
       )
 
-      return modals[id] = {modal, container}
+      modals[id] = { modal, container }
+      return modals[id]
     },
 
     render(modalComponent, containerId) {
-      ReactDOM.render(modalComponent,
-        document.getElementById(containerId))
+      ReactDOM.render(
+        modalComponent,
+        document.getElementById(containerId)
+      )
     },
 
     open(modalComponent, options = {}) {
       if (ModalManager.isOpen(options.id)) {
         ModalManager.destroy(options.id)
       }
-      var {id} = options
-      var {modal} =
+      const { id } = options
+      const { modal } =
         ModalManager.createModal({
           ...options,
           modalComponent
         })
-      var $modal = $(modal)
+      const $modal = $(modal)
 
       //hack: for multiple modals to work, we must manually
       //toggle the 'dimmed' class on the body, because semantic-ui

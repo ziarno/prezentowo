@@ -1,8 +1,11 @@
-import React from 'react'
-import {Tooltips} from '../../../lib/Mixins'
+import React, { Component, PropTypes } from 'react'
+import { $ } from 'meteor/jquery'
+import { _i18n } from 'meteor/universe:i18n'
 import reactMixin from 'react-mixin'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { Tooltips } from '../../../lib/Mixins'
 
-Present = class Present extends React.Component {
+Present = class Present extends Component {
 
   constructor() {
     super()
@@ -15,11 +18,12 @@ Present = class Present extends React.Component {
   }
 
   getTooltips() {
-    var {buyers} = this.props.present
-    var hasBuyers = buyers && buyers.length
-    var users = hasBuyers && Participants.find({_id: {$in: buyers}}).fetch()
-    var usersMessage = users && `${_i18n.__('Buyers')}:
-      ${users.map(u => u.profile.name).join(', ')}`
+    const { buyers } = this.props.present
+    const hasBuyers = buyers && buyers.length
+    const users = hasBuyers &&
+      Participants.find({ _id: { $in: buyers }}).fetch()
+    const usersMessage = users &&
+      `${_i18n.__('Buyers')}: ${users.map(u => u.profile.name).join(', ')}`
 
     if (!hasBuyers) {
       return {}
@@ -34,15 +38,15 @@ Present = class Present extends React.Component {
   }
 
   setActive() {
-    this.setState({isActive: true})
+    this.setState({ isActive: true })
   }
 
   setInactive() {
-    this.setState({isActive: false})
+    this.setState({ isActive: false })
   }
 
   showPresent() {
-    var {present} = this.props
+    const { present } = this.props
 
     ModalManager.open(
       <PresentDetails presentId={present._id} />,
@@ -54,9 +58,12 @@ Present = class Present extends React.Component {
   }
 
   render() {
-    var {present} = this.props
-    var isFullWidth = this.props.viewMode === 'full-width'
-    var hasBuyers = present &&
+    const {
+      present,
+      viewMode
+    } = this.props
+    const isFullWidth = viewMode === 'full-width'
+    const hasBuyers = present &&
       present.buyers &&
       present.buyers.length > 0
 
@@ -68,14 +75,16 @@ Present = class Present extends React.Component {
       <div
         className={classNames('present', {
           'full-width': isFullWidth
-        })}>
+        })}
+      >
         <div
           onMouseEnter={this.setActive}
           onMouseLeave={this.setInactive}
           onClick={this.showPresent}
           className={classNames('ui card', {
             active: this.state.isActive
-          })}>
+          })}
+        >
           <Img
             className="image waves-effect"
             src={present.picture.small}
@@ -84,7 +93,8 @@ Present = class Present extends React.Component {
             ref="buyers"
             className={classNames('ui left corner olive tiny label', {
               hidden: !hasBuyers
-            })}>
+            })}
+          >
             <i className="dollar icon" />
           </div>
 
@@ -93,7 +103,7 @@ Present = class Present extends React.Component {
               present={present}
               buttonClassName="edit-present small-icon-button"
               icon={(
-                <i className="vertical ellipsis icon"></i>
+                <i className="vertical ellipsis icon" />
               )}
               users={present.forUserId && [Participants.findOne(present.forUserId)]}
               popupSettings={{
@@ -116,11 +126,9 @@ Present = class Present extends React.Component {
           wrapperClassName={classNames({
             active: this.state.isActive
           })}
-          color={classNames({
-            green: present.isOwn,
-            red: !present.isOwn
-          })}
-          small={!isFullWidth}>
+          color={present.isOwn ? 'green' : 'red'}
+          small={!isFullWidth}
+        >
           {isFullWidth ? (
             <h1>
               <span>{present.title}</span>
@@ -133,9 +141,9 @@ Present = class Present extends React.Component {
 }
 
 Present.propTypes = {
-  present: React.PropTypes.object.isRequired,
-  viewMode: React.PropTypes.string,
-  onClick: React.PropTypes.func
+  present: PropTypes.object.isRequired,
+  viewMode: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 reactMixin(Present.prototype, Tooltips)

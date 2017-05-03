@@ -1,7 +1,9 @@
-import React from 'react'
-import {ValidatedInput} from '../../../../lib/Mixins'
-import reactMixin from 'react-mixin'
+import React, { PropTypes } from 'react'
 import _ from 'underscore'
+import { Cloudinary } from 'meteor/lepozepo:cloudinary'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { _i18n } from 'meteor/universe:i18n'
+import { ValidatedInput } from '../../../../lib/Mixins'
 
 ImagePicker = class ImagePicker extends ValidatedInput {
 
@@ -29,9 +31,9 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   }
   
   changeImageIndex(count) {
-    var imagesCount = this.props.images.length +
+    const imagesCount = this.props.images.length +
       this.state.uploadedImages.length
-    var nextIndex = (this.state.currentIndex + count + imagesCount)
+    const nextIndex = (this.state.currentIndex + count + imagesCount)
       % imagesCount
     this.setImageIndex(nextIndex)
   }
@@ -55,7 +57,7 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   }
 
   setValue(picture) {
-    var index = this.getIndexOfPicture(picture)
+    const index = this.getIndexOfPicture(picture)
     if (index > -1) {
       this.setImageIndex(index)
     } else {
@@ -77,13 +79,14 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   }
 
   uploadImage(event) {
-    var files = event.currentTarget.files
-    var {
+    const files = event.currentTarget.files
+    const {
       uploadOptions,
-      responseTransformations} = this.props
+      responseTransformations
+    } = this.props
 
     function makeObject(url) {
-      var imageObject = {}
+      const imageObject = {}
 
       responseTransformations.forEach(transformation => {
         imageObject[transformation] =
@@ -101,8 +104,7 @@ ImagePicker = class ImagePicker extends ValidatedInput {
 
     Cloudinary.upload(files, {
       ...uploadOptions,
-      //note: fix for lepozepo:cloudinary:
-      fields: {}
+      fields: {} // fix for lepozepo:cloudinary
     }, (err, res) => {
       this.setState({
         isLoading: false
@@ -130,14 +132,16 @@ ImagePicker = class ImagePicker extends ValidatedInput {
   }
 
   render() {
-    var image = this.getImage()
-    var imageToDisplay = _.isString(image) ? image :
+    const image = this.getImage()
+    const imageToDisplay = _.isString(image) ? image :
       (image.small || image.large)
 
     return (
-      <div className={classNames('image-picker shadow', {
-        disabled: this.isDisabled()
-      })}>
+      <div
+        className={classNames('image-picker shadow', {
+          disabled: this.isDisabled()
+        })}
+      >
         <Loader
           inverted
           text={_i18n.__('Uploading')}
@@ -166,7 +170,7 @@ ImagePicker = class ImagePicker extends ValidatedInput {
               {disabled: this.isDisabled()}
             )}>
             <T>Upload file</T>
-            <i className="upload icon"></i>
+            <i className="upload icon" />
           </label>
           <input
             name={this.inputId}
@@ -176,7 +180,7 @@ ImagePicker = class ImagePicker extends ValidatedInput {
           />
           {this.props.enableSearch ? (
             <div className="ui icon button waves-effect waves-button">
-              <i className="search icon"></i>
+              <i className="search icon" />
             </div>
           ) : null}
         </div>
@@ -188,18 +192,18 @@ ImagePicker = class ImagePicker extends ValidatedInput {
 }
 
 ImagePicker.propTypes = {
-  images: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        small: React.PropTypes.string,
-        large: React.PropTypes.string
+  images: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        small: PropTypes.string,
+        large: PropTypes.string
       })
     ),
-    React.PropTypes.arrayOf(
-      React.PropTypes.string
+    PropTypes.arrayOf(
+      PropTypes.string
     )
   ]),
-  uploadOptions: React.PropTypes.object,
-  randomizeInitialImage: React.PropTypes.bool,
-  enableSearch: React.PropTypes.bool
+  uploadOptions: PropTypes.object,
+  randomizeInitialImage: PropTypes.bool,
+  enableSearch: PropTypes.bool
 }

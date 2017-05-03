@@ -1,7 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { Component, PropTypes } from 'react'
+import _ from 'underscore'
+import { _i18n } from 'meteor/universe:i18n'
 
-UserPresents = class UserPresents extends React.Component {
+UserPresents = class UserPresents extends Component {
 
   static getPresents({title, presents, viewMode}) {
     if (!presents.length) {
@@ -30,35 +31,36 @@ UserPresents = class UserPresents extends React.Component {
   }
 
   render() {
-    var ownPresents = []
-    var otherPresents = []
-
-    this.props.presents.forEach((present) => {
-      if (present.isOwn) {
-        ownPresents.push(present)
-      } else {
-        otherPresents.push(present)
-      }
-    })
+    const {
+      presents,
+      users,
+      presentViewMode,
+    } = this.props
+    const [ownPresents, otherPresents] = _.partition(
+      presents,
+      p => p.isOwn
+    )
 
     return (
       <div
-        id={`user-presents-${this.props.users &&
-          this.props.users.length === 1 &&
-          this.props.users[0]._id}`}
-        className="user-presents">
+        id={`user-presents-${users &&
+          users.length === 1 &&
+          users[0]._id}`}
+        className="user-presents"
+      >
 
         <HorizontalDivider>
-          {this.props.users.map(user => (
+          {users.map(user => (
             <User
-              showAddPresentOnHover={this.props.users.length === 1}
+              showAddPresentOnHover={users.length === 1}
               key={user._id}
               user={user}
-              large />
+              large
+            />
           ))}
         </HorizontalDivider>
 
-        {this.props.users.length > 1 ? (
+        {users.length > 1 ? (
           <PresentPopup
             icon={<i className="ui plus icon" />}
             buttonClassName="right labeled compact"
@@ -70,12 +72,12 @@ UserPresents = class UserPresents extends React.Component {
         {UserPresents.getPresents({
           title: 'hints.ownPresents',
           presents: ownPresents,
-          viewMode: this.props.presentViewMode
+          viewMode: presentViewMode
         })}
         {UserPresents.getPresents({
           title: 'hints.otherPresents',
           presents: otherPresents,
-          viewMode: this.props.presentViewMode
+          viewMode: presentViewMode
         })}
 
       </div>
@@ -84,7 +86,7 @@ UserPresents = class UserPresents extends React.Component {
 }
 
 UserPresents.propTypes = {
-  users: React.PropTypes.array,
-  presents: React.PropTypes.array.isRequired,
-  presentViewMode: React.PropTypes.string
+  users: PropTypes.array,
+  presents: PropTypes.array.isRequired,
+  presentViewMode: PropTypes.string
 }

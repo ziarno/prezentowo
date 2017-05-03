@@ -1,9 +1,11 @@
-import React from 'react'
-import {createContainer} from 'meteor/react-meteor-data'
-import {Autorun} from '../../lib/Mixins'
+import React, { Component, PropTypes } from 'react'
+import { Meteor } from 'meteor/meteor'
+import { FlowRouter } from 'meteor/kadira:flow-router'
+import { createContainer } from 'meteor/react-meteor-data'
 import reactMixin from 'react-mixin'
+import { Autorun } from '../../lib/Mixins'
 
-App = class App extends React.Component {
+App = class App extends Component {
 
   constructor() {
     super()
@@ -11,12 +13,12 @@ App = class App extends React.Component {
   }
 
   autorunSetTitle() {
-    var eventId = FlowRouter.getParam('eventId')
-    var userId = FlowRouter.getParam('userId')
-    var event = Events.findOne(eventId)
-    var eventTitle = event && event.title.capitalizeFirstLetter()
-    var participant = Participants.findOne(userId)
-    var participantName = participant && participant.profile.name.capitalizeFirstLetter()
+    const eventId = FlowRouter.getParam('eventId')
+    const userId = FlowRouter.getParam('userId')
+    const event = Events.findOne(eventId)
+    const eventTitle = event && event.title.capitalizeFirstLetter()
+    const participant = Participants.findOne(userId)
+    const participantName = participant && participant.profile.name.capitalizeFirstLetter()
 
     document.title =
       participantName ?
@@ -26,28 +28,40 @@ App = class App extends React.Component {
   }
 
   render() {
-    var {ready, content, footer, className} = this.props
+    const {
+      ready,
+      content,
+      footer,
+      className
+    } = this.props
+
     return (
       <div
         id="app"
-        className={className}>
-        <Header
-          ready={ready}
-        />
+        className={className}
+      >
+        <Header ready={ready} />
         <div className="app-content">
           {content}
         </div>
-        {footer ? footer : null}
+        {footer || null}
       </div>
     )
   }
 }
 
+App.propTypes = {
+  ready: PropTypes.bool,
+  content: PropTypes.node,
+  footer: PropTypes.node,
+  className: PropTypes.string
+}
+
 reactMixin(App.prototype, Autorun)
 
 App = createContainer(() => {
-  var userSubscription = Meteor.subscribe('userData')
-  var eventsSubscription = Meteor.subscribe('events')
+  const userSubscription = Meteor.subscribe('userData')
+  const eventsSubscription = Meteor.subscribe('events')
   return {
     ready: userSubscription.ready() && eventsSubscription.ready()
   }

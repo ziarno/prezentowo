@@ -1,7 +1,12 @@
-import React from 'react'
-import {PopupComponent} from '../../../../lib/Mixins'
-import {createContainer} from 'meteor/react-meteor-data'
-import {getAvatarImages} from '../../../../lib/utilities'
+import React, { PropTypes } from 'react'
+import _ from 'underscore'
+import { Meteor } from 'meteor/meteor'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { createContainer } from 'meteor/react-meteor-data'
+import { AccountsTemplates } from 'meteor/useraccounts:core'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { PopupComponent } from '../../../../lib/Mixins'
+import { getAvatarImages } from '../../../../lib/utilities'
 
 UserProfilePopup = class UserProfilePopup extends PopupComponent {
 
@@ -21,7 +26,7 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
         type: String,
         regEx: SimpleSchema.RegEx.Email
       }
-      }).namedContext('userProfile')
+    }).namedContext('userProfile')
     this.getPopupSettings = this.getPopupSettings.bind(this)
     this.mapDataToForm = this.mapDataToForm.bind(this)
     this.saveUser = this.saveUser.bind(this)
@@ -29,7 +34,7 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
   }
 
   getPopupSettings() {
-    var position = 'bottom right'
+    const position = 'bottom right'
     return {
       onShow: () => {
         this.schema.resetValidation()
@@ -57,8 +62,11 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
   }
 
   renderTrigger() {
-    var {user} = this.props
-    var pictureBackground = {
+    const {
+      user,
+      buttonClassName
+    } = this.props
+    const pictureBackground = {
       backgroundImage: `url(${user && user.profile.pictureUrl})`
     }
 
@@ -70,7 +78,7 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
         className={classNames(
           'user-profile-button ui button capitalize',
           'waves-effect waves-buton',
-          this.props.buttonClassName
+          buttonClassName
         )}>
         <span>{user && user.profile.name}</span>
       </div>
@@ -78,37 +86,40 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
   }
 
   renderPopup() {
+    const {
+      popupClassName
+    } = this.props
     return (
       <div
         ref="popupTarget"
         className={classNames(
           'form-popup user-profile-popup ui flowing popup',
-          this.props.popupClassName
-        )}>
+          popupClassName
+        )}
+      >
         <Form
           ref="form"
           data={this.mapDataToForm()}
           flattenData
           onSubmit={this.saveUser}
-          schema={this.schema}>
+          schema={this.schema}
+        >
 
-          <div
-            className="form-popup--title with-button ui attached message">
-            <div
-              className="header">
+          <div className="form-popup--title with-button ui attached message">
+            <div className="header">
               <T>Your profile</T>
               <button
                 type="button"
                 onClick={this.logout}
-                className="ui compact icon right labeled button">
-                <i className="sign out icon"></i>
+                className="ui compact icon right labeled button"
+              >
+                <i className="sign out icon" />
                 <T>Logout</T>
               </button>
             </div>
           </div>
 
-          <div
-            className="form-popup--form flex ui form attached fluid segment">
+          <div className="form-popup--form flex ui form attached fluid segment">
             <ImagePicker
               name="profile.pictureUrl"
               images={this.state.images}
@@ -117,7 +128,7 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
                 transformation: 'avatar'
               }}
             />
-            <div className="form-popup--form-right" >
+            <div className="form-popup--form-right">
               <Input
                 name="profile.name"
                 placeholder="Fullname"
@@ -125,44 +136,47 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
               <Input
                 name="email"
                 placeholder="Email"
-                type="email">
-              </Input>
+                type="email"
+              />
               <SelectInput
                 placeholder="Gender"
                 name="profile.gender"
-                onChange={({gender}) =>
-                  this.setState({images: getAvatarImages(gender)})
-                }>
+                onChange={({ gender }) =>
+                  this.setState({ images: getAvatarImages(gender) })
+                }
+              >
                 <div className="item" data-value="male">
-                  <i className="man icon"></i>
+                  <i className="man icon" />
                   <T>Male</T>
                 </div>
                 <div className="item" data-value="female">
-                  <i className="woman icon"></i>
+                  <i className="woman icon" />
                   <T>Female</T>
                 </div>
               </SelectInput>
             </div>
 
-            <div
-              className="user-settings form-popup--form-right">
+            <div className="user-settings form-popup--form-right">
               <div className="ui field">
                 <label>
                   <T>Participants view mode</T>
                 </label>
                 <RadioButtons
-                  name="settings.viewMode.participantsMode">
+                  name="settings.viewMode.participantsMode"
+                >
                   <button
                     type="button"
                     className="ui left labeled icon button"
-                    data-value="single">
+                    data-value="single"
+                  >
                     <T>Single</T>
                     <i className="user icon" />
                   </button>
                   <button
                     type="button"
                     className="ui left labeled icon button"
-                    data-value="multi">
+                    data-value="multi"
+                  >
                     <T>Multi</T>
                     <i className="users icon" />
                   </button>
@@ -173,18 +187,21 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
                   <T>Presents view mode</T>
                 </label>
                 <RadioButtons
-                  name="settings.viewMode.presentMode">
+                  name="settings.viewMode.presentMode"
+                >
                   <button
                     type="button"
                     className="ui left labeled icon button"
-                    data-value="full-width">
+                    data-value="full-width"
+                  >
                     <T>Full width</T>
                     <i className="list layout icon" />
                   </button>
                   <button
                     type="button"
                     className="ui left labeled icon button"
-                    data-value="card">
+                    data-value="card"
+                  >
                     <T>Card</T>
                     <i className="grid layout icon" />
                   </button>
@@ -192,7 +209,8 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
               </div>
               <a
                 onClick={this.hidePopup}
-                href="/change-password">
+                href="/change-password"
+              >
                 <T>Change password</T>
               </a>
             </div>
@@ -210,12 +228,12 @@ UserProfilePopup = class UserProfilePopup extends PopupComponent {
       </div>
     )
   }
-
 }
 
 UserProfilePopup.propTypes = {
-  buttonClassName: React.PropTypes.string,
-  popupClassName: React.PropTypes.string
+  buttonClassName: PropTypes.string,
+  popupClassName: PropTypes.string,
+  user: PropTypes.object
 }
 
 UserProfilePopup = createContainer(() => {

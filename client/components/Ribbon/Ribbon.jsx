@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import _ from 'underscore'
+import { classNames } from 'meteor/maxharris9:classnames'
 
 Ribbon = class Ribbon extends React.Component  {
 
@@ -21,11 +23,11 @@ Ribbon = class Ribbon extends React.Component  {
       return
     }
 
-    var currentRibbonHeight = $(this.refs.ribbon).outerHeight()
-    var evenRibbonHeight = currentRibbonHeight +
+    const currentRibbonHeight = $(this.refs.ribbon).outerHeight()
+    const evenRibbonHeight = currentRibbonHeight +
       (currentRibbonHeight % 2)
-    var endingSize = evenRibbonHeight * Math.sqrt(2)
-    var endingDistance = evenRibbonHeight - (endingSize / 2)
+    const endingSize = evenRibbonHeight * Math.sqrt(2)
+    const endingDistance = evenRibbonHeight - (endingSize / 2)
 
     $(this.refs.rightEndingTop).css({
       height: endingSize,
@@ -68,47 +70,65 @@ Ribbon = class Ribbon extends React.Component  {
   }
 
   render() {
-
-    var ActualRibbon = (
+    const {
+      onMouseEnter,
+      onMouseLeave,
+      onClick,
+      color,
+      className,
+      small,
+      whiteStitches,
+      withEndings,
+      children,
+      rightFlatEnding,
+      wrapperClassName,
+    } = this.props
+    const ActualRibbon = (
       <div
-        onMouseEnter={this.props.onMouseEnter}
-        onMouseLeave={this.props.onMouseLeave}
-        onClick={this.props.onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onClick={onClick}
         ref="ribbon"
         className={classNames(
           'ribbon',
-          this.props.color,
-          this.props.className, {
-          small: this.props.small,
-          'white-stitches': this.props.whiteStitches,
-          'with-endings': this.props.withEndings
-        })}>
-        <div className="ribbon-stitches
-          ribbon-stitches--top"></div>
-        <div className="ribbon-content">
-          {this.props.children}
+          color,
+          className,
+          {
+            small,
+            'white-stitches': whiteStitches,
+            'with-endings': withEndings
+          }
+        )}
+      >
+        <div className="ribbon-stitches ribbon-stitches--top">
         </div>
-        <div className="ribbon-stitches
-          ribbon-stitches--bottom"></div>
+        <div className="ribbon-content">
+          {children}
+        </div>
+        <div className="ribbon-stitches ribbon-stitches--bottom">
+        </div>
       </div>
     )
 
-    return this.props.rightFlatEnding ? (
+    return rightFlatEnding ? (
       <div
         ref="ribbonWrapper"
         className={classNames(
           'ribbon-wrapper',
-          this.props.wrapperClassName,
-          this.props.color
-          )}>
+          wrapperClassName,
+          color
+        )}
+      >
         {ActualRibbon}
         <div
           ref="rightEndingTop"
-          className="right-ending right-ending--top">
+          className="right-ending right-ending--top"
+        >
         </div>
         <div
           ref="rightEndingBottom"
-          className="right-ending right-ending--bottom">
+          className="right-ending right-ending--bottom"
+        >
         </div>
       </div>
     ) : ActualRibbon

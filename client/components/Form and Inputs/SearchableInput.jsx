@@ -1,5 +1,8 @@
-import React from 'react'
-import {createContainer} from 'meteor/react-meteor-data'
+import React, { PropTypes } from 'react'
+import { $ } from 'meteor/jquery'
+import { _i18n } from 'meteor/universe:i18n'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { createContainer } from 'meteor/react-meteor-data'
 
 SearchableInput = class SearchableInput extends Input {
 
@@ -13,8 +16,8 @@ SearchableInput = class SearchableInput extends Input {
   }
 
   componentWillReceiveProps(newProps) {
-    var previousStatus = this.props.status
-    var nextStatus = newProps.status
+    const previousStatus = this.props.status
+    const nextStatus = newProps.status
 
     if (previousStatus.loading && nextStatus.loaded) {
       $(this.refs.dropdown).dropdown('show')
@@ -29,27 +32,42 @@ SearchableInput = class SearchableInput extends Input {
   }
 
   render() {
+    const {
+      className,
+      label,
+      results,
+      onSearchSelect,
+      placeholder,
+      name,
+      status,
+      hint,
+      children,
+    } = this.props
+
     return (
       <div
-        className={classNames('ui field searchable-input', this.props.className, {
+        className={classNames('ui field searchable-input', className, {
           error: this.shouldShowError()
-        })}>
+        })}
+      >
 
-        {this.props.label ? (
+        {label ? (
           <label>
-            <T>{this.props.label}</T>
+            <T>{label}</T>
           </label>
         ) : null}
 
         <div
           ref="dropdown"
-          className="ui fluid scrolling dropdown">
+          className="ui fluid scrolling dropdown"
+        >
           <div className="menu">
-            {this.props.results.length ? this.props.results.map((user) => (
+            {results.length ? results.map((user) => (
               <div
                 key={user._id}
                 className="item"
-                onClick={() => this.props.onSearchSelect(user)}>
+                onClick={() => onSearchSelect(user)}
+              >
                 <User user={user} className="item" />
               </div>
             )) : (
@@ -60,16 +78,15 @@ SearchableInput = class SearchableInput extends Input {
           </div>
         </div>
 
-        <div
-          className="ui action input">
+        <div className="ui action input">
           <input
             ref="input"
-            placeholder={_i18n.__(this.props.placeholder)}
+            placeholder={_i18n.__(placeholder)}
             onFocus={this.hideError}
-            onBlur={(e) => this.validate(e.currentTarget.value)}
-            onChange={(e) => this.onInputChange(e.currentTarget.value)}
+            onBlur={e => this.validate(e.currentTarget.value)}
+            onChange={e => this.onInputChange(e.currentTarget.value)}
             type="text"
-            name={this.props.name}
+            name={name}
             disabled={this.isDisabled()}
           />
 
@@ -77,20 +94,20 @@ SearchableInput = class SearchableInput extends Input {
             ref="search"
             type="button"
             className={classNames('ui icon button', {
-              loading: this.props.status.loading,
+              loading: status.loading,
               red: this.shouldShowError()
             })}
             disabled={this.isDisabled()}
             onClick={this.search}>
-            <i className="small search icon"></i>
+            <i className="small search icon" />
           </button>
         </div>
 
-        {this.props.hint ? (
-          <T className="hint">{this.props.hint}</T>
+        {hint ? (
+          <T className="hint">{hint}</T>
         ) : null}
 
-        {this.props.children}
+        {children}
 
       </div>
     )
@@ -98,12 +115,19 @@ SearchableInput = class SearchableInput extends Input {
 }
 
 SearchableInput.propTypes = {
-  label: React.PropTypes.string,
-  hint: React.PropTypes.string,
-  className: React.PropTypes.string,
-  placeholder: React.PropTypes.string,
-  search: React.PropTypes.object.isRequired,
-  onSearchSelect: React.PropTypes.func.isRequired
+  label: PropTypes.string,
+  hint: PropTypes.string,
+  name: PropTypes.string,
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
+  search: PropTypes.object.isRequired,
+  onSearchSelect: PropTypes.func.isRequired,
+  results: PropTypes.array,
+  status: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ])
 }
 
 SearchableInput = createContainer(({search}) => {

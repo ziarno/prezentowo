@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
-import {Tooltips, RefreshOnLocaleChange} from '../../../lib/Mixins'
 import reactMixin from 'react-mixin'
+import {
+  Tooltips,
+  RefreshOnLocaleChange
+} from '../../../lib/Mixins'
 
-DateField = class DateField extends React.Component {
+DateField = class DateField extends Component {
 
   constructor() {
     super()
@@ -12,11 +15,11 @@ DateField = class DateField extends React.Component {
   }
 
   static getRalationalTime({date, roundToDays}) {
-    var dateText = moment(date).from(new Date())
-    var startOfToday = moment().startOf('day')
-    var startOfDate = moment(date).startOf('day')
-    var daysDiff = startOfDate.diff(startOfToday, 'days')
-    var days = {
+    let dateText = moment(date).from(new Date())
+    const startOfToday = moment().startOf('day')
+    const startOfDate = moment(date).startOf('day')
+    const daysDiff = startOfDate.diff(startOfToday, 'days')
+    const days = {
       '0': _i18n.__('today'),
       '-1': _i18n.__('yesterday'),
       '1': _i18n.__('tomorrow')
@@ -34,7 +37,7 @@ DateField = class DateField extends React.Component {
   }
 
   getTooltips() {
-    var dateText = this.props.mode === 'from' ?
+    const dateText = this.props.mode === 'from' ?
       DateField.getFormattedDate(this.props) :
       DateField.getRalationalTime(this.props)
 
@@ -46,7 +49,7 @@ DateField = class DateField extends React.Component {
   }
 
   render() {
-    var dateText = this.props.mode !== 'from' ?
+    const dateText = this.props.mode !== 'from' ?
       DateField.getFormattedDate(this.props) :
       DateField.getRalationalTime(this.props)
 
@@ -65,10 +68,10 @@ DateField = class DateField extends React.Component {
 }
 
 DateField.propTypes = {
-  date: React.PropTypes.instanceOf(Date).isRequired,
-  className: React.PropTypes.string,
-  roundToDays: React.PropTypes.bool,
-  mode: React.PropTypes.oneOf([
+  date: PropTypes.instanceOf(Date).isRequired,
+  className: PropTypes.string,
+  roundToDays: PropTypes.bool,
+  mode: PropTypes.oneOf([
     'date', 'from'
   ])
 }

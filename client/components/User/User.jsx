@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
+import { classNames } from 'meteor/maxharris9:classnames'
 
 User = ({
   user,
@@ -8,8 +9,8 @@ User = ({
   className,
   large,
   showAddPresentOnHover
-  }) => {
-  var Avatar = (
+}) => {
+  const Avatar = (
     <Img
       className="ui avatar image"
       src={picture}
@@ -19,8 +20,9 @@ User = ({
 
   return (
     <div
-      className={classNames('user', className, {large})}
-      data-id={id}>
+      className={classNames('user', className, { large })}
+      data-id={id}
+    >
       {showAddPresentOnHover ? (
         <div className="user--picture-wrapper">
           {Avatar}
@@ -28,8 +30,8 @@ User = ({
             buttonClassName="present-button--add circular"
             icon={(
               <i className="large icons">
-                <i className="plus icon"></i>
-                <i className="gift corner icon"></i>
+                <i className="plus icon" />
+                <i className="gift corner icon" />
               </i>
             )}
             users={[user]}
@@ -41,4 +43,14 @@ User = ({
       </span>
     </div>
   )
+}
+
+User.propTypes = {
+  user: PropTypes.object,
+  id: PropTypes.string,
+  picture: PropTypes.string,
+  name: PropTypes.string,
+  className: PropTypes.string,
+  large: PropTypes.bool,
+  showAddPresentOnHover: PropTypes.bool,
 }

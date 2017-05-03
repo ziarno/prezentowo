@@ -1,5 +1,7 @@
-import React from 'react'
-import {PopupComponent} from '../../../../lib/Mixins'
+import React, { PropTypes } from 'react'
+import _ from 'underscore'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { PopupComponent } from '../../../../lib/Mixins'
 
 EventPopup = class EventPopup extends PopupComponent {
 
@@ -9,8 +11,8 @@ EventPopup = class EventPopup extends PopupComponent {
       showDeleteConfirmation: false
     })
     this.schema = Events.Schemas.Main
-        .pick(['title', 'type', 'date'])
-        .namedContext('newEventForm')
+      .pick(['title', 'type', 'date'])
+      .namedContext('newEventForm')
     this.reset = this.reset.bind(this)
     this.hideAndReset = this.hideAndReset.bind(this)
     this.submitEvent = this.submitEvent.bind(this)
@@ -31,7 +33,7 @@ EventPopup = class EventPopup extends PopupComponent {
   }
 
   submitEvent(data) {
-    var eventId
+    let eventId
 
     if (this.isEdit()) {
       Events.methods.editEvent.call({
@@ -66,7 +68,9 @@ EventPopup = class EventPopup extends PopupComponent {
         ref="popupTrigger"
         className={classNames(
           'ui compact icon button waves-effect',
-          this.props.buttonClassName)}>
+          this.props.buttonClassName
+        )}
+      >
         {this.props.icon}
       </div>
     )
@@ -79,12 +83,14 @@ EventPopup = class EventPopup extends PopupComponent {
         className={classNames(
           'ui flowing popup form-popup event-popup',
           this.props.popupClassName
-        )}>
+        )}
+      >
         <Form
           ref="form"
           data={this.props.event}
           onSubmit={this.submitEvent}
-          schema={this.schema}>
+          schema={this.schema}
+        >
 
           <div className="ui attached message">
             <div className="header">
@@ -96,8 +102,7 @@ EventPopup = class EventPopup extends PopupComponent {
             </div>
           </div>
 
-          <div
-            className="form-popup--form ui form attached fluid segment">
+          <div className="form-popup--form ui form attached fluid segment">
             <Input
               ref="autofocus"
               name="title"
@@ -136,8 +141,8 @@ EventPopup = class EventPopup extends PopupComponent {
 }
 
 EventPopup.propTypes = {
-  event: React.PropTypes.object,
-  buttonClassName: React.PropTypes.string,
-  popupClassName: React.PropTypes.string,
-  icon: React.PropTypes.element
+  event: PropTypes.object,
+  buttonClassName: PropTypes.string,
+  popupClassName: PropTypes.string,
+  icon: PropTypes.element
 }

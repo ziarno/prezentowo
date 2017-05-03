@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import { classNames } from 'meteor/maxharris9:classnames'
 
-FormActionButtons = class FormActionButtons extends React.Component {
+FormActionButtons = class FormActionButtons extends Component {
 
   constructor() {
     super()
@@ -10,44 +11,83 @@ FormActionButtons = class FormActionButtons extends React.Component {
   }
 
   render() {
-    if (this.state.showDeleteConfirmation) {
-      return (
-        <div className="ui bottom attached error message bottom-modal-buttons">
-          <T>hints.deleteConfirmation</T>
-          <div className="ui buttons">
-            <ButtonBack
-              onClick={() =>
-                this.setState({showDeleteConfirmation: false})}
-            />
-            <ButtonRemove
-              text={this.props.removeText}
-              icon={this.props.removeIcon}
-              onClick={this.props.onRemove}
-            />
-          </div>
-        </div>
+    const {
+      removeText,
+      removeIcon,
+      onRemove,
+      onCancel,
+      onAccept,
+      showRemove,
+      isSaving,
+      acceptIcon,
+      acceptButtonText = 'Save'
+    } = this.props
+    const {
+      showDeleteConfirmation
+    } = this.state
+
+    const Buttons = {
+      hideDeleteConfirmation: (
+        <ButtonBack
+          key="form-action-button-back"
+          onClick={() => this.setState({ showDeleteConfirmation: false })}
+        />
+      ),
+      showDeleteConfirmation: (
+        <ButtonRemove
+          key="form-action-button-show-delete"
+          text={removeText}
+          icon={removeIcon}
+          onClick={() => this.setState({ showDeleteConfirmation: true })}
+        />
+      ),
+      remove: (
+        <ButtonRemove
+          key="form-action-button-hide-delete"
+          text={removeText}
+          icon={removeIcon}
+          onClick={onRemove}
+        />
+      ),
+      cancel: (
+        <ButtonCancel
+          key="form-action-button-cancel"
+          onClick={onCancel}
+        />
+      ),
+      accept: (
+        <ButtonAccept
+          key="form-action-button-accept"
+          isLoading={isSaving}
+          onClick={onAccept}
+          icon={acceptIcon}
+          text={acceptButtonText}
+        />
       )
     }
+    const buttons = showDeleteConfirmation ?
+      [
+        Buttons.hideDeleteConfirmation,
+        Buttons.remove
+      ] :
+      [
+        Buttons.cancel,
+        showRemove ? Buttons.showDeleteConfirmation : null,
+        Buttons.accept
+      ]
 
     return (
-      <div className="ui bottom attached message bottom-modal-buttons ">
+      <div
+        className={classNames('ui bottom attached message bottom-modal-buttons', {
+          error: showDeleteConfirmation
+        })}
+      >
+        {showDeleteConfirmation ?
+          <T>hints.deleteConfirmation</T>
+        : null}
+
         <div className="ui buttons">
-          <ButtonCancel
-            onClick={this.props.onCancel}
-          />
-          {this.props.showRemove ? (
-            <ButtonRemove
-              text={this.props.removeText}
-              icon={this.props.removeIcon}
-              onClick={() => this.setState({showDeleteConfirmation: true})}
-            />
-          ) : null}
-          <ButtonAccept
-            isLoading={this.props.isSaving}
-            onClick={this.props.onAccept}
-            icon={this.props.acceptIcon}
-            text={this.props.acceptButtonText || 'Save'}
-          />
+          {buttons}
         </div>
       </div>
     )
@@ -56,13 +96,13 @@ FormActionButtons = class FormActionButtons extends React.Component {
 }
 
 FormActionButtons.propTypes = {
-  showRemove: React.PropTypes.bool,
-  isSaving: React.PropTypes.bool,
-  acceptButtonText: React.PropTypes.string,
-  removeIcon: React.PropTypes.string,
-  acceptIcon: React.PropTypes.string,
-  removeText: React.PropTypes.string,
-  onRemove: React.PropTypes.func,
-  onAccept: React.PropTypes.func,
-  onCancel: React.PropTypes.func
+  showRemove: PropTypes.bool,
+  isSaving: PropTypes.bool,
+  acceptButtonText: PropTypes.string,
+  removeIcon: PropTypes.string,
+  acceptIcon: PropTypes.string,
+  removeText: PropTypes.string,
+  onRemove: PropTypes.func,
+  onAccept: PropTypes.func,
+  onCancel: PropTypes.func
 }

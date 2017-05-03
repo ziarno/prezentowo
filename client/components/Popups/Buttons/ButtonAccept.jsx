@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
+import { classNames } from 'meteor/maxharris9:classnames'
 
 ButtonAccept = ({
   onClick,
@@ -6,7 +7,7 @@ ButtonAccept = ({
   className,
   isSaving,
   icon = 'checkmark'
-  }) => (
+}) => (
   <button
     type="submit"
     className={classNames(
@@ -16,8 +17,17 @@ ButtonAccept = ({
         loading: isSaving
       }
     )}
-    onClick={onClick}>
-    <i className={`${icon} icon`}></i>
+    onClick={onClick}
+  >
+    <i className={`${icon} icon`} />
     <T>{text}</T>
   </button>
 )
+
+ButtonAccept.propTypes = {
+  onClick: PropTypes.func,
+  text: PropTypes.string,
+  className: PropTypes.string,
+  isSaving: PropTypes.string,
+  icon: PropTypes.string
+}

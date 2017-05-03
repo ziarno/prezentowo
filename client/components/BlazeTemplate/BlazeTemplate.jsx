@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import reactMixin from 'react-mixin'
+import { Blaze } from 'meteor/blaze'
+import _ from 'underscore'
+import { Template } from 'meteor/templating'
+import { ReactMeteorData } from 'meteor/react-meteor-data'
 
-BlazeTemplate = class BlazeTemplate extends React.Component {
+BlazeTemplate = class BlazeTemplate extends Component {
 
   renderBlaze() {
     this.removeBlaze()

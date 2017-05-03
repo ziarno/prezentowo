@@ -1,6 +1,11 @@
-import React from 'react'
-import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import React, { PropTypes } from 'react'
 import reactMixin from 'react-mixin'
+import { _i18n } from 'meteor/universe:i18n'
+import { classNames } from 'meteor/maxharris9:classnames'
+import {
+  ValidatedInput,
+  RefreshOnLocaleChange
+} from '../../../lib/Mixins'
 
 Input = class Input extends ValidatedInput {
 
@@ -34,34 +39,49 @@ Input = class Input extends ValidatedInput {
   }
 
   render() {
-    var inputProps = {
+    const {
+      placeholder,
+      name,
+      rows,
+      type,
+      label,
+      button,
+      className,
+      size,
+      hint,
+      children
+    } = this.props
+    const inputProps = {
       ref: 'input',
-      placeholder: _i18n.__(this.props.placeholder),
+      placeholder: _i18n.__(placeholder),
       onFocus: this.hideError,
-      onBlur: (e) => this.validate(e.currentTarget.value),
-      onChange: (e) => this.onInputChange(e.currentTarget.value),
-      name: this.props.name,
-      rows: this.props.rows || 8,
-      type: this.props.type || 'text',
+      onBlur: e => this.validate(e.currentTarget.value),
+      onChange: e => this.onInputChange(e.currentTarget.value),
+      name,
+      rows: rows || 8,
+      type: type || 'text',
       disabled: this.isDisabled()
     }
 
     return (
       <div
-        className={classNames('ui field', this.props.className, {
+        className={classNames('ui field', className, {
           error: this.shouldShowError()
-        })}>
+        })}
+      >
 
-        {this.props.label ? (
+        {label ? (
           <label>
-            <T>{this.props.label}</T>
+            <T>{label}</T>
           </label>
         ) : null}
 
-        <div className={classNames('ui input', this.props.size, {
-          action: this.props.button
-        })}>
-          {this.props.type === 'textarea' ? (
+        <div
+          className={classNames('ui input', size, {
+            action: button
+          })}
+        >
+          {type === 'textarea' ? (
             <textarea
               {...inputProps}
             />
@@ -71,14 +91,14 @@ Input = class Input extends ValidatedInput {
               {...inputProps}
             />
           )}
-          {this.props.button || null}
+          {button || null}
         </div>
 
-        {this.props.hint ? (
-          <span className="hint">{_i18n.__(this.props.hint)}</span>
+        {hint ? (
+          <span className="hint">{_i18n.__(hint)}</span>
         ) : null}
 
-        {this.props.children}
+        {children}
 
       </div>
     )
@@ -86,13 +106,19 @@ Input = class Input extends ValidatedInput {
 }
 
 Input.propTypes = {
-  label: React.PropTypes.string,
-  className: React.PropTypes.string,
-  type: React.PropTypes.string,
-  hint: React.PropTypes.string,
-  rows: React.PropTypes.number,
-  placeholder: React.PropTypes.string,
-  size: React.PropTypes.string
+  label: PropTypes.string,
+  name: PropTypes.string,
+  className: PropTypes.string,
+  type: PropTypes.string,
+  hint: PropTypes.string,
+  rows: PropTypes.number,
+  placeholder: PropTypes.string,
+  size: PropTypes.string,
+  button: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ])
 }
 
 reactMixin(Input.prototype, RefreshOnLocaleChange)

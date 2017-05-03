@@ -1,48 +1,56 @@
 import React from 'react'
-EventItem = ({event, onClick, active}) => {
+import { classNames } from 'meteor/maxharris9:classnames'
+
+EventItem = ({ event, onClick, active }) => {
   //maybe will be used...
-  var EventTypeLabel = event.type === 'many-to-many' ? (
+  const EventTypeLabel = event.type === 'many-to-many' ? (
     <Label
       className="basic">
-      <i className="users icon"></i>
-      <i className="exchange icon"/>
-      <i className="users icon"></i>
+      <i className="users icon" />
+      <i className="exchange icon" />
+      <i className="users icon" />
     </Label>
   ) : (
     <Label
       className="basic">
-      <i className="users icon"></i>
-      <i className="long arrow right icon"/>
-      <i className="user icon"></i>
+      <i className="users icon" />
+      <i className="long arrow right icon" />
+      <i className="user icon" />
     </Label>
   )
 
-  var PresentsLabel = (
+  const PresentsLabel = (
     <CountLabel
       tooltip="Presents count"
       className="basic"
       icon="gift"
-      count={Events.functions.getPresentsCount(event)} />
+      count={Events.functions.getPresentsCount(event)}
+    />
   )
 
-  var ParticipantsLabel = (
+  const ParticipantsLabel = (
     <CountLabel
       tooltip="Participants count"
       className="basic"
       icon="user"
-      count={event.participantsCount} />
+      count={event.participantsCount}
+    />
   )
 
-  var DateLabel = (
-    <Label
-      className="basic">
-      <DateField date={event.date} roundToDays />
+  const DateLabel = (
+    <Label className="basic">
+      <DateField
+        date={event.date}
+        roundToDays
+      />
     </Label>
   )
 
   return (
-    <div className={classNames('item event flex', {active})}
-         onClick={() => onClick(event)}>
+    <div
+      className={classNames('item event flex', { active })}
+      onClick={() => onClick(event)}
+    >
       <div className="text">
         {event.title}
       </div>

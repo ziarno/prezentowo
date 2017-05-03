@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
+import { classNames } from 'meteor/maxharris9:classnames'
+import _ from 'underscore'
 
 UserItem = ({
   onClick,
@@ -9,12 +11,15 @@ UserItem = ({
   disabled,
   children,
   className
-  }) => (
+}) => (
   <div
     onClick={() => !disabled && onClick && onClick(user)}
-    className={classNames('user-item', className, {
-      active,
-      disabled})}>
+    className={classNames(
+      'user-item',
+      className,
+      { active, disabled }
+    )}
+  >
     <User user={user} />
     {_.isNumber(presentsCount) ? (
       <CountLabel
@@ -34,3 +39,17 @@ UserItem = ({
     {children}
   </div>
 )
+
+UserItem.propTypes = {
+  onClick: PropTypes.func,
+  user: PropTypes.object,
+  presentsCount: PropTypes.number,
+  showEditButton: PropTypes.bool,
+  active: PropTypes.bool,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ])
+}

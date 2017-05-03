@@ -1,4 +1,6 @@
 import React from 'react'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { $ } from 'meteor/jquery'
 
 NavEvents = class NavEvents extends React.Component {
 
@@ -15,13 +17,17 @@ NavEvents = class NavEvents extends React.Component {
   }
 
   render() {
-    var {event, events, ready} = this.props
-    var eventId = event && event._id
-    var now = new Date()
-    var activeEvents = []
-    var pastEvents = []
-    var activeEventsHeader
-    var isCreator = event && event.creatorId === Meteor.userId()
+    const {
+      event,
+      events,
+      ready
+    } = this.props
+    const eventId = event && event._id
+    const now = new Date()
+    const activeEvents = []
+    const pastEvents = []
+    let activeEventsHeader
+    const isCreator = event && event.creatorId === Meteor.userId()
 
     events.forEach((event) => {
       if (now < event.date) {
@@ -38,22 +44,27 @@ NavEvents = class NavEvents extends React.Component {
     return (
       <div
         id="nav-events"
-        className="popup-button-group">
+        className="popup-button-group"
+      >
 
-        <div className={classNames('events-dropdown popup-button ' +
-              'ui compact icon right labeled top right ' +
-              'pointing scrolling dropdown button', {
-              loading: !ready
-             })}
-             ref="dropdown">
+        <div
+          className={classNames(`
+            events-dropdown popup-button
+            ui compact icon right labeled top right pointing
+            scrolling dropdown button`,
+            { loading: !ready }
+          )}
+          ref="dropdown"
+        >
           <T>Events</T>
-          <i className="caret down icon"></i>
+          <i className="caret down icon" />
 
           <div className="menu">
             <div
               className={classNames('header', {
                 inactive: !activeEvents.length
-              })}>
+              })}
+            >
               {activeEventsHeader}
             </div>
             {events.length === 0 ? ( //dummy div - semantic only shows dropdown if there is at least 1 .item

@@ -1,8 +1,8 @@
-import React from 'react'
-import {Tooltips} from '../../../lib/Mixins'
+import React, { Component, PropTypes } from 'react'
 import reactMixin from 'react-mixin'
+import { Tooltips } from '../../../lib/Mixins'
 
-NavProfile = class NavProfile extends React.Component {
+NavProfile = class NavProfile extends Component {
 
   constructor() {
     super()
@@ -20,7 +20,8 @@ NavProfile = class NavProfile extends React.Component {
       <div
         id="user-profile-button"
         className="popup-button-group"
-        onClick={this.hideTooltips}>
+        onClick={this.hideTooltips}
+      >
         <UserProfilePopup
           buttonClassName="popup-button"
           popupClassName="non-pointing"
@@ -35,9 +36,9 @@ NavProfile = class NavProfile extends React.Component {
 }
 
 NavProfile.propTypes = {
-  pictureUrl: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func
+  pictureUrl: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.func
 }
 
 reactMixin(NavProfile.prototype, Tooltips)

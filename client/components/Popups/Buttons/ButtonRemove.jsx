@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
-ButtonRemove = ({onClick, icon, text}) => {
-  var removeIcon = icon || 'trash'
-  var displayText = text || 'Delete'
-  return (
-    <button
-      type="button"
-      className="ui labeled icon red button"
-      onClick={onClick}>
-      <i className={`${removeIcon} icon`}></i>
-      <T>{displayText}</T>
-    </button>
-  )
+ButtonRemove = ({
+  onClick,
+  icon = 'trash',
+  text = 'Delete'
+}) => (
+  <button
+    type="button"
+    className="ui labeled icon red button"
+    onClick={onClick}
+  >
+    <i className={`${icon} icon`} />
+    <T>{text}</T>
+  </button>
+)
+
+ButtonRemove.propTypes = {
+  onClick: PropTypes.func,
+  icon: PropTypes.string,
+  text: PropTypes.string
 }

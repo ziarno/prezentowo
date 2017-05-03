@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
-HorizontalDivider = ({children}) => (
+HorizontalDivider = ({ children }) => (
   <div className="horizontal-divider">
     <div className="horizontal-divider--line"></div>
     <div className="horizontal-divider--content">
@@ -9,3 +9,10 @@ HorizontalDivider = ({children}) => (
     <div className="horizontal-divider--line"></div>
   </div>
 )
+
+HorizontalDivider.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ])
+}

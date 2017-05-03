@@ -1,6 +1,7 @@
-import React from 'react'
-import {PopupComponent} from '../../../../lib/Mixins'
-import {createContainer} from 'meteor/react-meteor-data'
+import React, { PropTypes } from 'react'
+import { Session } from 'meteor/session'
+import { createContainer } from 'meteor/react-meteor-data'
+import { PopupComponent } from '../../../../lib/Mixins'
 
 UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
 
@@ -14,7 +15,7 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
   }
 
   getPopupSettings() {
-    var position = 'right center'
+    const position = 'right center'
     return {
       position,
       lastResort: position
@@ -22,14 +23,14 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
   }
 
   renderTrigger() {
-    var {user} = this.props
+    const { user } = this.props
     return (
-      <div
-        ref="popupTrigger">
+      <div ref="popupTrigger">
         <UserItem
           className="ui yellow message"
           user={user}
-          onClick={this.showPopup}>
+          onClick={this.showPopup}
+        >
           <i className="add user large icon" />
         </UserItem>
       </div>
@@ -37,8 +38,8 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
   }
 
   answerJoinRequest(accept, mergeWithUserId) {
-    var event = Session.get('event')
-    var {user} = this.props
+    const event = Session.get('event')
+    const { user } = this.props
 
     Events.methods.answerJoinRequest.call({
       eventId: event._id,
@@ -56,18 +57,22 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
     this.answerJoinRequest(false)
   }
 
-  replaceUser({mergeWithUserId}) {
+  replaceUser({ mergeWithUserId }) {
     this.answerJoinRequest(true, mergeWithUserId)
   }
 
   renderPopup() {
-    var {user, tempParticipants} = this.props
-    var existTempParticipants = tempParticipants.length > 0
+    const {
+      user,
+      tempParticipants
+    } = this.props
+    const existTempParticipants = tempParticipants.length > 0
 
     return (
       <div
         ref="popupTarget"
-        className="user-item-accept-popup ui flowing popup">
+        className="user-item-accept-popup ui flowing popup"
+      >
 
         <div className="title text-with-user translations">
           <User user={user} />
@@ -77,7 +82,8 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
         {existTempParticipants ? (
           <Form
             onSubmit={this.replaceUser}
-            className="replace-user-field text-with-user">
+            className="replace-user-field text-with-user"
+          >
             <span className="translations">
               <T>Add</T>
               <T>and</T>
@@ -87,19 +93,22 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
               inline
               className="scrolling"
               selectDefault={tempParticipants[0]._id}
-              name="mergeWithUserId">
+              name="mergeWithUserId"
+            >
               {tempParticipants.map(user => (
                 <div
                   className="item"
                   key={user._id}
-                  data-value={user._id}>
+                  data-value={user._id}
+                >
                   <User user={user} />
                 </div>
               ))}
             </SelectInput>
             <button
               type="submit"
-              className="replace-button ui primary icon left labeled button">
+              className="replace-button ui primary icon left labeled button"
+            >
               <i className="exchange icon" />
               <T>replace</T>
             </button>
@@ -124,7 +133,7 @@ UserItemAcceptPopup = class UserItemAcceptPopup extends PopupComponent {
 }
 
 UserItemAcceptPopup.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 }
 
 UserItemAcceptPopup = createContainer(() => {

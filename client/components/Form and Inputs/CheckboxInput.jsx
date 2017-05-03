@@ -1,6 +1,11 @@
-import React from 'react'
-import {ValidatedInput, RefreshOnLocaleChange} from '../../../lib/Mixins'
+import React, { PropTypes } from 'react'
 import reactMixin from 'react-mixin'
+import { $ } from 'meteor/jquery'
+import { classNames } from 'meteor/maxharris9:classnames'
+import {
+  ValidatedInput,
+  RefreshOnLocaleChange
+} from '../../../lib/Mixins'
 
 CheckboxInput = class CheckboxInput extends ValidatedInput {
 
@@ -39,8 +44,8 @@ CheckboxInput = class CheckboxInput extends ValidatedInput {
         ref="checkbox"
         className={classNames('ui checkbox', this.props.className, {
           error: this.shouldShowError()
-        })}>
-
+        })}
+      >
         <input
           type="checkbox"
           tabIndex="0"
@@ -51,15 +56,14 @@ CheckboxInput = class CheckboxInput extends ValidatedInput {
         <label>
           <T>{this.props.label}</T>
         </label>
-
       </div>
     )
   }
 }
 
 CheckboxInput.propTypes = {
-  checked: React.PropTypes.bool,
-  label: React.PropTypes.string
+  checked: PropTypes.bool,
+  label: PropTypes.string
 }
 
 reactMixin(CheckboxInput.prototype, RefreshOnLocaleChange)

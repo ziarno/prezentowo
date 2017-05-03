@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
+import { classNames } from 'meteor/maxharris9:classnames'
 
-NotificationItem = ({notification, onClick, clickable}) => {
+NotificationItem = ({ notification, onClick, clickable }) => {
   return (
     <div
       onClick={onClick}
       className={classNames('notification-item', {
         'is-selectable': clickable,
         'waves-effect': clickable
-      })}>
+      })}
+    >
       <div className="notification-item--icon">
         <Icon {...notification.getIcon()} size="large" />
       </div>
@@ -28,4 +30,10 @@ NotificationItem = ({notification, onClick, clickable}) => {
       </div>
     </div>
   )
+}
+
+NotificationItem.propTypes = {
+  notification: PropTypes.object,
+  onClick: PropTypes.func,
+  clickable: PropTypes.bool,
 }

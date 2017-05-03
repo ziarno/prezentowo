@@ -1,23 +1,31 @@
-import React from 'react'
-import reactMixin from 'react-mixin'
+import React, { Component, PropTypes } from 'react'
+import { Meteor } from 'meteor/meteor'
+import { Session } from 'meteor/session'
 import _ from 'underscore'
-import {createContainer} from 'meteor/react-meteor-data'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { createContainer } from 'meteor/react-meteor-data'
 
-UserList = class UserList extends React.Component {
+UserList = class UserList extends Component {
 
   render() {
-    var {event} = this.props
-    var isManyToOne = event.type === 'many-to-one'
-    var isUserAcceptedParticipant = Events.functions
-        .participant({
-          event,
-          participantId: Meteor.userId()
-        }).isAccepted()
-    var beneficiariesTitle
-    var activeUserId = this.props.activeUser &&
-      this.props.activeUser._id
+    const {
+      event,
+      activeUser,
+      users,
+      isCreator,
+      onUserSelect,
+    } = this.props
+    const isManyToOne = event.type === 'many-to-one'
+    const isUserAcceptedParticipant = Events.functions
+      .participant({
+        event,
+        participantId: Meteor.userId()
+      })
+      .isAccepted()
+    let beneficiariesTitle
+    const activeUserId = activeUser && activeUser._id
 
-    var Counts = (
+    const Counts = (
       <div className="counts">
         <CountLabel
           tooltip="Participants count"
@@ -34,8 +42,8 @@ UserList = class UserList extends React.Component {
       </div>
     )
 
-    var [BeneficiariesUserItems, ParticipantsUserItems] =
-      _(this.props.users)
+    const [BeneficiariesUserItems, ParticipantsUserItems] =
+      _(users)
       .partition(
         user => isManyToOne &&
           event.beneficiaryIds.indexOf(user._id) > -1
@@ -43,8 +51,7 @@ UserList = class UserList extends React.Component {
       .map(userGroup => (
         userGroup
           .filter(user => (
-            (this.props.isCreator &&
-             user.status !== 'isRemoved') ||
+            (isCreator && user.status !== 'isRemoved') ||
             user.status === 'isAccepted' ||
             user.status === 'isInvited' ||
             user.status === 'isTemp'
@@ -62,10 +69,11 @@ UserList = class UserList extends React.Component {
                 presentsCount={
                   !isManyToOne &&
                   Users.functions.getPresentsCount(user)}
-                showEditButton={this.props.isCreator}
-                onClick={this.props.onUserSelect}
+                showEditButton={isCreator}
+                onClick={onUserSelect}
                 key={user._id}
-                user={user} />
+                user={user}
+              />
             )
           ))
       ))
@@ -79,7 +87,8 @@ UserList = class UserList extends React.Component {
         ref="userList"
         className={classNames('user-list', {
           'many-to-one': isManyToOne
-        })}>
+        })}
+      >
 
         {isManyToOne ? (
           <div
@@ -108,18 +117,17 @@ UserList = class UserList extends React.Component {
       </div>
     )
   }
-  
 }
 
 UserList.propTypes = {
-  users: React.PropTypes.array.isRequired,
-  activeUser: React.PropTypes.object,
-  onUserSelect: React.PropTypes.func.isRequired
+  users: PropTypes.array.isRequired,
+  activeUser: PropTypes.object,
+  onUserSelect: PropTypes.func.isRequired
 }
 
 UserList = createContainer(() => {
-  var event = Session.get('event')
-  var activeUser = Session.get('currentUser')
+  const event = Session.get('event')
+  const activeUser = Session.get('currentUser')
   return {
     activeUser,
     event,

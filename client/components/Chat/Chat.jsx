@@ -1,7 +1,8 @@
-import React from 'react'
-import {createContainer} from 'meteor/react-meteor-data'
+import React, { Component, PropTypes } from 'react'
+import { createContainer } from 'meteor/react-meteor-data'
+import _ from 'underscore'
 
-Chat = class Chat extends React.Component {
+Chat = class Chat extends Component {
 
   constructor() {
     super()
@@ -16,7 +17,7 @@ Chat = class Chat extends React.Component {
    * }
    */
   static getGroupedComments(comments, participants) {
-    var groupedComments = []
+    const groupedComments = []
 
     function makeGroup(comment) {
       groupedComments.push({
@@ -42,8 +43,8 @@ Chat = class Chat extends React.Component {
     return groupedComments
   }
 
-  onMessageSubmit({message}) {
-    var {onMessageSubmit} = this.props
+  onMessageSubmit({ message }) {
+    const { onMessageSubmit } = this.props
 
     if (!message) {
       return
@@ -64,10 +65,16 @@ Chat = class Chat extends React.Component {
   }
 
   render() {
-    var {comments, participants, title, titleEl, loading} = this.props
-    var groupedComments =
+    const {
+      comments,
+      participants,
+      title,
+      titleEl,
+      loading
+    } = this.props
+    const groupedComments =
       Chat.getGroupedComments(comments, participants)
-    var isEmpty = !comments || comments.length === 0
+    const isEmpty = !comments || comments.length === 0
 
     return (
       <div className={classNames('chat', this.props.className)}>
@@ -119,13 +126,13 @@ Chat = class Chat extends React.Component {
 }
 
 Chat.propTypes = {
-  comments: React.PropTypes.array,
-  title: React.PropTypes.string,
-  titleEl: React.PropTypes.element,
-  className: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  loading: React.PropTypes.bool,
-  onMessageSubmit: React.PropTypes.func
+  comments: PropTypes.array,
+  title: PropTypes.string,
+  titleEl: PropTypes.element,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  loading: PropTypes.bool,
+  onMessageSubmit: PropTypes.func
 }
 
 Chat = createContainer(() => {

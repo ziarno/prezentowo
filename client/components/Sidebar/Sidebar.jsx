@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import {ScrollableComponent} from '../../../lib/Mixins'
-import {whichTransitionEvent} from '../../../lib/utilities'
+import _ from 'underscore'
+import { ScrollableComponent } from '../../../lib/Mixins'
+import { whichTransitionEvent } from '../../../lib/utilities'
 
 Sidebar = class Sidebar extends ScrollableComponent {
 
@@ -13,7 +14,7 @@ Sidebar = class Sidebar extends ScrollableComponent {
   }
 
   toggleVisibility(isVisible) {
-    var visible = _.isBoolean(isVisible) ?
+    const visible = _.isBoolean(isVisible) ?
       isVisible :
       !this.props.isVisible
 
@@ -62,31 +63,41 @@ Sidebar = class Sidebar extends ScrollableComponent {
   }
 
   render() {
+    const {
+      isVisible,
+      children
+    } = this.props
 
     return (
       <div
         id="sidebar"
         className={classNames({
-          visible: this.props.isVisible
-        })}>
+          visible: isVisible
+        })}
+      >
         <div
           onClick={this.toggleVisibility}
-          className="sidebar-controller ui compact icon button">
+          className="sidebar-controller ui compact icon button"
+        >
           <i className="left chevron icon" />
         </div>
         <div
           ref="scrollContainer"
-          className="sidebar-wrapper shadow">
-          {this.props.children}
+          className="sidebar-wrapper shadow"
+        >
+          {children}
         </div>
       </div>
     )
   }
-
 }
 
 Sidebar.propTypes = {
-  isVisible: React.PropTypes.bool,
-  onVisibilityChange: React.PropTypes.func,
-  onAfterVisibilityChange: React.PropTypes.func
+  isVisible: PropTypes.bool,
+  onVisibilityChange: PropTypes.func,
+  onAfterVisibilityChange: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ])
 }

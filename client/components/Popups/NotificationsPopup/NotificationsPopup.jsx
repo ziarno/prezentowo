@@ -1,13 +1,14 @@
-import React from 'react'
-import {PopupComponent} from '../../../../lib/Mixins'
-import {createContainer} from 'meteor/react-meteor-data'
-import reactMixin from 'react-mixin'
+import React, { PropTypes } from 'react'
+import { Meteor } from 'meteor/meteor'
+import { createContainer } from 'meteor/react-meteor-data'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { PopupComponent } from '../../../../lib/Mixins'
 
 NotificationsPopup = class NotificationsPopup extends PopupComponent {
 
   getPopupSettings() {
-    var position = 'bottom right'
-    var transition = 'slide down'
+    const position = 'bottom right'
+    const transition = 'slide down'
     return {
       onVisible() {
         Notifications.methods.seeAllNotifications.call()
@@ -19,7 +20,7 @@ NotificationsPopup = class NotificationsPopup extends PopupComponent {
   }
 
   renderAdditionalContent() {
-    var unseenNotificationsCount =
+    const unseenNotificationsCount =
       Notifications.functions.getUnseenCount()
 
     if (unseenNotificationsCount === 0) {
@@ -34,30 +35,40 @@ NotificationsPopup = class NotificationsPopup extends PopupComponent {
   }
 
   renderTrigger() {
+    const {
+      ready,
+      buttonClassName
+    } = this.props
     return (
       <div
         ref="popupTrigger"
         onClick={this.showPopup}
         className={classNames(
-          'ui compact icon button',
-          'waves-effect waves-button', {
-            loading: !this.props.ready
+          'ui compact icon button waves-effect waves-button', {
+            loading: !ready
           },
-          this.props.buttonClassName)}>
-        <i className="alarm outline icon"></i>
+          buttonClassName
+        )}
+      >
+        <i className="alarm outline icon" />
       </div>
     )
   }
 
   renderPopup() {
-    var {notifications} = this.props
+    const {
+      notifications,
+      popupClassName
+    } = this.props
 
     return (
       <div
         ref="popupTarget"
         className={classNames(
-        'notifications-popup ui popup',
-        this.props.popupClassName)}>
+          'notifications-popup ui popup',
+          popupClassName
+        )}
+      >
 
         {notifications.length ? notifications.map(notification => (
           <NotificationItem
@@ -80,16 +91,15 @@ NotificationsPopup = class NotificationsPopup extends PopupComponent {
       </div>
     )
   }
-
 }
 
 NotificationsPopup.propTypes = {
-  ready: React.PropTypes.bool,
-  notifications: React.PropTypes.array,
+  ready: PropTypes.bool,
+  notifications: PropTypes.array,
 }
 
 NotificationsPopup = createContainer(function() {
-  var subscription = Meteor.subscribe('notifications')
+  const subscription = Meteor.subscribe('notifications')
 
   return {
     ready: subscription.ready(),

@@ -1,6 +1,9 @@
 import React from 'react'
-import {Tooltips} from '../../../lib/Mixins'
+import _ from 'underscore'
+import { _i18n } from 'meteor/universe:i18n'
 import reactMixin from 'react-mixin'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { Tooltips } from '../../../lib/Mixins'
 
 Label = class Label extends React.Component {
 
@@ -10,15 +13,15 @@ Label = class Label extends React.Component {
   }
 
   getTooltips() {
-    var {tooltip} = this.props
-    var tooltipSettings
+    const { tooltip } = this.props
+    let tooltipSettings
 
     if (!tooltip) {
       return
     }
 
     tooltipSettings = _.isString(tooltip) ?
-      {content: tooltip} : tooltip
+      { content: tooltip } : tooltip
 
     tooltipSettings.content =
       _i18n.__(tooltipSettings.content)
@@ -29,11 +32,16 @@ Label = class Label extends React.Component {
   }
 
   render() {
+    const {
+      className,
+      children
+    } = this.props
     return (
       <div
         ref="label"
-        className={classNames('ui label', this.props.className)}>
-        {this.props.children}
+        className={classNames('ui label', className)}
+      >
+        {children}
       </div>
     )
   }

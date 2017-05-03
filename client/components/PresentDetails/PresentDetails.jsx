@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import {createContainer} from 'meteor/react-meteor-data'
+import { Meteor } from 'meteor/meteor'
+import { Session } from 'meteor/session'
+import { $ } from 'meteor/jquery'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { createContainer } from 'meteor/react-meteor-data'
 import _ from 'underscore'
 
-PresentDetailsModal = class PresentDetailsModal extends React.Component {
+PresentDetailsModal = class PresentDetailsModal extends Component {
 
   constructor({presentId}) {
     super()
@@ -15,7 +19,7 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
     // -> query listener gets overridden by listener for
     // an empty present
     this.observeHandle = Presents
-      .find({_id: presentId})
+      .find({ _id: presentId })
       .observeChanges({
         removed() {
           //destroy, to immediately stop this component
@@ -33,8 +37,11 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
   }
 
   toggleBuyer() {
-    var {presentId, present} = this.props
-    var action = !present.isUserBuyer()
+    const {
+      presentId,
+      present
+    } = this.props
+    const action = !present.isUserBuyer()
 
     Presents.methods.setBuyer.call({
       presentId,
@@ -42,8 +49,8 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
     })
   }
 
-  sendMessage({message, type}) {
-    var {presentId} = this.props
+  sendMessage({ message, type }) {
+    const { presentId } = this.props
 
     Comments.methods.createComment.call({
       presentId,
@@ -68,19 +75,25 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
   }
 
   handleKeyUp(e) {
-    var KEYCODE_LEFT = 37
-    var KEYCODE_RIGHT = 39
-    var srcElName = e.target &&
-      e.target.localName || e.srcElement.localName
-    if (srcElName === 'input' ||
-      srcElName === 'textarea') {
+    const {
+      previousPresentId,
+      nextPresentId
+    } = this.props
+    const KEYCODE_LEFT = 37
+    const KEYCODE_RIGHT = 39
+    const srcElName = (e.target && e.target.localName) ||
+      e.srcElement.localName
+    const presentToShowMap = {
+      [KEYCODE_LEFT]: previousPresentId,
+      [KEYCODE_RIGHT]: nextPresentId
+    }
+    const presentToShow = presentToShowMap[e.keyCode]
+
+    if (['input', 'textarea'].includes(srcElName)) {
       return
     }
-    if (e.keyCode === KEYCODE_LEFT) {
-      this.showPresent(this.props.previousPresentId)
-    } else if (e.keyCode === KEYCODE_RIGHT) {
-      this.showPresent(this.props.nextPresentId)
-    }
+
+    this.showPresent(presentToShow)
   }
 
   setModalShadow() {
@@ -95,9 +108,9 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
   }
 
   componentDidUpdate({present, presentReadyToShow}) {
-    var newPresent = _.omit(this.props.present,
+    const newPresent = _.omit(this.props.present,
       ['commentsShared', 'commentsSecret'])
-    var oldPresent = _.omit(present,
+    const oldPresent = _.omit(present,
       ['commentsShared', 'commentsSecret'])
 
     if (!_.isEqual(oldPresent, newPresent) ||
@@ -118,7 +131,7 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
   }
 
   render() {
-    var {
+    const {
       event,
       present,
       forUsers,
@@ -128,7 +141,7 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
       presentReadyToShow,
       previousPresentId,
       nextPresentId
-      } = this.props
+    } = this.props
 
     if (!presentReadyToShow) {
       return (
@@ -138,21 +151,27 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
       )
     }
 
-    var isUserBuyer = present.isUserBuyer()
-    var isUserBeneficiary =
+    const isUserBuyer = present.isUserBuyer()
+    const isUserBeneficiary =
       _.contains(event.beneficiaryIds, Meteor.userId())
-    var isUserCreator = present.creatorId === Meteor.userId()
-    var canUserBuy =
+    const isUserCreator = present.creatorId === Meteor.userId()
+    const canUserBuy =
       !(present.isOwn && isUserCreator) && !isUserBeneficiary
-    var commentsShared = present.commentsShared &&
-      Comments.find({
-        _id: {$in: present.commentsShared}
-      }, {sort: {createdAt: 1}}).fetch()
-    var commentsSecret = present.commentsSecret &&
-      Comments.find({
-        _id: {$in: present.commentsSecret}
-      }, {sort: {createdAt: 1}}).fetch()
-    var BuyersMessage = (
+    const commentsShared = present.commentsShared &&
+      Comments
+        .find(
+          { _id: { $in: present.commentsShared } },
+          { sort: { createdAt: 1 } }
+        )
+        .fetch()
+    const commentsSecret = present.commentsSecret &&
+      Comments
+        .find(
+          { _id: { $in: present.commentsSecret } },
+          { sort: { createdAt: 1 } }
+        )
+        .fetch()
+    const BuyersMessage = (
       <span>
         <T>Buyers</T>
         <span>:</span>
@@ -168,7 +187,8 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
         ribbonColor={classNames({
           red: !present.isOwn
         })}
-        title={present.title}>
+        title={present.title}
+      >
         <Message
           hidden={!buyers}
           className="top-message small olive icon"
@@ -179,21 +199,25 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
         {previousPresentId ? (
           <ArrowField
             onClick={() => this.showPresent(previousPresentId)}
-            left rounded />
+            left
+            rounded
+          />
         ) : null}
         {nextPresentId ? (
           <ArrowField
             onClick={() => this.showPresent(nextPresentId)}
-            right rounded />
+            right
+            rounded
+          />
         ) : null}
 
-        <div
-          className="present-details--content">
+        <div className="present-details--content">
           <div className="present-details--image">
             <Img
               src={present.picture.small}
               modalSrc={present.picture.large}
-              className="waves-effect" />
+              className="waves-effect"
+            />
               <div className="present-details--buttons">
                 {present.isUserCreator() ? (
                   <PresentPopup
@@ -220,7 +244,8 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
                       'ui left labeled compact icon button',
                       'waves-effect waves-button', {
                       primary: !isUserBuyer
-                    })}>
+                    })}
+                  >
                     <i className="ui dollar icon" />
                     {isUserBuyer ? (
                       <T>I will not buy this</T>
@@ -255,12 +280,12 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
             <div className="hint">
               <T>added by</T>
               <span>:&nbsp;</span>
-              <User user={creator}></User>
+              <User user={creator} />
               <span>&nbsp;(</span>
               <DateField
                 date={present.createdAt}
-                mode="from">
-              </DateField>
+                mode="from"
+              />
               <span>)</span>
             </div>
 
@@ -334,45 +359,44 @@ PresentDetailsModal = class PresentDetailsModal extends React.Component {
       </Modal>
     )
   }
-
 }
 
 PresentDetailsModal.propTypes = {
-  presentId: React.PropTypes.string.isRequired
+  presentId: PropTypes.string.isRequired
 }
 
-PresentDetails = createContainer(({presentId}) => {
-  var currentEvent = Session.get('event')
-  var currentUser = Session.get('currentUser')
-  var participantIds = Session.get('participantIds')
-  var user = Meteor.user()
-  var present = Presents.findOne(presentId)
-  var isParticipantsModeMulti =
+PresentDetails = createContainer(({ presentId }) => {
+  const currentEvent = Session.get('event')
+  const currentUser = Session.get('currentUser')
+  const participantIds = Session.get('participantIds')
+  const user = Meteor.user()
+  const present = Presents.findOne(presentId)
+  const isParticipantsModeMulti =
     user && user.settings.viewMode.participantsMode === 'multi'
-  var isPresentFromThisEvent = present && currentEvent &&
+  const isPresentFromThisEvent = present && currentEvent &&
     currentEvent._id === present.eventId
-  var presentEvent = present &&
+  const presentEvent = present &&
     Events.findOne(present.eventId)
-  var presentReadyToShow = present && (
+  const presentReadyToShow = present && (
       isPresentFromThisEvent ||
       Meteor
-        .subscribe('eventDetails', {eventId: present.eventId})
+        .subscribe('eventDetails', { eventId: present.eventId })
         .ready()
     )
-  var isManyToOne = presentEvent &&
+  const isManyToOne = presentEvent &&
     presentEvent.type === 'many-to-one'
-  var commentsReady = Meteor
-    .subscribe('presentDetails', {presentId})
+  const commentsReady = Meteor
+    .subscribe('presentDetails', { presentId })
     .ready()
-  var forUsers = []
-  var presentIds = isManyToOne  ?
+  let forUsers = []
+  const presentIds = isManyToOne  ?
     getPresentIds() :
     (participantIds && _.flatten(participantIds.map(getPresentIds)))
-  var currentPresentIndex = presentIds &&
+  const currentPresentIndex = presentIds &&
     presentIds.indexOf(presentId)
 
   function getPresentIds(forUserId) {
-    var selector = forUserId ? {forUserId} : {}
+    const selector = forUserId ? { forUserId } : {}
     return Presents.find(selector, {
       sort: {
         isOwn: -1,
@@ -386,8 +410,8 @@ PresentDetails = createContainer(({presentId}) => {
 
   function shouldShowArrows() {
     //basically, don't show arrows if present that we want to show
-    //is not already in presents container.
-    var isCurrentlyViewingForUser = present && currentUser &&
+    //is not already in Presents container.
+    const isCurrentlyViewingForUser = present && currentUser &&
       currentUser._id === present.forUserId
     return isPresentFromThisEvent &&
       (isManyToOne || isParticipantsModeMulti || isCurrentlyViewingForUser)
@@ -395,7 +419,7 @@ PresentDetails = createContainer(({presentId}) => {
 
   if (isManyToOne) {
     forUsers = Participants.find({
-      _id: {$in: presentEvent.beneficiaryIds}
+      _id: { $in: presentEvent.beneficiaryIds }
     }).fetch()
   } else if (presentReadyToShow) {
     let forUser = Participants.findOne(present.forUserId)
@@ -421,7 +445,7 @@ PresentDetails = createContainer(({presentId}) => {
       present.buyers &&
       present.buyers.length !== 0 &&
       Participants.find({
-        _id: {$in: present.buyers}
+        _id: { $in: present.buyers }
       }).fetch(),
     previousPresentId: shouldShowArrows() &&
       presentIds[currentPresentIndex - 1],

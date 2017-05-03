@@ -1,10 +1,14 @@
-import React from 'react'
-import {Autorun} from '../../../lib/Mixins'
+import React, { Component, PropTypes } from 'react'
+import { Session } from 'meteor/session'
+import { $ } from 'meteor/jquery'
+import { Meteor } from 'meteor/meteor'
 import reactMixin from 'react-mixin'
-import {createContainer} from 'meteor/react-meteor-data'
+import { createContainer } from 'meteor/react-meteor-data'
+import _ from 'underscore'
+import { Autorun } from '../../../lib/Mixins'
 
-PresentsContainer = class PresentsContainer extends React.Component {
-  
+PresentsContainer = class PresentsContainer extends Component {
+
   constructor() {
     super()
     this.id = 'presents-container'
@@ -12,10 +16,10 @@ PresentsContainer = class PresentsContainer extends React.Component {
   }
 
   autorunSetCurrentUser() {
-    var visibleUserIds = Session.get('visibleUserIds')
-    var currentUser = _.find(this.props.users,
+    const visibleUserIds = Session.get('visibleUserIds')
+    const currentUser = _.find(this.props.users,
       user => _.contains(visibleUserIds, user._id))
-    var isMouseOver = !!$(`#${this.id}:hover`).length
+    const isMouseOver = !!$(`#${this.id}:hover`).length
 
     if (currentUser && isMouseOver) {
       //note: current user from scrolling this component
@@ -25,7 +29,7 @@ PresentsContainer = class PresentsContainer extends React.Component {
   }
 
   render() {
-    var {
+    const {
       participantsViewMode,
       presentViewMode,
       presents,
@@ -33,11 +37,11 @@ PresentsContainer = class PresentsContainer extends React.Component {
       event,
       users,
       showUser
-      } = this.props
-    var isParticipantsViewModeSingle =
+    } = this.props
+    const isParticipantsViewModeSingle =
       participantsViewMode === 'single'
-    var isManyToOne = event.type === 'many-to-one'
-    var UserPresentsItems
+    const isManyToOne = event.type === 'many-to-one'
+    let UserPresentsItems
 
     if (!ready) {
       let text = isParticipantsViewModeSingle && showUser ?
@@ -87,8 +91,7 @@ PresentsContainer = class PresentsContainer extends React.Component {
     }
 
     return (
-      <div
-        id={this.id}>
+      <div id={this.id}>
         {UserPresentsItems}
       </div>
     )
@@ -108,16 +111,16 @@ PresentsContainer.propTypes = {
 reactMixin(PresentsContainer.prototype, Autorun)
 
 PresentsContainer = createContainer(() => {
-  var event = Session.get('event')
-  var eventId = event._id
-  var currentUser = Session.get('currentUser')
-  var user = Meteor.user()
-  var participantsViewMode = user &&
+  const event = Session.get('event')
+  const eventId = event._id
+  const currentUser = Session.get('currentUser')
+  const user = Meteor.user()
+  const participantsViewMode = user &&
     user.settings.viewMode.participantsMode
-  var presentViewMode = user &&
+  const presentViewMode = user &&
     user.settings.viewMode.presentMode
-  var subscriptionReady = false
-  var forUserId
+  let subscriptionReady = false
+  let forUserId
 
   if (eventId && !_.isEmpty(currentUser)) {
     forUserId = participantsViewMode === 'single' ?

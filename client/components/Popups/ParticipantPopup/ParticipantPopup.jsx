@@ -1,6 +1,12 @@
-import React from 'react'
-import {PopupComponent} from '../../../../lib/Mixins'
-import {getAvatarImages} from '../../../../lib/utilities'
+import React, { PropTypes } from 'react'
+import _ from 'underscore'
+import { Meteor } from 'meteor/meteor'
+import { Session } from 'meteor/session'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { SearchSource } from 'meteor/meteorhacks:search-source'
+import { PopupComponent } from '../../../../lib/Mixins'
+import { getAvatarImages } from '../../../../lib/utilities'
 
 ParticipantPopup = class ParticipantPopup extends PopupComponent {
 
@@ -32,8 +38,8 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   getPopupSettings() {
-    var position = this.isEdit() ? 'bottom left' : 'bottom right'
-    var transition = this.isEdit() ? 'scale' : 'slide down'
+    const position = this.isEdit() ? 'bottom left' : 'bottom right'
+    const transition = this.isEdit() ? 'scale' : 'slide down'
     return {
       onShow: () => {
         this.schema.resetValidation()
@@ -45,9 +51,9 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   addParticipant(participantData) {
-    var eventId = Session.get('event')._id
-    var participant = _.omit(participantData, 'sendEmail')
-    var callback = () => {
+    const eventId = Session.get('event')._id
+    const participant = _.omit(participantData, 'sendEmail')
+    const callback = () => {
       this.hideAndReset()
       this.setState({isSaving: false})
     }
@@ -58,11 +64,10 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
       sendEmail: participantData.sendEmail,
       participant
     }, callback)
-
   }
 
   editParticipant(participantData) {
-    var eventId = Session.get('event')._id
+    const eventId = Session.get('event')._id
 
     participantData.participantId = this.props.user._id
     Events.methods.editParticipant.call({
@@ -91,8 +96,8 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
   }
 
   redirectAfterParticipantRemove() {
-    var event = Session.get('event')
-    var user = Meteor.user()
+    const event = Session.get('event')
+    const user = Meteor.user()
 
     if (user.settings.viewMode.participantsMode === 'single' &&
       Session.get('currentUser')._id === this.props.user._id) {
@@ -140,33 +145,41 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
         className={classNames(
           'ui compact icon button',
           'waves-effect waves-button',
-          this.props.buttonClassName)}>
+          this.props.buttonClassName
+        )}
+      >
         {this.props.icon}
       </div>
     )
   }
 
   renderPopup() {
-    var isEdit = this.isEdit()
-    var event = Session.get('event')
-    var showBeneficiaryButton = isEdit &&
+    const {
+      user,
+      popupClassName,
+    } = this.props
+    const isEdit = this.isEdit()
+    const event = Session.get('event')
+    const showBeneficiaryButton = isEdit &&
       event.type === 'many-to-one'
-    var isBeneficiary = this.props.user &&
-      event.beneficiaryIds.indexOf(this.props.user._id) > -1
+    const isBeneficiary = user &&
+      event.beneficiaryIds.indexOf(user._id) > -1
 
     return (
       <div
         ref="popupTarget"
         className={classNames(
           'participant-popup form-popup ui flowing popup',
-          this.props.popupClassName
-        )}>
+          popupClassName
+        )}
+      >
         <Form
           ref="form"
-          disabled={this.props.user && !this.props.user.isTemp}
-          data={this.mapToFormData(this.props.user)}
+          disabled={user && !user.isTemp}
+          data={this.mapToFormData(user)}
           onSubmit={this.submitParticipant}
-          schema={this.schema}>
+          schema={this.schema}
+        >
 
           <div className={classNames(
             'form-popup--title ui attached message',
@@ -179,11 +192,14 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
                   <button
                     type="button"
                     onClick={() => this.setBeneficiary(!isBeneficiary)}
-                    className="ui compact icon left labeled button">
-                    <i className={classNames({
-                      plus: !isBeneficiary,
-                      minus: isBeneficiary
-                    }, 'icon')} />
+                    className="ui compact icon left labeled button"
+                  >
+                    <i
+                      className={classNames({
+                        plus: !isBeneficiary,
+                        minus: isBeneficiary
+                      }, 'icon')}
+                    />
                     {isBeneficiary ? (
                       <T>Remove as beneficiary</T>
                     ) : (
@@ -199,8 +215,7 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
             )}
           </div>
 
-          <div
-            className="form-popup--form flex ui form attached fluid segment">
+          <div className="form-popup--form flex ui form attached fluid segment">
             <ImagePicker
               name="pictureUrl"
               images={this.state.images}
@@ -235,7 +250,8 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
                   name="email"
                   placeholder="hints.EmailOptional"
                   search={new SearchSource('email', ['registered_emails'])}
-                  onSearchSelect={this.onUserSearchSelect}>
+                  onSearchSelect={this.onUserSearchSelect}
+                >
                   <CheckboxInput
                     name="sendEmail"
                     className="invitation-email-checkbox"
@@ -248,15 +264,16 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
                 placeholder="Gender"
                 name="gender"
                 selectDefault={this.initialGender}
-                onChange={({gender}) =>
-                  this.setState({images: getAvatarImages(gender)})
-                }>
+                onChange={({ gender }) =>
+                  this.setState({ images: getAvatarImages(gender) })
+                }
+              >
                 <div className="item" data-value="male">
-                  <i className="man icon"></i>
+                  <i className="man icon" />
                   <T>Male</T>
                 </div>
                 <div className="item" data-value="female">
-                  <i className="woman icon"></i>
+                  <i className="woman icon" />
                   <T>Female</T>
                 </div>
               </SelectInput>
@@ -282,9 +299,9 @@ ParticipantPopup = class ParticipantPopup extends PopupComponent {
 }
 
 ParticipantPopup.propTypes = {
-  user: React.PropTypes.object,
-  buttonClassName: React.PropTypes.string,
-  popupClassName: React.PropTypes.string,
-  icon: React.PropTypes.element,
-  onRemove: React.PropTypes.func
+  user: PropTypes.object,
+  buttonClassName: PropTypes.string,
+  popupClassName: PropTypes.string,
+  icon: PropTypes.element,
+  onRemove: PropTypes.func
 }

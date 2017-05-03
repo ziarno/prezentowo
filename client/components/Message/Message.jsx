@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import { classNames } from 'meteor/maxharris9:classnames'
 
 Message = class Message extends React.Component {
 
@@ -16,55 +17,67 @@ Message = class Message extends React.Component {
   }
 
   render() {
-    var key = 0
+    const {
+      className,
+      closable,
+      title,
+      icon,
+      message,
+      messageEl,
+      messages
+    } = this.props
+    let messageView = null
+
+    if (message) {
+      messageView = <span>{message}</span>
+    } else if (messageEl) {
+      messageView = messageEl
+    } else if (messages && messages.length) {
+      let key = 0
+      messageView = (
+        <ul className="list">
+          {messages.map((message) => (
+            <li key={key++}>{message}</li>
+          ))}
+        </ul>
+      )
+    }
 
     return (
       <div
-        className={classNames('ui message', this.props.className, {
+        className={classNames('ui message', className, {
           hidden: this.state.hidden || this.props.hidden
-        })}>
+        })}
+      >
 
-        {this.props.closable ? (
+        {closable ? (
           <i className="close icon"
              onClick={this.close}>
           </i>
         ) : null}
 
-        {this.props.title ? (
+        {title ? (
           <div className="header">
-            {this.props.title}
+            {title}
           </div>
         ) : null}
 
-        {this.props.icon ? (
-          <i className={classNames(this.props.icon, 'icon')}/>
+        {icon ? (
+          <i className={classNames(icon, 'icon')}/>
         ) : null}
 
-        {this.props.message ? (
-          <span>{this.props.message}</span>
-        ) : this.props.messageEl ? (
-          this.props.messageEl
-        ) : this.props.messages &&
-          this.props.messages.length ? (
-          <ul className="list">
-            {this.props.messages.map((message) => (
-              <li key={key++}>{message}</li>
-            ))}
-          </ul>
-        ) : null}
-
+        {messageView}
       </div>
     )
   }
-
 }
 
 Message.propTypes = {
-  title: React.PropTypes.string,
-  type: React.PropTypes.string,
-  closable: React.PropTypes.bool,
-  hidden: React.PropTypes.bool,
-  message: React.PropTypes.string,
-  messageEl: React.PropTypes.element,
-  messages: React.PropTypes.array
+  title: PropTypes.string,
+  type: PropTypes.string,
+  closable: PropTypes.bool,
+  hidden: PropTypes.bool,
+  message: PropTypes.string,
+  messageEl: PropTypes.element,
+  messages: PropTypes.array
 }

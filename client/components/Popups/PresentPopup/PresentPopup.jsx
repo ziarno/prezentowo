@@ -1,22 +1,28 @@
-import React from 'react'
-import {PopupComponent, ValidatedInput} from '../../../../lib/Mixins'
-import {getPresentImages} from '../../../../lib/utilities'
-import {createContainer} from 'meteor/react-meteor-data'
+import React, { PropTypes } from 'react'
+import _ from 'underscore'
+import { createContainer } from 'meteor/react-meteor-data'
+import { classNames } from 'meteor/maxharris9:classnames'
+import { Session } from 'meteor/session'
+import {
+  PopupComponent,
+  ValidatedInput
+} from '../../../../lib/Mixins'
+import { getPresentImages } from '../../../../lib/utilities'
 
 PresentPopup = class PresentPopup extends PopupComponent {
 
   constructor(props) {
     super(props)
     this.schema = Presents.Schemas.NewPresent
-        .pick([
-          'title',
-          'picture',
-          'picture.small',
-          'picture.large',
-          'description',
-          'forUserId'
-        ])
-        .namedContext('newPresent')
+      .pick([
+        'title',
+        'picture',
+        'picture.small',
+        'picture.large',
+        'description',
+        'forUserId'
+      ])
+      .namedContext('newPresent')
     this.hideAndReset = this.hideAndReset.bind(this)
     this.reset = this.reset.bind(this)
     this.addPresent = this.addPresent.bind(this)
@@ -27,7 +33,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
   }
 
   getPopupSettings() {
-    var position = 'bottom center'
+    const position = 'bottom center'
     return {
       onShow: () => {
         this.schema.resetValidation()
@@ -56,8 +62,12 @@ PresentPopup = class PresentPopup extends PopupComponent {
   }
 
   removePresent() {
-    var {onRemove} = this.props
-    var {_id: presentId} = this.props.present
+    const {
+      onRemove,
+      present: {
+        _id: presentId
+      }
+    } = this.props
 
     if (_.isFunction(onRemove)) {
       onRemove.call(this, presentId)
@@ -87,30 +97,43 @@ PresentPopup = class PresentPopup extends PopupComponent {
   }
 
   renderTrigger() {
+    const {
+      buttonClassName,
+      icon,
+      buttonText
+    } = this.props
     return (
       <div
         ref="popupTrigger"
         onClick={this.showPopup}
-        className={classNames(this.props.buttonClassName,
+        className={classNames(
+          buttonClassName,
           'present-button',
           'ui icon button',
-          'waves-effect waves-button')}>
-        {this.props.icon}
-        <T>{this.props.buttonText}</T>
+          'waves-effect waves-button'
+        )}
+      >
+        {icon}
+        <T>{buttonText}</T>
       </div>
     )
   }
 
   renderPopup() {
-    var {defaultSelectedUser, users} = this.props
-    var isEdit = this.isEdit()
-    var title = `${isEdit ? 'Edit' : 'New'} present`
-    var defaultSelectedUserId = !this.props.present &&
+    const {
+      defaultSelectedUser,
+      users,
+      present,
+      popupClassName
+    } = this.props
+    const isEdit = this.isEdit()
+    const title = `${isEdit ? 'Edit' : 'New'} present`
+    const defaultSelectedUserId = !present &&
       defaultSelectedUser ? defaultSelectedUser._id : ''
-    var forUser = users &&
+    const forUser = users &&
       users.length > 0 &&
       users[0]
-    var ForUser
+    let ForUser
 
     //set ForUser
     if (!forUser) {
@@ -119,7 +142,8 @@ PresentPopup = class PresentPopup extends PopupComponent {
       ForUser = (
         <ValidatedInput
           name="forUserId"
-          staticValue={users[0]._id}>
+          staticValue={users[0]._id}
+        >
           <User user={users[0]} />
         </ValidatedInput>
       )
@@ -130,12 +154,14 @@ PresentPopup = class PresentPopup extends PopupComponent {
           className="scrolling"
           placeholder="choose user"
           selectDefault={defaultSelectedUserId}
-          name="forUserId">
+          name="forUserId"
+        >
           {users.map((user) => (
             <div
               className="item"
               key={user._id}
-              data-value={user._id}>
+              data-value={user._id}
+            >
               <User user={user} />
             </div>
           ))}
@@ -148,13 +174,15 @@ PresentPopup = class PresentPopup extends PopupComponent {
         ref="popupTarget"
         className={classNames(
           'present-popup form-popup ui flowing popup',
-          this.props.popupClassName
-        )}>
+          popupClassName
+        )}
+      >
         <Form
           ref="form"
-          data={this.props.present}
+          data={present}
           onSubmit={this.submitPresent}
-          schema={this.schema}>
+          schema={this.schema}
+        >
 
           <div className="ui attached message">
             <div className="header">
@@ -166,8 +194,7 @@ PresentPopup = class PresentPopup extends PopupComponent {
             </div>
           </div>
 
-          <div
-            className="form-popup--form flex ui form attached fluid segment">
+          <div className="form-popup--form flex ui form attached fluid segment">
             <ImagePicker
               name="picture"
               images={getPresentImages()}
@@ -206,18 +233,17 @@ PresentPopup = class PresentPopup extends PopupComponent {
       </div>
     )
   }
-
 }
 
 PresentPopup.propTypes = {
-  present: React.PropTypes.object,
-  defaultSelectedUser: React.PropTypes.object,
-  users: React.PropTypes.array,
-  buttonClassName: React.PropTypes.string,
-  buttonText: React.PropTypes.string,
-  popupClassName: React.PropTypes.string,
-  icon: React.PropTypes.element,
-  onRemove: React.PropTypes.func
+  present: PropTypes.object,
+  defaultSelectedUser: PropTypes.object,
+  users: PropTypes.array,
+  buttonClassName: PropTypes.string,
+  buttonText: PropTypes.string,
+  popupClassName: PropTypes.string,
+  icon: PropTypes.element,
+  onRemove: PropTypes.func
 }
 
 PresentPopup = createContainer(() => {
